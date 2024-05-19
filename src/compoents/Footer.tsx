@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
@@ -6,7 +7,7 @@ const Footer = () => {
       <div className="footer">
         <div className="footer-top">
           <b className="footer-logo">
-            <a href="/">VisonMakers</a>
+            <Link href="/">VisonMakers</Link>
           </b>
           <div className="footer-right">
             <div className="map">

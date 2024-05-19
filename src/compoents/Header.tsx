@@ -1,27 +1,28 @@
+import Link from "next/link";
 import React from "react";
 
 const Header = () => {
   return (
     <div className="head">
       <h2 className="logo">
-        <a href="/">VisonMakers</a>
+        <Link href="/">VisonMakers</Link>
       </h2>
       <ul className="menu">
         <li>
-          <a href="#content02">서비스소개</a>
+          <Link href="#content02">서비스소개</Link>
         </li>
         <li>
-          <a href="#content03">가격</a>
+          <Link href="#content03">가격</Link>
         </li>
         <li>
-          <a href="#content04">상품</a>
+          <Link href="#content04">상품</Link>
         </li>
         <li>
-          <a href="#content05">기업후기</a>
+          <Link href="#content05">기업후기</Link>
         </li>
         <li className="button-box">
           <button type="button">
-            <a href="/sub">비용상담</a>
+            <Link href="/sub">비용상담</Link>
           </button>
         </li>
       </ul>

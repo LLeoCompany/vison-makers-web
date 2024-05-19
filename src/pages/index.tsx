@@ -1,15 +1,15 @@
-import Footer from "@/compoents/Footer";
-import Header from "@/compoents/Header";
-import React from "react";
-
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   FullpageContainer,
   FullpageSection,
 } from "@shinyongjun/react-fullpage";
 import "@shinyongjun/react-fullpage/css";
+import Link from "next/link";
+import Image from "next/image";
+import Header from "@/compoents/Header";
+import Footer from "@/compoents/Footer";
 
-const index = () => {
+const Index = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   return (
@@ -27,13 +27,19 @@ const index = () => {
                 <p>초기비용 0원으로 바로 시작하세요</p>
               </div>
               <div className="img-box">
-                <img src="/images/visonmarker-visual.png" alt="" />
+                <Image
+                  src="/images/visonmarker-visual.png"
+                  alt="Visual Marker"
+                  width={500}
+                  height={300}
+                  className="object-contain"
+                />
                 <div className="btn-list">
                   <button type="button">
-                    <a href="/sub">5초만에 상담받기</a>
+                    <Link href="/sub">5초만에 상담받기</Link>
                   </button>
                   <button type="button">
-                    <a href="/sub">5초만에 상담받기</a>
+                    <Link href="/sub">5초만에 상담받기</Link>
                   </button>
                 </div>
               </div>
@@ -42,7 +48,13 @@ const index = () => {
         </FullpageSection>
         <FullpageSection name="content02">
           <div className="content content02">
-            <img src="/images/visual-item.png" />
+            <Image
+              src="/images/visual-item.png"
+              alt="Visual Item"
+              width={500}
+              height={300}
+              className="object-contain"
+            />
             <div className="text-box">
               <h2 className="title">외주시장 90% 실패 이유?</h2>
               <p className="sub-text">
@@ -63,7 +75,13 @@ const index = () => {
               <h2 className="title">프로젝트 진행 과정</h2>
               <div className="list">
                 <div className="item">
-                  <img src="/images/Search.png" alt="" />
+                  <Image
+                    src="/images/Search.png"
+                    alt="Search"
+                    width={50}
+                    height={50}
+                    className="object-contain"
+                  />
                   <b>1차- 무료 컨설팅</b>
                   <p>
                     고객의 기대, 프로젝트 범위, 예산 및 일정에 대해 논의 합니다.
@@ -72,7 +90,13 @@ const index = () => {
                   </p>
                 </div>
                 <div className="item">
-                  <img src="/images/Folder.png" alt="" />
+                  <Image
+                    src="/images/Folder.png"
+                    alt="Folder"
+                    width={50}
+                    height={50}
+                    className="object-contain"
+                  />
                   <b>
                     2차- 전문 기획자와
                     <br />
@@ -84,7 +108,13 @@ const index = () => {
                   </p>
                 </div>
                 <div className="item">
-                  <img src="/images/Wallet.png" alt="" />
+                  <Image
+                    src="/images/Wallet.png"
+                    alt="Wallet"
+                    width={50}
+                    height={50}
+                    className="object-contain"
+                  />
                   <b>
                     3차- 기획 컨펌 및<br />
                     피드백
@@ -95,7 +125,13 @@ const index = () => {
                   </p>
                 </div>
                 <div className="item">
-                  <img src="/images/Search.png" alt="" />
+                  <Image
+                    src="/images/Search.png"
+                    alt="Search"
+                    width={50}
+                    height={50}
+                    className="object-contain"
+                  />
                   <b>
                     4차- 최종기획,
                     <br />
@@ -107,7 +143,13 @@ const index = () => {
                   </p>
                 </div>
                 <div className="item">
-                  <img src="/images/Bookmark.png" alt="" />
+                  <Image
+                    src="/images/Bookmark.png"
+                    alt="Bookmark"
+                    width={50}
+                    height={50}
+                    className="object-contain"
+                  />
                   <b>5차- 개발 및 테스트</b>
                   <p>
                     개발된 소프트웨어는 내부 및 외부 테스트를 거쳐 기능과 성능을
@@ -115,7 +157,13 @@ const index = () => {
                   </p>
                 </div>
                 <div className="item">
-                  <img src="/images/Category.png" alt="" />
+                  <Image
+                    src="/images/Category.png"
+                    alt="Category"
+                    width={50}
+                    height={50}
+                    className="object-contain"
+                  />
                   <b>6차- 품질 관리 및 검증</b>
                   <p>
                     최종 제품의 품질을 확보하기 위해 종합적인 품질 검사를
@@ -123,7 +171,13 @@ const index = () => {
                   </p>
                 </div>
                 <div className="item">
-                  <img src="/images/Category.png" alt="" />
+                  <Image
+                    src="/images/Category.png"
+                    alt="Category"
+                    width={50}
+                    height={50}
+                    className="object-contain"
+                  />
                   <b>7차- 배포 및 후속 지원</b>
                   <p>
                     완성된 프로젝트를 배포하고, 고객에게 필요한 훈련을
@@ -149,15 +203,19 @@ const index = () => {
                 <div className="item">
                   <div>
                     <div className="pig">
-                      <img
+                      <Image
                         src="/images/Coins.png"
-                        className="coin-img"
                         alt="Coins"
+                        width={50}
+                        height={50}
+                        className="coin-img object-contain"
                       />
-                      <img
+                      <Image
                         src="/images/Piggybank.png"
-                        className="pig-img"
                         alt="Piggybank"
+                        width={50}
+                        height={50}
+                        className="pig-img object-contain"
                       />
                     </div>
                     <div className="text">
@@ -166,9 +224,12 @@ const index = () => {
                     </div>
                   </div>
                   <div>
-                    <img
+                    <Image
                       src="/images/Isolation_Mode.png"
-                      alt="Isolation_Mode"
+                      alt="Isolation Mode"
+                      width={50}
+                      height={50}
+                      className="object-contain"
                     />
                     <div className="text">
                       <h2>2천만원 이상</h2>
@@ -189,7 +250,7 @@ const index = () => {
             <div className="content-box">
               <div className="title-box">
                 <h2 className="title">
-                  "당신의 창의력이 만든 서비스, 세상이 알지 못한다면?"
+                  당신의 창의력이 만든 서비스, 세상이 알지 못한다면?
                   <br />
                   스타트업의 초기 자본은 무엇보다 중요합니다.
                 </h2>
@@ -203,9 +264,15 @@ const index = () => {
                 </p>
               </div>
               <div className="img-box">
-                <img src="/images/visonmarker-visual.png" />
+                <Image
+                  src="/images/visonmarker-visual.png"
+                  alt="Visual Marker"
+                  width={500}
+                  height={300}
+                  className="object-contain"
+                />
                 <button type="button">
-                  <a href="/sub">5초만에 상담받기</a>
+                  <Link href="/sub">5초만에 상담받기</Link>
                 </button>
               </div>
             </div>
@@ -219,4 +286,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;
