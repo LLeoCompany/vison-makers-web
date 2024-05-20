@@ -1,6 +1,7 @@
-import Footer from "@/compoents/Footer";
-import Header from "@/compoents/Header";
 import React, { useState } from "react";
+import { useRouter } from "next/router";
+import Header from "@/compoents/Header";
+import Footer from "@/compoents/Footer";
 
 const Sub = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ const Sub = () => {
     duration: "",
     details: "",
   });
+
+  const router = useRouter();
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -33,6 +36,7 @@ const Sub = () => {
     const result = await response.json();
     if (response.ok) {
       alert("문의가 정상적으로 접수되었습니다");
+      router.push("/"); // 루트 페이지로 이동
     } else {
       console.error("Error sending message to Slack:", result.error);
       alert(`Error: ${result.error}`);
