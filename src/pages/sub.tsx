@@ -2,7 +2,7 @@ import Footer from "@/compoents/Footer";
 import Header from "@/compoents/Header";
 import React, { useState } from "react";
 
-const sub = () => {
+const Sub = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -117,4 +117,4 @@ const sub = () => {
   );
 };
 
-export default sub;
+export default Sub;
