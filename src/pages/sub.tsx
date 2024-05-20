@@ -1,8 +1,44 @@
 import Footer from "@/compoents/Footer";
 import Header from "@/compoents/Header";
-import React from "react";
+import React, { useState } from "react";
 
 const sub = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    duration: "",
+    details: "",
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async () => {
+    console.log("Submitting form with data:", formData);
+
+    const response = await fetch("/api/sendInquireSlackMessage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert("Message sent to Slack");
+    } else {
+      console.error("Error sending message to Slack:", result.error);
+      alert(`Error: ${result.error}`);
+    }
+  };
+
   return (
     <div className="sub">
       <Header />
@@ -22,30 +58,57 @@ const sub = () => {
             <div className="form-list">
               <div className="form-item">
                 <span>이름</span>
-                <input type="text" />
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-item">
                 <span>연락처</span>
-                <input type="text" />
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-item">
                 <span>이메일</span>
-                <input type="text" />
+                <input
+                  type="text"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-item">
                 <span>작업 기간</span>
-                <input type="text" />
+                <input
+                  type="text"
+                  name="duration"
+                  value={formData.duration}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-item">
                 <span>작업 내용</span>
-                <input type="text" />
+                <input
+                  type="text"
+                  name="details"
+                  value={formData.details}
+                  onChange={handleChange}
+                />
               </div>
             </div>
             <p className="information">
               *<span>개인정보 처리 방침</span>에 동의시에만 상담 신청이
               가능합니다.
             </p>
-            <button type="button">상담신청</button>
+            <button type="button" onClick={handleSubmit}>
+              상담신청
+            </button>
           </div>
         </div>
       </div>
