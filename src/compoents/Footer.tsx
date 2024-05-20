@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="footer">
         <div className="footer-top">
           <b className="footer-logo">
-            <Link href="/">VisonMakers</Link>
+            <Link href="/">VisionMakers</Link>
           </b>
           <div className="footer-right">
             <div className="map">
