@@ -27,23 +27,29 @@ const Sub = () => {
     setLoading(true); // 로딩 시작
     console.log("Submitting form with data:", formData);
 
-    const response = await fetch("/api/sendInquireSlackMessage", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await fetch("/api/sendInquireSlackMessage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const result = await response.json();
-    setLoading(false); // 로딩 종료
+      const result = await response.json();
+      setLoading(false); // 로딩 종료
 
-    if (response.ok) {
-      alert("문의가 정상적으로 접수되었습니다");
-      router.push("/"); // 루트 페이지로 이동
-    } else {
-      console.error("Error sending message to Slack:", result.error);
-      alert(`Error: ${result.error}`);
+      if (response.ok) {
+        alert("문의가 정상적으로 접수되었습니다");
+        router.push("/"); // 루트 페이지로 이동
+      } else {
+        console.error("Error sending message to Slack:", result.error);
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error: any) {
+      setLoading(false); // 로딩 종료
+      console.error("Error submitting form:", error);
+      alert(`Error: ${error.message}`);
     }
   };
 
