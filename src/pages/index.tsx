@@ -28,7 +28,7 @@ const Index = () => {
               </div>
               <div className="img-box">
                 <Image
-                  src="/images/visonmarker-visual.png"
+                  src="gs://vison-makers.appspot.com/visonmarker-visual.png"
                   alt="Visual Marker"
                   width={500}
                   height={300}
@@ -46,7 +46,7 @@ const Index = () => {
         <FullpageSection name="content02">
           <div className="content content02">
             <Image
-              src="/images/visual-item.png"
+              src="gs://vison-makers.appspot.com/visual-item.png"
               alt="Visual Item"
               width={500}
               height={300}
@@ -73,7 +73,7 @@ const Index = () => {
               <div className="list">
                 <div className="item">
                   <Image
-                    src="/images/Search.png"
+                    src="gs://vison-makers.appspot.com/Search.png"
                     alt="Search"
                     width={50}
                     height={50}
@@ -88,7 +88,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
-                    src="/images/Folder.png"
+                    src="gs://vison-makers.appspot.com/Folder.png"
                     alt="Folder"
                     width={50}
                     height={50}
@@ -106,7 +106,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
-                    src="/images/Wallet.png"
+                    src="gs://vison-makers.appspot.com/Wallet.png"
                     alt="Wallet"
                     width={50}
                     height={50}
@@ -123,7 +123,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
-                    src="/images/Search.png"
+                    src="gs://vison-makers.appspot.com/Search.png"
                     alt="Search"
                     width={50}
                     height={50}
@@ -141,7 +141,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
-                    src="/images/Bookmark.png"
+                    src="gs://vison-makers.appspot.com/Bookmark.png"
                     alt="Bookmark"
                     width={50}
                     height={50}
@@ -155,7 +155,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
-                    src="/images/Category.png"
+                    src="gs://vison-makers.appspot.com/Category.png"
                     alt="Category"
                     width={50}
                     height={50}
@@ -169,7 +169,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
-                    src="/images/Category.png"
+                    src="gs://vison-makers.appspot.com/Category.png"
                     alt="Category"
                     width={50}
                     height={50}
@@ -201,14 +201,14 @@ const Index = () => {
                   <div>
                     <div className="pig">
                       <Image
-                        src="/images/Coins.png"
+                        src="gs://vison-makers.appspot.com/Coins.png"
                         alt="Coins"
                         width={50}
                         height={50}
                         className="coin-img object-contain"
                       />
                       <Image
-                        src="/images/Piggybank.png"
+                        src="gs://vison-makers.appspot.com/Piggybank.png"
                         alt="Piggybank"
                         width={50}
                         height={50}
@@ -222,7 +222,7 @@ const Index = () => {
                   </div>
                   <div>
                     <Image
-                      src="/images/Isolation_Mode.png"
+                      src="gs://vison-makers.appspot.com/Isolation_Mode.png"
                       alt="Isolation Mode"
                       width={50}
                       height={50}
@@ -262,7 +262,7 @@ const Index = () => {
               </div>
               <div className="img-box">
                 <Image
-                  src="/images/visonmarker-visual.png"
+                  src="gs://vison-makers.appspot.com/visonmarker-visual.png"
                   alt="Visual Marker"
                   width={500}
                   height={300}

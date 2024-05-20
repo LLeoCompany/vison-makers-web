@@ -66,7 +66,7 @@ const Sub = () => {
                 디테일한 정보입력은 상담에 더욱 도움이 됩니다 :)
               </p>
             </div>
-            <img src="/images/visual-item-02.png" />
+            <img src="gs://vison-makers.appspot.com/visual-item-02.png" />
           </div>
           <div className="form">
             <div className={`form-list ${loading ? "loading" : ""}`}>

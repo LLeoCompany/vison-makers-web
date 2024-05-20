@@ -11,26 +11,27 @@ const Footer = () => {
           </b>
           <div className="footer-right">
             <div className="map">
-              <img src="/images/icon-map.png" /> 경기 성남시 분당구 판교역로 166
+              <img src="gs://vison-makers.appspot.com/icon-map.png" /> 경기
+              성남시 분당구 판교역로 166
             </div>
             <div className="number">
               <div>
-                <img src="/images/icon-phone.png" />
+                <img src="gs://vison-makers.appspot.com/icon-phone.png" />
                 1899-1326
               </div>
               <div>
-                <img src="/images/icon-printshop.png" />
+                <img src="gs://vison-makers.appspot.com/icon-printshop.png" />
                 (02) 456-7890
               </div>
             </div>
             <div className="sns">
               <span>Social Media</span>
               <div>
-                <img src="/images/icon-facebook.png" />
-                <img src="/images/icon-tw.png" />
-                <img src="/images/icon-in.png" />
-                <img src="/images/icon-youtube.png" />
-                <img src="/images/icon-in.png" />
+                <img src="gs://vison-makers.appspot.com/icon-facebook.png" />
+                <img src="gs://vison-makers.appspot.com/icon-tw.png" />
+                <img src="gs://vison-makers.appspot.com/icon-in.png" />
+                <img src="gs://vison-makers.appspot.com/icon-youtube.png" />
+                <img src="gs://vison-makers.appspot.com/icon-in.png" />
               </div>
             </div>
           </div>
