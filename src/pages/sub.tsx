@@ -32,7 +32,7 @@ const sub = () => {
 
     const result = await response.json();
     if (response.ok) {
-      alert("Message sent to Slack");
+      alert("문의가 정상적으로 접수되었습니다");
     } else {
       console.error("Error sending message to Slack:", result.error);
       alert(`Error: ${result.error}`);
