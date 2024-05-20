@@ -38,9 +38,6 @@ const Index = () => {
                   <button type="button">
                     <Link href="/sub">5초만에 상담받기</Link>
                   </button>
-                  <button type="button">
-                    <Link href="/sub">5초만에 상담받기</Link>
-                  </button>
                 </div>
               </div>
             </div>
