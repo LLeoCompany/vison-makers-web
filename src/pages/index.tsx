@@ -28,6 +28,7 @@ const Index = () => {
               </div>
               <div className="img-box">
                 <Image
+                  fetchPriority="high"
                   src="/images/visonmarker-visual.png"
                   alt="Visual Marker"
                   width={500}
@@ -46,6 +47,7 @@ const Index = () => {
         <FullpageSection name="content02">
           <div className="content content02">
             <Image
+              fetchPriority="high"
               src="/images/visual-item.png"
               alt="Visual Item"
               width={500}
@@ -73,6 +75,7 @@ const Index = () => {
               <div className="list">
                 <div className="item">
                   <Image
+                    fetchPriority="high"
                     src="/images/Search.png"
                     alt="Search"
                     width={50}
@@ -88,6 +91,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
+                    fetchPriority="high"
                     src="/images/Folder.png"
                     alt="Folder"
                     width={50}
@@ -106,6 +110,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
+                    fetchPriority="high"
                     src="/images/Wallet.png"
                     alt="Wallet"
                     width={50}
@@ -123,6 +128,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
+                    fetchPriority="high"
                     src="/images/Search.png"
                     alt="Search"
                     width={50}
@@ -141,6 +147,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
+                    fetchPriority="high"
                     src="/images/Bookmark.png"
                     alt="Bookmark"
                     width={50}
@@ -155,6 +162,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
+                    fetchPriority="high"
                     src="/images/Category.png"
                     alt="Category"
                     width={50}
@@ -169,6 +177,7 @@ const Index = () => {
                 </div>
                 <div className="item">
                   <Image
+                    fetchPriority="high"
                     src="/images/Category.png"
                     alt="Category"
                     width={50}
@@ -201,6 +210,7 @@ const Index = () => {
                   <div>
                     <div className="pig">
                       <Image
+                        fetchPriority="high"
                         src="/images/Coins.png"
                         alt="Coins"
                         width={50}
@@ -208,6 +218,7 @@ const Index = () => {
                         className="coin-img object-contain"
                       />
                       <Image
+                        fetchPriority="high"
                         src="/images/Piggybank.png"
                         alt="Piggybank"
                         width={50}
@@ -222,6 +233,7 @@ const Index = () => {
                   </div>
                   <div>
                     <Image
+                      fetchPriority="high"
                       src="/images/Isolation_Mode.png"
                       alt="Isolation Mode"
                       width={50}
@@ -262,6 +274,7 @@ const Index = () => {
               </div>
               <div className="img-box">
                 <Image
+                  fetchPriority="high"
                   src="/images/visonmarker-visual.png"
                   alt="Visual Marker"
                   width={500}
