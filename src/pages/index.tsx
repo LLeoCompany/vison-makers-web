@@ -10,6 +10,7 @@ import Header from "@/compoents/Header";
 import Footer from "@/compoents/Footer";
 import { Fade, Slide } from "react-awesome-reveal";
 
+// 3
 const Index = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
