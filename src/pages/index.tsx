@@ -38,14 +38,11 @@ const Index = () => {
                 </Fade>
               </div>
               <div className="img-box">
-                <Image
-                  fetchPriority="high"
-                  src="/images/visonmarker-visual.png"
-                  alt="Visual Marker"
-                  width={500}
-                  height={300}
-                  className="object-contain"
-                />
+                <div className="vedioOuter">
+                  <video autoPlay muted loop playsInline>
+                    <source src="/video/main-visual.mp4" type="video/mp4" />
+                  </video>
+                </div>
                 <div className="btn-list">
                   <button type="button">
                     <Link href="/sub">5초만에 상담받기</Link>

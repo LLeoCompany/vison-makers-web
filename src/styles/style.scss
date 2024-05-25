@@ -196,16 +196,28 @@ html {
     }
     .img-box {
       position: relative;
+      top: 0;
+      left: 0;
+      width: 100%;
       height: calc(65vh - 40px);
-      img {
+      &::after {
+        content: "";
         position: absolute;
-        top: 0;
-        left: 0;
+        background: #00000050;
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        left: 0;
+        top: 0;
+        z-index: 3;
+      }
+      video {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
       }
       .btn-list {
+        z-index: 5;
         position: absolute;
         top: toRem(80px);
         display: flex;
