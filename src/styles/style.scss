@@ -43,6 +43,35 @@ $xl: 1440px;
 html {
   font-size: 15px;
 }
+.primaryColor {
+  color: #ff4c4c;
+}
+
+.fadeItem {
+  display: block;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.5s ease-in-out;
+
+  &.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.fade-out {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+}
+
+.fadeItemDelay {
+  &.fade-in {
+    transition-delay: 0.2s;
+  }
+  &.fade-out {
+    transition-delay: 0.2s;
+  }
+}
 
 .head {
   position: fixed;
@@ -252,7 +281,7 @@ html {
           gap: toRem(40px) 5%;
           justify-content: center;
         }
-        .item {
+        .itemOuter {
           width: 15%;
           position: relative;
           @media (max-width: $t) {
@@ -277,25 +306,29 @@ html {
               display: none;
             }
           }
-          img {
-            margin-bottom: toRem(23px);
-          }
-          b {
-            display: block;
-            margin-bottom: toRem(20px);
-            font-weight: 600;
-            font-size: toRem(24px);
-            @media (max-width: $t) {
-              br {
-                display: none;
+          .item {
+            width: 100%;
+            position: relative;
+            img {
+              margin-bottom: toRem(23px);
+            }
+            b {
+              display: block;
+              margin-bottom: toRem(20px);
+              font-weight: 600;
+              font-size: toRem(24px);
+              @media (max-width: $t) {
+                br {
+                  display: none;
+                }
               }
             }
-          }
-          p {
-            font-size: toRem(17px);
-            line-height: toRem(24px);
-            @media (max-width: $t) {
-              text-align: center;
+            p {
+              font-size: toRem(17px);
+              line-height: toRem(24px);
+              @media (max-width: $t) {
+                text-align: center;
+              }
             }
           }
         }
@@ -356,25 +389,8 @@ html {
               display: none;
             }
           }
-          .pig {
-            position: relative;
-            width: toRem(100px);
-            height: toRem(138px);
-            img {
-              position: absolute;
-              object-fit: contain;
-            }
-            .coin-img {
-              top: 0;
-              left: 0;
-              z-index: 2;
-            }
-            .pig-img {
-              bottom: 0;
-              left: 0;
-            }
-          }
           .text {
+            text-align: center;
             @media (max-width: $t) {
               text-align: center;
               margin-top: toRem(25px);
@@ -600,6 +616,9 @@ html {
       .left {
         .text {
           margin-bottom: toRem(75px);
+          @media (max-width: $l) {
+            margin-bottom: toRem(20px);
+          }
           h2 {
             font-size: toRem(45px);
             line-height: toRem(53.7px);
@@ -609,6 +628,20 @@ html {
           p {
             font-size: toRem(24px);
             line-height: toRem(36px);
+          }
+        }
+        .imgBox {
+          @media (max-width: $t) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+          }
+          img {
+            max-height: 500px;
+            @media (max-width: $t) {
+              max-height: 250px;
+            }
           }
         }
       }
