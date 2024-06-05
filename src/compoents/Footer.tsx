@@ -11,7 +11,7 @@ const Footer = () => {
           </b>
           <div className="footer-right">
             <div className="map">
-              <img src="/images/icon-map.png" /> 인천광역시 연섘구 인천타워대로
+              <img src="/images/icon-map.png" /> 인천광역시 연수구 인천타워대로
               323, B동 30층 브이457호(송도동, 송도 센트로드)
             </div>
             <div className="number">
