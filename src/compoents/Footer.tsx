@@ -7,30 +7,40 @@ const Footer = () => {
       <div className="footer">
         <div className="footer-top">
           <b className="footer-logo">
-            <Link href="/">VisionMakers</Link>
+            <Link href="/">레오소프트(LeoSoft)</Link>
           </b>
           <div className="footer-right">
             <div className="map">
-              <img src="/images/icon-map.png" /> 경기 성남시 분당구 판교역로 166
+              <img src="/images/icon-map.png" /> 인천광역시 연섘구 인천타워대로
+              323, B동 30층 브이457호(송도동, 송도 센트로드)
             </div>
             <div className="number">
               <div>
                 <img src="/images/icon-phone.png" />
-                1899-1326
+                010-8739-5727
               </div>
               <div>
-                <img src="/images/icon-printshop.png" />
-                (02) 456-7890
+                {/* <img src="/images/icon-printshop.png" /> */}
+                사업자 정보 : 응용 소프트워에 개발 및 공급업
               </div>
             </div>
+
+            <div className="number">
+              <div>대표자 : 이성욱</div>
+              <div>
+                {/* <img src="/images/icon-printshop.png" /> */}
+                E-Mail : lucas@leocompany.net
+              </div>
+            </div>
+
             <div className="sns">
               <span>Social Media</span>
               <div>
-                <img src="/images/icon-facebook.png" />
-                <img src="/images/icon-tw.png" />
-                <img src="/images/icon-in.png" />
-                <img src="/images/icon-youtube.png" />
-                <img src="/images/icon-in.png" />
+                {/* <img src="/images/icon-facebook.png" /> */}
+                {/* <img src="/images/icon-tw.png" /> */}
+                {/* <img src="/images/icon-in.png" /> */}
+                {/* <img src="/images/icon-youtube.png" /> */}
+                {/* <img src="/images/icon-in.png" /> */}
               </div>
             </div>
           </div>
