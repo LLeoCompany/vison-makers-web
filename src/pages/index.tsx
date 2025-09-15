@@ -31,12 +31,12 @@ const Index = () => {
                     <span className="primaryColor">한 번에</span>
                   </h2>
                 </Fade>
-                <Fade direction="up" delay={500}>
+                {/* <Fade direction="up" delay={500}>
                   <p>
                     초기비용 <span className="primaryColor">0원</span>으로 바로
                     시작하세요
                   </p>
-                </Fade>
+                </Fade> */}
               </div>
               <div className="img-box">
                 <div className="vedioOuter">
@@ -225,7 +225,7 @@ const Index = () => {
             </div>
           </div>
         </FullpageSection>
-        <FullpageSection name="content04">
+        {/* <FullpageSection name="content04">
           <div className="content content04">
             <div className="content-box">
               <div className="title-box">
@@ -280,7 +280,7 @@ const Index = () => {
               </div>
             </div>
           </div>
-        </FullpageSection>
+        </FullpageSection> */}
         <FullpageSection name="content05">
           <div className="content content05">
             <div className="content-box">

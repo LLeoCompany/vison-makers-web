@@ -7,17 +7,17 @@ const Footer = () => {
       <div className="footer">
         <div className="footer-top">
           <b className="footer-logo">
-            <Link href="/">레오소프트(LeoSoft)</Link>
+            <Link href="/">레오핏테크(LeoFitTech)</Link>
           </b>
           <div className="footer-right">
-            <div className="map">
+            {/* <div className="map">
               <img src="/images/icon-map.png" /> 인천광역시 연수구 인천타워대로
               323, B동 30층 브이457호(송도동, 송도 센트로드)
-            </div>
+            </div> */}
             <div className="number">
               <div>
                 <img src="/images/icon-phone.png" />
-                010-8739-5727
+                010-9915-4724
               </div>
               <div>
                 {/* <img src="/images/icon-printshop.png" /> */}
@@ -26,10 +26,11 @@ const Footer = () => {
             </div>
 
             <div className="number">
-              <div>대표자 : 이성욱</div>
+              <div>대표자 : 임세환</div>
+              <div>운영 및 개발 : Marko</div>
               <div>
                 {/* <img src="/images/icon-printshop.png" /> */}
-                E-Mail : lucas@leocompany.net
+                E-Mail : sh414lim@gmail.com
               </div>
             </div>
 
