@@ -21,7 +21,7 @@ const Footer = () => {
               </div>
               <div>
                 {/* <img src="/images/icon-printshop.png" /> */}
-                사업자 정보 : 응용 소프트워에 개발 및 공급업
+                사업자 정보 : 응용 소프트워에 개발 및 공급
               </div>
             </div>
 
