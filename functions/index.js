@@ -18,7 +18,7 @@ exports.sendMessageToSlack = functions.https.onRequest(async (req, res) => {
 
   try {
     const response = await axios.post(
-      "https://hooks.slack.com/services/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",
+      "https://hooks.slack.com/services/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",
       {
         text: text,
       }
@@ -48,7 +48,7 @@ exports.sendMessageGolfToSlack = functions.https.onRequest(async (req, res) => {
 
   try {
     const response = await axios.post(
-      "https://hooks.slack.com/services/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",
+      "https://hooks.slack.com/services/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",
       {
         text: text,
       }

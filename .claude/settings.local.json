@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm install:*)",
+      "Bash(npm audit:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:micehub.com)",
+      "Bash(tree:*)",
+      "Bash(npm outdated)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
