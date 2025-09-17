@@ -169,7 +169,7 @@ export default function GuidedStep3() {
             <h2 className="text-h3 text-primary m-lg">
               🎯 특별히 중요한 기능 <span className="text-body-sm text-secondary">(여러개 선택 가능, 선택사항)</span>
             </h2>
-            <div className="grid grid-cols-2 gap-md">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-md">
               {featureOptions.map((feature) => {
                 const isSelected = state.guided.importantFeatures.includes(feature.value);
                 return (
@@ -228,16 +228,16 @@ export default function GuidedStep3() {
           </div>
 
           {/* 버튼들 */}
-          <div className="flex justify-between items-center m-xl">
+          <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-md m-xl">
             <button
-              className="btn btn-ghost"
+              className="btn btn-ghost order-2 sm:order-1"
               onClick={handlePrev}
             >
               ← 이전
             </button>
 
             <button
-              className={`btn btn-lg ${
+              className={`btn btn-lg order-1 sm:order-2 ${
                 state.guided.timeline ? 'btn-primary' : 'btn-secondary'
               }`}
               onClick={handleNext}

@@ -247,16 +247,16 @@ export default function GuidedStep2() {
           </div>
 
           {/* 버튼들 */}
-          <div className="flex justify-between items-center m-xl">
+          <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-md m-xl">
             <button
-              className="btn btn-ghost"
+              className="btn btn-ghost order-2 sm:order-1"
               onClick={handlePrev}
             >
               ← 이전
             </button>
 
             <button
-              className={`btn btn-lg ${
+              className={`btn btn-lg order-1 sm:order-2 ${
                 state.guided.projectSize && state.guided.budget ? 'btn-primary' : 'btn-secondary'
               }`}
               onClick={handleNext}

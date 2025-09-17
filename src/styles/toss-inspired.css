@@ -342,6 +342,56 @@ body {
   background-color: var(--primary-red);
 }
 
+/* Responsive utilities */
+.hidden {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .md\\:flex {
+    display: flex;
+  }
+  .md\\:hidden {
+    display: none;
+  }
+  .md\\:block {
+    display: block;
+  }
+  .md\\:grid {
+    display: grid;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\\:grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .lg\\:grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .lg\\:grid-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 640px) {
+  .sm\\:flex-row {
+    flex-direction: row;
+  }
+  .sm\\:items-center {
+    align-items: center;
+  }
+  .sm\\:order-1 {
+    order: 1;
+  }
+  .sm\\:order-2 {
+    order: 2;
+  }
+  .sm\\:grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* Header styles */
 .header {
   position: fixed;
@@ -532,60 +582,322 @@ body {
   transform: translateY(-2px);
 }
 
-/* Responsive design */
+/* Mobile-first responsive design */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 100%;
+    padding: 0 var(--spacing-lg);
+  }
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   :root {
     --spacing-3xl: 2rem;
+    --spacing-2xl: 1.5rem;
   }
 
+  /* Typography adjustments */
   .text-hero {
     font-size: 2.5rem;
+    line-height: 1.2;
   }
 
   .text-h1 {
     font-size: 2rem;
+    line-height: 1.3;
   }
 
   .text-h2 {
     font-size: 1.75rem;
+    line-height: 1.3;
   }
 
+  .text-h3 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  /* Layout adjustments */
   .hero-actions {
     flex-direction: column;
     align-items: center;
+    gap: var(--spacing-md);
   }
 
   .hero-actions .btn {
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
   }
 
+  /* Navigation */
   .nav-menu {
     display: none;
   }
 
+  .header-nav {
+    padding: 0.75rem 0;
+  }
+
+  /* Grid system mobile overrides */
   .grid-cols-2,
   .grid-cols-3,
   .grid-cols-4 {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 
+  /* Container and spacing */
   .container {
-    padding: 0 var(--spacing-sm);
+    padding: 0 var(--spacing-md);
+  }
+
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  /* Cards */
+  .card {
+    padding: var(--spacing-lg);
+    margin: var(--spacing-md);
+  }
+
+  .card-simple {
+    padding: var(--spacing-md);
+  }
+
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+
+  /* Buttons */
+  .btn {
+    min-height: 44px; /* Touch target minimum */
+    padding: 0.75rem 1rem;
+  }
+
+  .btn-lg {
+    min-height: 48px;
+    padding: 1rem 1.5rem;
+  }
+
+  /* Form elements */
+  input, textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+    min-height: 44px;
+  }
+
+  /* Consultation specific */
+  .consultation-card-option {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  /* Process steps mobile layout */
+  .process-steps {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .process-step {
+    text-align: left;
+  }
+
+  .process-number {
+    margin: 0 var(--spacing-md) 0 0;
+  }
+
+  /* Footer adjustments */
+  .footer .grid-cols-4 {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    text-align: center;
+  }
+
+  /* Flex layout adjustments */
+  .flex.justify-between {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: stretch;
+  }
+
+  .flex.justify-between.items-center {
+    align-items: stretch;
+  }
+
+  /* Mobile consultation flow specific */
+  .consultation-progress {
+    padding: var(--spacing-sm);
+  }
+
+  /* Thanks page mobile */
+  .thanks-buttons {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .thanks-buttons .btn {
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
+  :root {
+    --spacing-3xl: 1.5rem;
+    --spacing-2xl: 1rem;
+  }
+
+  /* Ultra-mobile typography */
   .text-hero {
     font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .text-h1 {
+    font-size: 1.75rem;
+  }
+
+  .text-h2 {
+    font-size: 1.5rem;
+  }
+
+  .text-h3 {
+    font-size: 1.125rem;
+  }
+
+  /* Ultra-mobile layout */
+  .container {
+    padding: 0 var(--spacing-sm);
   }
 
   .section {
     padding: var(--spacing-xl) 0;
   }
 
-  .card,
-  .feature-card {
+  .card {
+    padding: var(--spacing-md);
+    margin: var(--spacing-sm);
+  }
+
+  .card-simple {
+    padding: var(--spacing-sm);
+  }
+
+  /* Ultra-mobile specific elements */
+  .hero {
+    min-height: 80vh;
+    padding-top: 60px;
+  }
+
+  .hero-content {
+    padding: 0 var(--spacing-sm);
+  }
+
+  /* Form specific */
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  /* Ultra-mobile buttons */
+  .btn {
+    min-height: 48px;
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-lg {
+    min-height: 52px;
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  /* Mobile navigation adjustments */
+  .header {
+    padding: var(--spacing-sm) 0;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
+
+  /* Mobile-specific utilities */
+  .mobile-hidden {
+    display: none;
+  }
+
+  .mobile-full-width {
+    width: 100%;
+  }
+
+  .mobile-text-center {
+    text-align: center;
+  }
+
+  /* Consultation mobile specific */
+  .consultation-option-card {
+    padding: var(--spacing-md);
+  }
+
+  .consultation-option-icon {
+    font-size: 1.5rem;
+  }
+
+  /* Mobile spacing utilities */
+  .m-xl {
+    margin: var(--spacing-lg);
+  }
+
+  .m-lg {
+    margin: var(--spacing-md);
+  }
+
+  .p-xl {
     padding: var(--spacing-lg);
+  }
+
+  .p-lg {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Mobile landscape orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero {
+    min-height: 60vh;
+  }
+
+  .section {
+    padding: var(--spacing-xl) 0;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover {
+    transform: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .feature-card:hover {
+    transform: none;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .card-simple:active {
+    transform: scale(0.99);
   }
 }

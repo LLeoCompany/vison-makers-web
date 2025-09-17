@@ -365,9 +365,9 @@ export default function GuidedStep4() {
           </div>
 
           {/* 버튼들 */}
-          <div className="flex justify-between items-center m-xl">
+          <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-md m-xl">
             <button
-              className="btn btn-ghost"
+              className="btn btn-ghost order-2 sm:order-1"
               onClick={handlePrev}
               disabled={isSubmitting}
             >
@@ -375,7 +375,7 @@ export default function GuidedStep4() {
             </button>
 
             <button
-              className={`btn btn-lg ${
+              className={`btn btn-lg order-1 sm:order-2 ${
                 privacyConsent && state.guided.contact.name && state.guided.contact.phone && state.guided.contact.email && state.guided.contact.preferredContactTime
                   ? 'btn-primary'
                   : 'btn-secondary'

@@ -13,7 +13,9 @@ const Index = () => {
             <Link href="/" className="logo">
               VisionMakers
             </Link>
-            <ul className="nav-menu">
+
+            {/* Desktop Navigation */}
+            <ul className="nav-menu hidden md:flex">
               <li><a href="#services" className="nav-link">서비스</a></li>
               <li><a href="#process" className="nav-link">진행과정</a></li>
               <li><a href="#portfolio" className="nav-link">포트폴리오</a></li>
@@ -24,6 +26,13 @@ const Index = () => {
                 </Link>
               </li>
             </ul>
+
+            {/* Mobile CTA Button */}
+            <div className="md:hidden">
+              <Link href="/consultation/start" className="btn btn-primary btn-sm">
+                상담신청
+              </Link>
+            </div>
           </nav>
         </div>
       </header>
@@ -61,13 +70,13 @@ const Index = () => {
       {/* Problem-Solution Section */}
       <section id="services" className="section bg-gray">
         <div className="container">
-          <div className="grid grid-cols-2 items-center gap-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 items-start gap-xl">
             <Fade direction="left">
               <div>
                 <h2 className="text-h2 m-md">
                   😰 이런 고민 있으시죠?
                 </h2>
-                <div className="space-y-4">
+                <div className="grid gap-md">
                   <div className="card-simple">
                     <p className="text-body">❌ 홈페이지는 있는데 문의가 안 들어온다</p>
                   </div>
@@ -88,7 +97,7 @@ const Index = () => {
                 <h2 className="text-h2 text-green m-md">
                   ✅ VisionMakers 솔루션
                 </h2>
-                <div className="space-y-4">
+                <div className="grid gap-md">
                   <div className="card">
                     <h3 className="text-h3 text-green">매월 평균 30% 더 많은 문의 유치</h3>
                     <p className="text-secondary">전환율 최적화된 UX/UI 설계</p>
