@@ -6,7 +6,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import ConsultationLayout from '@/components/consultation/ConsultationLayout';
-import Button from '@/components/consultation/common/Button';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { ContactInfo } from '@/types/consultation';
 
@@ -129,233 +128,259 @@ export default function FreeWrite() {
       title="자유 작성"
       showProgress={false}
     >
-      <div className="bg-white rounded-xl shadow-sm border p-8">
-        {/* 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            📝 자유롭게 작성해주세요
-          </h1>
-          <p className="text-gray-600">
-            필요한 서비스나 요구사항을 자유롭게 설명해주세요. 전문 상담사가 검토 후 연락드리겠습니다.
-          </p>
-        </div>
+      <div className="container">
+        <div className="card">
+          {/* 헤더 */}
+          <div className="text-center m-xl">
+            <h1 className="text-h2 text-primary">
+              📝 자유롭게 작성해주세요
+            </h1>
+            <p className="text-body text-secondary m-md">
+              필요한 서비스나 요구사항을 자유롭게 설명해주세요. 전문 상담사가 검토 후 연락드리겠습니다.
+            </p>
+          </div>
 
-        {/* 프로젝트 설명 */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            🎯 프로젝트 설명
-          </h2>
-          <div className="space-y-4">
+          {/* 프로젝트 설명 */}
+          <div className="m-xl">
+            <h2 className="text-h3 text-primary m-lg">
+              🎯 프로젝트 설명
+            </h2>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                어떤 서비스가 필요하신가요? <span className="text-red-500">*</span>
+              <label className="text-body text-primary m-sm block">
+                어떤 서비스가 필요하신가요? <span className="text-red">*</span>
               </label>
-              <textarea
-                value={state.free.projectDescription}
-                onChange={handleProjectDescriptionChange}
-                placeholder="예시)&#10;• 카페 홈페이지를 만들고 싶어요. 메뉴 소개와 예약 기능이 필요합니다&#10;• 의류 쇼핑몰을 운영하고 있는데 온라인 판매를 시작하고 싶어요&#10;• 기존 홈페이지가 너무 오래되어서 새로 만들고 싶습니다&#10;&#10;참고하고 싶은 사이트나 특별한 요청사항도 함께 적어주세요!"
-                className={`
-                  w-full p-4 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200 resize-none
-                  ${errors.projectDescription ? 'border-red-300' : 'border-gray-300'}
-                `}
-                rows={8}
-                maxLength={2000}
-              />
-              <div className="mt-2 flex justify-between items-center">
+              <div className="card-simple">
+                <textarea
+                  value={state.free.projectDescription}
+                  onChange={handleProjectDescriptionChange}
+                  placeholder="예시)&#10;• 카페 홈페이지를 만들고 싶어요. 메뉴 소개와 예약 기능이 필요합니다&#10;• 의류 쇼핑몰을 운영하고 있는데 온라인 판매를 시작하고 싶어요&#10;• 기존 홈페이지가 너무 오래되어서 새로 만들고 싶습니다&#10;&#10;참고하고 싶은 사이트나 특별한 요청사항도 함께 적어주세요!"
+                  className="w-full p-0 border-0 text-body text-primary bg-transparent resize-none focus:outline-none"
+                  rows={8}
+                  maxLength={2000}
+                  style={{ fontFamily: 'var(--font-family)' }}
+                />
+                <div className="flex justify-between items-center m-sm">
+                  <div>
+                    {errors.projectDescription && (
+                      <p className="text-red text-body-sm">{errors.projectDescription}</p>
+                    )}
+                  </div>
+                  <span className="text-body-sm text-secondary">
+                    {state.free.projectDescription.length}/2000자
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 예산 및 일정 (선택사항) */}
+          <div className="m-xl">
+            <h2 className="text-h3 text-primary m-lg">
+              💰 예산 및 일정 <span className="text-body-sm text-secondary">(선택사항)</span>
+            </h2>
+            <div className="grid grid-cols-2 gap-lg">
+              <div>
+                <label className="text-body text-primary m-sm block">
+                  예상 예산
+                </label>
+                <div className="card-simple">
+                  <input
+                    type="text"
+                    value={state.free.budget || ''}
+                    onChange={handleBudgetChange}
+                    placeholder="예) 500만원 내외, 협의 가능"
+                    className="w-full p-0 border-0 text-body text-primary bg-transparent focus:outline-none"
+                    style={{ fontFamily: 'var(--font-family)' }}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-body text-primary m-sm block">
+                  희망 완성 시기
+                </label>
+                <div className="card-simple">
+                  <input
+                    type="text"
+                    value={state.free.timeline || ''}
+                    onChange={handleTimelineChange}
+                    placeholder="예) 2개월 내, 급하지 않음"
+                    className="w-full p-0 border-0 text-body text-primary bg-transparent focus:outline-none"
+                    style={{ fontFamily: 'var(--font-family)' }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 연락처 정보 */}
+          <div className="m-xl">
+            <h2 className="text-h3 text-primary m-lg">
+              📞 연락처 정보
+            </h2>
+            <div className="grid gap-lg">
+              <div className="grid grid-cols-2 gap-lg">
                 <div>
-                  {errors.projectDescription && (
-                    <p className="text-sm text-red-600">{errors.projectDescription}</p>
+                  <label className="text-body text-primary m-sm block">
+                    이름 <span className="text-red">*</span>
+                  </label>
+                  <div className="card-simple">
+                    <input
+                      type="text"
+                      value={state.free.contact.name || ''}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      placeholder="홍길동"
+                      className="w-full p-0 border-0 text-body text-primary bg-transparent focus:outline-none"
+                      style={{ fontFamily: 'var(--font-family)' }}
+                    />
+                  </div>
+                  {errors.name && (
+                    <p className="text-red text-body-sm m-sm">{errors.name}</p>
                   )}
                 </div>
-                <span className="text-sm text-gray-500">
-                  {state.free.projectDescription.length}/2000자
-                </span>
+
+                <div>
+                  <label className="text-body text-primary m-sm block">
+                    연락처 <span className="text-red">*</span>
+                  </label>
+                  <div className="card-simple">
+                    <input
+                      type="tel"
+                      value={state.free.contact.phone || ''}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      placeholder="010-1234-5678"
+                      className="w-full p-0 border-0 text-body text-primary bg-transparent focus:outline-none"
+                      style={{ fontFamily: 'var(--font-family)' }}
+                    />
+                  </div>
+                  {errors.phone && (
+                    <p className="text-red text-body-sm m-sm">{errors.phone}</p>
+                  )}
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* 예산 및 일정 (선택사항) */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            💰 예산 및 일정 <span className="text-sm font-normal text-gray-500">(선택사항)</span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                예상 예산
-              </label>
-              <input
-                type="text"
-                value={state.free.budget || ''}
-                onChange={handleBudgetChange}
-                placeholder="예) 500만원 내외, 협의 가능"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                희망 완성 시기
-              </label>
-              <input
-                type="text"
-                value={state.free.timeline || ''}
-                onChange={handleTimelineChange}
-                placeholder="예) 2개월 내, 급하지 않음"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* 연락처 정보 */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            📞 연락처 정보
-          </h2>
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  이름 <span className="text-red-500">*</span>
+                <label className="text-body text-primary m-sm block">
+                  이메일 <span className="text-red">*</span>
                 </label>
-                <input
-                  type="text"
-                  value={state.free.contact.name || ''}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  placeholder="홍길동"
-                  className={`
-                    w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200
-                    ${errors.name ? 'border-red-300' : 'border-gray-300'}
-                  `}
-                />
-                {errors.name && (
-                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                <div className="card-simple">
+                  <input
+                    type="email"
+                    value={state.free.contact.email || ''}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    placeholder="hong@example.com"
+                    className="w-full p-0 border-0 text-body text-primary bg-transparent focus:outline-none"
+                    style={{ fontFamily: 'var(--font-family)' }}
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-red text-body-sm m-sm">{errors.email}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  연락처 <span className="text-red-500">*</span>
+                <label className="text-body text-primary m-sm block">
+                  회사명 <span className="text-body-sm text-secondary">(선택사항)</span>
                 </label>
-                <input
-                  type="tel"
-                  value={state.free.contact.phone || ''}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                  placeholder="010-1234-5678"
-                  className={`
-                    w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200
-                    ${errors.phone ? 'border-red-300' : 'border-gray-300'}
-                  `}
-                />
-                {errors.phone && (
-                  <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
-                )}
+                <div className="card-simple">
+                  <input
+                    type="text"
+                    value={state.free.contact.company || ''}
+                    onChange={(e) => handleInputChange('company', e.target.value)}
+                    placeholder="회사명 또는 사업자명"
+                    className="w-full p-0 border-0 text-body text-primary bg-transparent focus:outline-none"
+                    style={{ fontFamily: 'var(--font-family)' }}
+                  />
+                </div>
               </div>
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                이메일 <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="email"
-                value={state.free.contact.email || ''}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                placeholder="hong@example.com"
-                className={`
-                  w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200
-                  ${errors.email ? 'border-red-300' : 'border-gray-300'}
-                `}
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-              )}
+          {/* 개인정보 동의 */}
+          <div className="m-xl">
+            <div className="card-simple">
+              <div className="flex items-start gap-md">
+                <div
+                  className={`w-6 h-6 border-2 rounded flex items-center justify-center cursor-pointer transition-all duration-200 ${
+                    privacyConsent
+                      ? 'border-red bg-red'
+                      : 'border-gray-300'
+                  }`}
+                  onClick={() => {
+                    setPrivacyConsent(!privacyConsent);
+                    setErrors(prev => ({ ...prev, privacyConsent: undefined }));
+                  }}
+                >
+                  {privacyConsent && (
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <label
+                    className="text-body text-primary cursor-pointer"
+                    onClick={() => {
+                      setPrivacyConsent(!privacyConsent);
+                      setErrors(prev => ({ ...prev, privacyConsent: undefined }));
+                    }}
+                  >
+                    ✅ 개인정보 수집 동의 <span className="text-red">*</span>
+                  </label>
+                  <p className="text-body-sm text-secondary m-xs">
+                    상담을 위한 개인정보 수집에 동의합니다.<br />
+                    수집항목: 이름, 연락처, 이메일 | 보관기간: 1년
+                  </p>
+                  <button
+                    type="button"
+                    className="text-body-sm text-red hover:underline m-xs"
+                    onClick={() => window.open('/privacy-policy', '_blank')}
+                  >
+                    개인정보처리방침 자세히보기
+                  </button>
+                </div>
+              </div>
             </div>
+            {errors.privacyConsent && (
+              <p className="text-red text-body-sm m-md">{errors.privacyConsent}</p>
+            )}
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                회사명 <span className="text-sm font-normal text-gray-500">(선택사항)</span>
-              </label>
-              <input
-                type="text"
-                value={state.free.contact.company || ''}
-                onChange={(e) => handleInputChange('company', e.target.value)}
-                placeholder="회사명 또는 사업자명"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors duration-200"
-              />
+          {/* 도움말 */}
+          <div className="card-simple" style={{ background: '#f0f9ff', border: '1px solid #bae6fd' }}>
+            <div className="flex gap-md items-start">
+              <div className="text-2xl">💡</div>
+              <div>
+                <p className="text-body text-blue">
+                  <strong>상담 진행 방식</strong><br />
+                  신청해주신 내용을 검토한 후, 1-2일 내에 전화로 자세한 상담을 진행합니다.
+                  궁금한 점이 있으시면 언제든 <span className="text-red">010-9915-4724</span>로 연락주세요.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* 개인정보 동의 */}
-        <div className="mb-8">
-          <div className="flex items-start">
-            <input
-              type="checkbox"
-              checked={privacyConsent}
-              onChange={(e) => {
-                setPrivacyConsent(e.target.checked);
-                setErrors(prev => ({ ...prev, privacyConsent: undefined }));
-              }}
-              className="w-5 h-5 mt-1 text-red-600 border-gray-300 rounded focus:ring-red-500"
-            />
-            <div className="ml-3">
-              <label className="text-sm font-medium text-gray-900">
-                ✅ 개인정보 수집 동의 <span className="text-red-500">*</span>
-              </label>
-              <p className="text-sm text-gray-600 mt-1">
-                상담을 위한 개인정보 수집에 동의합니다.<br />
-                수집항목: 이름, 연락처, 이메일 | 보관기간: 1년
-              </p>
-              <button
-                type="button"
-                className="text-sm text-red-500 hover:text-red-700 underline mt-1"
-                onClick={() => window.open('/privacy-policy', '_blank')}
-              >
-                개인정보처리방침 자세히보기
-              </button>
-            </div>
+          {/* 버튼들 */}
+          <div className="flex justify-between items-center m-xl">
+            <button
+              className="btn btn-ghost"
+              onClick={handlePrev}
+              disabled={isSubmitting}
+            >
+              ← 이전
+            </button>
+
+            <button
+              className={`btn btn-lg ${
+                privacyConsent && state.free.projectDescription && state.free.contact.name && state.free.contact.phone && state.free.contact.email
+                  ? 'btn-primary'
+                  : 'btn-secondary'
+              }`}
+              onClick={handleSubmit}
+              disabled={isSubmitting || !privacyConsent || !state.free.projectDescription || !state.free.contact.name || !state.free.contact.phone || !state.free.contact.email}
+            >
+              {isSubmitting ? '처리 중...' : '🎉 상담 신청 완료!'}
+            </button>
           </div>
-          {errors.privacyConsent && (
-            <p className="mt-2 text-sm text-red-600">{errors.privacyConsent}</p>
-          )}
-        </div>
-
-        {/* 도움말 */}
-        <div className="mb-8 p-4 bg-blue-50 rounded-lg">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <span className="text-blue-500 text-xl">💡</span>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-blue-800">
-                <strong>상담 진행 방식</strong><br />
-                신청해주신 내용을 검토한 후, 1-2일 내에 전화로 자세한 상담을 진행합니다.
-                궁금한 점이 있으시면 언제든 <span className="font-semibold">010-9915-4724</span>로 연락주세요.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* 버튼들 */}
-        <div className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={handlePrev}
-            disabled={isSubmitting}
-          >
-            ← 이전
-          </Button>
-
-          <Button
-            variant="primary"
-            onClick={handleSubmit}
-            loading={isSubmitting}
-            disabled={isSubmitting}
-          >
-            🎉 상담 신청 완료!
-          </Button>
         </div>
       </div>
     </ConsultationLayout>

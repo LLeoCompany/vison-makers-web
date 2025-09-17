@@ -6,8 +6,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import ConsultationLayout from '@/components/consultation/ConsultationLayout';
-import Button from '@/components/consultation/common/Button';
-import RadioGroup from '@/components/consultation/common/RadioGroup';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import {
   ProjectSize,
@@ -110,77 +108,163 @@ export default function GuidedStep2() {
       title="규모와 예산 설정"
       showProgress={true}
     >
-      <div className="bg-white rounded-xl shadow-sm border p-8">
-        {/* 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            🎯 2/4단계 - 규모와 예산은 어느 정도인가요?
-          </h1>
-          <p className="text-gray-600">
-            대략적인 규모를 선택하면 더 정확한 상담이 가능해요
-          </p>
-        </div>
+      <div className="container">
+        <div className="card">
+          {/* 헤더 */}
+          <div className="text-center m-xl">
+            <h1 className="text-h2 text-primary">
+              🎯 2/4단계 - 규모와 예산은 어느 정도인가요?
+            </h1>
+            <p className="text-body text-secondary m-md">
+              대략적인 규모를 선택하면 더 정확한 상담이 가능해요
+            </p>
+          </div>
 
-        {/* 프로젝트 규모 */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            📏 프로젝트 규모
-          </h2>
-          <RadioGroup
-            name="projectSize"
-            value={state.guided.projectSize || ''}
-            onChange={handleProjectSizeChange}
-            options={projectSizeOptions}
-            error={errors.size}
-          />
-        </div>
-
-        {/* 예상 예산 */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            💰 예상 예산
-          </h2>
-          <RadioGroup
-            name="budget"
-            value={state.guided.budget || ''}
-            onChange={handleBudgetChange}
-            options={budgetOptions}
-            error={errors.budget}
-          />
-        </div>
-
-        {/* 참고 정보 */}
-        <div className="mb-8 p-4 bg-blue-50 rounded-lg">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <span className="text-blue-500 text-xl">✅</span>
+          {/* 프로젝트 규모 */}
+          <div className="m-xl">
+            <h2 className="text-h3 text-primary m-lg">
+              📏 프로젝트 규모
+            </h2>
+            <div className="grid gap-md">
+              {projectSizeOptions.map((option) => (
+                <div
+                  key={option.value}
+                  className={`card-simple cursor-pointer transition-all duration-200 ${
+                    state.guided.projectSize === option.value
+                      ? 'border-red bg-red/5'
+                      : 'hover:border-gray-300 hover:shadow-md'
+                  }`}
+                  onClick={() => handleProjectSizeChange(option.value)}
+                >
+                  <div className="flex items-start gap-md">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-sm m-xs">
+                        <h3 className="text-h3 text-primary">
+                          {option.label}
+                        </h3>
+                        {option.recommended && (
+                          <span className="bg-red text-white px-md py-sm text-body-sm rounded-full">
+                            추천
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-body text-secondary">
+                        {option.description}
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <div className={`w-6 h-6 rounded-full border-2 ${
+                        state.guided.projectSize === option.value
+                          ? 'border-red bg-red'
+                          : 'border-gray-300'
+                      }`}>
+                        {state.guided.projectSize === option.value && (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="ml-3">
-              <p className="text-sm text-blue-800">
-                <strong>참고사항</strong><br />
-                대부분 고객님들이 <span className="font-semibold">300-800만원 범위</span>에서 프로젝트를 진행하십니다.
-                정확한 견적은 상세한 요구사항을 확인한 후 제공해드려요.
-              </p>
+            {errors.size && (
+              <div className="text-red text-body-sm m-md">
+                {errors.size}
+              </div>
+            )}
+          </div>
+
+          {/* 예상 예산 */}
+          <div className="m-xl">
+            <h2 className="text-h3 text-primary m-lg">
+              💰 예상 예산
+            </h2>
+            <div className="grid gap-md">
+              {budgetOptions.map((option) => (
+                <div
+                  key={option.value}
+                  className={`card-simple cursor-pointer transition-all duration-200 ${
+                    state.guided.budget === option.value
+                      ? 'border-red bg-red/5'
+                      : 'hover:border-gray-300 hover:shadow-md'
+                  }`}
+                  onClick={() => handleBudgetChange(option.value)}
+                >
+                  <div className="flex items-start gap-md">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-sm m-xs">
+                        <h3 className="text-h3 text-primary">
+                          {option.label}
+                        </h3>
+                        {option.recommended && (
+                          <span className="bg-red text-white px-md py-sm text-body-sm rounded-full">
+                            추천
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-body text-secondary">
+                        {option.description}
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <div className={`w-6 h-6 rounded-full border-2 ${
+                        state.guided.budget === option.value
+                          ? 'border-red bg-red'
+                          : 'border-gray-300'
+                      }`}>
+                        {state.guided.budget === option.value && (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {errors.budget && (
+              <div className="text-red text-body-sm m-md">
+                {errors.budget}
+              </div>
+            )}
+          </div>
+
+          {/* 참고 정보 */}
+          <div className="card-simple" style={{ background: '#f0f9ff', border: '1px solid #bae6fd' }}>
+            <div className="flex gap-md items-start">
+              <div className="text-2xl">✅</div>
+              <div>
+                <p className="text-body text-blue">
+                  <strong>참고사항</strong><br />
+                  대부분 고객님들이 <span className="text-red">300-800만원 범위</span>에서 프로젝트를 진행하십니다.<br />
+                  정확한 견적은 상세한 요구사항을 확인한 후 제공해드려요.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* 버튼들 */}
-        <div className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={handlePrev}
-          >
-            ← 이전
-          </Button>
+          {/* 버튼들 */}
+          <div className="flex justify-between items-center m-xl">
+            <button
+              className="btn btn-ghost"
+              onClick={handlePrev}
+            >
+              ← 이전
+            </button>
 
-          <Button
-            variant="primary"
-            onClick={handleNext}
-            disabled={!state.guided.projectSize || !state.guided.budget}
-          >
-            다음 단계로 →
-          </Button>
+            <button
+              className={`btn btn-lg ${
+                state.guided.projectSize && state.guided.budget ? 'btn-primary' : 'btn-secondary'
+              }`}
+              onClick={handleNext}
+              disabled={!state.guided.projectSize || !state.guided.budget}
+            >
+              다음 단계로 →
+            </button>
+          </div>
         </div>
       </div>
     </ConsultationLayout>

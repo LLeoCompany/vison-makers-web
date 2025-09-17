@@ -8,7 +8,8 @@
       "Bash(curl:*)",
       "WebFetch(domain:micehub.com)",
       "Bash(tree:*)",
-      "Bash(npm outdated)"
+      "Bash(npm outdated)",
+      "WebFetch(domain:toss.im)"
     ],
     "deny": [],
     "ask": []

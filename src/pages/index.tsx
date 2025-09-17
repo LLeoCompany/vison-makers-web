@@ -1,230 +1,213 @@
 import React, { useState } from "react";
-import {
-  FullpageContainer,
-  FullpageSection,
-} from "@shinyongjun/react-fullpage";
-import "@shinyongjun/react-fullpage/css";
 import Link from "next/link";
 import Image from "next/image";
-import Header from "@/compoents/Header";
-import Footer from "@/compoents/Footer";
-import { Fade, Slide } from "react-awesome-reveal";
+import { Fade } from "react-awesome-reveal";
 
-// 3
 const Index = () => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-
   return (
-    <div className="main">
-      <Header />
-      <FullpageContainer
-        activeIndex={activeIndex}
-        setActiveIndex={setActiveIndex}
-      >
-        <FullpageSection name="content01">
-          <div className="content content01">
-            <div className="title-page">
-              <div className="title-box">
-                <Fade direction="up">
-                  <h2>
-                    기획부터 디자인, 개발까지{" "}
-                    <span className="primaryColor">한 번에</span>
-                  </h2>
-                </Fade>
-                {/* <Fade direction="up" delay={500}>
-                  <p>
-                    초기비용 <span className="primaryColor">0원</span>으로 바로
-                    시작하세요
-                  </p>
-                </Fade> */}
+    <div className="bg-white">
+      {/* Header */}
+      <header className="header">
+        <div className="container">
+          <nav className="header-nav">
+            <Link href="/" className="logo">
+              VisionMakers
+            </Link>
+            <ul className="nav-menu">
+              <li><a href="#services" className="nav-link">서비스</a></li>
+              <li><a href="#process" className="nav-link">진행과정</a></li>
+              <li><a href="#portfolio" className="nav-link">포트폴리오</a></li>
+              <li><a href="#about" className="nav-link">회사소개</a></li>
+              <li>
+                <Link href="/consultation/start" className="btn btn-primary btn-sm">
+                  무료 상담받기
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="container">
+          <div className="hero-content">
+            <Fade direction="up">
+              <h1 className="text-hero">
+                기획부터 디자인, 개발까지{" "}
+                <span className="text-red">한 번에</span>
+              </h1>
+            </Fade>
+            <Fade direction="up" delay={200}>
+              <p className="text-body-lg hero-subtitle">
+                500+ 기업이 선택한 신뢰할 수 있는 웹 개발 파트너
+                <br />
+                전담 기획자와 함께 성공적인 프로젝트를 만들어보세요
+              </p>
+            </Fade>
+            <Fade direction="up" delay={400}>
+              <div className="hero-actions">
+                <Link href="/consultation/start" className="btn btn-primary btn-lg">
+                  🚀 5분만에 무료 견적받기
+                </Link>
+                <Link href="#portfolio" className="btn btn-secondary btn-lg">
+                  포트폴리오 보기
+                </Link>
               </div>
-              <div className="img-box">
-                <div className="vedioOuter">
-                  <video autoPlay muted loop playsInline>
-                    <source src="/video/main-visual.mp4" type="video/mp4" />
-                  </video>
-                </div>
-                <div className="btn-list">
-                  <button type="button">
-                    <Link href="/sub">5초만에 상담받기</Link>
-                  </button>
-                </div>
-              </div>
-            </div>
+            </Fade>
           </div>
-        </FullpageSection>
-        <FullpageSection name="content02">
-          <div className="content content02">
+        </div>
+      </section>
+      {/* Problem-Solution Section */}
+      <section id="services" className="section bg-gray">
+        <div className="container">
+          <div className="grid grid-cols-2 items-center gap-xl">
             <Fade direction="left">
-              <Image
-                fetchPriority="high"
-                src="/images/visual-item.png"
-                alt="Visual Item"
-                width={500}
-                height={300}
-                className="object-contain"
-              />
+              <div>
+                <h2 className="text-h2 m-md">
+                  😰 이런 고민 있으시죠?
+                </h2>
+                <div className="space-y-4">
+                  <div className="card-simple">
+                    <p className="text-body">❌ 홈페이지는 있는데 문의가 안 들어온다</p>
+                  </div>
+                  <div className="card-simple">
+                    <p className="text-body">❌ 경쟁사보다 우리 사이트가 구식으로 보인다</p>
+                  </div>
+                  <div className="card-simple">
+                    <p className="text-body">❌ 모바일에서 제대로 안 보여서 고객을 놓친다</p>
+                  </div>
+                  <div className="card-simple">
+                    <p className="text-body">❌ 관리가 어려워서 업데이트를 못하고 있다</p>
+                  </div>
+                </div>
+              </div>
             </Fade>
             <Fade direction="right">
-              <div className="text-box">
-                <h2 className="title">외주시장 90% 실패 이유?</h2>
-                <p className="sub-text">
-                  개발때문이 아닙니다.
-                  <br /> 개발실력이 아무리 뛰어나도 기획이 미비하면,
-                  <br /> 잘못된 결과가 발생합니다.
-                  <br /> 저희는 프로젝트당 담당 기획자 배정해서, 대표님의
-                  아이디어를
-                  <br />
-                  정확하고 꼼꼼히 구현시켜 드립니다.
+              <div>
+                <h2 className="text-h2 text-green m-md">
+                  ✅ VisionMakers 솔루션
+                </h2>
+                <div className="space-y-4">
+                  <div className="card">
+                    <h3 className="text-h3 text-green">매월 평균 30% 더 많은 문의 유치</h3>
+                    <p className="text-secondary">전환율 최적화된 UX/UI 설계</p>
+                  </div>
+                  <div className="card">
+                    <h3 className="text-h3 text-green">모던하고 전문적인 디자인</h3>
+                    <p className="text-secondary">브랜드 가치를 높이는 차별화된 디자인</p>
+                  </div>
+                  <div className="card">
+                    <h3 className="text-h3 text-green">완벽한 반응형 웹사이트</h3>
+                    <p className="text-secondary">모든 디바이스에서 최적화된 사용자 경험</p>
+                  </div>
+                  <div className="card">
+                    <h3 className="text-h3 text-green">직관적 관리자 시스템</h3>
+                    <p className="text-secondary">누구나 쉽게 업데이트할 수 있는 CMS</p>
+                  </div>
+                </div>
+              </div>
+            </Fade>
+          </div>
+        </div>
+      </section>
+      {/* Process Section */}
+      <section id="process" className="section">
+        <div className="container">
+          <div className="text-center">
+            <Fade direction="up">
+              <h2 className="text-h2">🚀 VisionMakers만의 3가지 차별점</h2>
+              <p className="text-body-lg text-secondary m-lg">
+                500+ 프로젝트 경험으로 검증된 성공 프로세스
+              </p>
+            </Fade>
+          </div>
+
+          <div className="feature-grid">
+            <Fade direction="up" delay={100}>
+              <div className="feature-card">
+                <div className="feature-icon">📊</div>
+                <h3 className="feature-title text-h3">데이터 기반 설계</h3>
+                <p className="feature-description">
+                  구글 애널리틱스 분석으로 최적화된 전환율 설계
+                  <br />사용자 행동 패턴을 반영한 UX/UI
+                </p>
+              </div>
+            </Fade>
+
+            <Fade direction="up" delay={200}>
+              <div className="feature-card">
+                <div className="feature-icon">👤</div>
+                <h3 className="feature-title text-h3">전담 PM 배정</h3>
+                <p className="feature-description">
+                  프로젝트 시작부터 완료까지 한 명이 책임지고 관리
+                  <br />체계적인 소통과 일정 관리
+                </p>
+              </div>
+            </Fade>
+
+            <Fade direction="up" delay={300}>
+              <div className="feature-card">
+                <div className="feature-icon">🛠️</div>
+                <h3 className="feature-title text-h3">6개월 무료 지원</h3>
+                <p className="feature-description">
+                  런칭 후 6개월간 무료 수정 및 기술지원
+                  <br />안정적인 서비스 운영 보장
                 </p>
               </div>
             </Fade>
           </div>
-        </FullpageSection>
-        <FullpageSection name="content03">
-          <div className="content content03 pc">
-            <div className="content-box">
-              <Fade direction="up">
-                <h2 className="title">프로젝트 진행 과정</h2>
+
+          <div className="text-center m-xl">
+            <h2 className="text-h2 m-lg">프로젝트 진행 과정</h2>
+            <div className="process-steps">
+              <Fade direction="up" delay={100}>
+                <div className="process-step">
+                  <div className="process-number">1</div>
+                  <h3 className="process-title text-h3">무료 컨설팅</h3>
+                  <p className="process-description">
+                    프로젝트 범위, 예산, 일정 논의<br />
+                    초기 아이디어 구체화
+                  </p>
+                </div>
               </Fade>
-              <div className="list">
-                <Fade direction="up" delay={100} className="itemOuter">
-                  <div className="item">
-                    <Image
-                      fetchPriority="high"
-                      src="/images/Search.png"
-                      alt="Search"
-                      width={32}
-                      height={32}
-                      className="object-contain"
-                    />
-                    <b>1차- 무료 컨설팅</b>
-                    <p>
-                      고객의 기대, 프로젝트 범위, 예산 및 일정에 대해 논의
-                      합니다.
-                      <br />
-                      초기 아이디어를 이해하고 프로젝트의 가능성을 평가합니다.
-                    </p>
-                  </div>
-                </Fade>
-                <Fade direction="up" delay={200} className="itemOuter">
-                  <div className="item">
-                    <Image
-                      fetchPriority="high"
-                      src="/images/Folder.png"
-                      alt="Folder"
-                      width={32}
-                      height={32}
-                      className="object-contain"
-                    />
-                    <b>
-                      2차- 전문 기획자와
-                      <br />
-                      상세 기획
-                    </b>
-                    <p>
-                      구체적인 기획안을 작성하여 프로젝트의 목표와 세부 실행
-                      계획을 명확히 합니다.
-                    </p>
-                  </div>
-                </Fade>
-                <Fade direction="up" delay={300} className="itemOuter">
-                  <div className="item">
-                    <Image
-                      fetchPriority="high"
-                      src="/images/Wallet.png"
-                      alt="Wallet"
-                      width={32}
-                      height={32}
-                      className="object-contain"
-                    />
-                    <b>
-                      3차- 기획 컨펌 및<br />
-                      피드백
-                    </b>
-                    <p>
-                      상세 기획안을 고객에게 제시하고, 그들의 피드백을 받아 추가
-                      개선을 진행합니다.
-                    </p>
-                  </div>
-                </Fade>
-                <Fade direction="up" delay={400} className="itemOuter">
-                  <div className="item">
-                    <Image
-                      fetchPriority="high"
-                      src="/images/Search.png"
-                      alt="Search"
-                      width={32}
-                      height={32}
-                      className="object-contain"
-                    />
-                    <b>
-                      4차- 최종기획,
-                      <br />
-                      디자인 컨펌
-                    </b>
-                    <p>
-                      수정된 기획안에 대한 최종 승인을 얻어 개발 단계로
-                      진행합니다.
-                    </p>
-                  </div>
-                </Fade>
-                <Fade direction="up" delay={500} className="itemOuter">
-                  <div className="item">
-                    <Image
-                      fetchPriority="high"
-                      src="/images/Bookmark.png"
-                      alt="Bookmark"
-                      width={22}
-                      height={28}
-                      className="object-contain"
-                    />
-                    <b>5차- 개발 및 테스트</b>
-                    <p>
-                      개발된 소프트웨어는 내부 및 외부 테스트를 거쳐 기능과
-                      성능을 검증합니다.
-                    </p>
-                  </div>
-                </Fade>
-                <Fade direction="up" delay={600} className="itemOuter">
-                  <div className="item">
-                    <Image
-                      fetchPriority="high"
-                      src="/images/Category.png"
-                      alt="Category"
-                      width={32}
-                      height={32}
-                      className="object-contain"
-                    />
-                    <b>6차- 품질 관리 및 검증</b>
-                    <p>
-                      최종 제품의 품질을 확보하기 위해 종합적인 품질 검사를
-                      실시합니다.
-                    </p>
-                  </div>
-                </Fade>
-                <Fade direction="up" delay={700} className="itemOuter">
-                  <div className="item">
-                    <Image
-                      fetchPriority="high"
-                      src="/images/Category.png"
-                      alt="Category"
-                      width={32}
-                      height={32}
-                      className="object-contain"
-                    />
-                    <b>7차- 배포 및 후속 지원</b>
-                    <p>
-                      완성된 프로젝트를 배포하고, 고객에게 필요한 훈련을
-                      제공합니다. 지속적인 지원 및 유지 보수를 통해 고객 만족을
-                      유지합니다.
-                    </p>
-                  </div>
-                </Fade>
-              </div>
+
+              <Fade direction="up" delay={200}>
+                <div className="process-step">
+                  <div className="process-number">2</div>
+                  <h3 className="process-title text-h3">전문 기획</h3>
+                  <p className="process-description">
+                    전담 기획자와 상세 기획안 작성<br />
+                    목표와 실행 계획 명확화
+                  </p>
+                </div>
+              </Fade>
+
+              <Fade direction="up" delay={300}>
+                <div className="process-step">
+                  <div className="process-number">3</div>
+                  <h3 className="process-title text-h3">디자인 & 개발</h3>
+                  <p className="process-description">
+                    최신 기술 스택으로 개발<br />
+                    지속적인 테스트와 품질 관리
+                  </p>
+                </div>
+              </Fade>
+
+              <Fade direction="up" delay={400}>
+                <div className="process-step">
+                  <div className="process-number">4</div>
+                  <h3 className="process-title text-h3">배포 & 지원</h3>
+                  <p className="process-description">
+                    안정적 배포 및 런칭<br />
+                    6개월 무료 지원 서비스
+                  </p>
+                </div>
+              </Fade>
             </div>
           </div>
-        </FullpageSection>
+        </div>
+      </section>
         {/* <FullpageSection name="content04">
           <div className="content content04">
             <div className="content-box">
@@ -281,48 +264,139 @@ const Index = () => {
             </div>
           </div>
         </FullpageSection> */}
-        <FullpageSection name="content05">
-          <div className="content content05">
-            <div className="content-box">
-              <div className="title-box">
-                <Fade direction="up">
-                  <h2 className="title">
-                    당신의 창의력이 만든 서비스, 세상이 알지 못한다면?
-                    <br />
-                    스타트업의 초기 자본은 무엇보다 중요합니다.
-                  </h2>
-                </Fade>
-                <Fade direction="up" delay={200}>
-                  <p className="sub-text">
-                    하지만 그 중에서도 마케팅에의 투자는 선택이 아닌 필수입니다.
-                    <br />
-                    당신의 혁신적인 서비스가 시장에서 살아남고 성장하려면,
-                    대중의 인식과 관심이 절대적입니다. <br />
-                    초기 투자를 마케팅에 적극적으로 활용하여, <br />
-                    당신의 서비스가 고객의 마음을 사로잡을 기회를 만드세요.
-                  </p>
-                </Fade>
+      {/* Social Proof Section */}
+      <section id="portfolio" className="section bg-gray">
+        <div className="container">
+          <div className="text-center">
+            <Fade direction="up">
+              <h2 className="text-h2">🎖️ 고객들의 실제 후기</h2>
+              <p className="text-body-lg text-secondary m-lg">
+                500+ 기업이 선택한 이유가 있습니다
+              </p>
+            </Fade>
+          </div>
+
+          <div className="grid grid-cols-3 gap-xl">
+            <Fade direction="up" delay={100}>
+              <div className="card">
+                <div className="text-yellow text-h3 m-sm">⭐⭐⭐⭐⭐</div>
+                <p className="text-body m-md">
+                  "3개월 만에 매출이 180% 증가했습니다. 정말 놀라운 결과에요!"
+                </p>
+                <div className="text-caption">
+                  - 김대표, 스타트업 A사
+                </div>
               </div>
-              <div className="img-box">
-                <Image
-                  fetchPriority="high"
-                  src="/images/visonmarker-visual.png"
-                  alt="Visual Marker"
-                  width={500}
-                  height={300}
-                  className="object-contain"
-                />
-                <button type="button">
-                  <Link href="/sub">5초만에 상담받기</Link>
-                </button>
+            </Fade>
+
+            <Fade direction="up" delay={200}>
+              <div className="card">
+                <div className="text-yellow text-h3 m-sm">⭐⭐⭐⭐⭐</div>
+                <p className="text-body m-md">
+                  "관리가 이렇게 쉬울 줄 몰랐어요. 직원들도 금방 배웠습니다."
+                </p>
+                <div className="text-caption">
+                  - 박차장, 중소기업 B사
+                </div>
               </div>
+            </Fade>
+
+            <Fade direction="up" delay={300}>
+              <div className="card">
+                <div className="text-yellow text-h3 m-sm">⭐⭐⭐⭐⭐</div>
+                <p className="text-body m-md">
+                  "문의가 3배나 늘었고, 고객들이 '사이트가 전문적'이라고 해요."
+                </p>
+                <div className="text-caption">
+                  - 이대표, 제조업 C사
+                </div>
+              </div>
+            </Fade>
+          </div>
+
+          <div className="text-center m-xl">
+            <div className="text-h3 text-primary">평균 만족도 4.8/5 ⭐⭐⭐⭐⭐</div>
+            <div className="text-body text-secondary">(127개 리뷰 기준)</div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="section">
+        <div className="container">
+          <div className="cta-section">
+            <div className="cta-content">
+              <Fade direction="up">
+                <h2 className="cta-title text-h2">
+                  🎉 지금 시작하면 특별 혜택!
+                </h2>
+                <p className="cta-subtitle text-body-lg">
+                  💰 런칭 기념 20% 할인 (이달 한정)<br />
+                  📞 24시간 내 1:1 무료 컨설팅<br />
+                  🎯 경쟁사 분석 리포트 무료 제공
+                </p>
+                <div className="hero-actions">
+                  <Link href="/consultation/start" className="cta-button btn btn-lg">
+                    🔥 특별혜택 받고 상담 신청하기
+                  </Link>
+                </div>
+              </Fade>
             </div>
           </div>
-        </FullpageSection>
-        <FullpageSection isAutoHeight>
-          <Footer />
-        </FullpageSection>
-      </FullpageContainer>
+        </div>
+      </section>
+      {/* Footer */}
+      <footer className="section bg-primary-dark text-white">
+        <div className="container">
+          <div className="grid grid-cols-4 gap-xl">
+            <div>
+              <h3 className="text-h3 text-white m-md">VisionMakers</h3>
+              <p className="text-body text-gray-300">
+                대한민국 최고의 웹 솔루션 파트너
+              </p>
+              <div className="text-caption text-gray-400 m-sm">
+                🏆 2024 우수 웹에이전시 선정<br />
+                한국웹산업협회
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-h3 text-white m-md">연락처</h4>
+              <div className="text-body text-gray-300">
+                ☎️ 010-9915-4724<br />
+                📧 contact@visionmakers.co.kr<br />
+                📍 서울시 강남구 테헤란로
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-h3 text-white m-md">바로가기</h4>
+              <div className="text-body text-gray-300">
+                • <Link href="#portfolio" className="text-gray-300 hover:text-white">포트폴리오</Link><br />
+                • <Link href="#process" className="text-gray-300 hover:text-white">성공사례</Link><br />
+                • <Link href="#about" className="text-gray-300 hover:text-white">요금안내</Link><br />
+                • <Link href="#contact" className="text-gray-300 hover:text-white">고객후기</Link>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-h3 text-white m-md">📞 마지막 기회!</h4>
+              <p className="text-body text-gray-300 m-sm">
+                놓치기 전에 상담받으세요
+              </p>
+              <Link href="/consultation/start" className="btn btn-primary">
+                지금 무료 상담 신청하기
+              </Link>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-600 pt-4 mt-8 text-center">
+            <p className="text-caption text-gray-400">
+              © 2024 VisionMakers. All rights reserved. | 고객 만족도 4.8/5 ⭐⭐⭐⭐⭐
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

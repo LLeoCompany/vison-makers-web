@@ -68,60 +68,96 @@ export default function GuidedStep1() {
       title="서비스 종류 선택"
       showProgress={true}
     >
-      <div className="bg-white rounded-xl shadow-sm border p-8">
-        {/* 헤더 */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900">
+      <div className="container">
+        <div className="card">
+          {/* 헤더 */}
+          <div className="text-center m-xl">
+            <h1 className="text-h2 text-primary">
               🎯 1/4단계 - 어떤 서비스가 필요하세요?
             </h1>
+            <p className="text-body text-secondary m-md">
+              하나를 선택해 주세요
+            </p>
           </div>
-          <p className="text-gray-600">
-            하나를 선택해 주세요
-          </p>
-        </div>
 
-        {/* 서비스 종류 선택 */}
-        <div className="mb-8">
-          <RadioGroup
-            name="serviceType"
-            value={state.guided.serviceType || ''}
-            onChange={handleServiceTypeChange}
-            options={serviceOptions}
-            error={error}
-          />
-        </div>
-
-        {/* 버튼들 */}
-        <div className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={() => router.push('/consultation/start')}
-          >
-            ← 이전
-          </Button>
-
-          <Button
-            variant="primary"
-            onClick={handleNext}
-            disabled={!state.guided.serviceType}
-          >
-            다음 단계로 →
-          </Button>
-        </div>
-
-        {/* 도움말 */}
-        <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <span className="text-gray-500 text-xl">💡</span>
+          {/* 서비스 종류 선택 */}
+          <div className="m-xl">
+            <div className="grid gap-lg">
+              {serviceOptions.map((option) => (
+                <div
+                  key={option.value}
+                  className={`card-simple cursor-pointer transition-all duration-200 ${
+                    state.guided.serviceType === option.value
+                      ? 'border-red bg-red/5'
+                      : 'hover:border-gray-300 hover:shadow-md'
+                  }`}
+                  onClick={() => handleServiceTypeChange(option.value)}
+                >
+                  <div className="flex items-start gap-md">
+                    <div className="text-2xl">{option.label.split(' ')[0]}</div>
+                    <div className="flex-1">
+                      <h3 className="text-h3 text-primary m-sm">
+                        {option.label.substring(2)}
+                      </h3>
+                      <p className="text-body text-secondary">
+                        {option.description}
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <div className={`w-6 h-6 rounded-full border-2 ${
+                        state.guided.serviceType === option.value
+                          ? 'border-red bg-red'
+                          : 'border-gray-300'
+                      }`}>
+                        {state.guided.serviceType === option.value && (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="ml-3">
-              <p className="text-sm text-gray-600">
-                <strong>잘 모르시겠다면?</strong><br />
-                '잘 모르겠어요'를 선택하시면 전화 상담으로 함께 알아보겠습니다.
-                어떤 선택을 하셔도 맞춤형 상담을 받으실 수 있어요!
-              </p>
+            {error && (
+              <div className="text-red text-body-sm m-md">
+                {error}
+              </div>
+            )}
+          </div>
+
+          {/* 버튼들 */}
+          <div className="flex justify-between items-center m-xl">
+            <button
+              className="btn btn-ghost"
+              onClick={() => router.push('/consultation/start')}
+            >
+              ← 이전
+            </button>
+
+            <button
+              className={`btn btn-lg ${
+                state.guided.serviceType ? 'btn-primary' : 'btn-secondary'
+              }`}
+              onClick={handleNext}
+              disabled={!state.guided.serviceType}
+            >
+              다음 단계로 →
+            </button>
+          </div>
+
+          {/* 도움말 */}
+          <div className="card-simple" style={{ background: '#f0f9ff', border: '1px solid #bae6fd' }}>
+            <div className="flex gap-md items-start">
+              <div className="text-2xl">💡</div>
+              <div>
+                <p className="text-body text-blue">
+                  <strong>잘 모르시겠다면?</strong><br />
+                  '잘 모르겠어요'를 선택하시면 전화 상담으로 함께 알아보겠습니다.<br />
+                  어떤 선택을 하셔도 맞춤형 상담을 받으실 수 있어요!
+                </p>
+              </div>
             </div>
           </div>
         </div>
