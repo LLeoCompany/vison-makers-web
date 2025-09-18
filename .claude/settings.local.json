@@ -9,7 +9,9 @@
       "WebFetch(domain:micehub.com)",
       "Bash(tree:*)",
       "Bash(npm outdated)",
-      "WebFetch(domain:toss.im)"
+      "WebFetch(domain:toss.im)",
+      "Bash(node:*)",
+      "Bash(xargs cat:*)"
     ],
     "deny": [],
     "ask": []
