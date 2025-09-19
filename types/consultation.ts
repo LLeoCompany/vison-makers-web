@@ -47,6 +47,39 @@ export interface GuidedConsultation {
 }
 
 // 자유 트랙 타입
+// API 요청/응답 타입
+export interface ConsultationRequest {
+  type: TrackType;
+  contact: ContactInfo;
+  serviceType?: ServiceType;
+  projectSize?: ProjectSize;
+  budget?: Budget | string;
+  timeline?: Timeline | string;
+  importantFeatures?: ImportantFeature[];
+  additionalRequests?: string;
+  projectDescription?: string;
+  metadata?: {
+    userAgent: string;
+    referrer: string;
+    timestamp: string;
+    screenResolution?: string;
+    timezone?: string;
+    language?: string;
+    platform?: string;
+  };
+}
+
+export interface ConsultationResponse {
+  success: boolean;
+  message?: string;
+  data: {
+    consultationId: string;
+    consultationNumber: string;
+    estimatedContactTime: string;
+  };
+  error?: any;
+}
+
 export interface FreeConsultation {
   // 메타 정보
   id: string;
@@ -168,3 +201,21 @@ export const CONTACT_TIME_DESCRIPTIONS = {
   evening: '평일 저녁 (6시-8시)',
   anytime: '언제든 괜찮아요'
 } as const;
+
+// Context Action 타입 정의
+export type ConsultationAction =
+  | { type: 'SET_TRACK_TYPE'; payload: TrackType }
+  | { type: 'SET_SERVICE_TYPE'; payload: ServiceType }
+  | { type: 'SET_PROJECT_SIZE'; payload: ProjectSize }
+  | { type: 'SET_BUDGET'; payload: Budget }
+  | { type: 'SET_TIMELINE'; payload: Timeline }
+  | { type: 'SET_IMPORTANT_FEATURES'; payload: ImportantFeature[] }
+  | { type: 'SET_ADDITIONAL_REQUESTS'; payload: string }
+  | { type: 'SET_CONTACT_INFO'; payload: ContactInfo }
+  | { type: 'SET_PROJECT_DESCRIPTION'; payload: string }
+  | { type: 'SET_FREE_BUDGET'; payload: string }
+  | { type: 'SET_FREE_TIMELINE'; payload: string }
+  | { type: 'NEXT_STEP' }
+  | { type: 'PREV_STEP' }
+  | { type: 'RESET_FORM' }
+  | { type: 'SET_CURRENT_STEP'; payload: number };

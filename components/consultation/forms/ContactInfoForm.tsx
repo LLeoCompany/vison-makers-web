@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
-import { ContactInfo } from '@/types/consultation';
-import { THEME_COLORS } from '@/constants';
+import { ContactInfo } from '../../../types/consultation';
+import { THEME_COLORS } from '../../../constants';
 
 interface ContactInfoFormProps {
   contact: Partial<ContactInfo>;

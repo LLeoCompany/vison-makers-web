@@ -5,14 +5,14 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import ConsultationLayout from '@/components/consultation/ConsultationLayout';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import ConsultationLayout from '../../../components/consultation/ConsultationLayout';
+import { useConsultation } from '../../../contexts/ConsultationContext';
 import {
   ProjectSize,
   Budget,
   PROJECT_SIZE_DESCRIPTIONS,
   BUDGET_DESCRIPTIONS
-} from '@/types/consultation';
+} from '../../../types/consultation';
 
 const projectSizeOptions = [
   {

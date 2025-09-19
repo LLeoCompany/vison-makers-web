@@ -1,9 +1,8 @@
 /**
  * 구조화된 로깅 시스템
- * VisionMakers API 로그 관리
+ * VisionMakers API 로그 관리 (Winston 없이 구현)
  */
 
-import winston from 'winston';
 import { NextApiRequest } from 'next';
 
 // 로그 레벨 정의
@@ -37,79 +36,24 @@ export interface LogContext {
   metadata?: Record<string, any>;
 }
 
-// Winston 로거 설정
-const logFormat = winston.format.combine(
-  winston.format.timestamp({
-    format: 'YYYY-MM-DD HH:mm:ss',
-  }),
-  winston.format.errors({ stack: true }),
-  winston.format.json(),
-  winston.format.printf(({ timestamp, level, message, ...meta }) => {
-    return JSON.stringify({
-      timestamp,
-      level,
-      message,
-      ...meta,
-    });
-  })
-);
-
-// 로거 생성
-const winstonLogger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
-  format: logFormat,
-  defaultMeta: {
-    service: 'visionmakers-api',
-    environment: process.env.NODE_ENV || 'development',
-  },
-  transports: [
-    // 에러 로그 파일
-    new winston.transports.File({
-      filename: 'logs/error.log',
-      level: 'error',
-      maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    }),
-    // 모든 로그 파일
-    new winston.transports.File({
-      filename: 'logs/combined.log',
-      maxsize: 5242880, // 5MB
-      maxFiles: 10,
-    }),
-    // HTTP 로그 파일
-    new winston.transports.File({
-      filename: 'logs/http.log',
-      level: 'http',
-      maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    }),
-  ],
-});
-
-// 개발 환경에서는 콘솔에도 출력
-if (process.env.NODE_ENV !== 'production') {
-  winstonLogger.add(
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple(),
-        winston.format.printf(({ timestamp, level, message, ...meta }) => {
-          const metaStr = Object.keys(meta).length ? JSON.stringify(meta, null, 2) : '';
-          return `${timestamp} [${level}]: ${message} ${metaStr}`;
-        })
-      ),
-    })
-  );
+// 로그 엔트리 인터페이스
+interface LogEntry {
+  timestamp: string;
+  level: LogLevel;
+  message: string;
+  context?: LogContext;
+  service: string;
+  environment: string;
 }
 
 // 로거 클래스
 export class Logger {
   private static instance: Logger;
-  private winston: winston.Logger;
+  private service: string = 'visionmakers-api';
+  private environment: string = process.env.NODE_ENV || 'development';
+  private logLevel: LogLevel = (process.env.LOG_LEVEL as LogLevel) || LogLevel.INFO;
 
-  private constructor() {
-    this.winston = winstonLogger;
-  }
+  private constructor() {}
 
   public static getInstance(): Logger {
     if (!Logger.instance) {
@@ -118,25 +62,84 @@ export class Logger {
     return Logger.instance;
   }
 
+  // 로그 레벨 우선순위 확인
+  private shouldLog(level: LogLevel): boolean {
+    const levels = {
+      [LogLevel.ERROR]: 0,
+      [LogLevel.WARN]: 1,
+      [LogLevel.INFO]: 2,
+      [LogLevel.HTTP]: 3,
+      [LogLevel.DEBUG]: 4,
+    };
+
+    return levels[level] <= levels[this.logLevel];
+  }
+
+  // 로그 엔트리 생성
+  private createLogEntry(level: LogLevel, message: string, context?: LogContext): LogEntry {
+    return {
+      timestamp: new Date().toISOString(),
+      level,
+      message,
+      context,
+      service: this.service,
+      environment: this.environment,
+    };
+  }
+
+  // 로그 출력
+  private writeLog(entry: LogEntry): void {
+    if (!this.shouldLog(entry.level)) {
+      return;
+    }
+
+    const logString = JSON.stringify(entry, null, this.environment === 'development' ? 2 : 0);
+
+    // 개발 환경에서는 콘솔에 색상과 함께 출력
+    if (this.environment === 'development') {
+      const colors = {
+        [LogLevel.ERROR]: '\x1b[31m', // 빨간색
+        [LogLevel.WARN]: '\x1b[33m',  // 노란색
+        [LogLevel.INFO]: '\x1b[36m',  // 청록색
+        [LogLevel.HTTP]: '\x1b[35m',  // 자주색
+        [LogLevel.DEBUG]: '\x1b[37m', // 흰색
+      };
+      const reset = '\x1b[0m';
+
+      console.log(`${colors[entry.level]}[${entry.level.toUpperCase()}]${reset} ${entry.timestamp} ${entry.message}`);
+      if (entry.context) {
+        console.log(`${colors[entry.level]}Context:${reset}`, entry.context);
+      }
+    } else {
+      // 프로덕션에서는 JSON 형태로 출력
+      console.log(logString);
+    }
+
+    // 프로덕션 환경에서 에러는 별도 처리
+    if (entry.level === LogLevel.ERROR && this.environment === 'production') {
+      console.error(logString);
+    }
+  }
+
   // 기본 로그 메서드들
   public error(message: string, context?: LogContext): void {
-    this.winston.error(message, context);
+    this.writeLog(this.createLogEntry(LogLevel.ERROR, message, context));
   }
 
   public warn(message: string, context?: LogContext): void {
-    this.winston.warn(message, context);
+    this.writeLog(this.createLogEntry(LogLevel.WARN, message, context));
   }
 
   public info(message: string, context?: LogContext): void {
-    this.winston.info(message, context);
+    this.writeLog(this.createLogEntry(LogLevel.INFO, message, context));
   }
 
   public http(message: string, context?: LogContext): void {
-    this.winston.http(message, context);
+    this.writeLog(this.createLogEntry(LogLevel.HTTP, message, context));
   }
 
   public debug(message: string, context?: LogContext): void {
-    this.winston.debug(message, context);
+    this.writeLog(this.createLogEntry(LogLevel.DEBUG, message, context));
   }
 
   // 특수한 로깅 메서드들
@@ -192,7 +195,7 @@ export class Logger {
     context?: Partial<LogContext>
   ): void {
     const level = event === 'auth_failed' ? LogLevel.WARN : LogLevel.INFO;
-    this.winston.log(level, `Auth Event: ${event}`, {
+    this.writeLog(this.createLogEntry(level, `Auth Event: ${event}`, {
       action: event,
       userId,
       method: req?.method,
@@ -200,7 +203,7 @@ export class Logger {
       ip: req ? this.getClientIP(req) : undefined,
       userAgent: req?.headers['user-agent'],
       ...context,
-    });
+    }));
   }
 
   public businessEvent(
@@ -234,7 +237,7 @@ export class Logger {
     context?: Partial<LogContext>
   ): void {
     const level = severity === 'critical' || severity === 'high' ? LogLevel.ERROR : LogLevel.WARN;
-    this.winston.log(level, `Security Event: ${event}`, {
+    this.writeLog(this.createLogEntry(level, `Security Event: ${event}`, {
       action: event,
       severity,
       method: req?.method,
@@ -242,7 +245,7 @@ export class Logger {
       ip: req ? this.getClientIP(req) : undefined,
       userAgent: req?.headers['user-agent'],
       ...context,
-    });
+    }));
   }
 
   public databaseEvent(
@@ -267,13 +270,13 @@ export class Logger {
     context?: Partial<LogContext>
   ): void {
     const level = success ? LogLevel.INFO : LogLevel.ERROR;
-    this.winston.log(level, `External Service: ${service} - ${operation}`, {
+    this.writeLog(this.createLogEntry(level, `External Service: ${service} - ${operation}`, {
       action: operation,
       resource: service,
       success,
       duration,
       ...context,
-    });
+    }));
   }
 
   // 헬퍼 메서드들
@@ -350,7 +353,7 @@ export function withLogging<T extends any[]>(
 
 // 로그 수집기 클래스 (배치 처리용)
 export class LogCollector {
-  private logs: any[] = [];
+  private logs: LogEntry[] = [];
   private maxBatchSize: number = 100;
   private flushInterval: number = 5000; // 5초
   private timer?: NodeJS.Timeout;
@@ -362,12 +365,16 @@ export class LogCollector {
   }
 
   public collect(level: LogLevel, message: string, context?: LogContext): void {
-    this.logs.push({
+    const entry: LogEntry = {
+      timestamp: new Date().toISOString(),
       level,
       message,
       context,
-      timestamp: new Date().toISOString(),
-    });
+      service: 'visionmakers-api',
+      environment: process.env.NODE_ENV || 'development',
+    };
+
+    this.logs.push(entry);
 
     if (this.logs.length >= this.maxBatchSize) {
       this.flush();
@@ -407,13 +414,15 @@ export class LogCollector {
 export const logCollector = new LogCollector();
 
 // 프로세스 종료 시 로그 수집기 정리
-process.on('SIGTERM', () => {
-  logCollector.destroy();
-});
+if (typeof process !== 'undefined') {
+  process.on('SIGTERM', () => {
+    logCollector.destroy();
+  });
 
-process.on('SIGINT', () => {
-  logCollector.destroy();
-});
+  process.on('SIGINT', () => {
+    logCollector.destroy();
+  });
+}
 
 // 편의 함수들 (기존 코드와의 호환성)
 export const log = {

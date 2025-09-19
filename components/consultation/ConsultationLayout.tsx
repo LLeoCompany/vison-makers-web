@@ -6,7 +6,7 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
 import { useConsultation } from "@/contexts/ConsultationContext";
-import Header from "@/compoents/Header";
+import Header from "@/components/Header";
 
 interface ConsultationLayoutProps {
   children: ReactNode;
