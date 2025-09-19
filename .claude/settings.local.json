@@ -11,7 +11,8 @@
       "Bash(npm outdated)",
       "WebFetch(domain:toss.im)",
       "Bash(node:*)",
-      "Bash(xargs cat:*)"
+      "Bash(xargs cat:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

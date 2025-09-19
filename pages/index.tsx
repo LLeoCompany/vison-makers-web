@@ -16,12 +16,31 @@ const Index = () => {
 
             {/* Desktop Navigation */}
             <ul className="nav-menu hidden md:flex">
-              <li><a href="#services" className="nav-link">서비스</a></li>
-              <li><a href="#process" className="nav-link">진행과정</a></li>
-              <li><a href="#portfolio" className="nav-link">포트폴리오</a></li>
-              <li><a href="#about" className="nav-link">회사소개</a></li>
               <li>
-                <Link href="/consultation/start" className="btn btn-primary btn-sm">
+                <a href="#services" className="nav-link">
+                  서비스
+                </a>
+              </li>
+              <li>
+                <a href="#process" className="nav-link">
+                  진행과정
+                </a>
+              </li>
+              <li>
+                <a href="#portfolio" className="nav-link">
+                  포트폴리오
+                </a>
+              </li>
+              <li>
+                <a href="#about" className="nav-link">
+                  회사소개
+                </a>
+              </li>
+              <li>
+                <Link
+                  href="/consultation/start"
+                  className="btn btn-primary btn-sm"
+                >
                   무료 상담받기
                 </Link>
               </li>
@@ -29,7 +48,10 @@ const Index = () => {
 
             {/* Mobile CTA Button */}
             <div className="md:hidden">
-              <Link href="/consultation/start" className="btn btn-primary btn-sm">
+              <Link
+                href="/consultation/start"
+                className="btn btn-primary btn-sm"
+              >
                 상담신청
               </Link>
             </div>
@@ -56,7 +78,10 @@ const Index = () => {
             </Fade>
             <Fade direction="up" delay={400}>
               <div className="hero-actions">
-                <Link href="/consultation/start" className="btn btn-primary btn-lg">
+                <Link
+                  href="/consultation/start"
+                  className="btn btn-primary btn-lg"
+                >
                   🚀 5분만에 무료 견적받기
                 </Link>
                 <Link href="#portfolio" className="btn btn-secondary btn-lg">
@@ -73,21 +98,27 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 items-start gap-xl">
             <Fade direction="left">
               <div>
-                <h2 className="text-h2 m-md">
-                  😰 이런 고민 있으시죠?
-                </h2>
+                <h2 className="text-h2 m-md">😰 이런 고민 있으시죠?</h2>
                 <div className="grid gap-md">
                   <div className="card-simple">
-                    <p className="text-body">❌ 홈페이지는 있는데 문의가 안 들어온다</p>
+                    <p className="text-body">
+                      ❌ 홈페이지는 있는데 문의가 안 들어온다
+                    </p>
                   </div>
                   <div className="card-simple">
-                    <p className="text-body">❌ 경쟁사보다 우리 사이트가 구식으로 보인다</p>
+                    <p className="text-body">
+                      ❌ 경쟁사보다 우리 사이트가 구식으로 보인다
+                    </p>
                   </div>
                   <div className="card-simple">
-                    <p className="text-body">❌ 모바일에서 제대로 안 보여서 고객을 놓친다</p>
+                    <p className="text-body">
+                      ❌ 모바일에서 제대로 안 보여서 고객을 놓친다
+                    </p>
                   </div>
                   <div className="card-simple">
-                    <p className="text-body">❌ 관리가 어려워서 업데이트를 못하고 있다</p>
+                    <p className="text-body">
+                      ❌ 관리가 어려워서 업데이트를 못하고 있다
+                    </p>
                   </div>
                 </div>
               </div>
@@ -99,20 +130,32 @@ const Index = () => {
                 </h2>
                 <div className="grid gap-md">
                   <div className="card">
-                    <h3 className="text-h3 text-green">매월 평균 30% 더 많은 문의 유치</h3>
+                    <h3 className="text-h3 text-green">
+                      매월 평균 30% 더 많은 문의 유치
+                    </h3>
                     <p className="text-secondary">전환율 최적화된 UX/UI 설계</p>
                   </div>
                   <div className="card">
-                    <h3 className="text-h3 text-green">모던하고 전문적인 디자인</h3>
-                    <p className="text-secondary">브랜드 가치를 높이는 차별화된 디자인</p>
+                    <h3 className="text-h3 text-green">
+                      모던하고 전문적인 디자인
+                    </h3>
+                    <p className="text-secondary">
+                      브랜드 가치를 높이는 차별화된 디자인
+                    </p>
                   </div>
                   <div className="card">
-                    <h3 className="text-h3 text-green">완벽한 반응형 웹사이트</h3>
-                    <p className="text-secondary">모든 디바이스에서 최적화된 사용자 경험</p>
+                    <h3 className="text-h3 text-green">
+                      완벽한 반응형 웹사이트
+                    </h3>
+                    <p className="text-secondary">
+                      모든 디바이스에서 최적화된 사용자 경험
+                    </p>
                   </div>
                   <div className="card">
                     <h3 className="text-h3 text-green">직관적 관리자 시스템</h3>
-                    <p className="text-secondary">누구나 쉽게 업데이트할 수 있는 CMS</p>
+                    <p className="text-secondary">
+                      누구나 쉽게 업데이트할 수 있는 CMS
+                    </p>
                   </div>
                 </div>
               </div>
@@ -139,7 +182,8 @@ const Index = () => {
                 <h3 className="feature-title text-h3">데이터 기반 설계</h3>
                 <p className="feature-description">
                   구글 애널리틱스 분석으로 최적화된 전환율 설계
-                  <br />사용자 행동 패턴을 반영한 UX/UI
+                  <br />
+                  사용자 행동 패턴을 반영한 UX/UI
                 </p>
               </div>
             </Fade>
@@ -150,7 +194,8 @@ const Index = () => {
                 <h3 className="feature-title text-h3">전담 PM 배정</h3>
                 <p className="feature-description">
                   프로젝트 시작부터 완료까지 한 명이 책임지고 관리
-                  <br />체계적인 소통과 일정 관리
+                  <br />
+                  체계적인 소통과 일정 관리
                 </p>
               </div>
             </Fade>
@@ -161,7 +206,8 @@ const Index = () => {
                 <h3 className="feature-title text-h3">6개월 무료 지원</h3>
                 <p className="feature-description">
                   런칭 후 6개월간 무료 수정 및 기술지원
-                  <br />안정적인 서비스 운영 보장
+                  <br />
+                  안정적인 서비스 운영 보장
                 </p>
               </div>
             </Fade>
@@ -175,7 +221,8 @@ const Index = () => {
                   <div className="process-number">1</div>
                   <h3 className="process-title text-h3">무료 컨설팅</h3>
                   <p className="process-description">
-                    프로젝트 범위, 예산, 일정 논의<br />
+                    프로젝트 범위, 예산, 일정 논의
+                    <br />
                     초기 아이디어 구체화
                   </p>
                 </div>
@@ -186,7 +233,8 @@ const Index = () => {
                   <div className="process-number">2</div>
                   <h3 className="process-title text-h3">전문 기획</h3>
                   <p className="process-description">
-                    전담 기획자와 상세 기획안 작성<br />
+                    전담 기획자와 상세 기획안 작성
+                    <br />
                     목표와 실행 계획 명확화
                   </p>
                 </div>
@@ -197,7 +245,8 @@ const Index = () => {
                   <div className="process-number">3</div>
                   <h3 className="process-title text-h3">디자인 & 개발</h3>
                   <p className="process-description">
-                    최신 기술 스택으로 개발<br />
+                    최신 기술 스택으로 개발
+                    <br />
                     지속적인 테스트와 품질 관리
                   </p>
                 </div>
@@ -208,7 +257,8 @@ const Index = () => {
                   <div className="process-number">4</div>
                   <h3 className="process-title text-h3">배포 & 지원</h3>
                   <p className="process-description">
-                    안정적 배포 및 런칭<br />
+                    안정적 배포 및 런칭
+                    <br />
                     6개월 무료 지원 서비스
                   </p>
                 </div>
@@ -217,7 +267,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-        {/* <FullpageSection name="content04">
+      {/* <FullpageSection name="content04">
           <div className="content content04">
             <div className="content-box">
               <div className="title-box">
@@ -292,9 +342,7 @@ const Index = () => {
                 <p className="text-body m-md">
                   "3개월 만에 매출이 180% 증가했습니다. 정말 놀라운 결과에요!"
                 </p>
-                <div className="text-caption">
-                  - 김대표, 스타트업 A사
-                </div>
+                <div className="text-caption">- 김대표, 스타트업 A사</div>
               </div>
             </Fade>
 
@@ -304,9 +352,7 @@ const Index = () => {
                 <p className="text-body m-md">
                   "관리가 이렇게 쉬울 줄 몰랐어요. 직원들도 금방 배웠습니다."
                 </p>
-                <div className="text-caption">
-                  - 박차장, 중소기업 B사
-                </div>
+                <div className="text-caption">- 박차장, 중소기업 B사</div>
               </div>
             </Fade>
 
@@ -316,15 +362,15 @@ const Index = () => {
                 <p className="text-body m-md">
                   "문의가 3배나 늘었고, 고객들이 '사이트가 전문적'이라고 해요."
                 </p>
-                <div className="text-caption">
-                  - 이대표, 제조업 C사
-                </div>
+                <div className="text-caption">- 이대표, 제조업 C사</div>
               </div>
             </Fade>
           </div>
 
           <div className="text-center m-xl">
-            <div className="text-h3 text-primary">평균 만족도 4.8/5 ⭐⭐⭐⭐⭐</div>
+            <div className="text-h3 text-primary">
+              평균 만족도 4.8/5 ⭐⭐⭐⭐⭐
+            </div>
             <div className="text-body text-secondary">(127개 리뷰 기준)</div>
           </div>
         </div>
@@ -340,12 +386,17 @@ const Index = () => {
                   🎉 지금 시작하면 특별 혜택!
                 </h2>
                 <p className="cta-subtitle text-body-lg">
-                  💰 런칭 기념 20% 할인 (이달 한정)<br />
-                  📞 24시간 내 1:1 무료 컨설팅<br />
+                  💰 런칭 기념 20% 할인 (이달 한정)
+                  <br />
+                  📞 24시간 내 1:1 무료 컨설팅
+                  <br />
                   🎯 경쟁사 분석 리포트 무료 제공
                 </p>
                 <div className="hero-actions">
-                  <Link href="/consultation/start" className="cta-button btn btn-lg">
+                  <Link
+                    href="/consultation/start"
+                    className="cta-button btn btn-lg"
+                  >
                     🔥 특별혜택 받고 상담 신청하기
                   </Link>
                 </div>
@@ -364,7 +415,8 @@ const Index = () => {
                 대한민국 최고의 웹 솔루션 파트너
               </p>
               <div className="text-caption text-gray-400 m-sm">
-                🏆 2024 우수 웹에이전시 선정<br />
+                🏆 2024 우수 웹에이전시 선정
+                <br />
                 한국웹산업협회
               </div>
             </div>
@@ -372,8 +424,10 @@ const Index = () => {
             <div>
               <h4 className="text-h3 text-white m-md">연락처</h4>
               <div className="text-body text-gray-300">
-                ☎️ 010-9915-4724<br />
-                📧 contact@visionmakers.co.kr<br />
+                ☎️ 010-9915-4724
+                <br />
+                📧 contact@visionmakers.co.kr
+                <br />
                 📍 서울시 강남구 테헤란로
               </div>
             </div>
@@ -381,10 +435,31 @@ const Index = () => {
             <div>
               <h4 className="text-h3 text-white m-md">바로가기</h4>
               <div className="text-body text-gray-300">
-                • <Link href="#portfolio" className="text-gray-300 hover:text-white">포트폴리오</Link><br />
-                • <Link href="#process" className="text-gray-300 hover:text-white">성공사례</Link><br />
-                • <Link href="#about" className="text-gray-300 hover:text-white">요금안내</Link><br />
-                • <Link href="#contact" className="text-gray-300 hover:text-white">고객후기</Link>
+                •{" "}
+                <Link
+                  href="#portfolio"
+                  className="text-gray-300 hover:text-white"
+                >
+                  포트폴리오
+                </Link>
+                <br />•{" "}
+                <Link
+                  href="#process"
+                  className="text-gray-300 hover:text-white"
+                >
+                  성공사례
+                </Link>
+                <br />•{" "}
+                <Link href="#about" className="text-gray-300 hover:text-white">
+                  요금안내
+                </Link>
+                <br />•{" "}
+                <Link
+                  href="#contact"
+                  className="text-gray-300 hover:text-white"
+                >
+                  고객후기
+                </Link>
               </div>
             </div>
 
@@ -401,7 +476,8 @@ const Index = () => {
 
           <div className="border-t border-gray-600 pt-4 mt-8 text-center">
             <p className="text-caption text-gray-400">
-              © 2024 VisionMakers. All rights reserved. | 고객 만족도 4.8/5 ⭐⭐⭐⭐⭐
+              © 2024 VisionMakers. All rights reserved. | 고객 만족도 4.8/5
+              ⭐⭐⭐⭐⭐
             </p>
           </div>
         </div>
