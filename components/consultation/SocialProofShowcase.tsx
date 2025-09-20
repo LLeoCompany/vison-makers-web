@@ -183,9 +183,9 @@ const CLIENT_LOGOS = [
 
 export const SocialProofShowcase: React.FC = () => {
   const [liveStats, setLiveStats] = useState({
-    consultationsToday: 23,
-    projectsCompleted: 1247,
-    activeUsers: 156
+    todayConsultations: 23,
+    weeklyProjects: 1247,
+    currentVisitors: 156
   });
 
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
@@ -197,9 +197,9 @@ export const SocialProofShowcase: React.FC = () => {
 
       // 통계 랜덤 업데이트 (소폭)
       setLiveStats(prev => ({
-        consultationsToday: prev.consultationsToday + Math.floor(Math.random() * 2),
-        projectsCompleted: prev.projectsCompleted,
-        activeUsers: prev.activeUsers + Math.floor(Math.random() * 3) - 1
+        todayConsultations: prev.todayConsultations + Math.floor(Math.random() * 2),
+        weeklyProjects: prev.weeklyProjects,
+        currentVisitors: prev.currentVisitors + Math.floor(Math.random() * 3) - 1
       }));
     }, 5000);
 
@@ -308,15 +308,15 @@ const LiveActivitySection: React.FC<LiveActivitySectionProps> = ({
           {/* 실시간 통계 */}
           <div className="live-stats">
             <div className="stat-item">
-              <div className="stat-number">{stats.consultationsToday}</div>
+              <div className="stat-number">{stats.todayConsultations}</div>
               <div className="stat-label">오늘 상담 신청</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">{stats.projectsCompleted.toLocaleString()}</div>
+              <div className="stat-number">{stats.weeklyProjects.toLocaleString()}</div>
               <div className="stat-label">총 프로젝트</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">{stats.activeUsers}</div>
+              <div className="stat-number">{stats.currentVisitors}</div>
               <div className="stat-label">현재 접속자</div>
             </div>
           </div>

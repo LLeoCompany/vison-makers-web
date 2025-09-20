@@ -199,7 +199,7 @@ export const useRealTimeOptimization = () => {
 
       gtag('event', 'auto_optimization_failed', {
         event_category: 'Error',
-        error_message: error.message
+        error_message: error instanceof Error ? error.message : 'Unknown error'
       });
 
     } finally {

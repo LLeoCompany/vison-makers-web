@@ -95,7 +95,7 @@ export const ExitIntentHandler: React.FC<ExitIntentHandlerProps> = ({ onClose })
 
       gtag('event', 'exit_intent_error', {
         event_category: 'Error',
-        event_label: error.message
+        event_label: error instanceof Error ? error.message : 'Unknown error'
       });
     } finally {
       setIsSubmitting(false);

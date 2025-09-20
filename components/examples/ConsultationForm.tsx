@@ -94,7 +94,7 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
         result = await createFreeConsultation(freeForm, metadata);
       }
 
-      if (result.success) {
+      if (result.success && result.data) {
         onSuccess?.(result.data.consultationNumber);
         // Reset form
         if (type === 'guided') {

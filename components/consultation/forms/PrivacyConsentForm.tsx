@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import { ROUTES, TIME_CONSTANTS } from '@/constants';
 
 interface PrivacyConsentFormProps {
   consent: boolean;
@@ -18,7 +17,7 @@ export default function PrivacyConsentForm({
   error
 }: PrivacyConsentFormProps) {
   const handlePrivacyPolicyClick = () => {
-    window.open(ROUTES.PRIVACY_POLICY, '_blank');
+    window.open('/privacy-policy', '_blank');
   };
 
   return (
@@ -39,7 +38,7 @@ export default function PrivacyConsentForm({
           </label>
           <p id="consent-description" className="text-sm text-gray-600 mt-1">
             상담을 위한 개인정보 수집에 동의합니다.<br />
-            수집항목: 이름, 연락처, 이메일 | 보관기간: {TIME_CONSTANTS.DATA_RETENTION_PERIOD}
+            수집항목: 이름, 연락처, 이메일 | 보관기간: 3년
           </p>
           <button
             type="button"

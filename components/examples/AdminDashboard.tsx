@@ -69,11 +69,11 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
         getConsultationStats(),
       ]);
 
-      if (consultationsResult.success) {
+      if (consultationsResult.success && consultationsResult.data) {
         setConsultations(consultationsResult.data.consultations);
       }
 
-      if (statsResult.success) {
+      if (statsResult.success && statsResult.data) {
         setStats(statsResult.data);
       }
     } catch (error) {
@@ -94,7 +94,7 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
         ipAddress: '127.0.0.1', // In real app, get from API
       });
 
-      if (result.success) {
+      if (result.success && result.data) {
         setUser(result.data.user);
         // In real app, store tokens in secure storage
         localStorage.setItem('accessToken', result.data.accessToken);

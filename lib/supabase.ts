@@ -23,9 +23,9 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: false,
     persistSession: false,
   },
-  realtime: {
-    enabled: false, // 실시간 기능 비활성화 (성능 최적화)
-  },
+  // realtime: {
+  //   enabled: false, // 실시간 기능 비활성화 (성능 최적화)
+  // },
 });
 
 // Admin client with service role key for admin operations
@@ -34,9 +34,9 @@ export const supabaseAdmin = createClient<Database>(supabaseUrl, supabaseService
     autoRefreshToken: false,
     persistSession: false,
   },
-  realtime: {
-    enabled: false,
-  },
+  // realtime: {
+  //   enabled: false,
+  // },
 });
 
 // Client-side authenticated client for admin dashboard
@@ -116,22 +116,22 @@ export function handleSupabaseResponse<T>(response: {
 // Type-safe query builder helper
 export const createQuery = <T>(table: keyof typeof SUPABASE_CONFIG.tables) => {
   return {
-    select: (columns = '*') => supabase.from(SUPABASE_CONFIG.tables[table]).select(columns),
-    insert: (data: any) => supabase.from(SUPABASE_CONFIG.tables[table]).insert(data),
-    update: (data: any) => supabase.from(SUPABASE_CONFIG.tables[table]).update(data),
-    delete: () => supabase.from(SUPABASE_CONFIG.tables[table]).delete(),
-    upsert: (data: any) => supabase.from(SUPABASE_CONFIG.tables[table]).upsert(data),
+    select: (columns = '*') => supabase.from(SUPABASE_CONFIG.tables[table] as any).select(columns),
+    insert: (data: any) => supabase.from(SUPABASE_CONFIG.tables[table] as any).insert(data),
+    update: (data: any) => supabase.from(SUPABASE_CONFIG.tables[table] as any).update(data),
+    delete: () => supabase.from(SUPABASE_CONFIG.tables[table] as any).delete(),
+    upsert: (data: any) => supabase.from(SUPABASE_CONFIG.tables[table] as any).upsert(data),
   };
 };
 
 // Admin query builder (bypasses RLS)
 export const createAdminQuery = <T>(table: keyof typeof SUPABASE_CONFIG.tables) => {
   return {
-    select: (columns = '*') => supabaseAdmin.from(SUPABASE_CONFIG.tables[table]).select(columns),
-    insert: (data: any) => supabaseAdmin.from(SUPABASE_CONFIG.tables[table]).insert(data),
-    update: (data: any) => supabaseAdmin.from(SUPABASE_CONFIG.tables[table]).update(data),
-    delete: () => supabaseAdmin.from(SUPABASE_CONFIG.tables[table]).delete(),
-    upsert: (data: any) => supabaseAdmin.from(SUPABASE_CONFIG.tables[table]).upsert(data),
+    select: (columns = '*') => supabaseAdmin.from(SUPABASE_CONFIG.tables[table] as any).select(columns),
+    insert: (data: any) => supabaseAdmin.from(SUPABASE_CONFIG.tables[table] as any).insert(data),
+    update: (data: any) => supabaseAdmin.from(SUPABASE_CONFIG.tables[table] as any).update(data),
+    delete: () => supabaseAdmin.from(SUPABASE_CONFIG.tables[table] as any).delete(),
+    upsert: (data: any) => supabaseAdmin.from(SUPABASE_CONFIG.tables[table] as any).upsert(data),
   };
 };
 

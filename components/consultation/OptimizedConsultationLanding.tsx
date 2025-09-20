@@ -38,7 +38,7 @@ export const OptimizedConsultationLanding: React.FC = () => {
   });
 
   // 실시간 최적화
-  const { conversionRate, recommendations } = useRealTimeOptimization();
+  const { metrics, recommendations } = useRealTimeOptimization();
 
   useEffect(() => {
     setIsVisible(true);
@@ -104,7 +104,7 @@ export const OptimizedConsultationLanding: React.FC = () => {
       {/* 실시간 최적화 디버깅 (개발환경에서만) */}
       {process.env.NODE_ENV === "development" && (
         <OptimizationDebugPanel
-          conversionRate={conversionRate}
+          conversionRate={metrics.conversionRate}
           recommendations={recommendations}
         />
       )}
@@ -456,7 +456,7 @@ const ActionSection: React.FC<ActionSectionProps> = ({
 // 최적화 디버그 패널 (개발환경용)
 interface OptimizationDebugPanelProps {
   conversionRate: number;
-  recommendations: string[];
+  recommendations: any[];
 }
 
 const OptimizationDebugPanel: React.FC<OptimizationDebugPanelProps> = ({
@@ -472,7 +472,7 @@ const OptimizationDebugPanel: React.FC<OptimizationDebugPanelProps> = ({
           <h5>개선 제안:</h5>
           <ul>
             {recommendations.map((rec, index) => (
-              <li key={index}>{rec}</li>
+              <li key={index}>{typeof rec === 'string' ? rec : rec.title || rec.description}</li>
             ))}
           </ul>
         </div>

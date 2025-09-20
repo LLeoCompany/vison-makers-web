@@ -46,7 +46,7 @@ export const ERROR_CODES = {
 export function handleApiError(error: any): AppError {
   // 네트워크 에러
   if (!error.response) {
-    if (error.code === 'NETWORK_ERROR' || error.message === 'Network Error') {
+    if (error.code === 'NETWORK_ERROR' || (error instanceof Error && error.message === 'Network Error')) {
       return {
         code: ERROR_CODES.NETWORK_ERROR,
         message: '네트워크 연결을 확인해주세요.',
@@ -54,7 +54,7 @@ export function handleApiError(error: any): AppError {
       };
     }
 
-    if (error.code === 'TIMEOUT' || error.message.includes('timeout')) {
+    if (error.code === 'TIMEOUT' || (error instanceof Error && error.message.includes('timeout'))) {
       return {
         code: ERROR_CODES.TIMEOUT,
         message: '요청 시간이 초과되었습니다. 다시 시도해주세요.',
@@ -180,7 +180,7 @@ export function handleConsultationError(error: any): AppError {
 
   return {
     code: ERROR_CODES.CONSULTATION_ERROR,
-    message: error.message || '상담 신청 중 오류가 발생했습니다.',
+    message: (error instanceof Error ? error.message : null) || '상담 신청 중 오류가 발생했습니다.',
     severity: 'high'
   };
 }
@@ -217,11 +217,11 @@ export function getErrorMessage(error: any): string {
     return error;
   }
 
-  if (error.message) {
+  if (error instanceof Error && error.message) {
     return error.message;
   }
 
-  if (error.error?.message) {
+  if (error?.error?.message) {
     return error.error.message;
   }
 

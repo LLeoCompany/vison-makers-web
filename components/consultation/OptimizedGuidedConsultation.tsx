@@ -9,9 +9,9 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { useConsultationSubmit } from '@/hooks/useConsultationSubmit';
-import { ProgressBar } from './shared/ProgressBar';
-import { NavigationButtons } from './shared/NavigationButtons';
-import { StepTransition } from './shared/StepTransition';
+// import { ProgressBar } from './shared/ProgressBar';
+// import { NavigationButtons } from './shared/NavigationButtons';
+// import { StepTransition } from './shared/StepTransition';
 
 // 서비스 타입 정의 (FAB 이론 적용)
 const SERVICE_TYPES = [
@@ -205,7 +205,7 @@ export const OptimizedGuidedConsultation: React.FC = () => {
           onAdditionalRequestsChange={setAdditionalRequests}
         />;
       case 4:
-        return <Step4Contact onContactChange={setContact} />;
+        return <Step4Contact onContactChange={(contact) => setContact(contact, 'guided')} />;
       default:
         return null;
     }
@@ -216,7 +216,18 @@ export const OptimizedGuidedConsultation: React.FC = () => {
       {/* 진행률 표시 */}
       <div className="consultation-header">
         <div className="container">
-          <ProgressBar current={currentStep} total={4} />
+          {/* <ProgressBar current={currentStep} total={4} /> */}
+          <div className="progress-bar">
+            <div className="progress-track">
+              <div
+                className="progress-fill"
+                style={{ width: `${(currentStep / 4) * 100}%` }}
+              />
+            </div>
+            <div className="progress-text">
+              단계 {currentStep} / 4
+            </div>
+          </div>
 
           {/* 단계별 안내 메시지 */}
           <div className="step-guidance">
@@ -228,9 +239,11 @@ export const OptimizedGuidedConsultation: React.FC = () => {
       {/* 단계별 콘텐츠 */}
       <div className="consultation-content">
         <div className="container">
-          <StepTransition isAnimating={isAnimating}>
+          {/* <StepTransition isAnimating={isAnimating}> */}
+          <div className={`step-content ${isAnimating ? 'animating' : ''}`}>
             {renderStepContent()}
-          </StepTransition>
+          </div>
+          {/* </StepTransition> */}
 
           {/* 에러 메시지 */}
           {error && (
@@ -241,14 +254,32 @@ export const OptimizedGuidedConsultation: React.FC = () => {
           )}
 
           {/* 네비게이션 */}
-          <NavigationButtons
+          {/* <NavigationButtons
             currentStep={currentStep}
             totalSteps={4}
             canProceed={canProceedToNext()}
             isSubmitting={isSubmitting}
             onPrev={handlePrev}
             onNext={handleNext}
-          />
+          /> */}
+          <div className="navigation-buttons">
+            <button
+              type="button"
+              onClick={handlePrev}
+              disabled={currentStep === 1}
+              className="nav-button prev-button"
+            >
+              이전
+            </button>
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={!canProceedToNext() || isSubmitting}
+              className="nav-button next-button"
+            >
+              {currentStep === 4 ? (isSubmitting ? '제출 중...' : '제출하기') : '다음'}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -575,12 +606,12 @@ const Step3TimelineAndFeatures: React.FC<Step3Props> = ({
 
   const handleFeatureToggle = (featureValue: string) => {
     const currentFeatures = state.guided.importantFeatures;
-    const isSelected = currentFeatures.includes(featureValue);
+    const isSelected = currentFeatures.includes(featureValue as any);
 
     if (isSelected) {
       onFeaturesSelect(currentFeatures.filter(f => f !== featureValue));
     } else {
-      onFeaturesSelect([...currentFeatures, featureValue]);
+      onFeaturesSelect([...currentFeatures, featureValue as any]);
     }
   };
 
@@ -626,7 +657,7 @@ const Step3TimelineAndFeatures: React.FC<Step3Props> = ({
               <div
                 key={feature.value}
                 className={`feature-card ${
-                  state.guided.importantFeatures.includes(feature.value) ? 'selected' : ''
+                  state.guided.importantFeatures.includes(feature.value as any) ? 'selected' : ''
                 } importance-${feature.importance}`}
                 onClick={() => handleFeatureToggle(feature.value)}
               >
@@ -635,7 +666,7 @@ const Step3TimelineAndFeatures: React.FC<Step3Props> = ({
                 <p className="feature-description">{feature.description}</p>
                 <div className="feature-benefit">💡 {feature.benefit}</div>
 
-                {state.guided.importantFeatures.includes(feature.value) && (
+                {state.guided.importantFeatures.includes(feature.value as any) && (
                   <div className="feature-check">✓</div>
                 )}
               </div>

@@ -73,12 +73,12 @@ export const useConsultationSubmit = (): UseConsultationSubmitReturn => {
       });
 
       // Facebook Pixel 전환 이벤트
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'Lead', {
+      if (typeof (window as any).fbq !== 'undefined') {
+        (window as any).fbq('track', 'Lead', {
           content_category: 'consultation',
           content_name: data.type,
           value: 1,
-          currency: 'KRW'
+          currency: 'KRV'
         });
       }
 

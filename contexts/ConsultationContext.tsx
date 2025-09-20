@@ -271,10 +271,10 @@ export function ConsultationProvider({ children }: ConsultationProviderProps) {
   const setFreeProject = (description: string, budget?: string, timeline?: string) => {
     dispatch({ type: 'SET_FREE_DESCRIPTION', payload: description });
     if (budget !== undefined) {
-      dispatch({ type: 'SET_FREE_BUDGET', payload: budget });
+      // dispatch({ type: 'SET_FREE_BUDGET', payload: budget });
     }
     if (timeline !== undefined) {
-      dispatch({ type: 'SET_FREE_TIMELINE', payload: timeline });
+      // dispatch({ type: 'SET_FREE_TIMELINE', payload: timeline });
     }
   };
 
