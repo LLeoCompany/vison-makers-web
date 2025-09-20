@@ -1,0 +1,1093 @@
+# VisionMakers 상담 관리 시스템 - 관리자 페이지 설계서
+
+## 1. 전체 시스템 아키텍처
+
+### 1.1 기술 스택
+- Frontend: Next.js 14 + TypeScript + Tailwind CSS
+- Backend: Next.js API Routes + Supabase
+- Database: PostgreSQL (Supabase)
+- Real-time: Supabase Realtime
+- 푸시 알림: Notion API + Webhook
+- 인증: JWT + Supabase Auth
+- 상태관리: React Context API + Zustand
+
+### 1.2 시스템 구조
+```
+상담신청 → Supabase DB → Real-time Update → 관리자 대시보드
+                    ↓
+              Webhook Trigger → Notion API → 노션 알림
+```
+
+## 2. 데이터베이스 설계
+
+### 2.1 테이블 구조
+
+#### consultations (기존 테이블 확장)
+```sql
+- id: UUID (Primary Key)
+- consultation_number: VARCHAR(20) (Unique)
+- type: ENUM('guided', 'free')
+- status: ENUM('pending', 'reviewing', 'approved', 'rejected', 'completed', 'cancelled')
+- priority: ENUM('low', 'normal', 'high', 'urgent')
+- assigned_to: UUID (관리자 ID, Foreign Key)
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+- reviewed_at: TIMESTAMP
+- completed_at: TIMESTAMP
+- client_info: JSONB (연락처, 회사정보 등)
+- project_details: JSONB (프로젝트 상세정보)
+- budget_range: VARCHAR(50)
+- timeline: VARCHAR(50)
+- notes: TEXT (관리자 메모)
+- tags: VARCHAR[] (태그 배열)
+- source: VARCHAR(50) (유입경로)
+- utm_data: JSONB (마케팅 데이터)
+- notification_sent: BOOLEAN DEFAULT false
+- notion_page_id: VARCHAR(100) (노션 페이지 ID)
+```
+
+#### consultation_history
+```sql
+- id: UUID (Primary Key)
+- consultation_id: UUID (Foreign Key)
+- admin_id: UUID (Foreign Key)
+- action: VARCHAR(50) (상태변경, 메모추가, 승인 등)
+- previous_status: VARCHAR(20)
+- new_status: VARCHAR(20)
+- comment: TEXT
+- created_at: TIMESTAMP
+```
+
+#### admin_users (기존 테이블 확장)
+```sql
+- id: UUID (Primary Key)
+- email: VARCHAR(255) (Unique)
+- name: VARCHAR(100)
+- role: ENUM('super_admin', 'admin', 'manager', 'viewer')
+- department: VARCHAR(50)
+- permissions: JSONB
+- is_active: BOOLEAN DEFAULT true
+- last_login: TIMESTAMP
+- notification_settings: JSONB
+- created_at: TIMESTAMP
+- updated_at: TIMESTAMP
+```
+
+#### consultation_stats (통계 테이블)
+```sql
+- id: UUID (Primary Key)
+- date: DATE
+- total_consultations: INTEGER
+- pending_count: INTEGER
+- approved_count: INTEGER
+- rejected_count: INTEGER
+- completed_count: INTEGER
+- conversion_rate: DECIMAL(5,2)
+- avg_response_time: INTEGER (분 단위)
+- source_breakdown: JSONB
+- created_at: TIMESTAMP
+```
+
+#### notification_logs
+```sql
+- id: UUID (Primary Key)
+- consultation_id: UUID (Foreign Key)
+- type: ENUM('notion', 'email', 'slack')
+- status: ENUM('pending', 'sent', 'failed')
+- payload: JSONB
+- response: JSONB
+- error_message: TEXT
+- sent_at: TIMESTAMP
+- created_at: TIMESTAMP
+```
+
+### 2.2 뷰(Views) 설계
+
+#### consultation_dashboard_view
+```sql
+CREATE VIEW consultation_dashboard_view AS
+SELECT
+    c.id,
+    c.consultation_number,
+    c.type,
+    c.status,
+    c.priority,
+    c.created_at,
+    c.client_info->>'name' as client_name,
+    c.client_info->>'email' as client_email,
+    c.client_info->>'phone' as client_phone,
+    c.client_info->>'company' as company,
+    c.budget_range,
+    c.timeline,
+    a.name as assigned_admin,
+    EXTRACT(EPOCH FROM (NOW() - c.created_at)) / 3600 as hours_since_created
+FROM consultations c
+LEFT JOIN admin_users a ON c.assigned_to = a.id
+ORDER BY c.created_at DESC;
+```
+
+## 3. API 설계
+
+### 3.1 관리자 인증 API
+```
+POST /api/admin/auth/login
+POST /api/admin/auth/logout
+POST /api/admin/auth/refresh
+GET /api/admin/auth/me
+```
+
+### 3.2 상담 관리 API
+```
+GET /api/admin/consultations - 상담 목록 조회 (페이지네이션, 필터링)
+GET /api/admin/consultations/[id] - 상담 상세 조회
+PUT /api/admin/consultations/[id] - 상담 정보 수정
+PUT /api/admin/consultations/[id]/status - 상태 변경
+PUT /api/admin/consultations/[id]/assign - 담당자 할당
+POST /api/admin/consultations/[id]/notes - 메모 추가
+DELETE /api/admin/consultations/[id] - 상담 삭제
+POST /api/admin/consultations/bulk-update - 일괄 처리
+```
+
+### 3.3 통계 API
+```
+GET /api/admin/analytics/dashboard - 대시보드 통계
+GET /api/admin/analytics/consultations - 상담 통계
+GET /api/admin/analytics/conversion - 전환율 통계
+GET /api/admin/analytics/source - 유입경로 통계
+GET /api/admin/analytics/performance - 성과 지표
+GET /api/admin/analytics/export - 데이터 내보내기
+```
+
+### 3.4 노션 연동 API
+```
+POST /api/admin/notion/create-page - 노션 페이지 생성
+PUT /api/admin/notion/update-page - 노션 페이지 업데이트
+POST /api/admin/notion/send-notification - 즉시 알림 발송
+GET /api/admin/notion/status - 연동 상태 확인
+```
+
+## 4. 관리자 페이지 UI/UX 설계
+
+### 4.1 대시보드 (/admin/dashboard)
+
+#### 메인 지표 카드
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 📊 오늘의 지표                                               │
+├─────────────────────────────────────────────────────────────┤
+│ [신규 상담: 12] [처리 대기: 8] [승인: 15] [완료: 23]         │
+│ [전환율: 18.5%] [평균 응답시간: 2.3시간]                     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 실시간 상담 현황
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 🔴 실시간 상담 현황                                          │
+├─────────────────────────────────────────────────────────────┤
+│ • 홍길동님 - 웹사이트 제작 상담 (2분 전) [긴급]              │
+│ • 김철수님 - 모바일 앱 개발 (15분 전) [일반]                 │
+│ • 이영희님 - 브랜딩 작업 (1시간 전) [일반]                   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 통계 차트
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 📈 주간 상담 추이                                            │
+├─────────────────────────────────────────────────────────────┤
+│        ▄                                                    │
+│      ▄ █ ▄                                                  │
+│    ▄ █ █ █ ▄                                                │
+│  ▄ █ █ █ █ █ ▄                                              │
+│ 월 화 수 목 금 토 일                                           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 4.2 상담 관리 (/admin/consultations)
+
+#### 필터 및 검색
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 🔍 [검색: 고객명/이메일] [상태: 전체▼] [기간: 최근 7일▼]       │
+│ [담당자: 전체▼] [우선순위: 전체▼] [유입경로: 전체▼]            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 상담 목록 테이블
+```
+┌─────────────────────────────────────────────────────────────┐
+│ □ 번호  │ 고객명   │ 연락처      │ 상태    │ 우선순위 │ 담당자 │
+├─────────────────────────────────────────────────────────────┤
+│ □ C-001 │ 홍길동   │ 010-1234   │ 🟡대기  │ 🔴긴급   │ 김관리 │
+│ □ C-002 │ 김철수   │ 010-5678   │ 🟢승인  │ 🟡일반   │ 이담당 │
+│ □ C-003 │ 이영희   │ 010-9012   │ 🔵검토  │ 🟢낮음   │ 박매니 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 일괄 처리 버튼
+```
+┌─────────────────────────────────────────────────────────────┐
+│ [일괄 승인] [일괄 거절] [담당자 할당] [상태 변경] [내보내기]    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 4.3 상담 상세 (/admin/consultations/[id])
+
+#### 고객 정보
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 👤 고객 정보                                                 │
+├─────────────────────────────────────────────────────────────┤
+│ 이름: 홍길동                회사: (주)테스트                   │
+│ 연락처: 010-1234-5678       이메일: hong@test.com           │
+│ 희망연락시간: 평일 오후      상담번호: C-001                  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 프로젝트 정보
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 💼 프로젝트 정보                                              │
+├─────────────────────────────────────────────────────────────┤
+│ 서비스 유형: 웹사이트 제작                                     │
+│ 프로젝트 규모: 중간 규모                                       │
+│ 예산 범위: 300-500만원                                        │
+│ 희망 일정: 2-3개월                                            │
+│ 주요 기능: 반응형 디자인, SEO 최적화, 관리자 페이지             │
+│ 추가 요청사항: 다국어 지원 필요, 모바일 우선 디자인             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 상태 관리
+```
+┌─────────────────────────────────────────────────────────────┐
+│ ⚙️ 상태 관리                                                 │
+├─────────────────────────────────────────────────────────────┤
+│ 현재 상태: [대기 중 ▼]    우선순위: [일반 ▼]                  │
+│ 담당자: [김관리자 ▼]      예상 연락시간: [24시간 이내 ▼]       │
+│ [상태 변경] [담당자 할당] [우선순위 변경]                       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 관리자 메모
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 📝 관리자 메모                                               │
+├─────────────────────────────────────────────────────────────┤
+│ [메모 입력 영역]                                             │
+│ ┌─────────────────────────────────────────────────────────┐ │
+│ │ 2024-01-15 14:30 - 김관리자                             │ │
+│ │ 고객과 통화 완료. 상세 요구사항 확인함.                   │ │
+│ │ 다음주 화요일 미팅 예정.                                 │ │
+│ └─────────────────────────────────────────────────────────┘ │
+│ [메모 추가]                                                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 처리 이력
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 📋 처리 이력                                                 │
+├─────────────────────────────────────────────────────────────┤
+│ 2024-01-15 14:30 - 김관리자: 상담 승인                       │
+│ 2024-01-15 10:15 - 시스템: 담당자 할당 (김관리자)             │
+│ 2024-01-15 09:00 - 시스템: 상담 신청 접수                    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 4.4 통계 및 분석 (/admin/analytics)
+
+#### KPI 대시보드
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 📊 핵심 지표 (이번 달)                                        │
+├─────────────────────────────────────────────────────────────┤
+│ 총 상담수: 156건 (↗ 12%)     전환율: 18.5% (↗ 2.3%)         │
+│ 평균 응답시간: 2.1시간 (↘ 15분)  고객 만족도: 4.7/5.0       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 유입경로 분석
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 🌐 유입경로 분석                                              │
+├─────────────────────────────────────────────────────────────┤
+│ Google 검색: 45% ████████████████████                       │
+│ 네이버 검색: 28% ████████████                               │
+│ 직접 접속: 15% ██████                                       │
+│ SNS: 8% ████                                               │
+│ 기타: 4% ██                                                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 담당자별 성과
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 👥 담당자별 성과                                              │
+├─────────────────────────────────────────────────────────────┤
+│ 김관리자: 처리 25건, 전환율 22%, 평균응답 1.8시간              │
+│ 이담당자: 처리 18건, 전환율 19%, 평균응답 2.3시간              │
+│ 박매니저: 처리 31건, 전환율 16%, 평균응답 2.8시간              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 5. 노션 연동 및 푸시 알림 시스템
+
+### 5.1 노션 데이터베이스 구조
+
+#### Consultation Database (노션)
+```
+속성 설정:
+- 상담번호: Title
+- 고객명: Text
+- 회사명: Text
+- 연락처: Phone
+- 이메일: Email
+- 상담유형: Select (가이드형, 자유형)
+- 상태: Select (대기, 검토중, 승인, 거절, 완료)
+- 우선순위: Select (낮음, 일반, 높음, 긴급)
+- 담당자: Person
+- 예산범위: Text
+- 희망일정: Text
+- 생성일: Created time
+- 수정일: Last edited time
+- 프로젝트설명: Rich text
+- 관리자메모: Rich text
+```
+
+### 5.2 노션 API 연동 구현
+
+#### 환경 변수 설정
+```env
+NOTION_API_KEY=secret_xxxxxxxxx
+NOTION_DATABASE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+NOTION_WEBHOOK_SECRET=your_webhook_secret
+```
+
+#### 노션 페이지 생성 로직
+```typescript
+// utils/notionClient.ts
+import { Client } from '@notionhq/client';
+
+export class NotionService {
+  private notion: Client;
+  private databaseId: string;
+
+  constructor() {
+    this.notion = new Client({
+      auth: process.env.NOTION_API_KEY,
+    });
+    this.databaseId = process.env.NOTION_DATABASE_ID!;
+  }
+
+  async createConsultationPage(consultation: ConsultationData) {
+    const response = await this.notion.pages.create({
+      parent: { database_id: this.databaseId },
+      properties: {
+        '상담번호': {
+          title: [{ text: { content: consultation.consultation_number } }]
+        },
+        '고객명': {
+          rich_text: [{ text: { content: consultation.client_info.name } }]
+        },
+        '회사명': {
+          rich_text: [{ text: { content: consultation.client_info.company || '' } }]
+        },
+        '연락처': {
+          phone_number: consultation.client_info.phone
+        },
+        '이메일': {
+          email: consultation.client_info.email
+        },
+        '상담유형': {
+          select: { name: consultation.type === 'guided' ? '가이드형' : '자유형' }
+        },
+        '상태': {
+          select: { name: '대기' }
+        },
+        '우선순위': {
+          select: { name: '일반' }
+        },
+        '예산범위': {
+          rich_text: [{ text: { content: consultation.budget_range || '' } }]
+        },
+        '희망일정': {
+          rich_text: [{ text: { content: consultation.timeline || '' } }]
+        }
+      }
+    });
+
+    return response.id;
+  }
+
+  async updateConsultationStatus(pageId: string, status: string, assignedTo?: string) {
+    await this.notion.pages.update({
+      page_id: pageId,
+      properties: {
+        '상태': {
+          select: { name: this.mapStatusToKorean(status) }
+        },
+        ...(assignedTo && {
+          '담당자': {
+            people: [{ id: assignedTo }]
+          }
+        })
+      }
+    });
+  }
+
+  private mapStatusToKorean(status: string): string {
+    const statusMap = {
+      'pending': '대기',
+      'reviewing': '검토중',
+      'approved': '승인',
+      'rejected': '거절',
+      'completed': '완료'
+    };
+    return statusMap[status] || '대기';
+  }
+}
+```
+
+### 5.3 실시간 알림 시스템
+
+#### Webhook 트리거 설정
+```typescript
+// api/webhooks/consultation-created.ts
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const consultation = req.body;
+
+  try {
+    // 1. 노션 페이지 생성
+    const notionService = new NotionService();
+    const pageId = await notionService.createConsultationPage(consultation);
+
+    // 2. 상담 테이블에 노션 페이지 ID 저장
+    await supabase
+      .from('consultations')
+      .update({ notion_page_id: pageId })
+      .eq('id', consultation.id);
+
+    // 3. 즉시 알림 발송
+    await sendImmediateNotification(consultation, pageId);
+
+    res.status(200).json({ success: true, pageId });
+  } catch (error) {
+    console.error('Webhook error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+```
+
+#### 즉시 알림 발송
+```typescript
+async function sendImmediateNotification(consultation: any, pageId: string) {
+  const notificationData = {
+    type: 'new_consultation',
+    consultation_id: consultation.id,
+    consultation_number: consultation.consultation_number,
+    client_name: consultation.client_info.name,
+    client_email: consultation.client_info.email,
+    client_phone: consultation.client_info.phone,
+    consultation_type: consultation.type,
+    budget_range: consultation.budget_range,
+    timeline: consultation.timeline,
+    notion_page_id: pageId,
+    notion_url: `https://notion.so/${pageId}`,
+    admin_url: `${process.env.NEXT_PUBLIC_URL}/admin/consultations/${consultation.id}`
+  };
+
+  // 여러 채널로 알림 발송
+  await Promise.all([
+    sendSlackNotification(notificationData),
+    sendEmailNotification(notificationData),
+    sendDiscordNotification(notificationData)
+  ]);
+}
+```
+
+### 5.4 알림 템플릿
+
+#### Slack 알림 템플릿
+```json
+{
+  "text": "🆕 새로운 상담 신청이 접수되었습니다!",
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "🆕 새로운 상담 신청"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*고객명:* {{client_name}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*상담번호:* {{consultation_number}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*연락처:* {{client_phone}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*이메일:* {{client_email}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*상담유형:* {{consultation_type}}"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*예산범위:* {{budget_range}}"
+        }
+      ]
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "노션에서 보기"
+          },
+          "url": "{{notion_url}}",
+          "style": "primary"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "관리자에서 보기"
+          },
+          "url": "{{admin_url}}"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### 이메일 알림 템플릿
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>새로운 상담 신청 알림</title>
+</head>
+<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+        <h2 style="color: #333; margin-bottom: 20px;">🆕 새로운 상담 신청이 접수되었습니다</h2>
+
+        <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
+            <h3 style="color: #555; margin-top: 0;">고객 정보</h3>
+            <p><strong>고객명:</strong> {{client_name}}</p>
+            <p><strong>연락처:</strong> {{client_phone}}</p>
+            <p><strong>이메일:</strong> {{client_email}}</p>
+            <p><strong>상담번호:</strong> {{consultation_number}}</p>
+        </div>
+
+        <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
+            <h3 style="color: #555; margin-top: 0;">프로젝트 정보</h3>
+            <p><strong>상담유형:</strong> {{consultation_type}}</p>
+            <p><strong>예산범위:</strong> {{budget_range}}</p>
+            <p><strong>희망일정:</strong> {{timeline}}</p>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="{{notion_url}}" style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; margin-right: 10px;">노션에서 보기</a>
+            <a href="{{admin_url}}" style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">관리자에서 처리</a>
+        </div>
+    </div>
+</body>
+</html>
+```
+
+## 6. 실시간 업데이트 시스템
+
+### 6.1 Supabase Realtime 설정
+```typescript
+// hooks/useRealtimeConsultations.ts
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+
+export function useRealtimeConsultations() {
+  const [consultations, setConsultations] = useState([]);
+  const [newConsultationAlert, setNewConsultationAlert] = useState(null);
+
+  useEffect(() => {
+    // 초기 데이터 로드
+    loadConsultations();
+
+    // 실시간 구독 설정
+    const subscription = supabase
+      .channel('consultations_channel')
+      .on('postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'consultations'
+        },
+        (payload) => {
+          console.log('새로운 상담 신청:', payload.new);
+          setConsultations(prev => [payload.new, ...prev]);
+          setNewConsultationAlert(payload.new);
+
+          // 브라우저 알림
+          if (Notification.permission === 'granted') {
+            new Notification('새로운 상담 신청', {
+              body: `${payload.new.client_info?.name}님의 상담 신청이 접수되었습니다.`,
+              icon: '/favicon.ico'
+            });
+          }
+        }
+      )
+      .on('postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'consultations'
+        },
+        (payload) => {
+          console.log('상담 업데이트:', payload.new);
+          setConsultations(prev =>
+            prev.map(item =>
+              item.id === payload.new.id ? payload.new : item
+            )
+          );
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const loadConsultations = async () => {
+    const { data, error } = await supabase
+      .from('consultation_dashboard_view')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (data) setConsultations(data);
+  };
+
+  return {
+    consultations,
+    newConsultationAlert,
+    dismissAlert: () => setNewConsultationAlert(null)
+  };
+}
+```
+
+### 6.2 실시간 알림 컴포넌트
+```typescript
+// components/admin/RealtimeNotification.tsx
+export function RealtimeNotification() {
+  const { newConsultationAlert, dismissAlert } = useRealtimeConsultations();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (newConsultationAlert) {
+      setIsVisible(true);
+      // 5초 후 자동 숨김
+      setTimeout(() => {
+        setIsVisible(false);
+        dismissAlert();
+      }, 5000);
+    }
+  }, [newConsultationAlert]);
+
+  if (!isVisible || !newConsultationAlert) return null;
+
+  return (
+    <div className="fixed top-4 right-4 bg-blue-500 text-white p-4 rounded-lg shadow-lg z-50 animate-slide-in">
+      <div className="flex items-start gap-3">
+        <div className="flex-shrink-0">
+          🆕
+        </div>
+        <div className="flex-1">
+          <h4 className="font-semibold">새로운 상담 신청</h4>
+          <p className="text-sm opacity-90">
+            {newConsultationAlert.client_info?.name}님의 상담이 접수되었습니다.
+          </p>
+        </div>
+        <button
+          onClick={() => {
+            setIsVisible(false);
+            dismissAlert();
+          }}
+          className="flex-shrink-0 text-white/70 hover:text-white"
+        >
+          ✕
+        </button>
+      </div>
+      <div className="mt-3 flex gap-2">
+        <Link
+          href={`/admin/consultations/${newConsultationAlert.id}`}
+          className="bg-white/20 hover:bg-white/30 px-3 py-1 rounded text-sm"
+        >
+          바로 확인
+        </Link>
+      </div>
+    </div>
+  );
+}
+```
+
+## 7. 보안 및 권한 관리
+
+### 7.1 역할 기반 접근 제어 (RBAC)
+```typescript
+// utils/permissions.ts
+export const PERMISSIONS = {
+  CONSULTATION_VIEW: 'consultation:view',
+  CONSULTATION_EDIT: 'consultation:edit',
+  CONSULTATION_DELETE: 'consultation:delete',
+  CONSULTATION_ASSIGN: 'consultation:assign',
+  ANALYTICS_VIEW: 'analytics:view',
+  USER_MANAGE: 'user:manage',
+  SYSTEM_CONFIG: 'system:config'
+};
+
+export const ROLE_PERMISSIONS = {
+  viewer: [PERMISSIONS.CONSULTATION_VIEW],
+  manager: [
+    PERMISSIONS.CONSULTATION_VIEW,
+    PERMISSIONS.CONSULTATION_EDIT,
+    PERMISSIONS.CONSULTATION_ASSIGN,
+    PERMISSIONS.ANALYTICS_VIEW
+  ],
+  admin: [
+    ...ROLE_PERMISSIONS.manager,
+    PERMISSIONS.CONSULTATION_DELETE,
+    PERMISSIONS.USER_MANAGE
+  ],
+  super_admin: [
+    ...ROLE_PERMISSIONS.admin,
+    PERMISSIONS.SYSTEM_CONFIG
+  ]
+};
+```
+
+### 7.2 API 보안
+```typescript
+// middleware/auth.ts
+export async function withAdminAuth(handler: NextApiHandler) {
+  return async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+
+      if (!token) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      const { data: user, error } = await supabase.auth.getUser(token);
+
+      if (error || !user) {
+        return res.status(401).json({ error: 'Invalid token' });
+      }
+
+      // 관리자 권한 확인
+      const { data: adminUser } = await supabase
+        .from('admin_users')
+        .select('*')
+        .eq('email', user.user.email)
+        .eq('is_active', true)
+        .single();
+
+      if (!adminUser) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+
+      req.user = user.user;
+      req.adminUser = adminUser;
+
+      return handler(req, res);
+    } catch (error) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+}
+```
+
+## 8. 성능 최적화
+
+### 8.1 데이터베이스 인덱스
+```sql
+-- 상담 조회 성능 향상
+CREATE INDEX idx_consultations_status ON consultations(status);
+CREATE INDEX idx_consultations_created_at ON consultations(created_at DESC);
+CREATE INDEX idx_consultations_assigned_to ON consultations(assigned_to);
+CREATE INDEX idx_consultations_priority ON consultations(priority);
+
+-- 복합 인덱스
+CREATE INDEX idx_consultations_status_created ON consultations(status, created_at DESC);
+CREATE INDEX idx_consultations_assigned_status ON consultations(assigned_to, status);
+
+-- 통계 쿼리 성능 향상
+CREATE INDEX idx_consultation_stats_date ON consultation_stats(date DESC);
+```
+
+### 8.2 캐싱 전략
+```typescript
+// utils/cache.ts
+import Redis from 'ioredis';
+
+const redis = new Redis(process.env.REDIS_URL);
+
+export class CacheService {
+  static async get(key: string) {
+    const value = await redis.get(key);
+    return value ? JSON.parse(value) : null;
+  }
+
+  static async set(key: string, value: any, ttl = 300) {
+    await redis.setex(key, ttl, JSON.stringify(value));
+  }
+
+  static async invalidate(pattern: string) {
+    const keys = await redis.keys(pattern);
+    if (keys.length > 0) {
+      await redis.del(...keys);
+    }
+  }
+}
+
+// 사용 예시
+export async function getCachedDashboardStats() {
+  const cacheKey = 'dashboard:stats';
+  let stats = await CacheService.get(cacheKey);
+
+  if (!stats) {
+    stats = await calculateDashboardStats();
+    await CacheService.set(cacheKey, stats, 60); // 1분 캐시
+  }
+
+  return stats;
+}
+```
+
+## 9. 모니터링 및 로깅
+
+### 9.1 로깅 시스템
+```typescript
+// utils/logger.ts
+export class Logger {
+  static info(message: string, data?: any) {
+    console.log(`[INFO] ${new Date().toISOString()} - ${message}`, data);
+  }
+
+  static error(message: string, error?: any) {
+    console.error(`[ERROR] ${new Date().toISOString()} - ${message}`, error);
+  }
+
+  static audit(action: string, userId: string, resourceId?: string, details?: any) {
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      action,
+      userId,
+      resourceId,
+      details,
+      ip: getClientIP(),
+      userAgent: getUserAgent()
+    };
+
+    // 데이터베이스에 감사 로그 저장
+    supabase.from('audit_logs').insert(logEntry);
+  }
+}
+```
+
+### 9.2 성능 모니터링
+```typescript
+// utils/monitoring.ts
+export class PerformanceMonitor {
+  static async trackApiCall(endpoint: string, method: string, duration: number, status: number) {
+    await supabase.from('api_performance').insert({
+      endpoint,
+      method,
+      duration,
+      status,
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  static async trackConsultationMetrics(consultationId: string, action: string) {
+    await supabase.from('consultation_metrics').insert({
+      consultation_id: consultationId,
+      action,
+      timestamp: new Date().toISOString()
+    });
+  }
+}
+```
+
+## 10. 배포 및 운영
+
+### 10.1 환경 설정
+```env
+# 프로덕션 환경 변수
+NODE_ENV=production
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# 노션 연동
+NOTION_API_KEY=secret_xxxxxxxxx
+NOTION_DATABASE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+# 알림 서비스
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/xxx
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/xxx
+SMTP_HOST=smtp.gmail.com
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+
+# Redis 캐시
+REDIS_URL=redis://localhost:6379
+
+# 모니터링
+SENTRY_DSN=https://xxx@sentry.io/xxx
+```
+
+### 10.2 Docker 설정
+```dockerfile
+# Dockerfile
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM node:18-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV production
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+### 10.3 CI/CD 파이프라인
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy Admin Dashboard
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+      - name: Deploy to production
+        run: |
+          # 배포 스크립트 실행
+          ./deploy.sh
+```
+
+## 11. 테스트 전략
+
+### 11.1 단위 테스트
+```typescript
+// __tests__/services/consultation.test.ts
+import { ConsultationService } from '@/services/consultation';
+
+describe('ConsultationService', () => {
+  test('should create consultation successfully', async () => {
+    const consultationData = {
+      type: 'guided',
+      client_info: {
+        name: '홍길동',
+        email: 'hong@test.com',
+        phone: '010-1234-5678'
+      }
+    };
+
+    const result = await ConsultationService.create(consultationData);
+
+    expect(result).toHaveProperty('consultation_number');
+    expect(result.status).toBe('pending');
+  });
+});
+```
+
+### 11.2 통합 테스트
+```typescript
+// __tests__/integration/notification.test.ts
+import { NotionService } from '@/services/notion';
+import { SlackService } from '@/services/slack';
+
+describe('Notification Integration', () => {
+  test('should send notification to all channels', async () => {
+    const consultationData = createMockConsultation();
+
+    // 노션 페이지 생성
+    const pageId = await NotionService.createPage(consultationData);
+    expect(pageId).toBeTruthy();
+
+    // Slack 알림 발송
+    const slackResult = await SlackService.sendNotification(consultationData);
+    expect(slackResult.success).toBe(true);
+  });
+});
+```
+
+## 12. 향후 확장 계획
+
+### 12.1 AI 기반 기능
+- 상담 내용 자동 분류 및 태깅
+- 응답 시간 예측 모델
+- 고객 만족도 예측
+- 자동 담당자 추천
+
+### 12.2 고급 분석 기능
+- 전환율 예측 모델
+- A/B 테스트 플랫폼
+- 고객 여정 분석
+- ROI 계산기
+
+### 12.3 모바일 앱
+- React Native 기반 관리자 앱
+- 푸시 알림 지원
+- 오프라인 모드
+- 음성 메모 기능
+
+이 설계서를 바탕으로 단계적으로 구현하면 효율적이고 확장 가능한 상담 관리 시스템을 구축할 수 있습니다.
