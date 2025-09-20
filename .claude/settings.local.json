@@ -12,7 +12,8 @@
       "WebFetch(domain:toss.im)",
       "Bash(node:*)",
       "Bash(xargs cat:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npm run type-check:*)"
     ],
     "deny": [],
     "ask": []

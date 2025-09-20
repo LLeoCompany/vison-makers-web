@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Header from "@/compoents/Header";
-import Footer from "@/compoents/Footer";
+import Image from "next/image";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const Sub = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +16,7 @@ const Sub = () => {
 
   const router = useRouter();
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -46,10 +47,11 @@ const Sub = () => {
         console.error("Error sending message to Slack:", result.error);
         alert(`Error: ${result.error}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       setLoading(false); // 로딩 종료
       console.error("Error submitting form:", error);
-      alert(`Error: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`Error: ${errorMessage}`);
     }
   };
 
@@ -67,7 +69,13 @@ const Sub = () => {
               </p>
             </div>
             <div className="imgBox">
-              <img src="/images/visual-item-02.png" />
+              <Image
+                src="/images/visual-item-02.png"
+                alt="상담 신청 안내 이미지"
+                width={400}
+                height={300}
+                priority
+              />
             </div>
           </div>
           <div className="form">

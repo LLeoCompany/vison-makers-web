@@ -16,10 +16,10 @@ import { StepTransition } from './shared/StepTransition';
 // 서비스 타입 정의 (FAB 이론 적용)
 const SERVICE_TYPES = [
   {
-    value: 'homepage',
+    value: 'web_development',
     icon: '🏢',
-    title: '회사/브랜드 홈페이지',
-    description: '브랜드 소개, 서비스 안내용',
+    title: '웹사이트 개발',
+    description: '홈페이지, 쇼핑몰 등',
     examples: '카페, 병원, 회사 소개',
     fab: {
       feature: '반응형 디자인 + SEO 최적화',
@@ -28,11 +28,11 @@ const SERVICE_TYPES = [
     }
   },
   {
-    value: 'shopping',
-    icon: '🛒',
-    title: '온라인 쇼핑몰',
-    description: '상품을 온라인으로 판매',
-    examples: '의류, 화장품, 식품',
+    value: 'mobile_app',
+    icon: '📱',
+    title: '모바일 앱 개발',
+    description: 'iOS, Android 앱 개발',
+    examples: '비즈니스 앱, 게임, 유틸리티',
     fab: {
       feature: '결제 시스템 + 재고 관리',
       advantage: '24시간 자동 판매',
@@ -40,11 +40,11 @@ const SERVICE_TYPES = [
     }
   },
   {
-    value: 'booking',
-    icon: '📅',
-    title: '예약 시스템',
-    description: '예약 접수 및 관리',
-    examples: '미용실, 레스토랑, 클리닉',
+    value: 'ai_ml',
+    icon: '🤖',
+    title: 'AI/머신러닝',
+    description: '인공지능 솔루션',
+    examples: '챗봇, 예측 시스템, 데이터 분석',
     fab: {
       feature: '실시간 예약 + 자동 알림',
       advantage: '24시간 예약 접수',
@@ -52,11 +52,11 @@ const SERVICE_TYPES = [
     }
   },
   {
-    value: 'membership',
-    icon: '👥',
-    title: '회원제 서비스',
-    description: '로그인, 커뮤니티, 개인정보',
-    examples: '학원, 피트니스, 동호회',
+    value: 'consulting',
+    icon: '📈',
+    title: 'IT 컨설팅',
+    description: '기술 자문 및 전략 수립',
+    examples: '디지털 전환, 시스템 개선, 기술 도입',
     fab: {
       feature: '회원 관리 + 커뮤니티',
       advantage: '고객 데이터 축적',
@@ -370,36 +370,36 @@ const Step2SizeAndBudget: React.FC<Step2Props> = ({ onSizeSelect, onBudgetSelect
 
   const budgetRanges = [
     {
-      value: '100-300',
+      value: '1000_to_3000',
       amount: '100~300만원',
       suitable: '간단한 홈페이지',
       savings: '타 업체 대비 70% 절약',
       anchor: false
     },
     {
-      value: '300-800',
-      amount: '300~800만원',
+      value: '3000_to_5000',
+      amount: '300~500만원',
       suitable: '기능이 있는 사이트',
       savings: '타 업체 대비 60% 절약',
       anchor: false,
       popular: true
     },
     {
-      value: '800-1500',
-      amount: '800~1500만원',
+      value: '5000_to_10000',
+      amount: '500~1000만원',
       suitable: '복잡한 시스템',
       savings: '타 업체 대비 50% 절약',
       anchor: false
     },
     {
-      value: '1500+',
-      amount: '1500만원 이상',
+      value: 'over_10000',
+      amount: '1000만원 이상',
       suitable: '대규모 프로젝트',
       savings: '맞춤 견적',
       anchor: false
     },
     {
-      value: 'consult',
+      value: 'negotiable',
       amount: '상담받고 결정',
       suitable: '예산을 잘 모르겠어요',
       savings: '최적 예산 제안',
@@ -504,7 +504,7 @@ const Step3TimelineAndFeatures: React.FC<Step3Props> = ({
 
   const timelines = [
     {
-      value: '1month',
+      value: '1_month',
       icon: '⚡',
       title: '1개월 이내',
       subtitle: '급해요!',
@@ -512,18 +512,18 @@ const Step3TimelineAndFeatures: React.FC<Step3Props> = ({
       urgency: 'high'
     },
     {
-      value: '2-3months',
+      value: '1_3_months',
       icon: '⏰',
-      title: '2-3개월 정도',
+      title: '1-3개월 정도',
       subtitle: '적당히',
       description: '일반적인 진행 속도',
       urgency: 'medium',
       popular: true
     },
     {
-      value: '6months',
+      value: '3_6_months',
       icon: '🌱',
-      title: '6개월 이내',
+      title: '3-6개월 이내',
       subtitle: '여유있게',
       description: '충분한 검토와 개선',
       urgency: 'low'

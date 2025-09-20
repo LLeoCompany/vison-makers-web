@@ -21,10 +21,10 @@ export interface ConsultationFormState {
   contact: ContactInfo;
 
   // 가이드 상담 전용 필드
-  serviceType?: 'homepage' | 'shopping' | 'booking' | 'membership' | 'other';
+  serviceType?: 'web_development' | 'mobile_app' | 'desktop_app' | 'ai_ml' | 'blockchain' | 'iot' | 'consulting' | 'maintenance' | 'other';
   projectSize?: 'small' | 'medium' | 'large';
-  budget?: '100-300' | '300-800' | '800-1500' | '1500+' | 'consult';
-  timeline?: '1month' | '2-3months' | '6months' | 'flexible';
+  budget?: 'under_1000' | '1000_to_3000' | '3000_to_5000' | '5000_to_10000' | 'over_10000' | 'negotiable';
+  timeline?: 'asap' | '1_month' | '1_3_months' | '3_6_months' | '6_12_months' | 'over_1_year' | 'flexible';
   importantFeatures?: ('mobile' | 'seo' | 'admin' | 'payment')[];
   additionalRequests?: string;
 

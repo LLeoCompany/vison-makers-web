@@ -62,7 +62,7 @@ export const ConsultationMetadataSchema = z.object({
 export const GuidedConsultationSchema = z.object({
   type: z.literal('guided'),
 
-  serviceType: z.enum(['homepage', 'shopping', 'booking', 'membership', 'other'], {
+  serviceType: z.enum(['web_development', 'mobile_app', 'desktop_app', 'ai_ml', 'blockchain', 'iot', 'consulting', 'maintenance', 'other'], {
     errorMap: () => ({ message: '서비스 종류를 선택해주세요' }),
   }),
 
@@ -70,11 +70,11 @@ export const GuidedConsultationSchema = z.object({
     errorMap: () => ({ message: '프로젝트 규모를 선택해주세요' }),
   }),
 
-  budget: z.enum(['100-300', '300-800', '800-1500', '1500+', 'consult'], {
+  budget: z.enum(['under_1000', '1000_to_3000', '3000_to_5000', '5000_to_10000', 'over_10000', 'negotiable'], {
     errorMap: () => ({ message: '예산 범위를 선택해주세요' }),
   }),
 
-  timeline: z.enum(['1month', '2-3months', '6months', 'flexible'], {
+  timeline: z.enum(['asap', '1_month', '1_3_months', '3_6_months', '6_12_months', 'over_1_year', 'flexible'], {
     errorMap: () => ({ message: '완성 희망 시기를 선택해주세요' }),
   }),
 

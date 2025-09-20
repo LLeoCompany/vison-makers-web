@@ -340,7 +340,7 @@ const Index = () => {
               <div className="card">
                 <div className="text-yellow text-h3 m-sm">⭐⭐⭐⭐⭐</div>
                 <p className="text-body m-md">
-                  "3개월 만에 매출이 180% 증가했습니다. 정말 놀라운 결과에요!"
+                  &quot;3개월 만에 매출이 180% 증가했습니다. 정말 놀라운 결과에요!&quot;
                 </p>
                 <div className="text-caption">- 김대표, 스타트업 A사</div>
               </div>
@@ -350,7 +350,7 @@ const Index = () => {
               <div className="card">
                 <div className="text-yellow text-h3 m-sm">⭐⭐⭐⭐⭐</div>
                 <p className="text-body m-md">
-                  "관리가 이렇게 쉬울 줄 몰랐어요. 직원들도 금방 배웠습니다."
+                  &quot;관리가 이렇게 쉬울 줄 몰랐어요. 직원들도 금방 배웠습니다.&quot;
                 </p>
                 <div className="text-caption">- 박차장, 중소기업 B사</div>
               </div>
@@ -360,7 +360,7 @@ const Index = () => {
               <div className="card">
                 <div className="text-yellow text-h3 m-sm">⭐⭐⭐⭐⭐</div>
                 <p className="text-body m-md">
-                  "문의가 3배나 늘었고, 고객들이 '사이트가 전문적'이라고 해요."
+                  &quot;문의가 3배나 늘었고, 고객들이 &apos;사이트가 전문적&apos;이라고 해요.&quot;
                 </p>
                 <div className="text-caption">- 이대표, 제조업 C사</div>
               </div>

@@ -25,9 +25,9 @@ const GuidedStep1Page: React.FC = () => {
 
   const serviceOptions = [
     {
-      key: "homepage" as ServiceType,
-      title: "홈페이지/브랜드 사이트",
-      description: SERVICE_TYPE_DESCRIPTIONS.homepage,
+      key: "web_development" as ServiceType,
+      title: "웹사이트 개발",
+      description: SERVICE_TYPE_DESCRIPTIONS.web_development,
       icon: (
         <svg
           className="w-8 h-8"
@@ -46,9 +46,9 @@ const GuidedStep1Page: React.FC = () => {
       examples: "회사 소개, 제품 홍보, 포트폴리오",
     },
     {
-      key: "shopping" as ServiceType,
-      title: "온라인 쇼핑몰",
-      description: SERVICE_TYPE_DESCRIPTIONS.shopping,
+      key: "mobile_app" as ServiceType,
+      title: "모바일 앱 개발",
+      description: SERVICE_TYPE_DESCRIPTIONS.mobile_app,
       icon: (
         <svg
           className="w-8 h-8"
@@ -67,9 +67,9 @@ const GuidedStep1Page: React.FC = () => {
       examples: "상품 판매, 장바구니, 결제 시스템",
     },
     {
-      key: "booking" as ServiceType,
-      title: "예약 시스템",
-      description: SERVICE_TYPE_DESCRIPTIONS.booking,
+      key: "consulting" as ServiceType,
+      title: "IT 컨설팅",
+      description: SERVICE_TYPE_DESCRIPTIONS.consulting,
       icon: (
         <svg
           className="w-8 h-8"
@@ -88,9 +88,9 @@ const GuidedStep1Page: React.FC = () => {
       examples: "병원, 미용실, 펜션, 레스토랑",
     },
     {
-      key: "membership" as ServiceType,
-      title: "회원제 사이트",
-      description: SERVICE_TYPE_DESCRIPTIONS.membership,
+      key: "ai_ml" as ServiceType,
+      title: "AI/머신러닝",
+      description: SERVICE_TYPE_DESCRIPTIONS.ai_ml,
       icon: (
         <svg
           className="w-8 h-8"
@@ -293,7 +293,7 @@ const GuidedStep1Page: React.FC = () => {
               </h4>
               <p className="text-sm text-blue-800 leading-relaxed">
                 정확히 어떤 유형인지 확실하지 않다면{" "}
-                <strong>"기타/복합 서비스"</strong>를 선택해주세요. 전문가가
+                <strong>&quot;기타/복합 서비스&quot;</strong>를 선택해주세요. 전문가가
                 상담을 통해 최적의 솔루션을 제안해드립니다.
               </p>
             </div>

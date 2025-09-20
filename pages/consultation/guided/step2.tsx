@@ -35,29 +35,29 @@ const projectSizeOptions = [
 
 const budgetOptions = [
   {
-    value: '100-300' as Budget,
-    label: BUDGET_DESCRIPTIONS['100-300'],
+    value: '1000_to_3000' as Budget,
+    label: '100-300만원',
     description: '기본형 웹사이트에 적합'
   },
   {
-    value: '300-800' as Budget,
-    label: BUDGET_DESCRIPTIONS['300-800'],
+    value: '3000_to_5000' as Budget,
+    label: '300-500만원',
     description: '대부분 고객님들이 선택하는 범위',
     recommended: true
   },
   {
-    value: '800-1500' as Budget,
-    label: BUDGET_DESCRIPTIONS['800-1500'],
+    value: '5000_to_10000' as Budget,
+    label: '500-1000만원',
     description: '고급 기능과 디자인 포함'
   },
   {
-    value: '1500+' as Budget,
-    label: BUDGET_DESCRIPTIONS['1500+'],
+    value: 'over_10000' as Budget,
+    label: '1000만원 이상',
     description: '프리미엄 솔루션'
   },
   {
-    value: 'consult' as Budget,
-    label: BUDGET_DESCRIPTIONS.consult,
+    value: 'negotiable' as Budget,
+    label: '상담 후 결정',
     description: '상세한 논의 후 견적 산출'
   }
 ];

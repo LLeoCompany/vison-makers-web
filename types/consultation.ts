@@ -15,10 +15,10 @@ export interface ContactInfo {
 }
 
 // 가이드 트랙 타입
-export type ServiceType = 'homepage' | 'shopping' | 'booking' | 'membership' | 'other';
+export type ServiceType = 'web_development' | 'mobile_app' | 'desktop_app' | 'ai_ml' | 'blockchain' | 'iot' | 'consulting' | 'maintenance' | 'other';
 export type ProjectSize = 'small' | 'medium' | 'large';
-export type Budget = '100-300' | '300-800' | '800-1500' | '1500+' | 'consult';
-export type Timeline = '1month' | '2-3months' | '6months' | 'flexible';
+export type Budget = 'under_1000' | '1000_to_3000' | '3000_to_5000' | '5000_to_10000' | 'over_10000' | 'negotiable';
+export type Timeline = 'asap' | '1_month' | '1_3_months' | '3_6_months' | '6_12_months' | 'over_1_year' | 'flexible';
 
 export type ImportantFeature = 'mobile' | 'seo' | 'admin' | 'payment';
 
@@ -98,13 +98,7 @@ export interface FreeConsultation {
 // 전체 상담 데이터 타입
 export type ConsultationData = GuidedConsultation | FreeConsultation;
 
-// API 응답 타입
-export interface ConsultationResponse {
-  success: boolean;
-  message: string;
-  consultationId: string;
-  estimatedResponseTime: string;
-}
+// 두 번째 중복 정의 제거 - 첫 번째 정의 사용
 
 // 상태 관리용 타입
 export interface ConsultationState {
@@ -155,11 +149,15 @@ export const STORAGE_KEY = 'visionmakers_consultation_state';
 
 // 서비스 타입별 설명
 export const SERVICE_TYPE_DESCRIPTIONS = {
-  homepage: '브랜드 소개, 서비스 안내용 웹사이트',
-  shopping: '상품을 온라인으로 판매하는 사이트',
-  booking: '병원, 미용실, 레스토랑 등의 예약 관리',
-  membership: '로그인, 커뮤니티, 개인정보 관리 기능',
-  other: '전화 상담으로 함께 알아보기'
+  web_development: '웹사이트 개발 (홈페이지, 쇼핑몰 등)',
+  mobile_app: '모바일 앱 개발 (iOS, Android)',
+  desktop_app: '데스크탑 애플리케이션 개발',
+  ai_ml: 'AI/머신러닝 솔루션',
+  blockchain: '블록체인 기술 구현',
+  iot: 'IoT 시스템 개발',
+  consulting: 'IT 컨설팅 서비스',
+  maintenance: '시스템 유지보수',
+  other: '기타 개발 서비스'
 } as const;
 
 // 프로젝트 규모별 설명
@@ -171,18 +169,22 @@ export const PROJECT_SIZE_DESCRIPTIONS = {
 
 // 예산 범위별 설명
 export const BUDGET_DESCRIPTIONS = {
-  '100-300': '100-300만원',
-  '300-800': '300-800만원',
-  '800-1500': '800-1500만원',
-  '1500+': '1500만원 이상',
-  'consult': '상담받고 정하고 싶어요'
+  'under_1000': '100만원 미만',
+  '1000_to_3000': '100-300만원',
+  '3000_to_5000': '300-500만원',
+  '5000_to_10000': '500-1000만원',
+  'over_10000': '1000만원 이상',
+  'negotiable': '상담받고 정하고 싶어요'
 } as const;
 
 // 일정별 설명
 export const TIMELINE_DESCRIPTIONS = {
-  '1month': '1개월 이내 (급해요!)',
-  '2-3months': '2-3개월 정도 (적당히)',
-  '6months': '6개월 이내 (여유있게)',
+  'asap': '최대한 빨리 (급해요!)',
+  '1_month': '1개월 이내',
+  '1_3_months': '1-3개월 정도',
+  '3_6_months': '3-6개월 이내',
+  '6_12_months': '6-12개월 이내',
+  'over_1_year': '1년 이상',
   'flexible': '일정은 상관없어요'
 } as const;
 

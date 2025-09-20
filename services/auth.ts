@@ -40,12 +40,18 @@ export interface LoginCredentials {
 }
 
 // Environment variables
-const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_SECRET = process.env.JWT_SECRET || 'default-auth-service-secret-key-visionmakers-2024';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET environment variable is required');
+// 개발 환경에서 기본값 사용 시 경고
+if (process.env.NODE_ENV === 'development' && !process.env.JWT_SECRET) {
+  console.warn('⚠️  JWT_SECRET not configured for auth service. Using default development secret.');
+}
+
+// 프로덕션 환경에서는 반드시 환경변수 필요
+if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required for production');
 }
 
 // Generate JWT tokens

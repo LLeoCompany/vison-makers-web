@@ -16,6 +16,7 @@
     "test": "npm run type-check && npm run test:api"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@shinyongjun/react-fullpage": "^1.10.0",
     "@supabase/supabase-js": "^2.57.4",
     "axios": "^1.12.2",
@@ -30,6 +31,7 @@
     "react-dom": "^18",
     "react-router-dom": "^6.23.1",
     "sass": "^1.77.1",
+    "swiper": "^12.0.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {

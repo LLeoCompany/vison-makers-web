@@ -3,19 +3,21 @@
  * AIDA 모델과 마케팅 이론을 적용한 고전환율 페이지
  */
 
-import React from 'react';
-import Head from 'next/head';
-import { GetServerSideProps } from 'next';
-import { OptimizedConsultationLanding } from '@/components/consultation/OptimizedConsultationLanding';
-import { ConsultationProvider } from '@/contexts/ConsultationContext';
+import React from "react";
+import Head from "next/head";
+import { GetServerSideProps } from "next";
+import { OptimizedConsultationLanding } from "@/components/consultation/OptimizedConsultationLanding";
+import { ConsultationProvider } from "@/contexts/ConsultationContext";
 
 // SEO 및 성능 최적화를 위한 메타데이터
 const pageMetadata = {
-  title: '웹사이트 제작비 50% 절약 - 무료 상담 신청 | VisionMakers',
-  description: '대기업 절반 가격으로 같은 품질의 웹사이트를 제작해드립니다. 5분 상담으로 맞춤 견적을 확인하세요. 24시간 내 연락, 100% 무료 상담.',
-  keywords: '웹사이트 제작, 홈페이지 제작, 온라인 쇼핑몰, 무료 상담, 견적, 저렴한 가격',
-  ogImage: '/images/og-consultation-landing.jpg',
-  canonicalUrl: 'https://visionmakers.co.kr/consultation/optimized-landing'
+  title: "웹사이트 제작비 50% 절약 - 무료 상담 신청 | VisionMakers",
+  description:
+    "대기업 절반 가격으로 같은 품질의 웹사이트를 제작해드립니다. 5분 상담으로 맞춤 견적을 확인하세요. 24시간 내 연락, 100% 무료 상담.",
+  keywords:
+    "웹사이트 제작, 홈페이지 제작, 온라인 쇼핑몰, 무료 상담, 견적, 저렴한 가격",
+  ogImage: "/images/og-consultation-landing.jpg",
+  canonicalUrl: "https://visionmakers.co.kr/consultation/optimized-landing",
 };
 
 interface OptimizedLandingPageProps {
@@ -33,7 +35,7 @@ interface OptimizedLandingPageProps {
 const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
   utm,
   userAgent,
-  referrer
+  referrer,
 }) => {
   return (
     <>
@@ -42,7 +44,10 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
         <title>{pageMetadata.title}</title>
         <meta name="description" content={pageMetadata.description} />
         <meta name="keywords" content={pageMetadata.keywords} />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={pageMetadata.canonicalUrl} />
 
@@ -62,7 +67,11 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
 
         {/* 성능 최적화 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
 
@@ -76,8 +85,9 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
         />
 
         {/* Critical CSS 인라인 */}
-        <style dangerouslySetInnerHTML={{
-          __html: `
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
             /* Critical CSS for above-the-fold content */
             .consultation-landing {
               font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -160,43 +170,44 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
               0% { background-position: 200% 0; }
               100% { background-position: -200% 0; }
             }
-          `
-        }} />
+          `,
+          }}
+        />
 
         {/* 구조화된 데이터 (JSON-LD) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Service',
-              name: '웹사이트 제작 서비스',
+              "@context": "https://schema.org",
+              "@type": "Service",
+              name: "웹사이트 제작 서비스",
               description: pageMetadata.description,
               provider: {
-                '@type': 'Organization',
-                name: 'VisionMakers',
-                url: 'https://visionmakers.co.kr',
-                logo: 'https://visionmakers.co.kr/logo.png',
+                "@type": "Organization",
+                name: "VisionMakers",
+                url: "https://visionmakers.co.kr",
+                logo: "https://visionmakers.co.kr/logo.png",
                 contactPoint: {
-                  '@type': 'ContactPoint',
-                  telephone: '+82-2-1234-5678',
-                  contactType: 'customer service',
-                  availableLanguage: 'Korean'
-                }
+                  "@type": "ContactPoint",
+                  telephone: "+82-2-1234-5678",
+                  contactType: "customer service",
+                  availableLanguage: "Korean",
+                },
               },
               offers: {
-                '@type': 'Offer',
-                description: '웹사이트 제작 무료 상담',
-                price: '0',
-                priceCurrency: 'KRW'
+                "@type": "Offer",
+                description: "웹사이트 제작 무료 상담",
+                price: "0",
+                priceCurrency: "KRW",
               },
               aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: '4.9',
-                reviewCount: '247',
-                bestRating: '5'
-              }
-            })
+                "@type": "AggregateRating",
+                ratingValue: "4.9",
+                reviewCount: "247",
+                bestRating: "5",
+              },
+            }),
           }}
         />
 
@@ -225,15 +236,15 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
               gtag('event', 'page_view', {
                 page_title: 'Optimized Consultation Landing',
                 page_location: window.location.href,
-                utm_source: '${utm.source || ''}',
-                utm_medium: '${utm.medium || ''}',
-                utm_campaign: '${utm.campaign || ''}',
-                utm_term: '${utm.term || ''}',
-                utm_content: '${utm.content || ''}',
+                utm_source: '${utm.source || ""}',
+                utm_medium: '${utm.medium || ""}',
+                utm_campaign: '${utm.campaign || ""}',
+                utm_term: '${utm.term || ""}',
+                utm_content: '${utm.content || ""}',
                 user_agent: '${userAgent}',
                 referrer: '${referrer}'
               });
-            `
+            `,
           }}
         />
 
@@ -254,11 +265,11 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
               fbq('track', 'ViewContent', {
                 content_type: 'landing_page',
                 content_name: 'consultation_landing',
-                utm_source: '${utm.source || ''}',
-                utm_medium: '${utm.medium || ''}',
-                utm_campaign: '${utm.campaign || ''}'
+                utm_source: '${utm.source || ""}',
+                utm_medium: '${utm.medium || ""}',
+                utm_campaign: '${utm.campaign || ""}'
               });
-            `
+            `,
           }}
         />
 
@@ -267,7 +278,7 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
           dangerouslySetInnerHTML={{
             __html: `
               gtag('config', 'AW-CONVERSION_ID');
-            `
+            `,
           }}
         />
 
@@ -283,7 +294,7 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
                 r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
                 a.appendChild(r);
               })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-            `
+            `,
           }}
         />
       </Head>
@@ -318,7 +329,7 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
                   });
               });
             }
-          `
+          `,
         }}
       />
     </>
@@ -335,12 +346,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     medium: query.utm_medium as string,
     campaign: query.utm_campaign as string,
     term: query.utm_term as string,
-    content: query.utm_content as string
+    content: query.utm_content as string,
   };
 
   // 사용자 에이전트 및 참조자 정보
-  const userAgent = req.headers['user-agent'] || '';
-  const referrer = req.headers.referer || '';
+  const userAgent = req.headers["user-agent"] || "";
+  const referrer = req.headers.referer || "";
 
   // A/B 테스트 변형 할당 (서버사이드)
   const userSegment = determineUserSegment(userAgent, referrer);
@@ -354,8 +365,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       userAgent,
       referrer,
       userSegment,
-      serverTime
-    }
+      serverTime,
+    },
   };
 };
 
@@ -365,24 +376,24 @@ function determineUserSegment(userAgent: string, referrer: string): string {
   const isMobile = /Mobile|Android|iPhone|iPad/i.test(userAgent);
 
   // 트래픽 소스 체크
-  if (referrer.includes('google.com')) {
-    return isMobile ? 'mobile_google' : 'desktop_google';
+  if (referrer.includes("google.com")) {
+    return isMobile ? "mobile_google" : "desktop_google";
   }
 
-  if (referrer.includes('facebook.com') || referrer.includes('fb.com')) {
-    return isMobile ? 'mobile_facebook' : 'desktop_facebook';
+  if (referrer.includes("facebook.com") || referrer.includes("fb.com")) {
+    return isMobile ? "mobile_facebook" : "desktop_facebook";
   }
 
-  if (referrer.includes('naver.com')) {
-    return isMobile ? 'mobile_naver' : 'desktop_naver';
+  if (referrer.includes("naver.com")) {
+    return isMobile ? "mobile_naver" : "desktop_naver";
   }
 
   // 직접 방문
   if (!referrer) {
-    return isMobile ? 'mobile_direct' : 'desktop_direct';
+    return isMobile ? "mobile_direct" : "desktop_direct";
   }
 
-  return isMobile ? 'mobile_other' : 'desktop_other';
+  return isMobile ? "mobile_other" : "desktop_other";
 }
 
 export default OptimizedLandingPage;

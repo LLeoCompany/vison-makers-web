@@ -16,19 +16,19 @@ import {
 
 const timelineOptions = [
   {
-    value: '1month' as Timeline,
-    label: TIMELINE_DESCRIPTIONS['1month'],
+    value: 'asap' as Timeline,
+    label: TIMELINE_DESCRIPTIONS.asap,
     description: '빠른 런칭이 필요한 경우'
   },
   {
-    value: '2-3months' as Timeline,
-    label: TIMELINE_DESCRIPTIONS['2-3months'],
+    value: '1_3_months' as Timeline,
+    label: TIMELINE_DESCRIPTIONS['1_3_months'],
     description: '일반적인 개발 기간',
     recommended: true
   },
   {
-    value: '6months' as Timeline,
-    label: TIMELINE_DESCRIPTIONS['6months'],
+    value: '3_6_months' as Timeline,
+    label: TIMELINE_DESCRIPTIONS['3_6_months'],
     description: '충분한 검토와 테스트 기간'
   },
   {

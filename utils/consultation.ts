@@ -202,10 +202,14 @@ export function getTypeLabel(type: string): string {
  */
 export function getServiceTypeLabel(serviceType: string): string {
   const labels: { [key: string]: string } = {
-    homepage: '회사 홈페이지',
-    shopping: '온라인 쇼핑몰',
-    booking: '예약/예매 시스템',
-    membership: '회원제 서비스',
+    web_development: '웹사이트 개발',
+    mobile_app: '모바일 앱 개발',
+    desktop_app: '데스크탑 앱 개발',
+    ai_ml: 'AI/머신러닝',
+    blockchain: '블록체인',
+    iot: 'IoT 시스템',
+    consulting: 'IT 컨설팅',
+    maintenance: '시스템 유지보수',
     other: '기타',
   };
 
@@ -217,11 +221,12 @@ export function getServiceTypeLabel(serviceType: string): string {
  */
 export function getBudgetLabel(budget: string): string {
   const labels: { [key: string]: string } = {
-    '100-300': '100-300만원',
-    '300-800': '300-800만원',
-    '800-1500': '800-1500만원',
-    '1500+': '1500만원 이상',
-    'consult': '상담 후 결정',
+    'under_1000': '100만원 미만',
+    '1000_to_3000': '100-300만원',
+    '3000_to_5000': '300-500만원',
+    '5000_to_10000': '500-1000만원',
+    'over_10000': '1000만원 이상',
+    'negotiable': '상담 후 결정',
   };
 
   return labels[budget] || budget;
@@ -245,9 +250,12 @@ export function getProjectSizeLabel(size: string): string {
  */
 export function getTimelineLabel(timeline: string): string {
   const labels: { [key: string]: string } = {
-    '1month': '1개월 내',
-    '2-3months': '2-3개월 내',
-    '6months': '6개월 내',
+    'asap': '최대한 빨리',
+    '1_month': '1개월 내',
+    '1_3_months': '1-3개월 내',
+    '3_6_months': '3-6개월 내',
+    '6_12_months': '6-12개월 내',
+    'over_1_year': '1년 이상',
     'flexible': '유연하게',
   };
 

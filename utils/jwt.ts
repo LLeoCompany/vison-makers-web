@@ -17,13 +17,20 @@ export interface JWTPayload {
 }
 
 // 환경변수 검증
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'default-development-secret-key-visionmakers-2024';
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'default-development-refresh-secret-key-visionmakers-2024';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
-if (!JWT_SECRET || !JWT_REFRESH_SECRET) {
-  throw new Error('JWT secrets must be defined in environment variables');
+// 개발 환경에서 기본값 사용 시 경고
+if (process.env.NODE_ENV === 'development' && (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET)) {
+  console.warn('⚠️  JWT secrets not configured in environment variables. Using default development secrets.');
+  console.warn('   For production, please set JWT_SECRET and JWT_REFRESH_SECRET environment variables.');
+}
+
+// 프로덕션 환경에서는 반드시 환경변수 필요
+if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET)) {
+  throw new Error('JWT secrets must be defined in environment variables for production');
 }
 
 /**

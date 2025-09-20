@@ -11,10 +11,10 @@ import { useConsultation } from "@/contexts/ConsultationContext";
 import { useABTest } from "@/hooks/useABTest";
 import { useRealTimeOptimization } from "@/hooks/useRealTimeOptimization";
 import { ExitIntentHandler } from "./ExitIntentHandler";
-import { ScrollTriggeredCTA } from "./ScrollTriggeredCTA";
-import { SocialProofShowcase } from "./SocialProofShowcase";
-import { ScarcityUrgencyComponent } from "./ScarcityUrgencyComponent";
-// import { PricingAnchoringTable } from "./PricingAnchoringTable";
+import ScrollTriggeredCTA from "./ScrollTriggeredCTA";
+import SocialProofShowcase from "./SocialProofShowcase";
+import ScarcityUrgencyComponent from "./ScarcityUrgencyComponent";
+import PricingAnchoringTable from "./PricingAnchoringTable";
 
 // AIDA 구조의 메인 랜딩 컴포넌트
 export const OptimizedConsultationLanding: React.FC = () => {
@@ -50,7 +50,7 @@ export const OptimizedConsultationLanding: React.FC = () => {
       headline_variant: headlineVariant,
       cta_variant: ctaVariant,
     });
-  }, []);
+  }, [headlineVariant, ctaVariant]);
 
   const handleConsultationStart = (type: "guided" | "free") => {
     trackConversion("consultation_start");
@@ -74,7 +74,7 @@ export const OptimizedConsultationLanding: React.FC = () => {
       <ExitIntentHandler />
 
       {/* 스크롤 기반 Sticky CTA */}
-      <ScrollTriggeredCTA onConsultationStart={handleConsultationStart} />
+      <ScrollTriggeredCTA />
 
       {/* 최소화된 헤더 */}
       <MinimalHeader />

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
 
 const Footer = () => {
@@ -16,7 +17,7 @@ const Footer = () => {
             </div> */}
             <div className="number">
               <div>
-                <img src="/images/icon-phone.png" />
+                <Image src="/images/icon-phone.png" alt="전화" width={16} height={16} />
                 010-9915-4724
               </div>
               <div>

@@ -6,6 +6,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
@@ -233,7 +234,11 @@ export const SocialProofShowcase: React.FC = () => {
 interface LiveActivitySectionProps {
   activities: typeof LIVE_ACTIVITIES;
   currentIndex: number;
-  stats: typeof liveStats;
+  stats: {
+    todayConsultations: number;
+    weeklyProjects: number;
+    currentVisitors: number;
+  };
 }
 
 const LiveActivitySection: React.FC<LiveActivitySectionProps> = ({
@@ -398,7 +403,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
 
                 <div className="testimonial-content">
                   <blockquote className="testimonial-text">
-                    "{testimonial.content}"
+                    &quot;{testimonial.content}&quot;
                   </blockquote>
 
                   <div className="testimonial-metrics">
@@ -550,8 +555,10 @@ const ClientLogosSection: React.FC<ClientLogosSectionProps> = ({ logos }) => {
                   alt={client.name}
                   onError={(e) => {
                     // 이미지 로드 실패 시 텍스트로 대체
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling!.style.display = 'flex';
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.style.display = 'none';
+                    const sibling = target.nextElementSibling as HTMLElement;
+                    if (sibling) sibling.style.display = 'flex';
                   }}
                 />
                 <div className="logo-fallback" style={{ display: 'none' }}>
@@ -601,8 +608,8 @@ const ExpertEndorsementSection: React.FC = () => {
           </div>
 
           <blockquote className="endorsement-text">
-            "VisionMakers는 중소기업에게 가장 적합한 웹 솔루션을 제공합니다.
-            <span className="highlight">합리적인 가격에 높은 품질</span>을 원한다면 강력 추천합니다."
+            &quot;VisionMakers는 중소기업에게 가장 적합한 웹 솔루션을 제공합니다.
+            <span className="highlight">합리적인 가격에 높은 품질</span>을 원한다면 강력 추천합니다.&quot;
           </blockquote>
 
           <div className="endorsement-credentials">
