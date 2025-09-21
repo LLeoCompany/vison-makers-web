@@ -13,7 +13,10 @@
       "Bash(node:*)",
       "Bash(xargs cat:*)",
       "Bash(find:*)",
-      "Bash(npm run type-check:*)"
+      "Bash(npm run type-check:*)",
+      "WebFetch(domain:imweb.me)",
+      "Bash(npx tsc:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []
