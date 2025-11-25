@@ -239,11 +239,11 @@ export class Logger {
     const level = severity === 'critical' || severity === 'high' ? LogLevel.ERROR : LogLevel.WARN;
     this.writeLog(this.createLogEntry(level, `Security Event: ${event}`, {
       action: event,
-      severity,
       method: req?.method,
       url: req?.url,
       ip: req ? this.getClientIP(req) : undefined,
-      userAgent: req?.headers['user-agent'],
+      userAgent: req?.headers['user-agent'] as string,
+      metadata: { severity },
       ...context,
     }));
   }
@@ -273,8 +273,8 @@ export class Logger {
     this.writeLog(this.createLogEntry(level, `External Service: ${service} - ${operation}`, {
       action: operation,
       resource: service,
-      success,
       duration,
+      metadata: { success },
       ...context,
     }));
   }
@@ -390,8 +390,7 @@ export class LogCollector {
     // 실제 환경에서는 외부 로그 수집 서비스로 전송
     // (예: Elasticsearch, Splunk, CloudWatch 등)
     logger.debug('Flushing logs to external service', {
-      count: logsToSend.length,
-      metadata: { logs: logsToSend },
+      metadata: { count: logsToSend.length, logs: logsToSend },
     });
   }
 

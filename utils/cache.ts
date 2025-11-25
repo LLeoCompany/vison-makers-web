@@ -200,11 +200,11 @@ export class MemoryCache<T = any> {
     const now = Date.now();
     const expiredKeys: string[] = [];
 
-    for (const [key, item] of this.cache) {
+    this.cache.forEach((item, key) => {
       if (now > item.expires) {
         expiredKeys.push(key);
       }
-    }
+    });
 
     expiredKeys.forEach(key => this.delete(key));
     this.stats.cleanups++;
@@ -230,12 +230,12 @@ export class MemoryCache<T = any> {
     let oldestKey: string | null = null;
     let oldestAccess = Infinity;
 
-    for (const [key, accessTime] of this.accessOrder) {
+    this.accessOrder.forEach((accessTime, key) => {
       if (accessTime < oldestAccess) {
         oldestAccess = accessTime;
         oldestKey = key;
       }
-    }
+    });
 
     if (oldestKey) {
       this.delete(oldestKey);
@@ -249,12 +249,12 @@ export class MemoryCache<T = any> {
   private getMemoryUsage(): number {
     let totalSize = 0;
 
-    for (const [key, item] of this.cache) {
+    this.cache.forEach((item, key) => {
       // 키 크기 + 데이터 크기 추정
       totalSize += key.length * 2; // 문자열은 UTF-16 (2바이트)
       totalSize += JSON.stringify(item.data).length * 2;
       totalSize += 64; // CacheItem 메타데이터 추정
-    }
+    });
 
     return totalSize;
   }
@@ -308,9 +308,9 @@ export class CacheManager {
   getAllStats(): { [namespace: string]: CacheStats } {
     const stats: { [namespace: string]: CacheStats } = {};
 
-    for (const [namespace, cache] of this.caches) {
+    this.caches.forEach((cache, namespace) => {
       stats[namespace] = cache.getStats();
-    }
+    });
 
     return stats;
   }
@@ -330,9 +330,9 @@ export class CacheManager {
    * 모든 캐시 정리
    */
   destroyAll(): void {
-    for (const [namespace, cache] of this.caches) {
+    this.caches.forEach((cache) => {
       cache.destroy();
-    }
+    });
     this.caches.clear();
   }
 }

@@ -15,7 +15,7 @@ export interface ContactInfo {
 }
 
 // 가이드 트랙 타입
-export type ServiceType = 'web_development' | 'mobile_app' | 'desktop_app' | 'ai_ml' | 'blockchain' | 'iot' | 'consulting' | 'maintenance' | 'other';
+export type ServiceType = 'homepage' | 'shopping' | 'booking' | 'membership' | 'web_development' | 'mobile_app' | 'desktop_app' | 'ai_ml' | 'blockchain' | 'iot' | 'consulting' | 'maintenance' | 'other';
 export type ProjectSize = 'small' | 'medium' | 'large';
 export type Budget = 'under_1000' | '1000_to_3000' | '3000_to_5000' | '5000_to_10000' | 'over_10000' | 'negotiable';
 export type Timeline = 'asap' | '1_month' | '1_3_months' | '3_6_months' | '6_12_months' | 'over_1_year' | 'flexible';
@@ -149,6 +149,10 @@ export const STORAGE_KEY = 'visionmakers_consultation_state';
 
 // 서비스 타입별 설명
 export const SERVICE_TYPE_DESCRIPTIONS = {
+  homepage: '회사 소개, 브랜드 홍보, 포트폴리오 사이트',
+  shopping: '온라인 상품 판매, 장바구니, 결제 시스템',
+  booking: '병원, 미용실, 펜션, 레스토랑 예약 시스템',
+  membership: '커뮤니티, 학습 플랫폼, 회원제 서비스',
   web_development: '웹사이트 개발 (홈페이지, 쇼핑몰 등)',
   mobile_app: '모바일 앱 개발 (iOS, Android)',
   desktop_app: '데스크탑 애플리케이션 개발',
@@ -157,7 +161,7 @@ export const SERVICE_TYPE_DESCRIPTIONS = {
   iot: 'IoT 시스템 개발',
   consulting: 'IT 컨설팅 서비스',
   maintenance: '시스템 유지보수',
-  other: '기타 개발 서비스'
+  other: '특별한 요구사항이 있는 프로젝트'
 } as const;
 
 // 프로젝트 규모별 설명
@@ -204,20 +208,3 @@ export const CONTACT_TIME_DESCRIPTIONS = {
   anytime: '언제든 괜찮아요'
 } as const;
 
-// Context Action 타입 정의
-export type ConsultationAction =
-  | { type: 'SET_TRACK_TYPE'; payload: TrackType }
-  | { type: 'SET_SERVICE_TYPE'; payload: ServiceType }
-  | { type: 'SET_PROJECT_SIZE'; payload: ProjectSize }
-  | { type: 'SET_BUDGET'; payload: Budget }
-  | { type: 'SET_TIMELINE'; payload: Timeline }
-  | { type: 'SET_IMPORTANT_FEATURES'; payload: ImportantFeature[] }
-  | { type: 'SET_ADDITIONAL_REQUESTS'; payload: string }
-  | { type: 'SET_CONTACT_INFO'; payload: ContactInfo }
-  | { type: 'SET_PROJECT_DESCRIPTION'; payload: string }
-  | { type: 'SET_FREE_BUDGET'; payload: string }
-  | { type: 'SET_FREE_TIMELINE'; payload: string }
-  | { type: 'NEXT_STEP' }
-  | { type: 'PREV_STEP' }
-  | { type: 'RESET_FORM' }
-  | { type: 'SET_CURRENT_STEP'; payload: number };

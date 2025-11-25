@@ -101,11 +101,11 @@ export class MemoryRateLimiter {
     const now = Date.now();
     const expired: string[] = [];
 
-    for (const [identifier, record] of this.records) {
+    this.records.forEach((record, identifier) => {
       if (now > record.resetTime) {
         expired.push(identifier);
       }
-    }
+    });
 
     expired.forEach(identifier => this.records.delete(identifier));
 
@@ -173,10 +173,12 @@ export function withRateLimit(config: RateLimitConfig) {
         'medium',
         req,
         {
-          identifier,
-          totalHits: result.totalHits,
-          limit: config.maxRequests,
-          windowMs: config.windowMs,
+          metadata: {
+            identifier,
+            totalHits: result.totalHits,
+            limit: config.maxRequests,
+            windowMs: config.windowMs,
+          },
         }
       );
 
@@ -234,10 +236,10 @@ export const rateLimitConfigs = {
     windowMs: 10 * 60 * 1000, // 10분
     onLimitReached: (req: NextApiRequest, identifier: string) => {
       logger.warn('Consultation submission rate limit exceeded', {
-        identifier,
         method: req.method,
         url: req.url,
-        userAgent: req.headers['user-agent'],
+        userAgent: req.headers['user-agent'] as string,
+        metadata: { identifier },
       });
     },
   },
@@ -269,7 +271,7 @@ export const rateLimitConfigs = {
         `Auth API rate limit exceeded for ${identifier}`,
         'high',
         req,
-        { identifier }
+        { metadata: { identifier } }
       );
     },
   },
@@ -324,7 +326,7 @@ export class SlidingWindowRateLimiter {
     const now = Date.now();
     const oneHourAgo = now - 60 * 60 * 1000; // 1시간 전
 
-    for (const [identifier, window] of this.windows) {
+    this.windows.forEach((window, identifier) => {
       const validRequests = window.filter(timestamp => timestamp > oneHourAgo);
 
       if (validRequests.length === 0) {
@@ -332,7 +334,7 @@ export class SlidingWindowRateLimiter {
       } else {
         this.windows.set(identifier, validRequests);
       }
-    }
+    });
   }
 }
 

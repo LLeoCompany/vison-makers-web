@@ -127,7 +127,7 @@ export class PerformanceMonitor {
       metadata: {
         method: metric.method,
         statusCode: metric.statusCode,
-        memoryUsed: metric.memoryUsage.used,
+        memoryUsed: metric.memoryUsage.heapUsed,
         apiVersion: metric.apiVersion,
       }
     });
@@ -182,7 +182,7 @@ export class PerformanceMonitor {
     }
 
     // 메모리 사용량 체크
-    const memoryPercent = (metric.memoryUsage.used / metric.memoryUsage.total) * 100;
+    const memoryPercent = (metric.memoryUsage.heapUsed / metric.memoryUsage.heapTotal) * 100;
     if (memoryPercent > this.HIGH_MEMORY_THRESHOLD * 100) {
       this.createAlert({
         level: 'critical',
@@ -240,7 +240,7 @@ export class PerformanceMonitor {
 
     // 중요한 알림은 로그로 기록
     if (newAlert.level === 'critical') {
-      logger.securityEvent('critical_alert_created', 'monitoring', {
+      logger.securityEvent('critical_alert_created', 'critical', undefined, {
         metadata: {
           alertId: newAlert.id,
           title: newAlert.title,
@@ -339,7 +339,7 @@ export class PerformanceMonitor {
    */
   private checkMemory(): HealthCheckResult['checks']['memory'] {
     const usage = process.memoryUsage();
-    const usagePercent = (usage.used / usage.total) * 100;
+    const usagePercent = (usage.heapUsed / usage.heapTotal) * 100;
 
     return {
       status: usagePercent > 90 ? 'down' : 'up',

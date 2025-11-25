@@ -139,7 +139,7 @@ async function upsertABTestParticipant(
   // 기존 참여자 확인
   const { data: existingParticipant } = await supabaseAdmin
     .from('ab_test_participants')
-    .select('id, first_exposure_at')
+    .select('id, first_seen_at, session_count')
     .eq('test_name', data.testName)
     .eq('user_id', data.userId)
     .single();
@@ -150,7 +150,7 @@ async function upsertABTestParticipant(
       .from('ab_test_participants')
       .update({
         last_activity_at: data.timestamp,
-        session_count: supabaseAdmin.sql`session_count + 1`
+        session_count: (existingParticipant.session_count || 0) + 1
       })
       .eq('id', existingParticipant.id);
 
@@ -201,13 +201,20 @@ async function saveABTestConversion(
     throw error;
   }
 
-  // 참여자 전환 상태 업데이트
+  // 참여자 전환 상태 업데이트 - 먼저 현재 값 가져오기
+  const { data: participant } = await supabaseAdmin
+    .from('ab_test_participants')
+    .select('conversion_count, first_conversion_at')
+    .eq('test_name', data.testName)
+    .eq('user_id', data.userId)
+    .single();
+
   await supabaseAdmin
     .from('ab_test_participants')
     .update({
       has_converted: true,
-      first_conversion_at: data.timestamp,
-      conversion_count: supabaseAdmin.sql`COALESCE(conversion_count, 0) + 1`
+      first_conversion_at: participant?.first_conversion_at || data.timestamp,
+      conversion_count: (participant?.conversion_count || 0) + 1
     })
     .eq('test_name', data.testName)
     .eq('user_id', data.userId);

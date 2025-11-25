@@ -10,7 +10,6 @@ import { ConsultationRequestSchema, sanitizeInput } from '@/schemas/consultation
 import { supabaseAdmin } from '@/lib/supabase';
 import { generateConsultationNumber, getClientIP, parseUserAgent, extractUTMParams, getEstimatedProcessingTime } from '@/utils/consultation';
 import { ConsultationRequest } from '@/types/database';
-import { createSuccessResponse } from '@/utils/apiWrapper';
 import { ValidationError, DatabaseError } from '@/utils/errors';
 import { logger } from '@/utils/logger';
 import { withPublicApi, presetConfigs } from '@/utils/combinedMiddleware';
@@ -41,7 +40,8 @@ async function consultationSubmitV2Handler(
   res.setHeader('API-Version', 'v2');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    res.status(200).end();
+    return;
   }
 
   // 1. 요청 데이터 검증
@@ -56,7 +56,7 @@ async function consultationSubmitV2Handler(
     // 2. 메타데이터 수집
     const userAgent = req.headers['user-agent'] || '';
     const ipAddress = getClientIP(req);
-    const referrer = req.headers.referer || req.headers.referrer || '';
+    const referrer = (req.headers.referer || req.headers.referrer || '') as string;
     const utmParams = extractUTMParams(referrer);
 
     // 3. 상담 번호 생성
@@ -166,15 +166,18 @@ async function consultationSubmitV2Handler(
   });
 
   // 9. v2 표준 형식 응답
-  const responseData = {
-    consultationId: consultation.id,
-    consultationNumber: consultation.consultation_number,
-    estimatedContactTime,
-    status: 'pending',
+  const response: V2ConsultationResponse = {
+    success: true,
+    data: {
+      consultationId: consultation.id,
+      consultationNumber: consultation.consultation_number,
+      estimatedContactTime,
+      status: 'pending',
+    },
+    timestamp: new Date().toISOString(),
   };
 
-  const response = createSuccessResponse(responseData);
-  return res.status(201).json(response);
+  res.status(201).json(response);
 }
 
 export default withPublicApi(consultationSubmitV2Handler, presetConfigs.consultationSubmit);

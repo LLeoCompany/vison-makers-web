@@ -23,6 +23,7 @@ export interface ApiConfig {
     windowMs: number;
   };
   validation?: {
+    method?: string;
     body?: any;
     query?: any;
     params?: any;
@@ -62,7 +63,7 @@ export function withApiWrapper<T = any>(
 ) {
   return async (
     req: NextApiRequest | AuthenticatedRequest,
-    res: NextApiResponse<SuccessResponse<T> | ErrorResponse>
+    res: NextApiResponse<T | SuccessResponse<T> | ErrorResponse>
   ) => {
     const metadata = initializeRequestMetadata(req);
 
@@ -321,14 +322,14 @@ export function withPerformanceMonitoring<T = any>(
           duration,
           method: req.method,
           url: req.url,
-          threshold: criticalThreshold,
+          metadata: { threshold: criticalThreshold },
         });
       } else if (duration > slowThreshold) {
         logger.warn('Slow API Performance', {
           duration,
           method: req.method,
           url: req.url,
-          threshold: slowThreshold,
+          metadata: { threshold: slowThreshold },
         });
       }
     }

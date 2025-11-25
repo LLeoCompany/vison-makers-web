@@ -35,9 +35,11 @@ class NotificationService {
 
   private constructor(config: NotificationServiceConfig) {
     this.config = {
-      enableBrowserNotifications: true,
-      enableSoundAlerts: true,
-      pollInterval: 30000, // 30초
+      ...{
+        enableBrowserNotifications: true,
+        enableSoundAlerts: true,
+        pollInterval: 30000, // 30초
+      },
       ...config
     };
   }
@@ -231,10 +233,6 @@ class NotificationService {
       badge: '/logo.svg',
       tag: notification.id, // 중복 알림 방지
       requireInteraction: notification.priority === 'urgent',
-      actions: notification.actionUrl ? [
-        { action: 'view', title: '보기' },
-        { action: 'dismiss', title: '닫기' }
-      ] : undefined
     };
 
     const browserNotification = new Notification(notification.title, options);

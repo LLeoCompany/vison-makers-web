@@ -57,7 +57,7 @@ interface ErrorResponse {
 
 async function statsHandler(
   req: AuthenticatedRequest,
-  res: NextApiResponse<StatsResponse>
+  res: NextApiResponse<StatsResponse | ErrorResponse>
 ) {
     // 쿼리 파라미터 검증
     const validationResult = StatsQuerySchema.safeParse(req.query);
@@ -91,6 +91,6 @@ async function statsHandler(
 
 // 관리자 API + 통계 읽기 권한 + 캐싱 + 버전 관리 적용
 export default withAdminApi(statsHandler, {
-  permission: 'statsAccess',
+  permission: 'readAccess',
   ...presetConfigs.stats,
 });

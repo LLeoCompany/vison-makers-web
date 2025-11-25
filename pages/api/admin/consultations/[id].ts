@@ -11,7 +11,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 import type { ConsultationDetailsView, ConsultationStatus, ConsultationPriority } from '@/types/database';
 import { triggerStatusChangeNotification, triggerAssignmentNotification } from '@/utils/adminNotificationTrigger';
 
-export interface ConsultationDetailResponse extends ConsultationItem {
+export interface ConsultationDetailResponse extends Omit<ConsultationItem, 'timeline'> {
   notes: ConsultationNote[];
   attachments: ConsultationAttachment[];
   timeline: ConsultationTimelineEvent[];
@@ -79,10 +79,10 @@ const fetchConsultationDetail = async (id: string): Promise<ConsultationItem | n
     email: data.contact_email,
     phone: data.contact_phone,
     consultationType: data.type === 'guided' ? '가이드 상담' : '자유 상담',
-    projectType: data.service_type,
-    budget: data.budget || data.budget_range,
-    timeline: data.timeline || data.timeline_preference,
-    message: data.additional_requests || data.project_description,
+    projectType: data.service_type ?? undefined,
+    budget: (data.budget || data.budget_range) ?? undefined,
+    timeline: (data.timeline || data.timeline_preference) ?? undefined,
+    message: (data.additional_requests || data.project_description) ?? undefined,
     status: data.status,
     priority: data.priority,
     assignedTo: data.assigned_to,
@@ -91,7 +91,7 @@ const fetchConsultationDetail = async (id: string): Promise<ConsultationItem | n
     updatedAt: data.updated_at,
     tags: [],
     source: data.utm_source || '직접 방문',
-    referrer: data.utm_campaign,
+    referrer: data.utm_campaign ?? undefined,
     serviceType: data.service_type,
     projectSize: data.project_size,
     importantFeatures: data.important_features,
@@ -123,7 +123,7 @@ const fetchConsultationLogs = async (consultationId: string): Promise<Consultati
     authorId: log.actor_id || 'system',
     authorName: log.actor_type === 'system' ? '시스템' : '관리자',
     createdAt: log.created_at,
-    metadata: log.details
+    metadata: (log.details as Record<string, any>) ?? undefined
   }));
 };
 
@@ -286,58 +286,47 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse, id: string) 
     }
 
     // 로그 추가
-    const logPromises: Promise<any>[] = [];
-
     // 상태 변경 로그
     if (updateData.status && updateData.status !== existingConsultation.status) {
-      logPromises.push(
-        supabaseAdmin.from('consultation_logs').insert({
-          consultation_id: id,
-          action: 'status_changed',
-          details: {
-            from: existingConsultation.status,
-            to: updateData.status
-          },
-          actor_type: 'admin',
-          actor_id: 'admin-session' // TODO: 실제 관리자 ID 사용
-        })
-      );
+      await supabaseAdmin.from('consultation_logs').insert({
+        consultation_id: id,
+        action: 'status_changed',
+        details: {
+          from: existingConsultation.status,
+          to: updateData.status
+        },
+        actor_type: 'admin',
+        actor_id: 'admin-session' // TODO: 실제 관리자 ID 사용
+      });
     }
 
     // 담당자 배정 로그
     if (updateData.assignedTo && updateData.assignedTo !== existingConsultation.assignedTo) {
-      logPromises.push(
-        supabaseAdmin.from('consultation_logs').insert({
-          consultation_id: id,
-          action: 'assigned',
-          details: {
-            assignedTo: updateData.assignedTo,
-            previousAssignee: existingConsultation.assignedTo
-          },
-          actor_type: 'admin',
-          actor_id: 'admin-session'
-        })
-      );
+      await supabaseAdmin.from('consultation_logs').insert({
+        consultation_id: id,
+        action: 'assigned',
+        details: {
+          assignedTo: updateData.assignedTo,
+          previousAssignee: existingConsultation.assignedTo
+        },
+        actor_type: 'admin',
+        actor_id: 'admin-session'
+      });
     }
 
     // 노트 추가 로그
     if (updateData.note) {
-      logPromises.push(
-        supabaseAdmin.from('consultation_logs').insert({
-          consultation_id: id,
-          action: 'note_added',
-          details: {
-            content: updateData.note.content,
-            isInternal: updateData.note.isInternal
-          },
-          actor_type: 'admin',
-          actor_id: 'admin-session'
-        })
-      );
+      await supabaseAdmin.from('consultation_logs').insert({
+        consultation_id: id,
+        action: 'note_added',
+        details: {
+          content: updateData.note.content,
+          isInternal: updateData.note.isInternal
+        },
+        actor_type: 'admin',
+        actor_id: 'admin-session'
+      });
     }
-
-    // 모든 로그 추가 실행
-    await Promise.all(logPromises);
 
     // 알림 트리거
     const notificationPromises: Promise<any>[] = [];

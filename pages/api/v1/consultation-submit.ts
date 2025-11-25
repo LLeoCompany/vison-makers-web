@@ -21,14 +21,10 @@ interface V1ConsultationResponse {
   estimatedContactTime: string;
 }
 
-interface ExtendedNextApiRequest extends NextApiRequest {
-  body: ConsultationRequest;
-}
-
 async function consultationSubmitV1Handler(
-  req: ExtendedNextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse<V1ConsultationResponse>
-) {
+): Promise<void> {
   // CORS 헤더 설정
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -36,7 +32,8 @@ async function consultationSubmitV1Handler(
   res.setHeader('API-Version', 'v1');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    res.status(200).end();
+    return;
   }
 
   // 1. 요청 데이터 검증
@@ -51,7 +48,7 @@ async function consultationSubmitV1Handler(
     // 2. 메타데이터 수집
     const userAgent = req.headers['user-agent'] || '';
     const ipAddress = getClientIP(req);
-    const referrer = req.headers.referer || req.headers.referrer || '';
+    const referrer = (req.headers.referer || req.headers.referrer || '') as string;
     const utmParams = extractUTMParams(referrer);
 
     // 3. 상담 번호 생성
@@ -167,7 +164,7 @@ async function consultationSubmitV1Handler(
     estimatedContactTime,
   };
 
-  return res.status(201).json(v1Response);
+  res.status(201).json(v1Response);
 }
 
 export default withPublicApi(consultationSubmitV1Handler, presetConfigs.consultationSubmit);

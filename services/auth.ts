@@ -44,6 +44,12 @@ const JWT_SECRET = process.env.JWT_SECRET || 'default-auth-service-secret-key-vi
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
+// Type-safe JWT options
+const getExpiresIn = (value: string): string | number => {
+  const parsed = parseInt(value, 10);
+  return isNaN(parsed) ? value : parsed;
+};
+
 // 개발 환경에서 기본값 사용 시 경고
 if (process.env.NODE_ENV === 'development' && !process.env.JWT_SECRET) {
   console.warn('⚠️  JWT_SECRET not configured for auth service. Using default development secret.');
@@ -57,7 +63,7 @@ if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
 // Generate JWT tokens
 export function generateAccessToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): string {
   return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES_IN,
+    expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'],
     issuer: 'visionmakers-api',
     audience: 'visionmakers-admin',
   });
@@ -65,7 +71,7 @@ export function generateAccessToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): s
 
 export function generateRefreshToken(userId: string): string {
   return jwt.sign({ userId, type: 'refresh' }, JWT_SECRET, {
-    expiresIn: JWT_REFRESH_EXPIRES_IN,
+    expiresIn: JWT_REFRESH_EXPIRES_IN as jwt.SignOptions['expiresIn'],
     issuer: 'visionmakers-api',
     audience: 'visionmakers-admin',
   });

@@ -58,7 +58,7 @@ export default async function handler(
     return res.status(500).json({
       success: false,
       message: '메트릭 계산 중 오류가 발생했습니다.',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined
     });
   }
 }

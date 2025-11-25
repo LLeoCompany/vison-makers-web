@@ -115,16 +115,19 @@ export function createConsultationMessage(data: SlackNotificationData): SlackMes
   };
 
   // 회사명이 있는 경우 추가
-  if (data.company) {
-    message.blocks![1].fields!.splice(2, 0, {
-      type: 'mrkdwn',
-      text: `*회사명:*\n${data.company}`
-    });
+  if (data.company && message.blocks && message.blocks[1]) {
+    const sectionBlock = message.blocks[1] as { type: 'section'; fields?: Array<{ type: string; text: string }> };
+    if (sectionBlock.fields) {
+      sectionBlock.fields.splice(2, 0, {
+        type: 'mrkdwn',
+        text: `*회사명:*\n${data.company}`
+      });
+    }
   }
 
   // 가이드 상담인 경우 추가 정보
   if (isGuided) {
-    const guidedFields = [];
+    const guidedFields: Array<{ type: 'mrkdwn'; text: string }> = [];
 
     if (data.serviceType) {
       guidedFields.push({
@@ -220,7 +223,7 @@ export function createConsultationMessage(data: SlackNotificationData): SlackMes
   });
 
   // 컨텍스트 정보
-  const contextElements = [
+  const contextElements: Array<{ type: 'mrkdwn' | 'plain_text'; text: string }> = [
     {
       type: 'mrkdwn',
       text: `📅 접수시간: ${formatKoreanTime(data.createdAt)}`
@@ -307,9 +310,9 @@ export function createErrorMessage(data: ErrorNotificationData): SlackMessage {
         ]
       },
       ...(data.stack ? [{
-        type: 'section',
+        type: 'section' as const,
         text: {
-          type: 'mrkdwn',
+          type: 'mrkdwn' as const,
           text: `*스택 트레이스:*\n\`\`\`${data.stack.slice(0, 500)}${data.stack.length > 500 ? '...' : ''}\`\`\``
         }
       }] : []),
@@ -377,16 +380,16 @@ export function createDailySummaryMessage(data: DailySummaryData): SlackMessage 
         ]
       },
       ...(hasConsultations && data.topProjectTypes.length > 0 ? [{
-        type: 'section',
+        type: 'section' as const,
         text: {
-          type: 'mrkdwn',
+          type: 'mrkdwn' as const,
           text: `*인기 프로젝트 유형:*\n${data.topProjectTypes.map(item => `• ${item.type}: ${item.count}건`).join('\n')}`
         }
       }] : []),
       ...(hasConsultations && data.topBudgetRanges.length > 0 ? [{
-        type: 'section',
+        type: 'section' as const,
         text: {
-          type: 'mrkdwn',
+          type: 'mrkdwn' as const,
           text: `*예산 분포:*\n${data.topBudgetRanges.map(item => `• ${item.range}: ${item.count}건`).join('\n')}`
         }
       }] : []),

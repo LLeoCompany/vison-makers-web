@@ -28,21 +28,19 @@ import {
 } from "@/utils/apiVersioning";
 import { triggerNewConsultationNotification } from "@/utils/adminNotificationTrigger";
 
-interface ExtendedNextApiRequest extends NextApiRequest {
-  body: ConsultationRequest;
-}
-
 async function consultationSubmitHandler(
-  req: ExtendedNextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse<ConsultationResponse>
-) {
+): Promise<void> {
+  const body = req.body as ConsultationRequest;
   // CORS 헤더 설정
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
-    return res.status(200).end();
+    res.status(200).end();
+    return;
   }
 
   // 1. 요청 데이터 검증
@@ -60,7 +58,7 @@ async function consultationSubmitHandler(
   // 2. 메타데이터 수집
   const userAgent = req.headers["user-agent"] || "";
   const ipAddress = getClientIP(req);
-  const referrer = req.headers.referer || req.headers.referrer || "";
+  const referrer = (req.headers.referer || req.headers.referrer || "") as string;
   const utmParams = extractUTMParams(referrer);
 
   // 3. 상담 번호 생성
@@ -219,7 +217,7 @@ async function consultationSubmitHandler(
     apiVersion
   );
 
-  return res.status(201).json(versionedResponse);
+  res.status(201).json(versionedResponse);
 }
 
 // 통합 미들웨어로 레이트 리미팅, 에러 처리, 로깅, 버전 관리 자동화

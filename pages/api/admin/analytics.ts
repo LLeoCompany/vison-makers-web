@@ -166,64 +166,68 @@ const generateAnalyticsData = async (): Promise<AnalyticsData> => {
       }
     ];
 
-    // 최근 활동 (로그에서 가져오기)
-    const { data: recentLogs } = await supabaseAdmin
-      .from('consultation_logs')
+    // 최근 활동 (consultations 테이블에서 가져오기)
+    const { data: recentConsultations } = await supabaseAdmin
+      .from('consultations')
       .select(`
         id,
-        action,
+        status,
         created_at,
-        consultations!inner(
-          contact_name,
-          contact_company,
-          priority
-        )
+        updated_at,
+        contact_name,
+        contact_company,
+        priority
       `)
-      .order('created_at', { ascending: false })
+      .order('updated_at', { ascending: false })
       .limit(10);
 
     // 헬퍼 함수들
-    const getActivityTitle = (action: string): string => {
+    const getActivityTitle = (status: string): string => {
       const titleMap: Record<string, string> = {
-        created: '새로운 상담 요청',
-        status_changed: '상담 상태 변경',
-        assigned: '담당자 배정',
+        pending: '새로운 상담 요청',
+        contacted: '고객 연락 완료',
+        in_progress: '상담 진행 중',
         completed: '상담 완료',
-        contacted: '고객 연락'
+        cancelled: '상담 취소',
+        on_hold: '상담 보류'
       };
-      return titleMap[action] || action;
+      return titleMap[status] || '상담 활동';
     };
 
-    const getActivityDescription = (action: string, consultation: any): string => {
+    const getActivityDescription = (status: string, consultation: any): string => {
       const name = consultation?.contact_name || '고객';
       const company = consultation?.contact_company;
-      const companyText = company ? `${company}에서` : '';
+      const companyText = company ? `${company}의 ` : '';
 
-      switch (action) {
-        case 'created':
-          return `${companyText} 새로운 상담을 요청했습니다.`;
-        case 'status_changed':
-          return `${name}님 상담 상태가 변경되었습니다.`;
-        case 'assigned':
-          return `${name}님 상담에 담당자가 배정되었습니다.`;
+      switch (status) {
+        case 'pending':
+          return `${companyText}${name}님이 새로운 상담을 요청했습니다.`;
+        case 'contacted':
+          return `${companyText}${name}님에게 연락이 완료되었습니다.`;
+        case 'in_progress':
+          return `${companyText}${name}님 상담이 진행 중입니다.`;
         case 'completed':
-          return `${name}님 상담이 성공적으로 완료되었습니다.`;
+          return `${companyText}${name}님 상담이 성공적으로 완료되었습니다.`;
+        case 'cancelled':
+          return `${companyText}${name}님 상담이 취소되었습니다.`;
         default:
-          return `${name}님 상담에 새로운 활동이 있습니다.`;
+          return `${companyText}${name}님 상담에 새로운 활동이 있습니다.`;
       }
     };
 
-    const recentActivity = (recentLogs || []).map((log: any) => ({
-      id: log.id,
-      type: log.action === 'created' ? 'new_consultation' :
-            log.action === 'status_changed' ? 'status_change' :
-            log.action === 'assigned' ? 'assignment' :
-            log.action === 'completed' ? 'completion' : log.action,
-      title: getActivityTitle(log.action),
-      description: getActivityDescription(log.action, log.consultations),
-      timestamp: log.created_at,
-      priority: log.consultations?.priority || 'medium'
-    }));
+    const recentActivity = (recentConsultations || []).map((consultation: any) => {
+      const activityType = consultation.status === 'pending' ? 'new_consultation' as const :
+            consultation.status === 'in_progress' ? 'status_change' as const :
+            consultation.status === 'completed' ? 'completion' as const : 'status_change' as const;
+      return {
+        id: consultation.id as string,
+        type: activityType,
+        title: getActivityTitle(consultation.status),
+        description: getActivityDescription(consultation.status, consultation),
+        timestamp: consultation.updated_at as string,
+        priority: (consultation.priority || 'medium') as 'low' | 'medium' | 'high' | 'urgent'
+      };
+    });
 
     // 총계 계산
     const totalConsultations = consultationsByDay.reduce((sum, day) => sum + day.count, 0);

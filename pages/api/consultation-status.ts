@@ -103,7 +103,7 @@ export default async function handler(
     let estimatedContactTime: string | undefined;
     if (consultation.status === 'pending') {
       estimatedContactTime = consultation.type === 'guided' ? '2-4시간 내' : '4-8시간 내';
-    } else if (consultation.status === 'reviewing') {
+    } else if (consultation.status === 'in_progress') {
       estimatedContactTime = '검토 중입니다';
     } else if (consultation.status === 'contacted') {
       estimatedContactTime = '연락 완료';
@@ -111,6 +111,8 @@ export default async function handler(
       estimatedContactTime = '상담 완료';
     } else if (consultation.status === 'cancelled') {
       estimatedContactTime = '상담 취소됨';
+    } else if (consultation.status === 'on_hold') {
+      estimatedContactTime = '상담 보류';
     }
 
     return res.status(200).json({

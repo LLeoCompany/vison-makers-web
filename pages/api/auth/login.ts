@@ -268,27 +268,9 @@ async function logLoginAttempt(
   userAgent: string,
   ipAddress: string
 ): Promise<void> {
-  try {
-    await supabaseAdmin
-      .from('consultation_logs')
-      .insert({
-        consultation_id: null, // 관리자 로그는 상담과 관련 없음
-        action: success ? 'admin_login_success' : 'admin_login_failed',
-        details: {
-          email,
-          userAgent,
-          ipAddress,
-          timestamp: new Date().toISOString(),
-        },
-        notes: success
-          ? `관리자 로그인 성공: ${email}`
-          : `관리자 로그인 실패: ${email}`,
-        actor_type: 'admin',
-        actor_id: email,
-      });
-  } catch (error) {
-    console.error('Failed to log login attempt:', error);
-  }
+  // Note: consultation_logs requires consultation_id, so admin login logs
+  // are not recorded there. Consider creating a separate admin_logs table.
+  console.log(`Admin login ${success ? 'success' : 'failed'}: ${email} from ${ipAddress}`);
 }
 
 /**

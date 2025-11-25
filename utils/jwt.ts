@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || !proces
  */
 export function generateAccessToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): string {
   return jwt.sign(payload, JWT_SECRET!, {
-    expiresIn: JWT_EXPIRES_IN,
+    expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'],
     issuer: 'visionmakers-api',
     audience: 'visionmakers-admin',
   });
@@ -52,7 +52,7 @@ export function generateRefreshToken(userId: string): string {
     { id: userId, type: 'refresh' },
     JWT_REFRESH_SECRET!,
     {
-      expiresIn: JWT_REFRESH_EXPIRES_IN,
+      expiresIn: JWT_REFRESH_EXPIRES_IN as jwt.SignOptions['expiresIn'],
       issuer: 'visionmakers-api',
       audience: 'visionmakers-admin',
     }

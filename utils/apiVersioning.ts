@@ -177,21 +177,25 @@ export function withApiVersion(
       // Deprecated 버전 사용 로깅
       logger.warn('Deprecated API version used', {
         action: 'deprecated_version_used',
-        requestedVersion,
-        latestVersion: LATEST_VERSION,
         method: req.method,
         url: req.url,
-        userAgent: req.headers['user-agent'],
+        userAgent: req.headers['user-agent'] as string,
         ip: getClientIP(req),
+        metadata: {
+          requestedVersion,
+          latestVersion: LATEST_VERSION,
+        },
       });
     }
 
     // 성공적인 버전 체크 로깅
     logger.debug('API version validated', {
       action: 'version_validated',
-      requestedVersion,
-      isDeprecated: versionInfo.isDeprecated,
-      isLatest: versionInfo.isLatest,
+      metadata: {
+        requestedVersion,
+        isDeprecated: versionInfo.isDeprecated,
+        isLatest: versionInfo.isLatest,
+      },
     });
 
     // 요청 객체에 버전 정보 추가

@@ -311,7 +311,7 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
         rel="stylesheet"
         href="/styles/consultation-landing.css"
         media="print"
-        onLoad="this.media='all'"
+        onLoad={(e) => { (e.currentTarget as HTMLLinkElement).media = 'all'; }}
       />
 
       {/* 서비스 워커 등록 (선택사항) */}

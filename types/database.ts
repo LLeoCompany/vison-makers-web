@@ -443,6 +443,224 @@ export interface Database {
           }
         ];
       };
+      consultation_logs: {
+        Row: {
+          id: string;
+          consultation_id: string;
+          action: ConsultationAction;
+          actor_type: ActorType;
+          actor_id: string | null;
+          actor_name: string | null;
+          details: Json | null;
+          notes: string | null;
+          previous_value: Json | null;
+          new_value: Json | null;
+          ip_address: string | null;
+          user_agent: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          consultation_id: string;
+          action: ConsultationAction;
+          actor_type?: ActorType;
+          actor_id?: string | null;
+          actor_name?: string | null;
+          details?: Json | null;
+          notes?: string | null;
+          previous_value?: Json | null;
+          new_value?: Json | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          consultation_id?: string;
+          action?: ConsultationAction;
+          actor_type?: ActorType;
+          actor_id?: string | null;
+          actor_name?: string | null;
+          details?: Json | null;
+          notes?: string | null;
+          previous_value?: Json | null;
+          new_value?: Json | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'consultation_logs_consultation_id_fkey';
+            columns: ['consultation_id'];
+            isOneToOne: false;
+            referencedRelation: 'consultations';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      analytics_events: {
+        Row: {
+          id: string;
+          event_name: string;
+          user_id: string | null;
+          session_id: string | null;
+          properties: Json | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          event_name: string;
+          user_id?: string | null;
+          session_id?: string | null;
+          properties?: Json | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          event_name?: string;
+          user_id?: string | null;
+          session_id?: string | null;
+          properties?: Json | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      analytics_sessions: {
+        Row: {
+          id: string;
+          session_id: string;
+          user_id: string | null;
+          device_info: Json | null;
+          started_at: string;
+          ended_at: string | null;
+          is_active: boolean;
+          page_views: number;
+          duration: number | null;
+          landing_page: string | null;
+          exit_page: string | null;
+          referrer: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          session_id: string;
+          user_id?: string | null;
+          device_info?: Json | null;
+          started_at?: string;
+          ended_at?: string | null;
+          is_active?: boolean;
+          page_views?: number;
+          duration?: number | null;
+          landing_page?: string | null;
+          exit_page?: string | null;
+          referrer?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          session_id?: string;
+          user_id?: string | null;
+          device_info?: Json | null;
+          started_at?: string;
+          ended_at?: string | null;
+          is_active?: boolean;
+          page_views?: number;
+          duration?: number | null;
+          landing_page?: string | null;
+          exit_page?: string | null;
+          referrer?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      ab_test_participants: {
+        Row: {
+          id: string;
+          test_name: string;
+          variant: string;
+          user_id: string | null;
+          session_id: string | null;
+          user_segment: string | null;
+          first_seen_at: string;
+          last_seen_at: string;
+          last_activity_at: string | null;
+          session_count: number;
+          has_converted: boolean;
+          first_conversion_at: string | null;
+          conversion_count: number;
+          properties: Json | null;
+        };
+        Insert: {
+          id?: string;
+          test_name: string;
+          variant: string;
+          user_id?: string | null;
+          session_id?: string | null;
+          user_segment?: string | null;
+          first_seen_at?: string;
+          last_seen_at?: string;
+          last_activity_at?: string | null;
+          session_count?: number;
+          has_converted?: boolean;
+          first_conversion_at?: string | null;
+          conversion_count?: number;
+          properties?: Json | null;
+        };
+        Update: {
+          id?: string;
+          test_name?: string;
+          variant?: string;
+          user_id?: string | null;
+          session_id?: string | null;
+          user_segment?: string | null;
+          first_seen_at?: string;
+          last_seen_at?: string;
+          last_activity_at?: string | null;
+          session_count?: number;
+          has_converted?: boolean;
+          first_conversion_at?: string | null;
+          conversion_count?: number;
+          properties?: Json | null;
+        };
+        Relationships: [];
+      };
+      ab_test_conversions: {
+        Row: {
+          id: string;
+          test_name: string;
+          variant: string;
+          conversion_type: string;
+          user_id: string | null;
+          session_id: string | null;
+          value: number | null;
+          properties: Json | null;
+          converted_at: string;
+        };
+        Insert: {
+          id?: string;
+          test_name: string;
+          variant: string;
+          conversion_type: string;
+          user_id?: string | null;
+          session_id?: string | null;
+          value?: number | null;
+          properties?: Json | null;
+          converted_at?: string;
+        };
+        Update: {
+          id?: string;
+          test_name?: string;
+          variant?: string;
+          conversion_type?: string;
+          user_id?: string | null;
+          session_id?: string | null;
+          value?: number | null;
+          properties?: Json | null;
+          converted_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       consultation_details: {
@@ -473,6 +691,11 @@ export interface Database {
           utm_source: string | null;
           utm_medium: string | null;
           utm_campaign: string | null;
+          ip_address: string | null;
+          user_agent: string | null;
+          referrer_url: string | null;
+          reviewed_at: string | null;
+          contacted_at: string | null;
           metadata: Json;
         };
         Relationships: [];
@@ -482,6 +705,15 @@ export interface Database {
           status: ConsultationStatus;
           count: number;
           percentage: number;
+        };
+        Relationships: [];
+      };
+      consultation_stats: {
+        Row: {
+          date: string;
+          total_submissions: number;
+          guided_submissions: number;
+          free_submissions: number;
         };
         Relationships: [];
       };
@@ -506,6 +738,20 @@ export interface Database {
           user_uuid?: string;
         };
         Returns: boolean;
+      };
+      execute_query: {
+        Args: {
+          query: string;
+          params?: Record<string, any>;
+        };
+        Returns: any;
+      };
+      execute_batch_query: {
+        Args: {
+          query: string;
+          param_sets: Record<string, any>[];
+        };
+        Returns: any;
       };
     };
     Enums: {
@@ -599,6 +845,47 @@ export interface FreeConsultationForm {
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
+}
+
+// API Request/Response Types for consultation submit
+export interface ConsultationRequest {
+  type: ConsultationType;
+  contact: {
+    name: string;
+    phone: string;
+    email: string;
+    company?: string;
+    preferredContactTime?: ContactTimePreference;
+  };
+  // For guided consultations
+  guided?: {
+    serviceType: ServiceType;
+    projectSize: ProjectSize;
+    budget: BudgetRange;
+    timeline: Timeline;
+    importantFeatures: string[];
+    additionalRequests?: string;
+  };
+  // For free consultations
+  free?: {
+    projectDescription: string;
+    budgetRange?: string;
+    timelinePreference?: string;
+  };
+}
+
+export interface ConsultationResponse {
+  success: boolean;
+  data?: {
+    consultationNumber: string;
+    message: string;
+    estimatedProcessingTime?: string;
+  };
+  error?: {
+    code: string;
+    message: string;
+    details?: any;
+  };
 }
 
 export default Database;

@@ -293,7 +293,7 @@ const GuidedStep1Page: React.FC = () => {
               </h4>
               <p className="text-sm text-blue-800 leading-relaxed">
                 정확히 어떤 유형인지 확실하지 않다면{" "}
-                <strong>"기타/복합 서비스"</strong>를 선택해주세요. 전문가가
+                <strong>&quot;기타/복합 서비스&quot;</strong>를 선택해주세요. 전문가가
                 상담을 통해 최적의 솔루션을 제안해드립니다.
               </p>
             </div>

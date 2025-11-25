@@ -204,8 +204,7 @@ async function apiDocsHandler(
 }
 
 export default withPublicApi(apiDocsHandler, {
-  enableRateLimit: true,
-  rateLimitConfig: {
+  rateLimit: {
     windowMs: 60 * 1000, // 1분
     maxRequests: 60, // 분당 60회
   },

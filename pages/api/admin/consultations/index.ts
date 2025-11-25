@@ -184,15 +184,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // 필터 적용
     if (status) {
-      query = query.eq('status', status);
+      query = query.eq('status', status as ConsultationStatus);
     }
 
     if (priority) {
-      query = query.eq('priority', priority);
+      query = query.eq('priority', priority as ConsultationPriority);
     }
 
     if (assignedTo) {
-      query = query.eq('assigned_to', assignedTo);
+      query = query.eq('assigned_to', assignedTo as string);
     }
 
     if (startDate && endDate) {

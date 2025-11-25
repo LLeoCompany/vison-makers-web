@@ -41,8 +41,7 @@ async function versionsHandler(
 
 // 공개 API로 설정 (인증 불필요)
 export default withPublicApi(versionsHandler, {
-  enableRateLimit: true,
-  rateLimitConfig: {
+  rateLimit: {
     windowMs: 60 * 1000, // 1분
     maxRequests: 30, // 분당 30회
   },

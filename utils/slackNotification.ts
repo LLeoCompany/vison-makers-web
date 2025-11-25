@@ -92,7 +92,7 @@ export async function sendSlackMessage(message: SlackMessage): Promise<Notificat
 
     return {
       success: true,
-      messageId: result.ts || undefined,
+      messageId: (result as any).ts || undefined,
       timestamp: new Date()
     };
   } catch (error) {
