@@ -317,7 +317,8 @@ const Index = () => {
           <div className="hero-content">
             <Fade direction="up">
               <div className="hero-badge">
-                {/* <span className="hero-badge-dot"></span>앱 스토어 출시 5회 이상 */}
+                <span className="hero-badge-dot"></span>IOS/Android 앱 스토어
+                출시
               </div>
             </Fade>
             <Fade direction="up" delay={100}>
