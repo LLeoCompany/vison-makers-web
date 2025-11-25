@@ -1,4 +1,4 @@
--- VisionMakers 최적화된 데이터베이스 스키마
+-- LeoFitTech 최적화된 데이터베이스 스키마
 -- 설계 이론 기반 완전 재설계 버전
 
 -- ==========================================
@@ -22,15 +22,15 @@ CREATE EXTENSION IF NOT EXISTS "pg_stat_statements";
 
 -- 상담 상태 (확장 가능한 참조 테이블 패턴)
 CREATE TABLE consultation_domain.statuses (
-    code VARCHAR(50) PRIMARY KEY,
-    display_name JSONB NOT NULL,
-    description TEXT,
-    sort_order INTEGER DEFAULT 0,
-    is_final BOOLEAN DEFAULT FALSE, -- 최종 상태 여부
-    allows_transition_to TEXT[] DEFAULT '{}', -- 허용되는 다음 상태들
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+code VARCHAR(50) PRIMARY KEY,
+display_name JSONB NOT NULL,
+description TEXT,
+sort_order INTEGER DEFAULT 0,
+is_final BOOLEAN DEFAULT FALSE, -- 최종 상태 여부
+allows_transition_to TEXT[] DEFAULT '{}', -- 허용되는 다음 상태들
+is_active BOOLEAN DEFAULT TRUE,
+created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
 );
 
 -- 기본 상태 데이터
@@ -44,13 +44,13 @@ INSERT INTO consultation_domain.statuses (code, display_name, sort_order, is_fin
 
 -- 상담 타입 (확장 가능한 참조 테이블)
 CREATE TABLE consultation_domain.types (
-    code VARCHAR(50) PRIMARY KEY,
-    display_name JSONB NOT NULL,
-    description TEXT,
-    is_active BOOLEAN DEFAULT TRUE,
-    sort_order INTEGER DEFAULT 0,
-    config JSONB DEFAULT '{}', -- 타입별 설정
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+code VARCHAR(50) PRIMARY KEY,
+display_name JSONB NOT NULL,
+description TEXT,
+is_active BOOLEAN DEFAULT TRUE,
+sort_order INTEGER DEFAULT 0,
+config JSONB DEFAULT '{}', -- 타입별 설정
+created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
 );
 
 INSERT INTO consultation_domain.types (code, display_name, sort_order, config) VALUES
@@ -69,8 +69,8 @@ CREATE TYPE contact_time_preference AS ENUM ('morning', 'afternoon', 'evening', 
 
 -- 상담 핵심 정보 (SRP 원칙 적용)
 CREATE TABLE consultation_domain.consultations (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    consultation_number VARCHAR(50) NOT NULL UNIQUE,
+id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+consultation_number VARCHAR(50) NOT NULL UNIQUE,
 
     -- 기본 정보
     type_code VARCHAR(50) NOT NULL REFERENCES consultation_domain.types(code),
@@ -106,11 +106,12 @@ CREATE TABLE consultation_domain.consultations (
         -- 상태 전환 규칙 검증은 트리거에서 처리
         status_code IN (SELECT code FROM consultation_domain.statuses WHERE is_active = true)
     )
+
 );
 
 -- 상담 연락처 정보 (개인정보 분리)
 CREATE TABLE consultation_domain.contacts (
-    consultation_id UUID PRIMARY KEY REFERENCES consultation_domain.consultations(id) ON DELETE CASCADE,
+consultation_id UUID PRIMARY KEY REFERENCES consultation_domain.consultations(id) ON DELETE CASCADE,
 
     -- 암호화된 개인정보
     contact_name_encrypted BYTEA NOT NULL,
@@ -131,11 +132,12 @@ CREATE TABLE consultation_domain.contacts (
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+
 );
 
 -- 상담 메타데이터 (추적 정보 분리)
 CREATE TABLE consultation_domain.metadata (
-    consultation_id UUID PRIMARY KEY REFERENCES consultation_domain.consultations(id) ON DELETE CASCADE,
+consultation_id UUID PRIMARY KEY REFERENCES consultation_domain.consultations(id) ON DELETE CASCADE,
 
     -- 추적 정보
     user_agent TEXT,
@@ -158,11 +160,12 @@ CREATE TABLE consultation_domain.metadata (
     geo_city VARCHAR(100),
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+
 );
 
 -- 가이드 상담 세부사항 (개선된 구조)
 CREATE TABLE consultation_domain.guided_details (
-    consultation_id UUID PRIMARY KEY REFERENCES consultation_domain.consultations(id) ON DELETE CASCADE,
+consultation_id UUID PRIMARY KEY REFERENCES consultation_domain.consultations(id) ON DELETE CASCADE,
 
     -- 서비스 정보 (참조 테이블로 확장 가능)
     service_type VARCHAR(50) NOT NULL,
@@ -191,11 +194,12 @@ CREATE TABLE consultation_domain.guided_details (
     -- 제약 조건
     CONSTRAINT valid_budget_range CHECK (estimated_budget_min <= estimated_budget_max),
     CONSTRAINT valid_timeline CHECK (estimated_duration_months > 0)
+
 );
 
 -- 자유 상담 세부사항 (개선된 NLP 분석)
 CREATE TABLE consultation_domain.free_details (
-    consultation_id UUID PRIMARY KEY REFERENCES consultation_domain.consultations(id) ON DELETE CASCADE,
+consultation_id UUID PRIMARY KEY REFERENCES consultation_domain.consultations(id) ON DELETE CASCADE,
 
     -- 원본 설명
     project_description TEXT NOT NULL,
@@ -222,6 +226,7 @@ CREATE TABLE consultation_domain.free_details (
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+
 );
 
 -- ==========================================
@@ -230,7 +235,7 @@ CREATE TABLE consultation_domain.free_details (
 
 -- 관리자 사용자 (보안 강화)
 CREATE TABLE user_domain.admin_users (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
 
     -- 기본 인증 정보
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -284,31 +289,32 @@ CREATE TABLE user_domain.admin_users (
         (is_locked = FALSE AND locked_until IS NULL) OR
         (is_locked = TRUE AND locked_until > NOW())
     )
+
 );
 
 -- 사용자 역할 정의 (확장 가능)
 CREATE TABLE user_domain.roles (
-    code VARCHAR(50) PRIMARY KEY,
-    display_name JSONB NOT NULL,
-    description TEXT,
-    permissions JSONB DEFAULT '[]' NOT NULL,
-    is_system_role BOOLEAN DEFAULT FALSE, -- 시스템 기본 역할 여부
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+code VARCHAR(50) PRIMARY KEY,
+display_name JSONB NOT NULL,
+description TEXT,
+permissions JSONB DEFAULT '[]' NOT NULL,
+is_system_role BOOLEAN DEFAULT FALSE, -- 시스템 기본 역할 여부
+created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
 );
 
 -- 기본 역할 생성
 INSERT INTO user_domain.roles (code, display_name, permissions, is_system_role) VALUES
 ('admin', '{"ko": "시스템 관리자", "en": "System Administrator"}',
- '["*"]', true),
+'["*"]', true),
 ('manager', '{"ko": "관리자", "en": "Manager"}',
- '["consultations:*", "stats:read", "users:read"]', true),
+'["consultations:*", "stats:read", "users:read"]', true),
 ('viewer', '{"ko": "조회자", "en": "Viewer"}',
- '["consultations:read", "stats:read"]', true);
+'["consultations:read", "stats:read"]', true);
 
 -- 사용자 세션 (향상된 보안)
 CREATE TABLE user_domain.sessions (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES user_domain.admin_users(id) ON DELETE CASCADE,
+id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+user_id UUID NOT NULL REFERENCES user_domain.admin_users(id) ON DELETE CASCADE,
 
     -- 토큰 정보 (보안 강화)
     access_token_hash VARCHAR(255) NOT NULL UNIQUE,
@@ -341,6 +347,7 @@ CREATE TABLE user_domain.sessions (
         (is_revoked = FALSE AND revoked_at IS NULL) OR
         (is_revoked = TRUE AND revoked_at IS NOT NULL)
     )
+
 );
 
 -- ==========================================
@@ -348,7 +355,7 @@ CREATE TABLE user_domain.sessions (
 -- ==========================================
 
 CREATE TABLE system_domain.domain_events (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
 
     -- 이벤트 식별
     event_id UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
@@ -388,6 +395,7 @@ CREATE TABLE system_domain.domain_events (
     processing_attempts INTEGER DEFAULT 0,
 
     CONSTRAINT positive_aggregate_version CHECK (aggregate_version > 0)
+
 );
 
 -- 이벤트 스트림 고유성 보장
@@ -400,7 +408,7 @@ ON system_domain.domain_events(aggregate_id, aggregate_version);
 
 -- 감사 로그 (이벤트 소싱과 분리)
 CREATE TABLE system_domain.audit_logs (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
 
     -- 대상 정보
     table_name VARCHAR(100) NOT NULL,
@@ -432,11 +440,12 @@ CREATE TABLE system_domain.audit_logs (
 
     CONSTRAINT valid_operation CHECK (operation IN ('INSERT', 'UPDATE', 'DELETE')),
     CONSTRAINT valid_severity CHECK (severity IN ('debug', 'info', 'warn', 'error', 'critical'))
+
 );
 
 -- API 호출 로그 (성능 모니터링 중심)
 CREATE TABLE system_domain.api_logs (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
 
     -- 요청 정보
     request_id UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
@@ -487,6 +496,7 @@ CREATE TABLE system_domain.api_logs (
         cache_hit_count >= 0 AND
         cache_miss_count >= 0
     )
+
 );
 
 -- ==========================================
@@ -495,7 +505,7 @@ CREATE TABLE system_domain.api_logs (
 
 -- 일별 통계 (파티셔닝 준비)
 CREATE TABLE analytics_domain.daily_stats (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
 
     -- 파티션 키
     date_key DATE NOT NULL,
@@ -544,6 +554,7 @@ CREATE TABLE analytics_domain.daily_stats (
     CONSTRAINT valid_response_time CHECK (avg_response_time_hours >= 0),
     CONSTRAINT valid_satisfaction CHECK (customer_satisfaction_avg IS NULL OR
         customer_satisfaction_avg BETWEEN 1.00 AND 5.00)
+
 ) PARTITION BY RANGE (date_key);
 
 -- 월별 파티션 생성 (예시)
@@ -623,20 +634,21 @@ ON system_domain.domain_events USING GIN(event_data);
 
 -- 상태 전환 검증 함수
 CREATE OR REPLACE FUNCTION consultation_domain.validate_status_transition(
-    old_status_code TEXT,
-    new_status_code TEXT
+old_status_code TEXT,
+new_status_code TEXT
 ) RETURNS BOOLEAN AS $$
 DECLARE
-    allowed_transitions TEXT[];
+allowed_transitions TEXT[];
 BEGIN
-    IF old_status_code = new_status_code THEN
-        RETURN TRUE; -- 동일 상태는 허용
-    END IF;
+IF old_status_code = new_status_code THEN
+RETURN TRUE; -- 동일 상태는 허용
+END IF;
 
     SELECT allows_transition_to INTO allowed_transitions
     FROM consultation_domain.statuses
     WHERE code = old_status_code;
 
     RETURN new_status_code = ANY(allowed_transitions);
+
 END;
 $$ LANGUAGE plpgsql STABLE;

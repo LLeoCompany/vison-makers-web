@@ -1,5 +1,5 @@
 /**
- * VisionMakers 상담 시작 페이지 - Toss UI 스타일
+ * LeoFitTech 상담 시작 페이지 - Toss UI 스타일
  * 설계 문서 4.2 UI/UX 플로우 기반 + Toss 디자인 패턴 적용
  */
 
@@ -34,7 +34,7 @@ const ConsultationStartPage: React.FC = () => {
               <span className="text-blue-500">시작해보세요</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-16">
-              VisionMakers와 함께 여러분의 아이디어를 현실로 만들어보세요.
+              LeoFitTech와 함께 여러분의 아이디어를 현실로 만들어보세요.
               <br />
               정확하고 빠른 상담을 위한 두 가지 방법을 준비했습니다.
             </p>
@@ -169,7 +169,7 @@ const ConsultationStartPage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              VisionMakers가 <span className="text-blue-500">특별한 이유</span>
+              LeoFitTech가 <span className="text-blue-500">특별한 이유</span>
             </h2>
             <p className="text-lg text-gray-600">
               10년 이상의 경험과 전문성으로 최고의 서비스를 제공합니다

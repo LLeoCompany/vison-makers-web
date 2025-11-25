@@ -1,4 +1,4 @@
--- VisionMakers RLS (Row Level Security) 정책 설정
+-- LeoFitTech RLS (Row Level Security) 정책 설정
 -- Supabase Dashboard > SQL Editor에서 실행
 
 -- ==========================================

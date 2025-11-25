@@ -1,6 +1,7 @@
-# VisionMakers 상담 신청 시스템 설계 문서
+# LeoFitTech 상담 신청 시스템 설계 문서
 
 ## 📋 목차
+
 1. [시스템 개요](#시스템-개요)
 2. [API 설계](#api-설계)
 3. [UI/UX 설계](#uiux-설계)
@@ -14,14 +15,16 @@
 
 ## 🎯 시스템 개요
 
-VisionMakers 상담 신청 시스템은 두 가지 트랙을 제공합니다:
+LeoFitTech 상담 신청 시스템은 두 가지 트랙을 제공합니다:
 
 ### 1. 가이드 상담 (Guided Consultation)
+
 - **4단계 프로세스**: 서비스 종류 → 규모/예산 → 일정/기능 → 연락처
 - **구조화된 데이터**: 명확한 선택지를 통한 정량적 정보 수집
 - **자동 견적**: 입력된 정보를 바탕으로 예상 비용 및 일정 제시
 
 ### 2. 자유 상담 (Free Consultation)
+
 - **간단한 프로세스**: 프로젝트 설명 + 연락처
 - **유연한 요구사항**: 텍스트 기반의 자유로운 프로젝트 설명
 - **맞춤 상담**: 복잡하거나 특수한 요구사항에 적합
@@ -41,11 +44,13 @@ GET /api/versions
 ### 1. 상담 신청 API
 
 #### Endpoint
+
 ```
 POST /api/consultation-submit
 ```
 
 #### Request Headers
+
 ```json
 {
   "Content-Type": "application/json",
@@ -56,6 +61,7 @@ POST /api/consultation-submit
 #### Request Body 스키마
 
 **가이드 상담 요청:**
+
 ```typescript
 interface GuidedConsultationRequest {
   type: "guided";
@@ -76,6 +82,7 @@ interface GuidedConsultationRequest {
 ```
 
 **자유 상담 요청:**
+
 ```typescript
 interface FreeConsultationRequest {
   type: "free";
@@ -95,6 +102,7 @@ interface FreeConsultationRequest {
 #### Response 스키마
 
 **성공 응답:**
+
 ```typescript
 interface ConsultationResponse {
   success: true;
@@ -108,6 +116,7 @@ interface ConsultationResponse {
 ```
 
 **에러 응답:**
+
 ```typescript
 interface ErrorResponse {
   success: false;
@@ -122,11 +131,13 @@ interface ErrorResponse {
 ### 2. 상담 상태 조회 API
 
 #### Endpoint
+
 ```
 GET /api/consultation-status/:consultationId
 ```
 
 #### Response
+
 ```typescript
 interface StatusResponse {
   success: true;
@@ -145,10 +156,12 @@ interface StatusResponse {
 ### 3. API 버전 관리
 
 #### 지원 버전
+
 - **v1**: 기본 응답 구조
 - **v2**: 확장된 메타데이터 포함
 
 #### 버전 지정 방법
+
 1. Header: `X-API-Version: v2`
 2. Query Parameter: `?version=v2`
 
@@ -182,6 +195,7 @@ interface StatusResponse {
 **목적**: 사용자의 상황에 맞는 트랙 선택 유도
 
 **구성 요소**:
+
 ```jsx
 <ConsultationStart>
   <Hero>
@@ -194,13 +208,12 @@ interface StatusResponse {
       <Icon>🎯</Icon>
       <Title>단계별 가이드 상담</Title>
       <Description>
-        몇 가지 질문으로 빠르게<br/>
+        몇 가지 질문으로 빠르게
+        <br />
         견적과 일정을 확인해보세요
       </Description>
       <Features>
-        ✓ 5분 내 완료
-        ✓ 즉시 예상 견적 확인
-        ✓ 맞춤형 제안서 제공
+        ✓ 5분 내 완료 ✓ 즉시 예상 견적 확인 ✓ 맞춤형 제안서 제공
       </Features>
       <Button primary>가이드 상담 시작</Button>
     </GuidedTrackCard>
@@ -209,13 +222,12 @@ interface StatusResponse {
       <Icon>💬</Icon>
       <Title>자유 상담</Title>
       <Description>
-        프로젝트를 자유롭게 설명하고<br/>
+        프로젝트를 자유롭게 설명하고
+        <br />
         전화로 자세히 상담받으세요
       </Description>
       <Features>
-        ✓ 복잡한 요구사항 OK
-        ✓ 맞춤형 솔루션 제안
-        ✓ 전문가 직접 상담
+        ✓ 복잡한 요구사항 OK ✓ 맞춤형 솔루션 제안 ✓ 전문가 직접 상담
       </Features>
       <Button>자유 상담 시작</Button>
     </FreeTrackCard>
@@ -273,12 +285,10 @@ interface StatusResponse {
   </ServiceOptions>
 
   <Navigation>
-    <Button variant="text" onClick={goBack}>이전</Button>
-    <Button
-      primary
-      disabled={!selectedService}
-      onClick={nextStep}
-    >
+    <Button variant="text" onClick={goBack}>
+      이전
+    </Button>
+    <Button primary disabled={!selectedService} onClick={nextStep}>
       다음 단계
     </Button>
   </Navigation>
@@ -344,12 +354,10 @@ interface StatusResponse {
   </SectionGroup>
 
   <Navigation>
-    <Button variant="text" onClick={prevStep}>이전</Button>
-    <Button
-      primary
-      disabled={!projectSize || !budget}
-      onClick={nextStep}
-    >
+    <Button variant="text" onClick={prevStep}>
+      이전
+    </Button>
+    <Button primary disabled={!projectSize || !budget} onClick={nextStep}>
       다음 단계
     </Button>
   </Navigation>
@@ -431,12 +439,10 @@ interface StatusResponse {
   </SectionGroup>
 
   <Navigation>
-    <Button variant="text" onClick={prevStep}>이전</Button>
-    <Button
-      primary
-      disabled={!timeline}
-      onClick={nextStep}
-    >
+    <Button variant="text" onClick={prevStep}>
+      이전
+    </Button>
+    <Button primary disabled={!timeline} onClick={nextStep}>
       다음 단계
     </Button>
   </Navigation>
@@ -460,7 +466,7 @@ interface StatusResponse {
         type="text"
         placeholder="홍길동"
         value={contact.name}
-        onChange={(e) => setContact({...contact, name: e.target.value})}
+        onChange={(e) => setContact({ ...contact, name: e.target.value })}
         required
       />
     </FormGroup>
@@ -471,7 +477,7 @@ interface StatusResponse {
         type="tel"
         placeholder="010-1234-5678"
         value={contact.phone}
-        onChange={(e) => setContact({...contact, phone: e.target.value})}
+        onChange={(e) => setContact({ ...contact, phone: e.target.value })}
         required
       />
     </FormGroup>
@@ -482,7 +488,7 @@ interface StatusResponse {
         type="email"
         placeholder="example@email.com"
         value={contact.email}
-        onChange={(e) => setContact({...contact, email: e.target.value})}
+        onChange={(e) => setContact({ ...contact, email: e.target.value })}
         required
       />
     </FormGroup>
@@ -493,7 +499,7 @@ interface StatusResponse {
         type="text"
         placeholder="(주)회사명"
         value={contact.company}
-        onChange={(e) => setContact({...contact, company: e.target.value})}
+        onChange={(e) => setContact({ ...contact, company: e.target.value })}
       />
     </FormGroup>
 
@@ -525,11 +531,7 @@ interface StatusResponse {
   </ContactForm>
 
   <Agreement>
-    <Checkbox
-      checked={agreedToTerms}
-      onChange={setAgreedToTerms}
-      required
-    />
+    <Checkbox checked={agreedToTerms} onChange={setAgreedToTerms} required />
     <Label>
       개인정보 수집 및 이용에 동의합니다.
       <Link href="/privacy">자세히 보기</Link>
@@ -537,7 +539,9 @@ interface StatusResponse {
   </Agreement>
 
   <Navigation>
-    <Button variant="text" onClick={prevStep}>이전</Button>
+    <Button variant="text" onClick={prevStep}>
+      이전
+    </Button>
     <Button
       primary
       disabled={!canSubmit || isSubmitting}
@@ -614,7 +618,7 @@ interface StatusResponse {
             type="text"
             placeholder="홍길동"
             value={contact.name}
-            onChange={(e) => setContact({...contact, name: e.target.value})}
+            onChange={(e) => setContact({ ...contact, name: e.target.value })}
             required
           />
         </FormGroup>
@@ -625,7 +629,7 @@ interface StatusResponse {
             type="tel"
             placeholder="010-1234-5678"
             value={contact.phone}
-            onChange={(e) => setContact({...contact, phone: e.target.value})}
+            onChange={(e) => setContact({ ...contact, phone: e.target.value })}
             required
           />
         </FormGroup>
@@ -636,7 +640,7 @@ interface StatusResponse {
             type="email"
             placeholder="example@email.com"
             value={contact.email}
-            onChange={(e) => setContact({...contact, email: e.target.value})}
+            onChange={(e) => setContact({ ...contact, email: e.target.value })}
             required
           />
         </FormGroup>
@@ -647,7 +651,9 @@ interface StatusResponse {
             type="text"
             placeholder="(주)회사명"
             value={contact.company}
-            onChange={(e) => setContact({...contact, company: e.target.value})}
+            onChange={(e) =>
+              setContact({ ...contact, company: e.target.value })
+            }
           />
         </FormGroup>
       </ContactGrid>
@@ -661,11 +667,7 @@ interface StatusResponse {
     </ContactSection>
 
     <Agreement>
-      <Checkbox
-        checked={agreedToTerms}
-        onChange={setAgreedToTerms}
-        required
-      />
+      <Checkbox checked={agreedToTerms} onChange={setAgreedToTerms} required />
       <Label>
         개인정보 수집 및 이용에 동의합니다.
         <Link href="/privacy">자세히 보기</Link>
@@ -682,9 +684,7 @@ interface StatusResponse {
       >
         상담 신청하기
       </Button>
-      <HelpText>
-        신청 후 24시간 이내 연락드립니다
-      </HelpText>
+      <HelpText>신청 후 24시간 이내 연락드립니다</HelpText>
     </SubmitSection>
   </ConsultationForm>
 </FreeConsultation>
@@ -728,7 +728,9 @@ interface StatusResponse {
       <StepNumber>2</StepNumber>
       <StepContent>
         <StepTitle>상담 준비</StepTitle>
-        <StepDescription>담당자가 프로젝트를 검토하고 상담을 준비합니다</StepDescription>
+        <StepDescription>
+          담당자가 프로젝트를 검토하고 상담을 준비합니다
+        </StepDescription>
       </StepContent>
       <StepStatus current>📋</StepStatus>
     </StepItem>
@@ -737,7 +739,9 @@ interface StatusResponse {
       <StepNumber>3</StepNumber>
       <StepContent>
         <StepTitle>전화 상담</StepTitle>
-        <StepDescription>선택하신 시간에 전화로 상세 상담을 진행합니다</StepDescription>
+        <StepDescription>
+          선택하신 시간에 전화로 상세 상담을 진행합니다
+        </StepDescription>
       </StepContent>
       <StepStatus>📞</StepStatus>
     </StepItem>
@@ -746,7 +750,9 @@ interface StatusResponse {
       <StepNumber>4</StepNumber>
       <StepContent>
         <StepTitle>제안서 발송</StepTitle>
-        <StepDescription>상담 결과를 바탕으로 맞춤 제안서를 보내드립니다</StepDescription>
+        <StepDescription>
+          상담 결과를 바탕으로 맞춤 제안서를 보내드립니다
+        </StepDescription>
       </StepContent>
       <StepStatus>📋</StepStatus>
     </StepItem>
@@ -763,16 +769,16 @@ interface StatusResponse {
       <ContactMethod>
         <Icon>✉️</Icon>
         <Label>이메일</Label>
-        <Value>contact@visionmakers.co.kr</Value>
+        <Value>contact@LeoFitTech.co.kr</Value>
       </ContactMethod>
     </ContactMethods>
   </ContactInfo>
 
   <Actions>
-    <Button variant="outline" onClick={() => router.push('/')}>
+    <Button variant="outline" onClick={() => router.push("/")}>
       홈으로 돌아가기
     </Button>
-    <Button primary onClick={() => router.push('/portfolio')}>
+    <Button primary onClick={() => router.push("/portfolio")}>
       포트폴리오 보기
     </Button>
   </Actions>
@@ -782,21 +788,24 @@ interface StatusResponse {
 ### 3. 반응형 디자인 가이드라인
 
 #### 브레이크포인트
+
 ```scss
 $breakpoints: (
   mobile: 480px,
   tablet: 768px,
   desktop: 1024px,
-  wide: 1440px
+  wide: 1440px,
 );
 ```
 
 #### 모바일 우선 설계
+
 - **모바일 (< 768px)**: 1열 레이아웃, 스택형 카드
 - **태블릿 (768px-1024px)**: 2열 레이아웃, 적당한 여백
 - **데스크톱 (> 1024px)**: 3-4열 레이아웃, 넉넉한 여백
 
 #### 터치 친화적 인터페이스
+
 - 최소 터치 영역: 44px × 44px
 - 버튼 간 최소 간격: 8px
 - 스와이프 제스처 지원
@@ -856,10 +865,10 @@ src/
 
 ```typescript
 // contexts/ConsultationContext.tsx
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 
 interface ConsultationState {
-  trackType: 'guided' | 'free' | null;
+  trackType: "guided" | "free" | null;
   currentStep: number;
   totalSteps: number;
   isLoading: boolean;
@@ -884,49 +893,49 @@ interface ConsultationState {
 }
 
 type ConsultationAction =
-  | { type: 'SET_TRACK_TYPE'; payload: 'guided' | 'free' }
-  | { type: 'SET_CURRENT_STEP'; payload: number }
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string | null }
-  // ... 기타 액션들
+  | { type: "SET_TRACK_TYPE"; payload: "guided" | "free" }
+  | { type: "SET_CURRENT_STEP"; payload: number }
+  | { type: "SET_LOADING"; payload: boolean }
+  | { type: "SET_ERROR"; payload: string | null };
+// ... 기타 액션들
 
 const consultationReducer = (
   state: ConsultationState,
   action: ConsultationAction
 ): ConsultationState => {
   switch (action.type) {
-    case 'SET_TRACK_TYPE':
+    case "SET_TRACK_TYPE":
       return {
         ...state,
         trackType: action.payload,
-        totalSteps: action.payload === 'guided' ? 4 : 1,
-        currentStep: 1
+        totalSteps: action.payload === "guided" ? 4 : 1,
+        currentStep: 1,
       };
     // ... 기타 케이스들
   }
 };
 
 export const ConsultationProvider: React.FC<{ children: React.ReactNode }> = ({
-  children
+  children,
 }) => {
   const [state, dispatch] = useReducer(consultationReducer, initialState);
 
   // 로컬 스토리지 자동 저장/복원
   useEffect(() => {
-    const saved = localStorage.getItem('consultation_state');
+    const saved = localStorage.getItem("consultation_state");
     if (saved) {
       try {
         const parsedState = JSON.parse(saved);
-        dispatch({ type: 'LOAD_FROM_STORAGE', payload: parsedState });
+        dispatch({ type: "LOAD_FROM_STORAGE", payload: parsedState });
       } catch (error) {
-        console.warn('Failed to load consultation state:', error);
+        console.warn("Failed to load consultation state:", error);
       }
     }
   }, []);
 
   useEffect(() => {
     if (state.trackType) {
-      localStorage.setItem('consultation_state', JSON.stringify(state));
+      localStorage.setItem("consultation_state", JSON.stringify(state));
     }
   }, [state]);
 
@@ -934,22 +943,22 @@ export const ConsultationProvider: React.FC<{ children: React.ReactNode }> = ({
     state,
     dispatch,
     // Helper methods
-    setTrackType: (type: 'guided' | 'free') =>
-      dispatch({ type: 'SET_TRACK_TYPE', payload: type }),
+    setTrackType: (type: "guided" | "free") =>
+      dispatch({ type: "SET_TRACK_TYPE", payload: type }),
     nextStep: () => {
       if (state.currentStep < state.totalSteps) {
-        dispatch({ type: 'SET_CURRENT_STEP', payload: state.currentStep + 1 });
+        dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
       }
     },
     prevStep: () => {
       if (state.currentStep > 1) {
-        dispatch({ type: 'SET_CURRENT_STEP', payload: state.currentStep - 1 });
+        dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep - 1 });
       }
     },
     resetState: () => {
-      localStorage.removeItem('consultation_state');
-      dispatch({ type: 'RESET_STATE' });
-    }
+      localStorage.removeItem("consultation_state");
+      dispatch({ type: "RESET_STATE" });
+    },
   };
 
   return (
@@ -962,7 +971,7 @@ export const ConsultationProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useConsultation = () => {
   const context = useContext(ConsultationContext);
   if (!context) {
-    throw new Error('useConsultation must be used within ConsultationProvider');
+    throw new Error("useConsultation must be used within ConsultationProvider");
   }
   return context;
 };
@@ -972,9 +981,12 @@ export const useConsultation = () => {
 
 ```typescript
 // hooks/useConsultationSubmit.ts
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { ConsultationRequest, ConsultationResponse } from '@/types/consultation';
+import { useState } from "react";
+import { useRouter } from "next/router";
+import {
+  ConsultationRequest,
+  ConsultationResponse,
+} from "@/types/consultation";
 
 export const useConsultationSubmit = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -988,34 +1000,34 @@ export const useConsultationSubmit = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/consultation-submit', {
-        method: 'POST',
+      const response = await fetch("/api/consultation-submit", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'X-API-Version': 'v2'
+          "Content-Type": "application/json",
+          "X-API-Version": "v2",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || '상담 신청 중 오류가 발생했습니다.');
+        throw new Error(result.message || "상담 신청 중 오류가 발생했습니다.");
       }
 
       // 성공 시 완료 페이지로 이동
       router.push({
-        pathname: '/consultation/complete',
+        pathname: "/consultation/complete",
         query: {
           consultationId: result.data.consultationId,
-          consultationNumber: result.data.consultationNumber
-        }
+          consultationNumber: result.data.consultationNumber,
+        },
       });
 
       return result;
-
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
+      const errorMessage =
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.";
       setError(errorMessage);
       return null;
     } finally {
@@ -1027,7 +1039,7 @@ export const useConsultationSubmit = () => {
     submitConsultation,
     isSubmitting,
     error,
-    clearError: () => setError(null)
+    clearError: () => setError(null),
   };
 };
 ```
@@ -1045,17 +1057,14 @@ interface ProgressBarProps {
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   current,
   total,
-  className
+  className,
 }) => {
   const progress = (current / total) * 100;
 
   return (
     <div className={`progress-bar ${className}`}>
       <div className="progress-bar__track">
-        <div
-          className="progress-bar__fill"
-          style={{ width: `${progress}%` }}
-        />
+        <div className="progress-bar__fill" style={{ width: `${progress}%` }} />
       </div>
       <div className="progress-bar__label">
         {current} / {total}
@@ -1084,16 +1093,16 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   description,
   examples,
   selected,
-  onClick
+  onClick,
 }) => {
   return (
     <div
-      className={`service-card ${selected ? 'service-card--selected' : ''}`}
+      className={`service-card ${selected ? "service-card--selected" : ""}`}
       onClick={() => onClick(value)}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === "Enter" || e.key === " ") {
           onClick(value);
         }
       }}
@@ -1102,13 +1111,9 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
       <h3 className="service-card__title">{title}</h3>
       <p className="service-card__description">{description}</p>
       {examples && (
-        <div className="service-card__examples">
-          예시: {examples}
-        </div>
+        <div className="service-card__examples">예시: {examples}</div>
       )}
-      {selected && (
-        <div className="service-card__check">✓</div>
-      )}
+      {selected && <div className="service-card__check">✓</div>}
     </div>
   );
 };
@@ -1118,57 +1123,62 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 
 ```typescript
 // utils/validation.ts
-import { z } from 'zod';
+import { z } from "zod";
 
 // 연락처 정보 스키마
 const ContactInfoSchema = z.object({
-  name: z.string()
-    .min(1, '이름을 입력해주세요')
-    .max(50, '이름은 50자 이하로 입력해주세요'),
-  phone: z.string()
-    .regex(/^010-?\d{4}-?\d{4}$/, '올바른 휴대폰 번호를 입력해주세요'),
-  email: z.string()
-    .email('올바른 이메일 주소를 입력해주세요')
-    .max(100, '이메일은 100자 이하로 입력해주세요'),
-  company: z.string()
-    .max(100, '회사명은 100자 이하로 입력해주세요')
-    .optional(),
-  preferredContactTime: z.enum(['morning', 'afternoon', 'evening', 'anytime'])
+  name: z
+    .string()
+    .min(1, "이름을 입력해주세요")
+    .max(50, "이름은 50자 이하로 입력해주세요"),
+  phone: z
+    .string()
+    .regex(/^010-?\d{4}-?\d{4}$/, "올바른 휴대폰 번호를 입력해주세요"),
+  email: z
+    .string()
+    .email("올바른 이메일 주소를 입력해주세요")
+    .max(100, "이메일은 100자 이하로 입력해주세요"),
+  company: z.string().max(100, "회사명은 100자 이하로 입력해주세요").optional(),
+  preferredContactTime: z.enum(["morning", "afternoon", "evening", "anytime"]),
 });
 
 // 가이드 상담 스키마
 const GuidedConsultationSchema = z.object({
-  type: z.literal('guided'),
-  serviceType: z.enum(['homepage', 'shopping', 'booking', 'membership', 'other']),
-  projectSize: z.enum(['small', 'medium', 'large']),
-  budget: z.enum(['100-300', '300-800', '800-1500', '1500+', 'consult']),
-  timeline: z.enum(['1month', '2-3months', '6months', 'flexible']),
-  importantFeatures: z.array(z.enum(['mobile', 'seo', 'admin', 'payment'])),
-  additionalRequests: z.string()
-    .max(500, '추가 요청사항은 500자 이하로 입력해주세요')
+  type: z.literal("guided"),
+  serviceType: z.enum([
+    "homepage",
+    "shopping",
+    "booking",
+    "membership",
+    "other",
+  ]),
+  projectSize: z.enum(["small", "medium", "large"]),
+  budget: z.enum(["100-300", "300-800", "800-1500", "1500+", "consult"]),
+  timeline: z.enum(["1month", "2-3months", "6months", "flexible"]),
+  importantFeatures: z.array(z.enum(["mobile", "seo", "admin", "payment"])),
+  additionalRequests: z
+    .string()
+    .max(500, "추가 요청사항은 500자 이하로 입력해주세요")
     .optional(),
-  contact: ContactInfoSchema
+  contact: ContactInfoSchema,
 });
 
 // 자유 상담 스키마
 const FreeConsultationSchema = z.object({
-  type: z.literal('free'),
-  projectDescription: z.string()
-    .min(20, '프로젝트 설명을 20자 이상 입력해주세요')
-    .max(2000, '프로젝트 설명은 2000자 이하로 입력해주세요'),
-  budget: z.string()
-    .max(100, '예산은 100자 이하로 입력해주세요')
-    .optional(),
-  timeline: z.string()
-    .max(100, '일정은 100자 이하로 입력해주세요')
-    .optional(),
-  contact: ContactInfoSchema
+  type: z.literal("free"),
+  projectDescription: z
+    .string()
+    .min(20, "프로젝트 설명을 20자 이상 입력해주세요")
+    .max(2000, "프로젝트 설명은 2000자 이하로 입력해주세요"),
+  budget: z.string().max(100, "예산은 100자 이하로 입력해주세요").optional(),
+  timeline: z.string().max(100, "일정은 100자 이하로 입력해주세요").optional(),
+  contact: ContactInfoSchema,
 });
 
 // 통합 스키마
-export const ConsultationRequestSchema = z.discriminatedUnion('type', [
+export const ConsultationRequestSchema = z.discriminatedUnion("type", [
   GuidedConsultationSchema,
-  FreeConsultationSchema
+  FreeConsultationSchema,
 ]);
 
 // 실시간 유효성 검증 함수들
@@ -1178,22 +1188,22 @@ export const validateStep = (step: number, data: any): string[] => {
   switch (step) {
     case 1: // 서비스 타입
       if (!data.serviceType) {
-        errors.push('서비스 종류를 선택해주세요');
+        errors.push("서비스 종류를 선택해주세요");
       }
       break;
 
     case 2: // 규모와 예산
       if (!data.projectSize) {
-        errors.push('프로젝트 규모를 선택해주세요');
+        errors.push("프로젝트 규모를 선택해주세요");
       }
       if (!data.budget) {
-        errors.push('예산 범위를 선택해주세요');
+        errors.push("예산 범위를 선택해주세요");
       }
       break;
 
     case 3: // 일정과 기능
       if (!data.timeline) {
-        errors.push('원하는 완료 시기를 선택해주세요');
+        errors.push("원하는 완료 시기를 선택해주세요");
       }
       break;
 
@@ -1202,7 +1212,7 @@ export const validateStep = (step: number, data: any): string[] => {
         ContactInfoSchema.parse(data.contact);
       } catch (err) {
         if (err instanceof z.ZodError) {
-          errors.push(...err.errors.map(e => e.message));
+          errors.push(...err.errors.map((e) => e.message));
         }
       }
       break;
@@ -1215,8 +1225,8 @@ export const validateStep = (step: number, data: any): string[] => {
 export const sanitizeInput = (input: string): string => {
   return input
     .trim()
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // XSS 방지
-    .replace(/[<>'"]/g, ''); // HTML 태그 제거
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "") // XSS 방지
+    .replace(/[<>'"]/g, ""); // HTML 태그 제거
 };
 ```
 
@@ -1226,12 +1236,12 @@ export const sanitizeInput = (input: string): string => {
 
 ```typescript
 // pages/api/consultation-submit.ts
-import { NextApiRequest, NextApiResponse } from 'next';
-import { ConsultationRequestSchema, sanitizeInput } from '@/utils/validation';
-import { supabaseAdmin } from '@/lib/supabase';
-import { generateConsultationNumber, getClientIP } from '@/utils/helpers';
-import { sendNotificationEmail } from '@/lib/email';
-import { logEvent } from '@/lib/analytics';
+import { NextApiRequest, NextApiResponse } from "next";
+import { ConsultationRequestSchema, sanitizeInput } from "@/utils/validation";
+import { supabaseAdmin } from "@/lib/supabase";
+import { generateConsultationNumber, getClientIP } from "@/utils/helpers";
+import { sendNotificationEmail } from "@/lib/email";
+import { logEvent } from "@/lib/analytics";
 
 interface ExtendedNextApiRequest extends NextApiRequest {
   body: any;
@@ -1242,19 +1252,19 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // CORS 헤더
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-API-Version');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-API-Version");
 
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  if (req.method !== 'POST') {
+  if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
-      message: 'Method not allowed',
-      error: { type: 'method_not_allowed' }
+      message: "Method not allowed",
+      error: { type: "method_not_allowed" },
     });
   }
 
@@ -1265,57 +1275,58 @@ export default async function handler(
     if (!validationResult.success) {
       return res.status(400).json({
         success: false,
-        message: '입력 데이터가 유효하지 않습니다.',
+        message: "입력 데이터가 유효하지 않습니다.",
         error: {
-          type: 'validation',
-          details: validationResult.error.errors
-        }
+          type: "validation",
+          details: validationResult.error.errors,
+        },
       });
     }
 
     const consultationData = validationResult.data;
 
     // 2. 메타데이터 수집
-    const userAgent = req.headers['user-agent'] || '';
+    const userAgent = req.headers["user-agent"] || "";
     const ipAddress = getClientIP(req);
-    const referrer = req.headers.referer || '';
+    const referrer = req.headers.referer || "";
     const consultationNumber = generateConsultationNumber();
 
     // 3. 메인 상담 레코드 생성
     const { data: consultation, error: consultationError } = await supabaseAdmin
-      .from('consultations')
+      .from("consultations")
       .insert({
         consultation_number: consultationNumber,
         type: consultationData.type,
-        status: 'pending',
-        priority: 'normal',
+        status: "pending",
+        priority: "normal",
         contact_name: sanitizeInput(consultationData.contact.name),
         contact_phone: sanitizeInput(consultationData.contact.phone),
         contact_email: sanitizeInput(consultationData.contact.email),
-        contact_company: consultationData.contact.company ?
-          sanitizeInput(consultationData.contact.company) : null,
+        contact_company: consultationData.contact.company
+          ? sanitizeInput(consultationData.contact.company)
+          : null,
         preferred_contact_time: consultationData.contact.preferredContactTime,
         user_agent: userAgent,
         ip_address: ipAddress,
         referrer_url: referrer,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       })
       .select()
       .single();
 
     if (consultationError) {
-      console.error('Database error:', consultationError);
+      console.error("Database error:", consultationError);
       return res.status(500).json({
         success: false,
-        message: '상담 신청 처리 중 오류가 발생했습니다.',
-        error: { type: 'server' }
+        message: "상담 신청 처리 중 오류가 발생했습니다.",
+        error: { type: "server" },
       });
     }
 
     // 4. 타입별 세부 정보 저장
-    if (consultationData.type === 'guided') {
+    if (consultationData.type === "guided") {
       const { error: guidedError } = await supabaseAdmin
-        .from('guided_consultations')
+        .from("guided_consultations")
         .insert({
           consultation_id: consultation.id,
           service_type: consultationData.serviceType,
@@ -1323,42 +1334,53 @@ export default async function handler(
           budget: consultationData.budget,
           timeline: consultationData.timeline,
           important_features: consultationData.importantFeatures,
-          additional_requests: consultationData.additionalRequests ?
-            sanitizeInput(consultationData.additionalRequests) : null
+          additional_requests: consultationData.additionalRequests
+            ? sanitizeInput(consultationData.additionalRequests)
+            : null,
         });
 
       if (guidedError) {
         // 메인 레코드 롤백
-        await supabaseAdmin.from('consultations').delete().eq('id', consultation.id);
+        await supabaseAdmin
+          .from("consultations")
+          .delete()
+          .eq("id", consultation.id);
 
-        console.error('Guided consultation error:', guidedError);
+        console.error("Guided consultation error:", guidedError);
         return res.status(500).json({
           success: false,
-          message: '가이드 상담 정보 저장 중 오류가 발생했습니다.',
-          error: { type: 'server' }
+          message: "가이드 상담 정보 저장 중 오류가 발생했습니다.",
+          error: { type: "server" },
         });
       }
     } else {
       const { error: freeError } = await supabaseAdmin
-        .from('free_consultations')
+        .from("free_consultations")
         .insert({
           consultation_id: consultation.id,
-          project_description: sanitizeInput(consultationData.projectDescription),
-          budget_range: consultationData.budget ?
-            sanitizeInput(consultationData.budget) : null,
-          timeline_preference: consultationData.timeline ?
-            sanitizeInput(consultationData.timeline) : null
+          project_description: sanitizeInput(
+            consultationData.projectDescription
+          ),
+          budget_range: consultationData.budget
+            ? sanitizeInput(consultationData.budget)
+            : null,
+          timeline_preference: consultationData.timeline
+            ? sanitizeInput(consultationData.timeline)
+            : null,
         });
 
       if (freeError) {
         // 메인 레코드 롤백
-        await supabaseAdmin.from('consultations').delete().eq('id', consultation.id);
+        await supabaseAdmin
+          .from("consultations")
+          .delete()
+          .eq("id", consultation.id);
 
-        console.error('Free consultation error:', freeError);
+        console.error("Free consultation error:", freeError);
         return res.status(500).json({
           success: false,
-          message: '자유 상담 정보 저장 중 오류가 발생했습니다.',
-          error: { type: 'server' }
+          message: "자유 상담 정보 저장 중 오류가 발생했습니다.",
+          error: { type: "server" },
         });
       }
     }
@@ -1366,66 +1388,67 @@ export default async function handler(
     // 5. 알림 이메일 발송 (비동기)
     try {
       await sendNotificationEmail({
-        type: 'new_consultation',
+        type: "new_consultation",
         consultationNumber,
         consultationType: consultationData.type,
         customerName: consultationData.contact.name,
-        customerEmail: consultationData.contact.email
+        customerEmail: consultationData.contact.email,
       });
     } catch (emailError) {
-      console.error('Email notification failed:', emailError);
+      console.error("Email notification failed:", emailError);
       // 이메일 실패는 전체 프로세스를 중단시키지 않음
     }
 
     // 6. 분석 이벤트 로깅
-    logEvent('consultation_submitted', {
+    logEvent("consultation_submitted", {
       consultation_id: consultation.id,
       consultation_type: consultationData.type,
-      service_type: consultationData.type === 'guided' ?
-        consultationData.serviceType : 'free',
+      service_type:
+        consultationData.type === "guided"
+          ? consultationData.serviceType
+          : "free",
       user_agent: userAgent,
-      ip_address: ipAddress
+      ip_address: ipAddress,
     });
 
     // 7. 예상 연락 시간 계산
-    const estimatedContactTime = consultationData.type === 'guided' ?
-      '24시간 이내' : '48시간 이내';
+    const estimatedContactTime =
+      consultationData.type === "guided" ? "24시간 이내" : "48시간 이내";
 
     // 8. 성공 응답
     const responseData = {
       consultationId: consultation.id,
       consultationNumber: consultation.consultation_number,
-      estimatedContactTime
+      estimatedContactTime,
     };
 
     // API 버전별 응답 처리
-    const apiVersion = req.headers['x-api-version'] || 'v1';
+    const apiVersion = req.headers["x-api-version"] || "v1";
 
-    if (apiVersion === 'v2') {
+    if (apiVersion === "v2") {
       return res.status(201).json({
         success: true,
-        message: '상담 신청이 완료되었습니다.',
+        message: "상담 신청이 완료되었습니다.",
         data: responseData,
         meta: {
-          version: 'v2',
-          submittedAt: new Date().toISOString()
-        }
+          version: "v2",
+          submittedAt: new Date().toISOString(),
+        },
       });
     } else {
       return res.status(201).json({
         success: true,
-        message: '상담 신청이 완료되었습니다.',
-        ...responseData
+        message: "상담 신청이 완료되었습니다.",
+        ...responseData,
       });
     }
-
   } catch (error) {
-    console.error('Unexpected error:', error);
+    console.error("Unexpected error:", error);
 
     return res.status(500).json({
       success: false,
-      message: '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-      error: { type: 'server' }
+      message: "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+      error: { type: "server" },
     });
   }
 }
@@ -1435,33 +1458,34 @@ export default async function handler(
 
 ```typescript
 // pages/api/consultation-status/[id].ts
-import { NextApiRequest, NextApiResponse } from 'next';
-import { supabaseAdmin } from '@/lib/supabase';
+import { NextApiRequest, NextApiResponse } from "next";
+import { supabaseAdmin } from "@/lib/supabase";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== 'GET') {
+  if (req.method !== "GET") {
     return res.status(405).json({
       success: false,
-      message: 'Method not allowed'
+      message: "Method not allowed",
     });
   }
 
   const { id } = req.query;
 
-  if (!id || typeof id !== 'string') {
+  if (!id || typeof id !== "string") {
     return res.status(400).json({
       success: false,
-      message: '유효하지 않은 상담 ID입니다.'
+      message: "유효하지 않은 상담 ID입니다.",
     });
   }
 
   try {
     const { data: consultation, error } = await supabaseAdmin
-      .from('consultations')
-      .select(`
+      .from("consultations")
+      .select(
+        `
         id,
         consultation_number,
         status,
@@ -1471,32 +1495,33 @@ export default async function handler(
         contact_name,
         contact_email,
         contact_phone
-      `)
-      .eq('id', id)
+      `
+      )
+      .eq("id", id)
       .single();
 
     if (error || !consultation) {
       return res.status(404).json({
         success: false,
-        message: '상담 정보를 찾을 수 없습니다.'
+        message: "상담 정보를 찾을 수 없습니다.",
       });
     }
 
     // 다음 액션 메시지 생성
     const getNextAction = (status: string) => {
       switch (status) {
-        case 'pending':
-          return '담당자 배정 대기 중';
-        case 'in_progress':
-          return '상담 준비 중';
-        case 'contacted':
-          return '고객 연락 완료';
-        case 'completed':
-          return '상담 완료';
-        case 'cancelled':
-          return '상담 취소됨';
+        case "pending":
+          return "담당자 배정 대기 중";
+        case "in_progress":
+          return "상담 준비 중";
+        case "contacted":
+          return "고객 연락 완료";
+        case "completed":
+          return "상담 완료";
+        case "cancelled":
+          return "상담 취소됨";
         default:
-          return '상태 확인 중';
+          return "상태 확인 중";
       }
     };
 
@@ -1509,16 +1534,15 @@ export default async function handler(
         submittedAt: consultation.created_at,
         lastUpdated: consultation.updated_at,
         assignedTo: consultation.assigned_to,
-        nextAction: getNextAction(consultation.status)
-      }
+        nextAction: getNextAction(consultation.status),
+      },
     });
-
   } catch (error) {
-    console.error('Status check error:', error);
+    console.error("Status check error:", error);
 
     return res.status(500).json({
       success: false,
-      message: '상태 조회 중 오류가 발생했습니다.'
+      message: "상태 조회 중 오류가 발생했습니다.",
     });
   }
 }
@@ -1533,32 +1557,37 @@ export default async function handler(
 export const generateConsultationNumber = (): string => {
   const now = new Date();
   const year = now.getFullYear().toString().slice(-2);
-  const month = (now.getMonth() + 1).toString().padStart(2, '0');
-  const day = now.getDate().toString().padStart(2, '0');
-  const sequence = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+  const month = (now.getMonth() + 1).toString().padStart(2, "0");
+  const day = now.getDate().toString().padStart(2, "0");
+  const sequence = Math.floor(Math.random() * 9999)
+    .toString()
+    .padStart(4, "0");
 
   return `VM${year}${month}${day}${sequence}`;
 };
 
 // 클라이언트 IP 추출
 export const getClientIP = (req: NextApiRequest): string => {
-  const forwarded = req.headers['x-forwarded-for'];
-  const ip = forwarded ?
-    (Array.isArray(forwarded) ? forwarded[0] : forwarded.split(',')[0]) :
-    req.connection.remoteAddress;
+  const forwarded = req.headers["x-forwarded-for"];
+  const ip = forwarded
+    ? Array.isArray(forwarded)
+      ? forwarded[0]
+      : forwarded.split(",")[0]
+    : req.connection.remoteAddress;
 
-  return ip || 'unknown';
+  return ip || "unknown";
 };
 
 // User Agent 파싱
 export const parseUserAgent = (userAgent: string) => {
   const isMobile = /Mobile|Android|iPhone|iPad/i.test(userAgent);
-  const browser = userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera)/i)?.[1] || 'Unknown';
+  const browser =
+    userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera)/i)?.[1] || "Unknown";
 
   return {
     isMobile,
     browser,
-    raw: userAgent
+    raw: userAgent,
   };
 };
 
@@ -1567,11 +1596,11 @@ export const extractUTMParams = (referrer: string) => {
   try {
     const url = new URL(referrer);
     return {
-      source: url.searchParams.get('utm_source'),
-      medium: url.searchParams.get('utm_medium'),
-      campaign: url.searchParams.get('utm_campaign'),
-      term: url.searchParams.get('utm_term'),
-      content: url.searchParams.get('utm_content')
+      source: url.searchParams.get("utm_source"),
+      medium: url.searchParams.get("utm_medium"),
+      campaign: url.searchParams.get("utm_campaign"),
+      term: url.searchParams.get("utm_term"),
+      content: url.searchParams.get("utm_content"),
     };
   } catch {
     return {};
@@ -1579,7 +1608,7 @@ export const extractUTMParams = (referrer: string) => {
 };
 
 // 예상 처리 시간 계산
-export const getEstimatedProcessingTime = (type: 'guided' | 'free'): string => {
+export const getEstimatedProcessingTime = (type: "guided" | "free"): string => {
   const now = new Date();
   const hour = now.getHours();
 
@@ -1587,10 +1616,10 @@ export const getEstimatedProcessingTime = (type: 'guided' | 'free'): string => {
   const isBusinessHour = hour >= 9 && hour < 18;
   const isWeekday = now.getDay() >= 1 && now.getDay() <= 5;
 
-  if (type === 'guided') {
-    return isBusinessHour && isWeekday ? '4시간 이내' : '24시간 이내';
+  if (type === "guided") {
+    return isBusinessHour && isWeekday ? "4시간 이내" : "24시간 이내";
   } else {
-    return isBusinessHour && isWeekday ? '24시간 이내' : '48시간 이내';
+    return isBusinessHour && isWeekday ? "24시간 이내" : "48시간 이내";
   }
 };
 ```
@@ -1821,7 +1850,7 @@ export const validateField = (
 
   return {
     isValid: errors.length === 0,
-    errors
+    errors,
   };
 };
 
@@ -1832,46 +1861,46 @@ interface ValidationRule {
 
 // 공통 검증 규칙들
 export const ValidationRules = {
-  required: (message = '필수 입력 항목입니다'): ValidationRule => ({
+  required: (message = "필수 입력 항목입니다"): ValidationRule => ({
     validate: (value) => ({
-      isValid: value !== null && value !== undefined && value !== '',
-      message
-    })
+      isValid: value !== null && value !== undefined && value !== "",
+      message,
+    }),
   }),
 
   minLength: (min: number, message?: string): ValidationRule => ({
     validate: (value) => ({
-      isValid: typeof value === 'string' && value.length >= min,
-      message: message || `최소 ${min}자 이상 입력해주세요`
-    })
+      isValid: typeof value === "string" && value.length >= min,
+      message: message || `최소 ${min}자 이상 입력해주세요`,
+    }),
   }),
 
   maxLength: (max: number, message?: string): ValidationRule => ({
     validate: (value) => ({
-      isValid: typeof value === 'string' && value.length <= max,
-      message: message || `최대 ${max}자 이하로 입력해주세요`
-    })
+      isValid: typeof value === "string" && value.length <= max,
+      message: message || `최대 ${max}자 이하로 입력해주세요`,
+    }),
   }),
 
-  email: (message = '올바른 이메일 주소를 입력해주세요'): ValidationRule => ({
+  email: (message = "올바른 이메일 주소를 입력해주세요"): ValidationRule => ({
     validate: (value) => ({
       isValid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-      message
-    })
+      message,
+    }),
   }),
 
-  phone: (message = '올바른 휴대폰 번호를 입력해주세요'): ValidationRule => ({
+  phone: (message = "올바른 휴대폰 번호를 입력해주세요"): ValidationRule => ({
     validate: (value) => ({
       isValid: /^010-?\d{4}-?\d{4}$/.test(value),
-      message
-    })
-  })
+      message,
+    }),
+  }),
 };
 
 // 사용 예시
-const emailValidation = validateField('email', userInput, [
+const emailValidation = validateField("email", userInput, [
   ValidationRules.required(),
-  ValidationRules.email()
+  ValidationRules.email(),
 ]);
 ```
 
@@ -1887,7 +1916,7 @@ interface ErrorDisplayProps {
 
 export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   errors,
-  className
+  className,
 }) => {
   if (errors.length === 0) return null;
 
@@ -1929,26 +1958,28 @@ export class AppError extends Error {
     public isOperational: boolean = true
   ) {
     super(message);
-    this.name = 'AppError';
+    this.name = "AppError";
     Error.captureStackTrace(this, this.constructor);
   }
 }
 
 export const ErrorCodes = {
-  VALIDATION_ERROR: 'VALIDATION_ERROR',
-  NETWORK_ERROR: 'NETWORK_ERROR',
-  SERVER_ERROR: 'SERVER_ERROR',
-  RATE_LIMIT_ERROR: 'RATE_LIMIT_ERROR',
-  DUPLICATE_SUBMISSION: 'DUPLICATE_SUBMISSION'
+  VALIDATION_ERROR: "VALIDATION_ERROR",
+  NETWORK_ERROR: "NETWORK_ERROR",
+  SERVER_ERROR: "SERVER_ERROR",
+  RATE_LIMIT_ERROR: "RATE_LIMIT_ERROR",
+  DUPLICATE_SUBMISSION: "DUPLICATE_SUBMISSION",
 } as const;
 
 // 에러 메시지 매핑
 export const ErrorMessages = {
-  [ErrorCodes.VALIDATION_ERROR]: '입력 정보를 다시 확인해주세요.',
-  [ErrorCodes.NETWORK_ERROR]: '네트워크 연결을 확인해주세요.',
-  [ErrorCodes.SERVER_ERROR]: '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-  [ErrorCodes.RATE_LIMIT_ERROR]: '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.',
-  [ErrorCodes.DUPLICATE_SUBMISSION]: '이미 처리 중인 요청입니다.'
+  [ErrorCodes.VALIDATION_ERROR]: "입력 정보를 다시 확인해주세요.",
+  [ErrorCodes.NETWORK_ERROR]: "네트워크 연결을 확인해주세요.",
+  [ErrorCodes.SERVER_ERROR]:
+    "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+  [ErrorCodes.RATE_LIMIT_ERROR]:
+    "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.",
+  [ErrorCodes.DUPLICATE_SUBMISSION]: "이미 처리 중인 요청입니다.",
 } as const;
 
 // API 에러 처리
@@ -2022,7 +2053,7 @@ const defaultRetryOptions: RetryOptions = {
   retryCondition: (error) => {
     // 네트워크 에러나 5xx 서버 에러의 경우만 재시도
     return !error.response || error.response.status >= 500;
-  }
+  },
 };
 
 export const withRetry = async <T>(
@@ -2039,10 +2070,7 @@ export const withRetry = async <T>(
       lastError = error;
 
       // 마지막 시도이거나 재시도 조건을 만족하지 않으면 에러 던지기
-      if (
-        attempt === config.maxRetries ||
-        !config.retryCondition!(error)
-      ) {
+      if (attempt === config.maxRetries || !config.retryCondition!(error)) {
         throw error;
       }
 
@@ -2052,7 +2080,7 @@ export const withRetry = async <T>(
         config.maxDelay
       );
 
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 
@@ -2061,17 +2089,14 @@ export const withRetry = async <T>(
 
 // 사용 예시
 const submitWithRetry = async (consultationData: any) => {
-  return withRetry(
-    () => submitConsultation(consultationData),
-    {
-      maxRetries: 3,
-      baseDelay: 1000,
-      retryCondition: (error) => {
-        // 4xx 클라이언트 에러는 재시도하지 않음
-        return !error.response || error.response.status >= 500;
-      }
-    }
-  );
+  return withRetry(() => submitConsultation(consultationData), {
+    maxRetries: 3,
+    baseDelay: 1000,
+    retryCondition: (error) => {
+      // 4xx 클라이언트 에러는 재시도하지 않음
+      return !error.response || error.response.status >= 500;
+    },
+  });
 };
 ```
 
@@ -2084,13 +2109,13 @@ const submitWithRetry = async (consultationData: any) => {
 ```typescript
 // utils/security.ts
 
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from "isomorphic-dompurify";
 
 // XSS 방지를 위한 HTML sanitization
 export const sanitizeHtml = (input: string): string => {
   return DOMPurify.sanitize(input, {
     ALLOWED_TAGS: [], // HTML 태그 모두 제거
-    ALLOWED_ATTR: []
+    ALLOWED_ATTR: [],
   });
 };
 
@@ -2098,22 +2123,23 @@ export const sanitizeHtml = (input: string): string => {
 export const sanitizeInput = (input: string): string => {
   return input
     .trim()
-    .replace(/[<>'"`;\\]/g, '') // 위험한 문자 제거
+    .replace(/[<>'"`;\\]/g, "") // 위험한 문자 제거
     .substring(0, 1000); // 최대 길이 제한
 };
 
 // 이메일 주소 마스킹 (로그용)
 export const maskEmail = (email: string): string => {
-  const [localPart, domain] = email.split('@');
+  const [localPart, domain] = email.split("@");
   if (localPart.length <= 2) return email;
 
-  const maskedLocal = localPart[0] + '*'.repeat(localPart.length - 2) + localPart.slice(-1);
+  const maskedLocal =
+    localPart[0] + "*".repeat(localPart.length - 2) + localPart.slice(-1);
   return `${maskedLocal}@${domain}`;
 };
 
 // 전화번호 마스킹 (로그용)
 export const maskPhone = (phone: string): string => {
-  return phone.replace(/(\d{3})-?(\d{2})\d{2}-?(\d{4})/, '$1-$2**-$3');
+  return phone.replace(/(\d{3})-?(\d{2})\d{2}-?(\d{4})/, "$1-$2**-$3");
 };
 ```
 
@@ -2122,7 +2148,7 @@ export const maskPhone = (phone: string): string => {
 ```typescript
 // utils/rateLimiter.ts
 
-import { LRUCache } from 'lru-cache';
+import { LRUCache } from "lru-cache";
 
 interface RateLimitConfig {
   windowMs: number;
@@ -2138,7 +2164,7 @@ class RateLimiter {
     this.config = config;
     this.cache = new LRUCache({
       max: 10000,
-      ttl: config.windowMs
+      ttl: config.windowMs,
     });
   }
 
@@ -2149,12 +2175,12 @@ class RateLimiter {
     let requests = this.cache.get(identifier) || [];
 
     // 윈도우 밖의 요청들 제거
-    requests = requests.filter(time => time > windowStart);
+    requests = requests.filter((time) => time > windowStart);
 
     if (requests.length >= this.config.maxRequests) {
       return {
         allowed: false,
-        resetTime: Math.min(...requests) + this.config.windowMs
+        resetTime: Math.min(...requests) + this.config.windowMs,
       };
     }
 
@@ -2169,7 +2195,7 @@ class RateLimiter {
 export const consultationRateLimiter = new RateLimiter({
   windowMs: 15 * 60 * 1000, // 15분
   maxRequests: 3, // 15분에 최대 3회
-  message: '너무 많은 상담 신청이 발생했습니다. 15분 후 다시 시도해주세요.'
+  message: "너무 많은 상담 신청이 발생했습니다. 15분 후 다시 시도해주세요.",
 });
 
 // Express 미들웨어
@@ -2183,9 +2209,9 @@ export const rateLimitMiddleware = (rateLimiter: RateLimiter) => {
         success: false,
         message: rateLimiter.config.message,
         error: {
-          type: 'rate_limit',
-          resetTime: result.resetTime
-        }
+          type: "rate_limit",
+          resetTime: result.resetTime,
+        },
       });
     }
 
@@ -2209,23 +2235,27 @@ export interface PersonalData {
 }
 
 // 개인정보 암호화 (저장 시)
-export const encryptPersonalData = (data: PersonalData): EncryptedPersonalData => {
+export const encryptPersonalData = (
+  data: PersonalData
+): EncryptedPersonalData => {
   // 실제 구현 시 crypto 라이브러리 사용
   return {
     name: encrypt(data.name),
     phone: encrypt(data.phone),
     email: encrypt(data.email),
-    company: data.company ? encrypt(data.company) : undefined
+    company: data.company ? encrypt(data.company) : undefined,
   };
 };
 
 // 개인정보 복호화 (조회 시)
-export const decryptPersonalData = (encryptedData: EncryptedPersonalData): PersonalData => {
+export const decryptPersonalData = (
+  encryptedData: EncryptedPersonalData
+): PersonalData => {
   return {
     name: decrypt(encryptedData.name),
     phone: decrypt(encryptedData.phone),
     email: decrypt(encryptedData.email),
-    company: encryptedData.company ? decrypt(encryptedData.company) : undefined
+    company: encryptedData.company ? decrypt(encryptedData.company) : undefined,
   };
 };
 
@@ -2235,7 +2265,7 @@ export const checkDataRetention = (createdAt: Date): boolean => {
   const now = new Date().getTime();
   const created = createdAt.getTime();
 
-  return (now - created) > retentionPeriod;
+  return now - created > retentionPeriod;
 };
 
 // 개인정보 삭제 (자동화된 데이터 삭제용)
@@ -2250,17 +2280,15 @@ export const scheduleDataDeletion = async (consultationId: string) => {
 ```typescript
 // middleware/auth.ts
 
-export const requireAuth = (
-  handler: NextApiHandler
-): NextApiHandler => {
+export const requireAuth = (handler: NextApiHandler): NextApiHandler => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-      const token = req.headers.authorization?.replace('Bearer ', '');
+      const token = req.headers.authorization?.replace("Bearer ", "");
 
       if (!token) {
         return res.status(401).json({
           success: false,
-          message: '인증이 필요합니다.'
+          message: "인증이 필요합니다.",
         });
       }
 
@@ -2272,7 +2300,7 @@ export const requireAuth = (
     } catch (error) {
       return res.status(401).json({
         success: false,
-        message: '유효하지 않은 인증 정보입니다.'
+        message: "유효하지 않은 인증 정보입니다.",
       });
     }
   };
@@ -2285,7 +2313,7 @@ export const requirePermission = (permission: string) => {
       if (!req.user?.permissions?.includes(permission)) {
         return res.status(403).json({
           success: false,
-          message: '권한이 없습니다.'
+          message: "권한이 없습니다.",
         });
       }
 
@@ -2304,39 +2332,39 @@ export const requirePermission = (permission: string) => {
 ```typescript
 // hooks/useOptimizedSubmit.ts
 
-import { useCallback, useRef } from 'react';
-import { debounce } from 'lodash';
+import { useCallback, useRef } from "react";
+import { debounce } from "lodash";
 
 // 중복 제출 방지
 export const useOptimizedSubmit = () => {
   const submissionRef = useRef<Promise<any> | null>(null);
   const lastSubmitTime = useRef<number>(0);
 
-  const submitWithOptimization = useCallback(async (
-    submitFunction: () => Promise<any>,
-    minInterval: number = 1000
-  ) => {
-    const now = Date.now();
+  const submitWithOptimization = useCallback(
+    async (submitFunction: () => Promise<any>, minInterval: number = 1000) => {
+      const now = Date.now();
 
-    // 최소 간격 체크
-    if (now - lastSubmitTime.current < minInterval) {
-      throw new Error('너무 빠른 연속 요청입니다.');
-    }
+      // 최소 간격 체크
+      if (now - lastSubmitTime.current < minInterval) {
+        throw new Error("너무 빠른 연속 요청입니다.");
+      }
 
-    // 진행 중인 요청이 있으면 대기
-    if (submissionRef.current) {
-      return submissionRef.current;
-    }
+      // 진행 중인 요청이 있으면 대기
+      if (submissionRef.current) {
+        return submissionRef.current;
+      }
 
-    try {
-      lastSubmitTime.current = now;
-      submissionRef.current = submitFunction();
-      const result = await submissionRef.current;
-      return result;
-    } finally {
-      submissionRef.current = null;
-    }
-  }, []);
+      try {
+        lastSubmitTime.current = now;
+        submissionRef.current = submitFunction();
+        const result = await submissionRef.current;
+        return result;
+      } finally {
+        submissionRef.current = null;
+      }
+    },
+    []
+  );
 
   return { submitWithOptimization };
 };
@@ -2346,10 +2374,10 @@ export const useAutoSave = (
   saveFunction: (data: any) => void,
   delay: number = 2000
 ) => {
-  const debouncedSave = useCallback(
-    debounce(saveFunction, delay),
-    [saveFunction, delay]
-  );
+  const debouncedSave = useCallback(debounce(saveFunction, delay), [
+    saveFunction,
+    delay,
+  ]);
 
   return debouncedSave;
 };
@@ -2361,7 +2389,7 @@ export const useAutoSave = (
 // utils/databaseOptimization.ts
 
 // 연결 풀링
-import { Pool } from 'pg';
+import { Pool } from "pg";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -2375,7 +2403,7 @@ export const batchInsertConsultations = async (consultations: any[]) => {
   const client = await pool.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     const insertQuery = `
       INSERT INTO consultations (
@@ -2389,13 +2417,13 @@ export const batchInsertConsultations = async (consultations: any[]) => {
         consultation.type,
         consultation.contactName,
         consultation.contactEmail,
-        consultation.contactPhone
+        consultation.contactPhone,
       ]);
     }
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
   } catch (error) {
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     throw error;
   } finally {
     client.release();
@@ -2403,16 +2431,16 @@ export const batchInsertConsultations = async (consultations: any[]) => {
 };
 
 // 캐싱
-import { Redis } from 'ioredis';
+import { Redis } from "ioredis";
 
 const redis = new Redis(process.env.REDIS_URL);
 
 export const cacheConsultationStats = async (stats: any) => {
-  await redis.setex('consultation_stats', 300, JSON.stringify(stats)); // 5분 캐시
+  await redis.setex("consultation_stats", 300, JSON.stringify(stats)); // 5분 캐시
 };
 
 export const getCachedConsultationStats = async () => {
-  const cached = await redis.get('consultation_stats');
+  const cached = await redis.get("consultation_stats");
   return cached ? JSON.parse(cached) : null;
 };
 ```
@@ -2425,9 +2453,9 @@ export const getCachedConsultationStats = async () => {
 // Next.js Image 컴포넌트 설정
 export const optimizedImageProps = {
   quality: 85,
-  formats: ['webp', 'avif'],
-  placeholder: 'blur' as const,
-  loading: 'lazy' as const
+  formats: ["webp", "avif"],
+  placeholder: "blur" as const,
+  loading: "lazy" as const,
 };
 
 // CSS 최적화를 위한 critical CSS 추출
@@ -2455,22 +2483,22 @@ module.exports = {
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // 번들 최적화 설정
     if (!dev && !isServer) {
-      config.optimization.splitChunks.chunks = 'all';
+      config.optimization.splitChunks.chunks = "all";
       config.optimization.splitChunks.cacheGroups = {
         default: false,
         vendors: false,
         // 상담 관련 코드를 별도 청크로 분리
         consultation: {
-          name: 'consultation',
-          chunks: 'all',
+          name: "consultation",
+          chunks: "all",
           test: /[\\/]consultation[\\/]/,
           priority: 40,
           enforce: true,
         },
         // 공통 라이브러리
         commons: {
-          name: 'commons',
-          chunks: 'all',
+          name: "commons",
+          chunks: "all",
           minChunks: 2,
           priority: 30,
           reuseExistingChunk: true,
@@ -2487,8 +2515,8 @@ module.exports = {
 
   // 이미지 도메인 설정
   images: {
-    domains: ['example.com'],
-    formats: ['image/webp', 'image/avif'],
+    domains: ["example.com"],
+    formats: ["image/webp", "image/avif"],
   },
 };
 ```
@@ -2511,10 +2539,10 @@ export const measurePageLoad = (pageName: string) => {
     const loadTime = endTime - startTime;
 
     // 분석 도구로 전송
-    gtag('event', 'page_load_time', {
+    gtag("event", "page_load_time", {
       page_name: pageName,
       load_time: Math.round(loadTime),
-      category: 'Performance'
+      category: "Performance",
     });
   };
 };
@@ -2531,10 +2559,10 @@ export const measureApiResponse = async <T>(
     const duration = Date.now() - startTime;
 
     // 성공 시 메트릭 전송
-    gtag('event', 'api_response_time', {
+    gtag("event", "api_response_time", {
       endpoint,
       duration,
-      status: 'success'
+      status: "success",
     });
 
     return result;
@@ -2542,11 +2570,11 @@ export const measureApiResponse = async <T>(
     const duration = Date.now() - startTime;
 
     // 실패 시 에러 메트릭 전송
-    gtag('event', 'api_response_time', {
+    gtag("event", "api_response_time", {
       endpoint,
       duration,
-      status: 'error',
-      error_message: error.message
+      status: "error",
+      error_message: error.message,
     });
 
     throw error;
@@ -2561,29 +2589,33 @@ export const measureApiResponse = async <T>(
 
 // 상담 단계별 이탈률 추적
 export const trackConsultationStep = (step: number, trackType: string) => {
-  gtag('event', 'consultation_step', {
+  gtag("event", "consultation_step", {
     step_number: step,
     track_type: trackType,
-    category: 'Consultation Flow'
+    category: "Consultation Flow",
   });
 };
 
 // 폼 필드별 상호작용 추적
 export const trackFieldInteraction = (fieldName: string, action: string) => {
-  gtag('event', 'form_interaction', {
+  gtag("event", "form_interaction", {
     field_name: fieldName,
     action, // focus, blur, change, error
-    category: 'Form Interaction'
+    category: "Form Interaction",
   });
 };
 
 // 에러 발생 추적
-export const trackError = (errorType: string, errorMessage: string, context?: any) => {
-  gtag('event', 'exception', {
+export const trackError = (
+  errorType: string,
+  errorMessage: string,
+  context?: any
+) => {
+  gtag("event", "exception", {
     description: errorMessage,
     fatal: false,
     error_type: errorType,
-    context: JSON.stringify(context)
+    context: JSON.stringify(context),
   });
 };
 
@@ -2594,24 +2626,26 @@ export const trackConsultationCompletion = (
   timeToComplete: number
 ) => {
   // Google Analytics 변환 이벤트
-  gtag('event', 'purchase', {
+  gtag("event", "purchase", {
     transaction_id: consultationId,
     value: 1,
-    currency: 'KRW',
-    items: [{
-      item_id: consultationType,
-      item_name: `${consultationType} consultation`,
-      item_category: 'Consultation',
-      quantity: 1
-    }]
+    currency: "KRW",
+    items: [
+      {
+        item_id: consultationType,
+        item_name: `${consultationType} consultation`,
+        item_category: "Consultation",
+        quantity: 1,
+      },
+    ],
   });
 
   // 맞춤 완료 이벤트
-  gtag('event', 'consultation_completed', {
+  gtag("event", "consultation_completed", {
     consultation_type: consultationType,
     consultation_id: consultationId,
     time_to_complete: timeToComplete,
-    category: 'Conversion'
+    category: "Conversion",
   });
 };
 ```
@@ -2636,18 +2670,20 @@ export const getConsultationMetrics = async (
   endDate: Date
 ): Promise<ConsultationMetrics> => {
   const { data: consultations } = await supabaseAdmin
-    .from('consultation_summary')
-    .select('*')
-    .gte('created_at', startDate.toISOString())
-    .lte('created_at', endDate.toISOString());
+    .from("consultation_summary")
+    .select("*")
+    .gte("created_at", startDate.toISOString())
+    .lte("created_at", endDate.toISOString());
 
   const total = consultations.length;
-  const guided = consultations.filter(c => c.type === 'guided').length;
-  const free = consultations.filter(c => c.type === 'free').length;
-  const completed = consultations.filter(c => c.status === 'completed').length;
+  const guided = consultations.filter((c) => c.type === "guided").length;
+  const free = consultations.filter((c) => c.type === "free").length;
+  const completed = consultations.filter(
+    (c) => c.status === "completed"
+  ).length;
 
   const serviceTypeCounts = consultations
-    .filter(c => c.service_type)
+    .filter((c) => c.service_type)
     .reduce((acc, c) => {
       acc[c.service_type] = (acc[c.service_type] || 0) + 1;
       return acc;
@@ -2665,11 +2701,11 @@ export const getConsultationMetrics = async (
     completionRate: total > 0 ? (completed / total) * 100 : 0,
     averageResponseTime: 0, // 추후 계산 로직 추가
     topServiceTypes,
-    dailyTrends: [] // 추후 계산 로직 추가
+    dailyTrends: [], // 추후 계산 로직 추가
   };
 };
 ```
 
 ---
 
-이상으로 VisionMakers 상담 신청 시스템의 종합적인 설계 문서를 완성했습니다. 이 문서는 API 설계, UI/UX, 코드 구현, 데이터베이스 스키마, 에러 처리, 보안, 성능 최적화까지 모든 측면을 포괄하고 있으며, 실제 개발 시 바로 활용할 수 있는 상세한 코드 예시와 모범 사례들을 포함하고 있습니다.
+이상으로 LeoFitTech 상담 신청 시스템의 종합적인 설계 문서를 완성했습니다. 이 문서는 API 설계, UI/UX, 코드 구현, 데이터베이스 스키마, 에러 처리, 보안, 성능 최적화까지 모든 측면을 포괄하고 있으며, 실제 개발 시 바로 활용할 수 있는 상세한 코드 예시와 모범 사례들을 포함하고 있습니다.

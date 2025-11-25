@@ -1,8 +1,8 @@
-# VisionMakers Database Setup Guide
+# LeoFitTech Database Setup Guide
 
 ## 📋 개요
 
-VisionMakers API 시스템을 위한 Supabase 데이터베이스 스키마 설정 가이드입니다.
+LeoFitTech API 시스템을 위한 Supabase 데이터베이스 스키마 설정 가이드입니다.
 
 ## 🚀 빠른 시작
 
@@ -51,24 +51,24 @@ NODE_ENV=development
 
 ### 핵심 테이블
 
-| 테이블명 | 목적 | 주요 필드 |
-|----------|------|-----------|
-| `consultations` | 메인 상담 데이터 | id, consultation_number, type, status |
-| `guided_consultations` | 가이드 상담 세부사항 | service_type, budget, timeline |
-| `free_consultations` | 자유 상담 세부사항 | project_description |
-| `admin_users` | 관리자 계정 | username, email, role, permissions |
-| `user_sessions` | 세션 관리 | access_token_hash, refresh_token_hash |
-| `consultation_logs` | 활동 로그 | action, old_values, new_values |
-| `api_logs` | API 호출 로그 | endpoint, status_code, response_time_ms |
-| `system_configs` | 시스템 설정 | config_key, config_value |
-| `consultation_stats` | 일별 통계 | date, total_submissions, conversion_rate |
+| 테이블명               | 목적                 | 주요 필드                                |
+| ---------------------- | -------------------- | ---------------------------------------- |
+| `consultations`        | 메인 상담 데이터     | id, consultation_number, type, status    |
+| `guided_consultations` | 가이드 상담 세부사항 | service_type, budget, timeline           |
+| `free_consultations`   | 자유 상담 세부사항   | project_description                      |
+| `admin_users`          | 관리자 계정          | username, email, role, permissions       |
+| `user_sessions`        | 세션 관리            | access_token_hash, refresh_token_hash    |
+| `consultation_logs`    | 활동 로그            | action, old_values, new_values           |
+| `api_logs`             | API 호출 로그        | endpoint, status_code, response_time_ms  |
+| `system_configs`       | 시스템 설정          | config_key, config_value                 |
+| `consultation_stats`   | 일별 통계            | date, total_submissions, conversion_rate |
 
 ### 뷰 (Views)
 
-| 뷰명 | 목적 |
-|------|------|
-| `consultation_details` | 상담 상세 정보 통합 뷰 |
-| `consultation_status_counts` | 상태별 카운트 집계 |
+| 뷰명                         | 목적                   |
+| ---------------------------- | ---------------------- |
+| `consultation_details`       | 상담 상세 정보 통합 뷰 |
+| `consultation_status_counts` | 상태별 카운트 집계     |
 
 ## 🔐 보안 설정
 
@@ -82,11 +82,11 @@ NODE_ENV=development
 
 ### 기본 계정
 
-| 역할 | 사용자명 | 이메일 | 기본 비밀번호 |
-|------|----------|--------|---------------|
-| admin | admin | admin@visionmakers.com | VisionMakers2024! |
-| manager | manager | manager@visionmakers.com | Manager2024! |
-| viewer | viewer | viewer@visionmakers.com | Viewer2024! |
+| 역할    | 사용자명 | 이메일                 | 기본 비밀번호   |
+| ------- | -------- | ---------------------- | --------------- |
+| admin   | admin    | admin@LeoFitTech.com   | LeoFitTech2024! |
+| manager | manager  | manager@LeoFitTech.com | Manager2024!    |
+| viewer  | viewer   | viewer@LeoFitTech.com  | Viewer2024!     |
 
 ⚠️ **보안 경고**: 운영 환경 배포 전에 반드시 기본 비밀번호를 변경하세요!
 
@@ -295,4 +295,4 @@ WHERE NOT blocked_locks.granted;
 
 ---
 
-*마지막 업데이트: 2024년 12월 17일*
+_마지막 업데이트: 2024년 12월 17일_

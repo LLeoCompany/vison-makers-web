@@ -1,8 +1,8 @@
-# VisionMakers Database Schema 설계 문서
+# LeoFitTech Database Schema 설계 문서
 
 ## 📋 개요
 
-VisionMakers API 시스템을 위한 Supabase PostgreSQL 데이터베이스 스키마 설계 문서입니다.
+LeoFitTech API 시스템을 위한 Supabase PostgreSQL 데이터베이스 스키마 설계 문서입니다.
 정규화 원칙을 따르면서도 성능을 고려한 최적화된 구조로 설계되었습니다.
 
 ---
@@ -10,6 +10,7 @@ VisionMakers API 시스템을 위한 Supabase PostgreSQL 데이터베이스 스�
 ## 🏗️ 전체 스키마 구조
 
 ### 핵심 엔티티
+
 1. **상담 관리** - consultations, guided_consultations, free_consultations
 2. **사용자 관리** - admin_users, user_sessions
 3. **시스템 관리** - consultation_logs, api_logs, system_configs
@@ -22,6 +23,7 @@ VisionMakers API 시스템을 위한 Supabase PostgreSQL 데이터베이스 스�
 ### 1. 상담 관리 테이블
 
 #### 1.1 consultations (메인 상담 테이블)
+
 ```sql
 CREATE TABLE consultations (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -63,6 +65,7 @@ CREATE TABLE consultations (
 ```
 
 #### 1.2 guided_consultations (가이드 상담 세부사항)
+
 ```sql
 CREATE TABLE guided_consultations (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -92,6 +95,7 @@ CREATE TABLE guided_consultations (
 ```
 
 #### 1.3 free_consultations (자유 상담 세부사항)
+
 ```sql
 CREATE TABLE free_consultations (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -118,6 +122,7 @@ CREATE TABLE free_consultations (
 ### 2. 사용자 관리 테이블
 
 #### 2.1 admin_users (관리자 사용자)
+
 ```sql
 CREATE TABLE admin_users (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -158,6 +163,7 @@ CREATE TABLE admin_users (
 ```
 
 #### 2.2 user_sessions (사용자 세션 관리)
+
 ```sql
 CREATE TABLE user_sessions (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -187,6 +193,7 @@ CREATE TABLE user_sessions (
 ### 3. 시스템 관리 테이블
 
 #### 3.1 consultation_logs (상담 활동 로그)
+
 ```sql
 CREATE TABLE consultation_logs (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -213,6 +220,7 @@ CREATE TABLE consultation_logs (
 ```
 
 #### 3.2 api_logs (API 호출 로그)
+
 ```sql
 CREATE TABLE api_logs (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -250,6 +258,7 @@ CREATE TABLE api_logs (
 ```
 
 #### 3.3 system_configs (시스템 설정)
+
 ```sql
 CREATE TABLE system_configs (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -279,6 +288,7 @@ CREATE TABLE system_configs (
 ### 4. 통계 테이블
 
 #### 4.1 consultation_stats (일별 통계)
+
 ```sql
 CREATE TABLE consultation_stats (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -313,6 +323,7 @@ CREATE TABLE consultation_stats (
 ## 🔍 뷰 (Views) 정의
 
 ### 1. consultation_details (상담 상세 정보 뷰)
+
 ```sql
 CREATE VIEW consultation_details AS
 SELECT
@@ -357,6 +368,7 @@ LEFT JOIN free_consultations fc ON c.id = fc.consultation_id;
 ```
 
 ### 2. consultation_status_counts (상태별 카운트 뷰)
+
 ```sql
 CREATE VIEW consultation_status_counts AS
 SELECT
@@ -638,6 +650,7 @@ CREATE POLICY "Only admins can modify configs" ON system_configs
 ## 🔄 트리거 및 함수 정의
 
 ### 1. updated_at 자동 업데이트 함수
+
 ```sql
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -670,6 +683,7 @@ CREATE TRIGGER update_system_configs_updated_at
 ```
 
 ### 2. 상담 로그 자동 생성 함수
+
 ```sql
 CREATE OR REPLACE FUNCTION log_consultation_changes()
 RETURNS TRIGGER AS $$
@@ -735,6 +749,7 @@ CREATE TRIGGER trigger_log_consultation_changes
 ```
 
 ### 3. 일별 통계 업데이트 함수
+
 ```sql
 CREATE OR REPLACE FUNCTION update_daily_stats()
 RETURNS TRIGGER AS $$
@@ -792,12 +807,13 @@ CREATE TRIGGER trigger_update_daily_stats
 ## 🎯 초기 데이터 삽입
 
 ### 1. 시스템 설정 초기값
+
 ```sql
 INSERT INTO system_configs (config_key, config_value, config_type, description, category, is_public) VALUES
-('site_title', '"VisionMakers"', 'string', '사이트 제목', 'general', true),
+('site_title', '"LeoFitTech"', 'string', '사이트 제목', 'general', true),
 ('max_file_size', '10485760', 'number', '최대 파일 크기 (bytes)', 'upload', false),
 ('maintenance_mode', 'false', 'boolean', '점검 모드 활성화', 'system', false),
-('contact_email', '"info@visionmakers.com"', 'string', '연락처 이메일', 'contact', true),
+('contact_email', '"info@LeoFitTech.com"', 'string', '연락처 이메일', 'contact', true),
 ('business_hours', '{"start": "09:00", "end": "18:00", "timezone": "Asia/Seoul"}', 'json', '영업 시간', 'contact', true),
 ('supported_languages', '["ko", "en"]', 'array', '지원 언어 목록', 'i18n', true),
 ('rate_limit_consultation', '3', 'number', '상담 신청 레이트 리미트 (10분당)', 'security', false),
@@ -807,6 +823,7 @@ INSERT INTO system_configs (config_key, config_value, config_type, description, 
 ```
 
 ### 2. 기본 관리자 계정 (임시, 실제 운영시 변경 필요)
+
 ```sql
 -- 비밀번호: admin123! (bcrypt 해시됨)
 INSERT INTO admin_users (
@@ -820,7 +837,7 @@ INSERT INTO admin_users (
     permissions
 ) VALUES (
     'admin',
-    'admin@visionmakers.com',
+    'admin@LeoFitTech.com',
     '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewYWDNlzqUOx3OaK', -- admin123!
     '시스템 관리자',
     'admin',
@@ -849,6 +866,7 @@ INSERT INTO admin_users (
 ## 🔧 유지보수 쿼리
 
 ### 1. 통계 재계산
+
 ```sql
 -- 모든 일별 통계 재계산
 TRUNCATE consultation_stats;
@@ -890,6 +908,7 @@ ORDER BY date DESC;
 ```
 
 ### 2. 세션 정리
+
 ```sql
 -- 만료된 세션 삭제
 DELETE FROM user_sessions
@@ -903,6 +922,7 @@ WHERE user_id IN (
 ```
 
 ### 3. 로그 아카이브
+
 ```sql
 -- 90일 이전 API 로그 아카이브 (선택적)
 DELETE FROM api_logs
@@ -915,4 +935,4 @@ WHERE created_at < NOW() - INTERVAL '1 year';
 
 ---
 
-이 스키마는 VisionMakers API 시스템의 모든 기능을 완벽하게 지원하며, 확장성과 성능을 고려한 최적화된 구조입니다.
+이 스키마는 LeoFitTech API 시스템의 모든 기능을 완벽하게 지원하며, 확장성과 성능을 고려한 최적화된 구조입니다.

@@ -1,6 +1,6 @@
-# VisionMakers Consultation System Supabase Configuration
+# LeoFitTech Consultation System Supabase Configuration
 
-project_id = "visionmakers-consultation"
+project_id = "LeoFitTech-consultation"
 
 [api]
 enabled = true
@@ -58,4 +58,4 @@ enabled = false
 
 # 로컬 개발 환경 설정
 [local]
-project_id = "visionmakers-consultation"
+project_id = "LeoFitTech-consultation"

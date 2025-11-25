@@ -1,9 +1,9 @@
 /**
- * VisionMakers 가격 앵커링 테이블 컴포넌트
+ * LeoFitTech 가격 앵커링 테이블 컴포넌트
  * 행동경제학 앵커링 효과를 활용한 가격 비교 테이블
  */
 
-import React from 'react';
+import React from "react";
 
 interface PricingOption {
   id: string;
@@ -23,55 +23,55 @@ interface PricingAnchoringTableProps {
 
 const defaultOptions: PricingOption[] = [
   {
-    id: 'basic',
-    name: '기본형',
-    price: '300만원',
-    originalPrice: '500만원',
+    id: "basic",
+    name: "기본형",
+    price: "300만원",
+    originalPrice: "500만원",
     features: [
-      '반응형 웹사이트',
-      '기본 SEO 설정',
-      '연락처 폼',
-      '3개월 유지보수'
-    ]
+      "반응형 웹사이트",
+      "기본 SEO 설정",
+      "연락처 폼",
+      "3개월 유지보수",
+    ],
   },
   {
-    id: 'premium',
-    name: '프리미엄',
-    price: '800만원',
-    originalPrice: '1,200만원',
+    id: "premium",
+    name: "프리미엄",
+    price: "800만원",
+    originalPrice: "1,200만원",
     features: [
-      '고급 반응형 웹사이트',
-      '전문 SEO 최적화',
-      '관리자 시스템',
-      '예약/문의 시스템',
-      '6개월 유지보수',
-      '성과 분석 리포트'
+      "고급 반응형 웹사이트",
+      "전문 SEO 최적화",
+      "관리자 시스템",
+      "예약/문의 시스템",
+      "6개월 유지보수",
+      "성과 분석 리포트",
     ],
     isRecommended: true,
-    isPopular: true
+    isPopular: true,
   },
   {
-    id: 'enterprise',
-    name: '엔터프라이즈',
-    price: '1,500만원',
-    originalPrice: '2,000만원',
+    id: "enterprise",
+    name: "엔터프라이즈",
+    price: "1,500만원",
+    originalPrice: "2,000만원",
     features: [
-      '맞춤형 웹 플랫폼',
-      '고급 SEO + 마케팅',
-      '완전한 관리자 시스템',
-      '결제 시스템 연동',
-      '1년 유지보수',
-      '전담 매니저',
-      '월간 성과 리포트',
-      '24/7 기술 지원'
-    ]
-  }
+      "맞춤형 웹 플랫폼",
+      "고급 SEO + 마케팅",
+      "완전한 관리자 시스템",
+      "결제 시스템 연동",
+      "1년 유지보수",
+      "전담 매니저",
+      "월간 성과 리포트",
+      "24/7 기술 지원",
+    ],
+  },
 ];
 
 export default function PricingAnchoringTable({
   options = defaultOptions,
   title = "💰 특별 할인가 (런칭 기념)",
-  subtitle = "지금 신청하시면 최대 40% 할인 혜택을 받으실 수 있습니다"
+  subtitle = "지금 신청하시면 최대 40% 할인 혜택을 받으실 수 있습니다",
 }: PricingAnchoringTableProps) {
   return (
     <div className="pricing-anchoring-table">
@@ -86,8 +86,8 @@ export default function PricingAnchoringTable({
             key={option.id}
             className={`pricing-card relative ${
               option.isRecommended
-                ? 'border-2 border-red-500 shadow-lg scale-105 z-10'
-                : 'border border-gray-200 shadow-md'
+                ? "border-2 border-red-500 shadow-lg scale-105 z-10"
+                : "border border-gray-200 shadow-md"
             } rounded-lg p-6 bg-white transition-all duration-300 hover:shadow-xl`}
           >
             {option.isPopular && (
@@ -107,7 +107,9 @@ export default function PricingAnchoringTable({
             )}
 
             <div className="text-center mb-6">
-              <h4 className="text-xl font-bold text-gray-900 mb-2">{option.name}</h4>
+              <h4 className="text-xl font-bold text-gray-900 mb-2">
+                {option.name}
+              </h4>
 
               <div className="price-container mb-4">
                 {option.originalPrice && (
@@ -115,14 +117,24 @@ export default function PricingAnchoringTable({
                     {option.originalPrice}
                   </div>
                 )}
-                <div className={`text-3xl font-bold ${
-                  option.isRecommended ? 'text-red-600' : 'text-gray-900'
-                }`}>
+                <div
+                  className={`text-3xl font-bold ${
+                    option.isRecommended ? "text-red-600" : "text-gray-900"
+                  }`}
+                >
                   {option.price}
                 </div>
                 {option.originalPrice && (
                   <div className="text-red-500 text-sm font-semibold mt-1">
-                    {Math.round((1 - parseInt(option.price.replace(/[^0-9]/g, '')) / parseInt(option.originalPrice.replace(/[^0-9]/g, ''))) * 100)}% 할인
+                    {Math.round(
+                      (1 -
+                        parseInt(option.price.replace(/[^0-9]/g, "")) /
+                          parseInt(
+                            option.originalPrice.replace(/[^0-9]/g, "")
+                          )) *
+                        100
+                    )}
+                    % 할인
                   </div>
                 )}
               </div>
@@ -140,15 +152,15 @@ export default function PricingAnchoringTable({
             <button
               className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors duration-200 ${
                 option.isRecommended
-                  ? 'bg-red-500 hover:bg-red-600 text-white'
-                  : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : "bg-gray-100 hover:bg-gray-200 text-gray-800"
               }`}
               onClick={() => {
                 // 상담 신청 페이지로 이동 또는 모달 열기
                 window.location.href = `/consultation/start?package=${option.id}`;
               }}
             >
-              {option.isRecommended ? '🚀 지금 신청하기' : '상담 신청'}
+              {option.isRecommended ? "🚀 지금 신청하기" : "상담 신청"}
             </button>
           </div>
         ))}
@@ -159,8 +171,12 @@ export default function PricingAnchoringTable({
           <div className="flex items-center">
             <div className="text-yellow-600 mr-2">⏰</div>
             <div>
-              <p className="text-yellow-800 font-semibold">한정 특가 마감까지</p>
-              <p className="text-yellow-700 text-sm">이 가격은 이번 달까지만 제공됩니다</p>
+              <p className="text-yellow-800 font-semibold">
+                한정 특가 마감까지
+              </p>
+              <p className="text-yellow-700 text-sm">
+                이 가격은 이번 달까지만 제공됩니다
+              </p>
             </div>
           </div>
         </div>

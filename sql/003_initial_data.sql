@@ -1,4 +1,4 @@
--- VisionMakers 초기 데이터 삽입
+-- LeoFitTech 초기 데이터 삽입
 -- Supabase Dashboard > SQL Editor에서 실행
 
 -- ==========================================
@@ -7,12 +7,12 @@
 
 INSERT INTO system_configs (config_key, config_value, config_type, description, category, is_public) VALUES
 -- 일반 설정
-('site_title', '"VisionMakers"', 'string', '사이트 제목', 'general', true),
-('site_description', '"VisionMakers는 혁신적인 디지털 솔루션을 제공합니다"', 'string', '사이트 설명', 'general', true),
-('company_name', '"VisionMakers Co., Ltd."', 'string', '회사명', 'general', true),
+('site_title', '"LeoFitTech"', 'string', '사이트 제목', 'general', true),
+('site_description', '"LeoFitTech는 혁신적인 디지털 솔루션을 제공합니다"', 'string', '사이트 설명', 'general', true),
+('company_name', '"LeoFitTech Co., Ltd."', 'string', '회사명', 'general', true),
 
 -- 연락처 정보
-('contact_email', '"info@visionmakers.com"', 'string', '연락처 이메일', 'contact', true),
+('contact_email', '"info@LeoFitTech.com"', 'string', '연락처 이메일', 'contact', true),
 ('contact_phone', '"02-1234-5678"', 'string', '연락처 전화번호', 'contact', true),
 ('contact_address', '"서울특별시 강남구 테헤란로 123"', 'string', '회사 주소', 'contact', true),
 ('business_hours', '{"start": "09:00", "end": "18:00", "timezone": "Asia/Seoul", "weekdays": [1,2,3,4,5]}', 'json', '영업 시간', 'contact', true),
@@ -38,7 +38,7 @@ INSERT INTO system_configs (config_key, config_value, config_type, description, 
 
 -- 알림 설정
 ('email_notifications_enabled', 'true', 'boolean', '이메일 알림 활성화', 'notification', false),
-('admin_notification_email', '"admin@visionmakers.com"', 'string', '관리자 알림 이메일', 'notification', false),
+('admin_notification_email', '"admin@LeoFitTech.com"', 'string', '관리자 알림 이메일', 'notification', false),
 ('new_consultation_notification', 'true', 'boolean', '새 상담 알림', 'notification', false),
 ('status_change_notification', 'true', 'boolean', '상태 변경 알림', 'notification', false),
 
@@ -61,8 +61,8 @@ INSERT INTO system_configs (config_key, config_value, config_type, description, 
 -- API 설정
 ('api_version_default', '"v1"', 'string', 'API 기본 버전', 'api', false),
 ('api_version_latest', '"v2"', 'string', 'API 최신 버전', 'api', false),
-('api_cors_origins', '["http://localhost:3000", "https://visionmakers.com"]', 'array', 'CORS 허용 도메인', 'api', false),
-('api_documentation_url', '"https://docs.visionmakers.com"', 'string', 'API 문서 URL', 'api', true);
+('api_cors_origins', '["http://localhost:3000", "https://LeoFitTech.com"]', 'array', 'CORS 허용 도메인', 'api', false),
+('api_documentation_url', '"https://docs.LeoFitTech.com"', 'string', 'API 문서 URL', 'api', true);
 
 -- ==========================================
 -- 2. 기본 관리자 계정 생성
@@ -70,8 +70,8 @@ INSERT INTO system_configs (config_key, config_value, config_type, description, 
 
 -- 기본 시스템 관리자 (임시 계정, 운영 시 변경 필요)
 -- 사용자명: admin
--- 이메일: admin@visionmakers.com
--- 비밀번호: VisionMakers2024! (bcrypt 해시)
+-- 이메일: admin@LeoFitTech.com
+-- 비밀번호: LeoFitTech2024! (bcrypt 해시)
 INSERT INTO admin_users (
     username,
     email,
@@ -85,8 +85,8 @@ INSERT INTO admin_users (
     position
 ) VALUES (
     'admin',
-    'admin@visionmakers.com',
-    '$2b$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- VisionMakers2024!
+    'admin@LeoFitTech.com',
+    '$2b$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- LeoFitTech2024!
     '시스템 관리자',
     'admin',
     true,
@@ -98,7 +98,7 @@ INSERT INTO admin_users (
 
 -- 매니저 계정 (임시)
 -- 사용자명: manager
--- 이메일: manager@visionmakers.com
+-- 이메일: manager@LeoFitTech.com
 -- 비밀번호: Manager2024! (bcrypt 해시)
 INSERT INTO admin_users (
     username,
@@ -113,7 +113,7 @@ INSERT INTO admin_users (
     position
 ) VALUES (
     'manager',
-    'manager@visionmakers.com',
+    'manager@LeoFitTech.com',
     '$2b$12$E9rQqPW1YjzK8.Z3XuKUWeQFGy9tZf8s7iJ5q1K9rEGHl6A4gA8XC', -- Manager2024!
     '서비스 매니저',
     'manager',
@@ -126,7 +126,7 @@ INSERT INTO admin_users (
 
 -- 뷰어 계정 (임시)
 -- 사용자명: viewer
--- 이메일: viewer@visionmakers.com
+-- 이메일: viewer@LeoFitTech.com
 -- 비밀번호: Viewer2024! (bcrypt 해시)
 INSERT INTO admin_users (
     username,
@@ -141,7 +141,7 @@ INSERT INTO admin_users (
     position
 ) VALUES (
     'viewer',
-    'viewer@visionmakers.com',
+    'viewer@LeoFitTech.com',
     '$2b$12$8h9QKsF2NvY3GqI8RjW7.eUZKv1PtJ4mV7nQ0sL6bC3fE9rG5aH2D', -- Viewer2024!
     '데이터 뷰어',
     'viewer',
@@ -363,6 +363,6 @@ SELECT
     jsonb_build_object(
         'type', 'security_warning',
         'message', '기본 관리자 계정들이 생성되었습니다. 운영 전에 반드시 비밀번호를 변경하거나 계정을 삭제해주세요.',
-        'accounts', jsonb_build_array('admin@visionmakers.com', 'manager@visionmakers.com', 'viewer@visionmakers.com'),
+        'accounts', jsonb_build_array('admin@LeoFitTech.com', 'manager@LeoFitTech.com', 'viewer@LeoFitTech.com'),
         'priority', 'high'
     );

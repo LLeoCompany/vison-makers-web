@@ -1,13 +1,13 @@
-# VisionMakers Supabase 직접 통신 설정 가이드
+# LeoFitTech Supabase 직접 통신 설정 가이드
 
-VisionMakers 프로젝트의 Supabase 데이터베이스 직접 통신을 위한 완전한 설정 및 사용 가이드입니다.
+LeoFitTech 프로젝트의 Supabase 데이터베이스 직접 통신을 위한 완전한 설정 및 사용 가이드입니다.
 
 ## 🚀 빠른 시작
 
 ### 1. Supabase 프로젝트 설정
 
 1. [Supabase Dashboard](https://app.supabase.com)에 접속
-2. 새 프로젝트 생성: `visionmakers-consultation`
+2. 새 프로젝트 생성: `LeoFitTech-consultation`
 3. 데이터베이스 비밀번호 설정
 4. 프로젝트 생성 완료 후 SQL Editor로 이동
 
@@ -58,7 +58,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 # 선택적 설정 (알림 등)
-EMAIL_FROM=noreply@visionmakers.com
+EMAIL_FROM=noreply@LeoFitTech.com
 SLACK_WEBHOOK_URL=https://hooks.slack.com/services/your/webhook/url
 ```
 
@@ -83,32 +83,32 @@ SLACK_WEBHOOK_URL=https://hooks.slack.com/services/your/webhook/url
 ### 1. 상담 신청 생성
 
 ```typescript
-import { createGuidedConsultation } from '@/services/consultation';
+import { createGuidedConsultation } from "@/services/consultation";
 
 const result = await createGuidedConsultation({
-  contact_name: '홍길동',
-  contact_phone: '010-1234-5678',
-  contact_email: 'hong@example.com',
-  service_type: 'web_development',
-  project_size: 'medium',
-  budget: '1000_to_3000',
-  timeline: '1_3_months',
-  important_features: ['responsive_design', 'cms'],
+  contact_name: "홍길동",
+  contact_phone: "010-1234-5678",
+  contact_email: "hong@example.com",
+  service_type: "web_development",
+  project_size: "medium",
+  budget: "1000_to_3000",
+  timeline: "1_3_months",
+  important_features: ["responsive_design", "cms"],
 });
 
 if (result.success) {
-  console.log('상담 번호:', result.data.consultationNumber);
+  console.log("상담 번호:", result.data.consultationNumber);
 }
 ```
 
 ### 2. 관리자 로그인
 
 ```typescript
-import { loginAdmin } from '@/services/auth';
+import { loginAdmin } from "@/services/auth";
 
 const result = await loginAdmin({
-  email: 'admin@visionmakers.com',
-  password: 'VisionMakers2024!',
+  email: "admin@LeoFitTech.com",
+  password: "LeoFitTech2024!",
 });
 
 if (result.success) {
@@ -119,13 +119,13 @@ if (result.success) {
 ### 3. 상담 목록 조회 (관리자)
 
 ```typescript
-import { getConsultations } from '@/services/consultation';
+import { getConsultations } from "@/services/consultation";
 
 const result = await getConsultations({
   page: 1,
   limit: 20,
-  status: 'pending',
-  search: '홍길동',
+  status: "pending",
+  search: "홍길동",
 });
 ```
 
@@ -154,12 +154,14 @@ npm test
 ## 📊 상담 신청 플로우
 
 ### 가이드 상담
+
 1. 서비스 타입 선택 (homepage/shopping/booking/membership/other)
 2. 프로젝트 규모 및 예산 선택
 3. 일정 및 중요 기능 선택
 4. 연락처 정보 입력
 
 ### 자유 상담
+
 1. 프로젝트 상세 설명 작성
 2. 연락처 정보 입력
 
@@ -193,17 +195,21 @@ npm test
 ### 자주 발생하는 문제
 
 1. **연결 오류**
+
    ```
    Failed to fetch from Supabase
    ```
+
    - Supabase URL과 API 키 확인
    - 네트워크 연결 확인
    - RLS 정책 확인
 
 2. **권한 오류**
+
    ```
    insufficient_privilege
    ```
+
    - Service Role 키 사용 확인
    - RLS 정책 재검토
 
@@ -217,6 +223,7 @@ npm test
 ### 디버깅
 
 1. **로그 확인**
+
 ```bash
 # 서버 로그
 npm run dev
@@ -226,6 +233,7 @@ npm run dev
 ```
 
 2. **API 테스트**
+
 ```bash
 # 전체 API 테스트
 npm run test:api
@@ -249,12 +257,14 @@ curl -X POST http://localhost:3000/api/consultation-submit \
 ### 데이터베이스 스키마 변경
 
 1. **마이그레이션 파일 생성**
+
 ```sql
 -- supabase/migrations/002_add_new_feature.sql
 ALTER TABLE consultations ADD COLUMN new_field TEXT;
 ```
 
 2. **마이그레이션 적용**
+
 ```bash
 supabase db push
 ```

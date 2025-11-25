@@ -1,13 +1,13 @@
 // Consultation Service Layer
-// VisionMakers - Direct Supabase Communication
+// LeoFitTech - Direct Supabase Communication
 
 import {
   supabase,
   supabaseAdmin,
   handleSupabaseResponse,
   SupabaseError,
-  SUPABASE_CONFIG
-} from '@/lib/supabase';
+  SUPABASE_CONFIG,
+} from "@/lib/supabase";
 import type {
   ConsultationRow,
   ConsultationInsert,
@@ -23,23 +23,23 @@ import type {
   BudgetRange,
   Timeline,
   ConsultationStatus,
-  ConsultationPriority
-} from '@/types/database';
+  ConsultationPriority,
+} from "@/types/database";
 
 // Consultation number generation
 export async function generateConsultationNumber(): Promise<string> {
   const today = new Date();
-  const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
+  const dateStr = today.toISOString().slice(0, 10).replace(/-/g, "");
 
   // Get today's count
   const { data: todayCount } = await supabaseAdmin
-    .from('consultations')
-    .select('count')
-    .gte('created_at', `${today.toISOString().slice(0, 10)}T00:00:00.000Z`)
-    .lt('created_at', `${today.toISOString().slice(0, 10)}T23:59:59.999Z`);
+    .from("consultations")
+    .select("count")
+    .gte("created_at", `${today.toISOString().slice(0, 10)}T00:00:00.000Z`)
+    .lt("created_at", `${today.toISOString().slice(0, 10)}T23:59:59.999Z`);
 
   const count = (todayCount?.length || 0) + 1;
-  return `CON-${dateStr}-${count.toString().padStart(3, '0')}`;
+  return `CON-${dateStr}-${count.toString().padStart(3, "0")}`;
 }
 
 // Create guided consultation
@@ -50,16 +50,18 @@ export async function createGuidedConsultation(
     ipAddress?: string;
     referrerUrl?: string;
   }
-): Promise<ApiResponse<{ consultationId: string; consultationNumber: string }>> {
+): Promise<
+  ApiResponse<{ consultationId: string; consultationNumber: string }>
+> {
   try {
     const consultationNumber = await generateConsultationNumber();
 
     // Create main consultation record
     const consultationData: ConsultationInsert = {
       consultation_number: consultationNumber,
-      type: 'guided',
-      status: 'pending',
-      priority: 'normal',
+      type: "guided",
+      status: "pending",
+      priority: "normal",
       contact_name: formData.contact_name,
       contact_phone: formData.contact_phone,
       contact_email: formData.contact_email,
@@ -75,7 +77,7 @@ export async function createGuidedConsultation(
     };
 
     const consultationResponse = await supabase
-      .from('consultations')
+      .from("consultations")
       .insert(consultationData)
       .select()
       .single();
@@ -94,7 +96,7 @@ export async function createGuidedConsultation(
     };
 
     const guidedResponse = await supabase
-      .from('guided_consultations')
+      .from("guided_consultations")
       .insert(guidedData);
 
     handleSupabaseResponse(guidedResponse);
@@ -107,13 +109,13 @@ export async function createGuidedConsultation(
       },
     };
   } catch (error) {
-    console.error('Error creating guided consultation:', error);
+    console.error("Error creating guided consultation:", error);
 
     if (error instanceof SupabaseError) {
       return {
         success: false,
         error: {
-          code: error.code || 'CONSULTATION_CREATE_ERROR',
+          code: error.code || "CONSULTATION_CREATE_ERROR",
           message: error.message,
           details: error.details,
         },
@@ -123,8 +125,8 @@ export async function createGuidedConsultation(
     return {
       success: false,
       error: {
-        code: 'INTERNAL_ERROR',
-        message: 'Failed to create consultation',
+        code: "INTERNAL_ERROR",
+        message: "Failed to create consultation",
       },
     };
   }
@@ -138,16 +140,18 @@ export async function createFreeConsultation(
     ipAddress?: string;
     referrerUrl?: string;
   }
-): Promise<ApiResponse<{ consultationId: string; consultationNumber: string }>> {
+): Promise<
+  ApiResponse<{ consultationId: string; consultationNumber: string }>
+> {
   try {
     const consultationNumber = await generateConsultationNumber();
 
     // Create main consultation record
     const consultationData: ConsultationInsert = {
       consultation_number: consultationNumber,
-      type: 'free',
-      status: 'pending',
-      priority: 'normal',
+      type: "free",
+      status: "pending",
+      priority: "normal",
       contact_name: formData.contact_name,
       contact_phone: formData.contact_phone,
       contact_email: formData.contact_email,
@@ -163,7 +167,7 @@ export async function createFreeConsultation(
     };
 
     const consultationResponse = await supabase
-      .from('consultations')
+      .from("consultations")
       .insert(consultationData)
       .select()
       .single();
@@ -179,7 +183,7 @@ export async function createFreeConsultation(
     };
 
     const freeResponse = await supabase
-      .from('free_consultations')
+      .from("free_consultations")
       .insert(freeData);
 
     handleSupabaseResponse(freeResponse);
@@ -192,13 +196,13 @@ export async function createFreeConsultation(
       },
     };
   } catch (error) {
-    console.error('Error creating free consultation:', error);
+    console.error("Error creating free consultation:", error);
 
     if (error instanceof SupabaseError) {
       return {
         success: false,
         error: {
-          code: error.code || 'CONSULTATION_CREATE_ERROR',
+          code: error.code || "CONSULTATION_CREATE_ERROR",
           message: error.message,
           details: error.details,
         },
@@ -208,8 +212,8 @@ export async function createFreeConsultation(
     return {
       success: false,
       error: {
-        code: 'INTERNAL_ERROR',
-        message: 'Failed to create consultation',
+        code: "INTERNAL_ERROR",
+        message: "Failed to create consultation",
       },
     };
   }
@@ -224,9 +228,9 @@ export async function getConsultationById(
     const client = useAdmin ? supabaseAdmin : supabase;
 
     const response = await client
-      .from('consultation_details')
-      .select('*')
-      .eq('id', id)
+      .from("consultation_details")
+      .select("*")
+      .eq("id", id)
       .single();
 
     const consultation = handleSupabaseResponse(response);
@@ -236,13 +240,13 @@ export async function getConsultationById(
       data: consultation,
     };
   } catch (error) {
-    console.error('Error getting consultation:', error);
+    console.error("Error getting consultation:", error);
 
     if (error instanceof SupabaseError) {
       return {
         success: false,
         error: {
-          code: error.code || 'CONSULTATION_NOT_FOUND',
+          code: error.code || "CONSULTATION_NOT_FOUND",
           message: error.message,
         },
       };
@@ -251,8 +255,8 @@ export async function getConsultationById(
     return {
       success: false,
       error: {
-        code: 'INTERNAL_ERROR',
-        message: 'Failed to get consultation',
+        code: "INTERNAL_ERROR",
+        message: "Failed to get consultation",
       },
     };
   }
@@ -272,42 +276,44 @@ export async function getConsultations({
   page?: number;
   limit?: number;
   status?: ConsultationStatus;
-  type?: 'guided' | 'free';
+  type?: "guided" | "free";
   priority?: ConsultationPriority;
   startDate?: string;
   endDate?: string;
   search?: string;
-} = {}): Promise<ApiResponse<{
-  consultations: ConsultationDetailsView[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}>> {
+} = {}): Promise<
+  ApiResponse<{
+    consultations: ConsultationDetailsView[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }>
+> {
   try {
     let query = supabaseAdmin
-      .from('consultation_details')
-      .select('*', { count: 'exact' });
+      .from("consultation_details")
+      .select("*", { count: "exact" });
 
     // Apply filters
     if (status) {
-      query = query.eq('status', status);
+      query = query.eq("status", status);
     }
 
     if (type) {
-      query = query.eq('type', type);
+      query = query.eq("type", type);
     }
 
     if (priority) {
-      query = query.eq('priority', priority);
+      query = query.eq("priority", priority);
     }
 
     if (startDate) {
-      query = query.gte('created_at', startDate);
+      query = query.gte("created_at", startDate);
     }
 
     if (endDate) {
-      query = query.lte('created_at', endDate);
+      query = query.lte("created_at", endDate);
     }
 
     if (search) {
@@ -320,9 +326,7 @@ export async function getConsultations({
     const from = (page - 1) * limit;
     const to = from + limit - 1;
 
-    query = query
-      .range(from, to)
-      .order('created_at', { ascending: false });
+    query = query.range(from, to).order("created_at", { ascending: false });
 
     const response = await query;
     const data = handleSupabaseResponse(response);
@@ -346,13 +350,13 @@ export async function getConsultations({
       },
     };
   } catch (error) {
-    console.error('Error getting consultations:', error);
+    console.error("Error getting consultations:", error);
 
     if (error instanceof SupabaseError) {
       return {
         success: false,
         error: {
-          code: error.code || 'CONSULTATIONS_FETCH_ERROR',
+          code: error.code || "CONSULTATIONS_FETCH_ERROR",
           message: error.message,
         },
       };
@@ -361,8 +365,8 @@ export async function getConsultations({
     return {
       success: false,
       error: {
-        code: 'INTERNAL_ERROR',
-        message: 'Failed to get consultations',
+        code: "INTERNAL_ERROR",
+        message: "Failed to get consultations",
       },
     };
   }
@@ -385,14 +389,14 @@ export async function updateConsultationStatus(
       updateData.assigned_at = new Date().toISOString();
     }
 
-    if (status === 'completed') {
+    if (status === "completed") {
       updateData.completed_at = new Date().toISOString();
     }
 
     const response = await supabaseAdmin
-      .from('consultations')
+      .from("consultations")
       .update(updateData)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -403,13 +407,13 @@ export async function updateConsultationStatus(
       data: consultation,
     };
   } catch (error) {
-    console.error('Error updating consultation status:', error);
+    console.error("Error updating consultation status:", error);
 
     if (error instanceof SupabaseError) {
       return {
         success: false,
         error: {
-          code: error.code || 'CONSULTATION_UPDATE_ERROR',
+          code: error.code || "CONSULTATION_UPDATE_ERROR",
           message: error.message,
         },
       };
@@ -418,58 +422,66 @@ export async function updateConsultationStatus(
     return {
       success: false,
       error: {
-        code: 'INTERNAL_ERROR',
-        message: 'Failed to update consultation status',
+        code: "INTERNAL_ERROR",
+        message: "Failed to update consultation status",
       },
     };
   }
 }
 
 // Get consultation statistics (Admin only)
-export async function getConsultationStats(): Promise<ApiResponse<{
-  total: number;
-  pending: number;
-  contacted: number;
-  in_progress: number;
-  completed: number;
-  cancelled: number;
-  guided: number;
-  free: number;
-  today: number;
-  this_week: number;
-  this_month: number;
-}>> {
+export async function getConsultationStats(): Promise<
+  ApiResponse<{
+    total: number;
+    pending: number;
+    contacted: number;
+    in_progress: number;
+    completed: number;
+    cancelled: number;
+    guided: number;
+    free: number;
+    today: number;
+    this_week: number;
+    this_month: number;
+  }>
+> {
   try {
     // Get overall counts
     const { data: statusCounts } = await supabaseAdmin
-      .from('consultation_status_counts')
-      .select('*');
+      .from("consultation_status_counts")
+      .select("*");
 
     // Get type counts
     const { data: typeCounts } = await supabaseAdmin
-      .from('consultations')
-      .select('type')
-      .neq('status', 'cancelled');
+      .from("consultations")
+      .select("type")
+      .neq("status", "cancelled");
 
     // Get time-based counts
     const today = new Date();
-    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const weekStart = new Date(todayStart.getTime() - (today.getDay() * 24 * 60 * 60 * 1000));
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    const weekStart = new Date(
+      todayStart.getTime() - today.getDay() * 24 * 60 * 60 * 1000
+    );
     const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
 
     const [todayResult, weekResult, monthResult] = await Promise.all([
       supabaseAdmin
-        .from('consultations')
-        .select('id', { count: 'exact' })
-        .gte('created_at', todayStart.toISOString()),
+        .from("consultations")
+        .select("id", { count: "exact" })
+        .gte("created_at", todayStart.toISOString()),
       supabaseAdmin
-        .from('consultations')
-        .select('id', { count: 'exact' })
-        .gte('created_at', weekStart.toISOString()),
+        .from("consultations")
+        .select("id", { count: "exact" })
+        .gte("created_at", weekStart.toISOString()),
       supabaseAdmin
-        .from('consultations')
-        .select('id', { count: 'exact' })
-        .gte('created_at', monthStart.toISOString()),
+        .from("consultations")
+        .select("id", { count: "exact" })
+        .gte("created_at", monthStart.toISOString()),
     ]);
 
     const statusMap = (statusCounts || []).reduce((acc, item) => {
@@ -499,13 +511,13 @@ export async function getConsultationStats(): Promise<ApiResponse<{
       },
     };
   } catch (error) {
-    console.error('Error getting consultation stats:', error);
+    console.error("Error getting consultation stats:", error);
 
     if (error instanceof SupabaseError) {
       return {
         success: false,
         error: {
-          code: error.code || 'STATS_FETCH_ERROR',
+          code: error.code || "STATS_FETCH_ERROR",
           message: error.message,
         },
       };
@@ -514,8 +526,8 @@ export async function getConsultationStats(): Promise<ApiResponse<{
     return {
       success: false,
       error: {
-        code: 'INTERNAL_ERROR',
-        message: 'Failed to get consultation statistics',
+        code: "INTERNAL_ERROR",
+        message: "Failed to get consultation statistics",
       },
     };
   }
@@ -530,35 +542,38 @@ export function validateGuidedConsultationForm(data: any): {
 
   // Required fields
   if (!data.contact_name?.trim()) {
-    errors.push('연락처 이름은 필수입니다.');
+    errors.push("연락처 이름은 필수입니다.");
   }
   if (!data.contact_phone?.trim()) {
-    errors.push('연락처 전화번호는 필수입니다.');
+    errors.push("연락처 전화번호는 필수입니다.");
   }
   if (!data.contact_email?.trim()) {
-    errors.push('연락처 이메일은 필수입니다.');
+    errors.push("연락처 이메일은 필수입니다.");
   }
   if (!data.service_type) {
-    errors.push('서비스 타입은 필수입니다.');
+    errors.push("서비스 타입은 필수입니다.");
   }
   if (!data.project_size) {
-    errors.push('프로젝트 규모는 필수입니다.');
+    errors.push("프로젝트 규모는 필수입니다.");
   }
   if (!data.budget) {
-    errors.push('예산 범위는 필수입니다.');
+    errors.push("예산 범위는 필수입니다.");
   }
   if (!data.timeline) {
-    errors.push('타임라인은 필수입니다.');
+    errors.push("타임라인은 필수입니다.");
   }
 
   // Email validation
-  if (data.contact_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contact_email)) {
-    errors.push('올바른 이메일 형식이 아닙니다.');
+  if (
+    data.contact_email &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contact_email)
+  ) {
+    errors.push("올바른 이메일 형식이 아닙니다.");
   }
 
   // Phone validation (Korean format)
   if (data.contact_phone && !/^[\d\-\+\(\)\s]+$/.test(data.contact_phone)) {
-    errors.push('올바른 전화번호 형식이 아닙니다.');
+    errors.push("올바른 전화번호 형식이 아닙니다.");
   }
 
   return {
@@ -575,31 +590,34 @@ export function validateFreeConsultationForm(data: any): {
 
   // Required fields
   if (!data.contact_name?.trim()) {
-    errors.push('연락처 이름은 필수입니다.');
+    errors.push("연락처 이름은 필수입니다.");
   }
   if (!data.contact_phone?.trim()) {
-    errors.push('연락처 전화번호는 필수입니다.');
+    errors.push("연락처 전화번호는 필수입니다.");
   }
   if (!data.contact_email?.trim()) {
-    errors.push('연락처 이메일은 필수입니다.');
+    errors.push("연락처 이메일은 필수입니다.");
   }
   if (!data.project_description?.trim()) {
-    errors.push('프로젝트 설명은 필수입니다.');
+    errors.push("프로젝트 설명은 필수입니다.");
   }
 
   // Email validation
-  if (data.contact_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contact_email)) {
-    errors.push('올바른 이메일 형식이 아닙니다.');
+  if (
+    data.contact_email &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.contact_email)
+  ) {
+    errors.push("올바른 이메일 형식이 아닙니다.");
   }
 
   // Phone validation
   if (data.contact_phone && !/^[\d\-\+\(\)\s]+$/.test(data.contact_phone)) {
-    errors.push('올바른 전화번호 형식이 아닙니다.');
+    errors.push("올바른 전화번호 형식이 아닙니다.");
   }
 
   // Description length
   if (data.project_description && data.project_description.length < 10) {
-    errors.push('프로젝트 설명은 최소 10자 이상이어야 합니다.');
+    errors.push("프로젝트 설명은 최소 10자 이상이어야 합니다.");
   }
 
   return {

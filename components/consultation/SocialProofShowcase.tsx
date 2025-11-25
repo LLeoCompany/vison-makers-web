@@ -3,189 +3,193 @@
  * 실시간 활동, 고객 후기, 성과 지표를 통한 신뢰도 구축
  */
 
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 // 실시간 활동 시뮬레이션을 위한 데이터
 const LIVE_ACTIVITIES = [
   {
     id: 1,
-    type: 'consultation',
-    customerName: '김○○',
-    action: '상담 신청',
+    type: "consultation",
+    customerName: "김○○",
+    action: "상담 신청",
     timeAgo: 2,
-    location: '서울'
+    location: "서울",
   },
   {
     id: 2,
-    type: 'completion',
-    customerName: '박○○',
-    action: '프로젝트 완료',
+    type: "completion",
+    customerName: "박○○",
+    action: "프로젝트 완료",
     timeAgo: 37,
-    location: '부산'
+    location: "부산",
   },
   {
     id: 3,
-    type: 'consultation',
-    customerName: '이○○',
-    action: '상담 신청',
+    type: "consultation",
+    customerName: "이○○",
+    action: "상담 신청",
     timeAgo: 12,
-    location: '대구'
+    location: "대구",
   },
   {
     id: 4,
-    type: 'contract',
-    customerName: '최○○',
-    action: '계약 체결',
+    type: "contract",
+    customerName: "최○○",
+    action: "계약 체결",
     timeAgo: 45,
-    location: '인천'
+    location: "인천",
   },
   {
     id: 5,
-    type: 'consultation',
-    customerName: '정○○',
-    action: '상담 신청',
+    type: "consultation",
+    customerName: "정○○",
+    action: "상담 신청",
     timeAgo: 8,
-    location: '광주'
-  }
+    location: "광주",
+  },
 ];
 
 // 고객 후기 데이터
 const TESTIMONIALS = [
   {
     id: 1,
-    customerName: '김소영',
-    company: '소영카페',
-    business: '카페 운영',
-    avatar: '/testimonials/customer1.jpg',
+    customerName: "김소영",
+    company: "소영카페",
+    business: "카페 운영",
+    avatar: "/testimonials/customer1.jpg",
     rating: 5,
-    content: '300만원 예산으로 홈페이지와 예약시스템까지 만들어주셨어요. 덕분에 매출이 30% 증가했습니다!',
+    content:
+      "300만원 예산으로 홈페이지와 예약시스템까지 만들어주셨어요. 덕분에 매출이 30% 증가했습니다!",
     metrics: [
-      { label: '예약 증가', value: '+200%' },
-      { label: '매출 증가', value: '+30%' },
-      { label: '제작 기간', value: '4주' }
+      { label: "예약 증가", value: "+200%" },
+      { label: "매출 증가", value: "+30%" },
+      { label: "제작 기간", value: "4주" },
     ],
-    projectType: 'homepage',
+    projectType: "homepage",
     beforeAfter: {
-      before: '전화 예약만 가능',
-      after: '24시간 온라인 예약'
-    }
+      before: "전화 예약만 가능",
+      after: "24시간 온라인 예약",
+    },
   },
   {
     id: 2,
-    customerName: '박진우',
-    company: '미소치과',
-    business: '치과 운영',
-    avatar: '/testimonials/customer2.jpg',
+    customerName: "박진우",
+    company: "미소치과",
+    business: "치과 운영",
+    avatar: "/testimonials/customer2.jpg",
     rating: 5,
-    content: '다른 업체는 2천만원이라고 했는데, 여기서는 800만원에 더 좋은 결과를 만들어주셨어요.',
+    content:
+      "다른 업체는 2천만원이라고 했는데, 여기서는 800만원에 더 좋은 결과를 만들어주셨어요.",
     metrics: [
-      { label: '비용 절약', value: '1,200만원' },
-      { label: '환자 증가', value: '+40%' },
-      { label: '예약률', value: '95%' }
+      { label: "비용 절약", value: "1,200만원" },
+      { label: "환자 증가", value: "+40%" },
+      { label: "예약률", value: "95%" },
     ],
-    projectType: 'booking',
+    projectType: "booking",
     beforeAfter: {
-      before: '수기 예약 관리',
-      after: '자동 예약 시스템'
-    }
+      before: "수기 예약 관리",
+      after: "자동 예약 시스템",
+    },
   },
   {
     id: 3,
-    customerName: '최민정',
-    company: '민정샵',
-    business: '온라인 쇼핑몰',
-    avatar: '/testimonials/customer3.jpg',
+    customerName: "최민정",
+    company: "민정샵",
+    business: "온라인 쇼핑몰",
+    avatar: "/testimonials/customer3.jpg",
     rating: 5,
-    content: '쇼핑몰 오픈 후 첫 달에 500만원 매출! 모바일에서도 완벽하게 작동해서 만족해요.',
+    content:
+      "쇼핑몰 오픈 후 첫 달에 500만원 매출! 모바일에서도 완벽하게 작동해서 만족해요.",
     metrics: [
-      { label: '첫 달 매출', value: '500만원' },
-      { label: '모바일 비율', value: '78%' },
-      { label: '재구매율', value: '35%' }
+      { label: "첫 달 매출", value: "500만원" },
+      { label: "모바일 비율", value: "78%" },
+      { label: "재구매율", value: "35%" },
     ],
-    projectType: 'shopping',
+    projectType: "shopping",
     beforeAfter: {
-      before: '오프라인 판매만',
-      after: '24시간 온라인 판매'
-    }
+      before: "오프라인 판매만",
+      after: "24시간 온라인 판매",
+    },
   },
   {
     id: 4,
-    customerName: '이현수',
-    company: '현수헬스',
-    business: '피트니스센터',
-    avatar: '/testimonials/customer4.jpg',
+    customerName: "이현수",
+    company: "현수헬스",
+    business: "피트니스센터",
+    avatar: "/testimonials/customer4.jpg",
     rating: 5,
-    content: '회원 관리가 이렇게 쉬울 줄 몰랐어요. 관리 시간은 50% 줄고, 신규 회원은 두 배로 늘었습니다.',
+    content:
+      "회원 관리가 이렇게 쉬울 줄 몰랐어요. 관리 시간은 50% 줄고, 신규 회원은 두 배로 늘었습니다.",
     metrics: [
-      { label: '신규 회원', value: '+100%' },
-      { label: '관리 시간', value: '-50%' },
-      { label: '만족도', value: '98%' }
+      { label: "신규 회원", value: "+100%" },
+      { label: "관리 시간", value: "-50%" },
+      { label: "만족도", value: "98%" },
     ],
-    projectType: 'membership',
+    projectType: "membership",
     beforeAfter: {
-      before: '엑셀로 수기 관리',
-      after: '자동 회원 관리 시스템'
-    }
-  }
+      before: "엑셀로 수기 관리",
+      after: "자동 회원 관리 시스템",
+    },
+  },
 ];
 
 // 성과 지표 데이터
 const ACHIEVEMENTS = [
   {
-    number: '1,247',
-    label: '프로젝트 완성',
-    period: '2019-2024',
-    icon: '🚀',
-    trend: '+23% (작년 대비)'
+    number: "1,247",
+    label: "프로젝트 완성",
+    period: "2019-2024",
+    icon: "🚀",
+    trend: "+23% (작년 대비)",
   },
   {
-    number: '98%',
-    label: '고객 만족도',
-    period: '5점 기준 4.9점',
-    icon: '⭐',
-    trend: '6개월 연속 98% 이상'
+    number: "98%",
+    label: "고객 만족도",
+    period: "5점 기준 4.9점",
+    icon: "⭐",
+    trend: "6개월 연속 98% 이상",
   },
   {
-    number: '24시간',
-    label: '평균 응답시간',
-    period: '최대 48시간',
-    icon: '⚡',
-    trend: '업계 최고 수준'
+    number: "24시간",
+    label: "평균 응답시간",
+    period: "최대 48시간",
+    icon: "⚡",
+    trend: "업계 최고 수준",
   },
   {
-    number: '50%',
-    label: '비용 절감',
-    period: '타 업체 대비',
-    icon: '💰',
-    trend: '평균 2,000만원 절약'
-  }
+    number: "50%",
+    label: "비용 절감",
+    period: "타 업체 대비",
+    icon: "💰",
+    trend: "평균 2,000만원 절약",
+  },
 ];
 
 // 클라이언트 로고 데이터
 const CLIENT_LOGOS = [
-  { name: '소영카페', logo: '/logos/client1.png' },
-  { name: '미소치과', logo: '/logos/client2.png' },
-  { name: '민정샵', logo: '/logos/client3.png' },
-  { name: '현수헬스', logo: '/logos/client4.png' },
-  { name: '한빛학원', logo: '/logos/client5.png' },
-  { name: '바다펜션', logo: '/logos/client6.png' },
-  { name: '행복병원', logo: '/logos/client7.png' },
-  { name: '꿈의미용실', logo: '/logos/client8.png' }
+  { name: "소영카페", logo: "/logos/client1.png" },
+  { name: "미소치과", logo: "/logos/client2.png" },
+  { name: "민정샵", logo: "/logos/client3.png" },
+  { name: "현수헬스", logo: "/logos/client4.png" },
+  { name: "한빛학원", logo: "/logos/client5.png" },
+  { name: "바다펜션", logo: "/logos/client6.png" },
+  { name: "행복병원", logo: "/logos/client7.png" },
+  { name: "꿈의미용실", logo: "/logos/client8.png" },
 ];
 
 export const SocialProofShowcase: React.FC = () => {
   const [liveStats, setLiveStats] = useState({
     todayConsultations: 23,
     weeklyProjects: 1247,
-    currentVisitors: 156
+    currentVisitors: 156,
   });
 
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
@@ -196,10 +200,12 @@ export const SocialProofShowcase: React.FC = () => {
       setCurrentActivityIndex((prev) => (prev + 1) % LIVE_ACTIVITIES.length);
 
       // 통계 랜덤 업데이트 (소폭)
-      setLiveStats(prev => ({
-        todayConsultations: prev.todayConsultations + Math.floor(Math.random() * 2),
+      setLiveStats((prev) => ({
+        todayConsultations:
+          prev.todayConsultations + Math.floor(Math.random() * 2),
         weeklyProjects: prev.weeklyProjects,
-        currentVisitors: prev.currentVisitors + Math.floor(Math.random() * 3) - 1
+        currentVisitors:
+          prev.currentVisitors + Math.floor(Math.random() * 3) - 1,
       }));
     }, 5000);
 
@@ -244,23 +250,31 @@ interface LiveActivitySectionProps {
 const LiveActivitySection: React.FC<LiveActivitySectionProps> = ({
   activities,
   currentIndex,
-  stats
+  stats,
 }) => {
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'consultation': return '💬';
-      case 'completion': return '✅';
-      case 'contract': return '📄';
-      default: return '📋';
+      case "consultation":
+        return "💬";
+      case "completion":
+        return "✅";
+      case "contract":
+        return "📄";
+      default:
+        return "📋";
     }
   };
 
   const getActivityColor = (type: string) => {
     switch (type) {
-      case 'consultation': return '#4299E1';
-      case 'completion': return '#48BB78';
-      case 'contract': return '#FF6B35';
-      default: return '#718096';
+      case "consultation":
+        return "#4299E1";
+      case "completion":
+        return "#48BB78";
+      case "contract":
+        return "#FF6B35";
+      default:
+        return "#718096";
     }
   };
 
@@ -272,7 +286,9 @@ const LiveActivitySection: React.FC<LiveActivitySectionProps> = ({
             <span className="live-indicator">🔴</span>
             실시간 활동
           </h2>
-          <p className="section-description">지금 이 순간에도 계속되고 있어요</p>
+          <p className="section-description">
+            지금 이 순간에도 계속되고 있어요
+          </p>
         </div>
 
         <div className="live-content">
@@ -281,10 +297,12 @@ const LiveActivitySection: React.FC<LiveActivitySectionProps> = ({
             {activities.map((activity, index) => (
               <div
                 key={activity.id}
-                className={`activity-item ${index === currentIndex ? 'active' : ''}`}
+                className={`activity-item ${
+                  index === currentIndex ? "active" : ""
+                }`}
                 style={{
                   transform: `translateX(${(index - currentIndex) * 100}%)`,
-                  opacity: index === currentIndex ? 1 : 0
+                  opacity: index === currentIndex ? 1 : 0,
                 }}
               >
                 <div
@@ -295,11 +313,13 @@ const LiveActivitySection: React.FC<LiveActivitySectionProps> = ({
                 </div>
                 <div className="activity-content">
                   <div className="activity-text">
-                    <strong>{activity.customerName}님</strong>이{' '}
-                    <span className="time">{activity.timeAgo}분 전</span>{' '}
+                    <strong>{activity.customerName}님</strong>이{" "}
+                    <span className="time">{activity.timeAgo}분 전</span>{" "}
                     {activity.action}했습니다
                   </div>
-                  <div className="activity-location">📍 {activity.location}</div>
+                  <div className="activity-location">
+                    📍 {activity.location}
+                  </div>
                 </div>
               </div>
             ))}
@@ -312,7 +332,9 @@ const LiveActivitySection: React.FC<LiveActivitySectionProps> = ({
               <div className="stat-label">오늘 상담 신청</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">{stats.weeklyProjects.toLocaleString()}</div>
+              <div className="stat-number">
+                {stats.weeklyProjects.toLocaleString()}
+              </div>
               <div className="stat-label">총 프로젝트</div>
             </div>
             <div className="stat-item">
@@ -331,12 +353,14 @@ interface TestimonialsSectionProps {
   testimonials: typeof TESTIMONIALS;
 }
 
-const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials }) => {
+const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
+  testimonials,
+}) => {
   return (
     <section className="testimonials-section">
       <div className="container">
         <div className="section-header">
-          <h2 className="section-title">고객들이 말하는 VisionMakers</h2>
+          <h2 className="section-title">고객들이 말하는 LeoFitTech</h2>
           <p className="section-description">실제 고객들의 솔직한 후기입니다</p>
         </div>
 
@@ -350,7 +374,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
           }}
           pagination={{
             clickable: true,
-            dynamicBullets: true
+            dynamicBullets: true,
           }}
           navigation={true}
           breakpoints={{
@@ -362,7 +386,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
             },
             1024: {
               slidesPerView: 2,
-            }
+            },
           }}
           className="testimonials-slider"
         >
@@ -388,15 +412,23 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
                       />
                     </div>
                     <div className="customer-details">
-                      <div className="customer-name">{testimonial.customerName} 대표</div>
-                      <div className="customer-company">{testimonial.company}</div>
-                      <div className="customer-business">{testimonial.business}</div>
+                      <div className="customer-name">
+                        {testimonial.customerName} 대표
+                      </div>
+                      <div className="customer-company">
+                        {testimonial.company}
+                      </div>
+                      <div className="customer-business">
+                        {testimonial.business}
+                      </div>
                     </div>
                   </div>
 
                   <div className="testimonial-rating">
                     {Array.from({ length: testimonial.rating }, (_, i) => (
-                      <span key={i} className="star">★</span>
+                      <span key={i} className="star">
+                        ★
+                      </span>
                     ))}
                   </div>
                 </div>
@@ -418,12 +450,16 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials 
                   <div className="before-after">
                     <div className="before-after-item">
                       <div className="before-after-label">이전</div>
-                      <div className="before-after-content">{testimonial.beforeAfter.before}</div>
+                      <div className="before-after-content">
+                        {testimonial.beforeAfter.before}
+                      </div>
                     </div>
                     <div className="arrow">→</div>
                     <div className="before-after-item">
                       <div className="before-after-label">이후</div>
-                      <div className="before-after-content">{testimonial.beforeAfter.after}</div>
+                      <div className="before-after-content">
+                        {testimonial.beforeAfter.after}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -441,7 +477,9 @@ interface AchievementsSectionProps {
   achievements: typeof ACHIEVEMENTS;
 }
 
-const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achievements }) => {
+const AchievementsSection: React.FC<AchievementsSectionProps> = ({
+  achievements,
+}) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -454,7 +492,7 @@ const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achievements 
       { threshold: 0.5 }
     );
 
-    const element = document.querySelector('.achievements-section');
+    const element = document.querySelector(".achievements-section");
     if (element) observer.observe(element);
 
     return () => observer.disconnect();
@@ -464,7 +502,7 @@ const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achievements 
     <section className="achievements-section">
       <div className="container">
         <div className="section-header">
-          <h2 className="section-title">숫자로 보는 VisionMakers</h2>
+          <h2 className="section-title">숫자로 보는 LeoFitTech</h2>
           <p className="section-description">검증된 실력과 경험</p>
         </div>
 
@@ -472,7 +510,7 @@ const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achievements 
           {achievements.map((achievement, index) => (
             <div
               key={index}
-              className={`achievement-card ${isVisible ? 'animate' : ''}`}
+              className={`achievement-card ${isVisible ? "animate" : ""}`}
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <div className="achievement-icon">{achievement.icon}</div>
@@ -496,15 +534,15 @@ const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achievements 
 // 숫자 카운트업 컴포넌트
 const CountUpNumber: React.FC<{ target: string; isVisible: boolean }> = ({
   target,
-  isVisible
+  isVisible,
 }) => {
-  const [current, setCurrent] = useState('0');
+  const [current, setCurrent] = useState("0");
 
   useEffect(() => {
     if (!isVisible) return;
 
     // 숫자인 경우에만 카운트업 애니메이션
-    const numericValue = target.replace(/[^0-9]/g, '');
+    const numericValue = target.replace(/[^0-9]/g, "");
     if (numericValue) {
       const targetNum = parseInt(numericValue);
       const duration = 2000;
@@ -556,12 +594,12 @@ const ClientLogosSection: React.FC<ClientLogosSectionProps> = ({ logos }) => {
                   onError={(e) => {
                     // 이미지 로드 실패 시 텍스트로 대체
                     const target = e.currentTarget as HTMLImageElement;
-                    target.style.display = 'none';
+                    target.style.display = "none";
                     const sibling = target.nextElementSibling as HTMLElement;
-                    if (sibling) sibling.style.display = 'flex';
+                    if (sibling) sibling.style.display = "flex";
                   }}
                 />
-                <div className="logo-fallback" style={{ display: 'none' }}>
+                <div className="logo-fallback" style={{ display: "none" }}>
                   {client.name}
                 </div>
               </div>
@@ -608,8 +646,9 @@ const ExpertEndorsementSection: React.FC = () => {
           </div>
 
           <blockquote className="endorsement-text">
-            &quot;VisionMakers는 중소기업에게 가장 적합한 웹 솔루션을 제공합니다.
-            <span className="highlight">합리적인 가격에 높은 품질</span>을 원한다면 강력 추천합니다.&quot;
+            &quot;LeoFitTech는 중소기업에게 가장 적합한 웹 솔루션을 제공합니다.
+            <span className="highlight">합리적인 가격에 높은 품질</span>을
+            원한다면 강력 추천합니다.&quot;
           </blockquote>
 
           <div className="endorsement-credentials">
@@ -623,7 +662,9 @@ const ExpertEndorsementSection: React.FC = () => {
             </div>
             <div className="credential">
               <span className="credential-icon">📚</span>
-              <span className="credential-text">『웹마케팅 성공법칙』 저자</span>
+              <span className="credential-text">
+                『웹마케팅 성공법칙』 저자
+              </span>
             </div>
           </div>
         </div>

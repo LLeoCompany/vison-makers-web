@@ -24,7 +24,7 @@ export const OptimizedConsultationLanding: React.FC = () => {
 
   // A/B 테스트 적용
   const { variant: headlineVariant } = useABTest("headline_test", {
-    CONTROL: "웹사이트 제작 전문 업체 VisionMakers",
+    CONTROL: "웹사이트 제작 전문 업체 LeoFitTech",
     BENEFIT_FOCUSED: "웹사이트 제작비 50% 절약하는 방법",
     PROBLEM_FOCUSED: "웹사이트 제작, 복잡하고 비싸서 고민이세요?",
     URGENCY_FOCUSED: "이번 달 한정! 웹사이트 제작 특가 이벤트",
@@ -119,7 +119,7 @@ const MinimalHeader: React.FC = () => {
       <div className="container">
         <div className="header-content">
           <div className="logo">
-            <img src="/logo.svg" alt="VisionMakers" />
+            <img src="/logo.svg" alt="LeoFitTech" />
           </div>
           <div className="trust-indicator">
             <span className="trust-icon">🔒</span>
@@ -320,7 +320,7 @@ const InterestSection: React.FC<InterestSectionProps> = ({
         {/* 해결책 제시 */}
         <div className="solution-section">
           <h2 className="solution-title">
-            <span className="highlight">VisionMakers</span>는 달라요
+            <span className="highlight">LeoFitTech</span>는 달라요
           </h2>
 
           <div className="solution-grid">
@@ -472,7 +472,9 @@ const OptimizationDebugPanel: React.FC<OptimizationDebugPanelProps> = ({
           <h5>개선 제안:</h5>
           <ul>
             {recommendations.map((rec, index) => (
-              <li key={index}>{typeof rec === 'string' ? rec : rec.title || rec.description}</li>
+              <li key={index}>
+                {typeof rec === "string" ? rec : rec.title || rec.description}
+              </li>
             ))}
           </ul>
         </div>

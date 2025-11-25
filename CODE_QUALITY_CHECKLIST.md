@@ -1,8 +1,9 @@
-# 🏗️ VisionMakers Code Quality & Architecture Checklist
+# 🏗️ LeoFitTech Code Quality & Architecture Checklist
 
 ## 📋 Clean Code Principles
 
 ### ✅ Naming Conventions
+
 - [ ] **함수명**: 동사로 시작, 명확한 의도 표현
 - [ ] **변수명**: 명사, 축약어 지양, 의미 명확
 - [ ] **상수명**: UPPER_SNAKE_CASE
@@ -10,6 +11,7 @@
 - [ ] **파일명**: kebab-case, 역할 명확
 
 ### ✅ Function Design
+
 - [ ] **단일 책임 원칙**: 하나의 함수는 하나의 역할
 - [ ] **함수 길이**: 20줄 이하 권장
 - [ ] **매개변수**: 3개 이하 권장, 객체로 그룹화
@@ -17,6 +19,7 @@
 - [ ] **중복 제거**: DRY 원칙 준수
 
 ### ✅ Code Structure
+
 - [ ] **들여쓰기**: 일관된 2칸 스페이스
 - [ ] **주석**: 코드로 설명 안되는 부분만
 - [ ] **매직 넘버**: 상수로 추출
@@ -26,18 +29,21 @@
 ## 🏛️ Clean Architecture
 
 ### ✅ Layer Separation
+
 - [ ] **Presentation Layer**: React 컴포넌트, UI 로직만
 - [ ] **Business Logic Layer**: 서비스 레이어, 도메인 로직
 - [ ] **Data Access Layer**: Supabase 클라이언트, 데이터 처리
 - [ ] **Infrastructure Layer**: 외부 API, 유틸리티
 
 ### ✅ Dependency Direction
+
 - [ ] **의존성 역전**: 상위 레이어가 하위 레이어 의존
 - [ ] **인터페이스 분리**: 필요한 메서드만 노출
 - [ ] **의존성 주입**: 하드코딩된 의존성 제거
 - [ ] **순환 의존성**: 존재하지 않음
 
 ### ✅ Domain Design
+
 - [ ] **엔티티 정의**: 비즈니스 객체 명확히 정의
 - [ ] **값 객체**: 불변 객체 활용
 - [ ] **집계**: 관련 엔티티 그룹화
@@ -46,12 +52,14 @@
 ## 🔌 API Connection & Optimization
 
 ### ✅ Connection Management
+
 - [ ] **연결 풀링**: Supabase 클라이언트 재사용
 - [ ] **에러 복구**: 연결 실패 시 재시도 로직
 - [ ] **타임아웃**: 적절한 요청 타임아웃 설정
 - [ ] **헬스 체크**: 연결 상태 모니터링
 
 ### ✅ Query Optimization
+
 - [ ] **SELECT 최적화**: 필요한 컬럼만 조회
 - [ ] **인덱스 활용**: 자주 조회되는 컬럼 인덱싱
 - [ ] **페이지네이션**: 대용량 데이터 처리
@@ -59,6 +67,7 @@
 - [ ] **배치 처리**: 여러 쿼리 한번에 처리
 
 ### ✅ Performance Monitoring
+
 - [ ] **응답 시간**: API 응답 시간 측정
 - [ ] **에러율**: 실패한 요청 비율 추적
 - [ ] **스로틀링**: 요청 빈도 제한
@@ -67,18 +76,21 @@
 ## 🛡️ Security Review
 
 ### ✅ Authentication & Authorization
+
 - [ ] **JWT 보안**: 적절한 만료 시간, 시크릿 키 관리
 - [ ] **비밀번호**: bcrypt 해싱, 복잡도 정책
 - [ ] **세션 관리**: 안전한 세션 저장 및 만료
 - [ ] **권한 검증**: 모든 API 엔드포인트 권한 확인
 
 ### ✅ Data Protection
+
 - [ ] **입력 검증**: Zod 스키마 활용한 강력한 검증
 - [ ] **SQL 인젝션**: 매개화된 쿼리 사용
 - [ ] **XSS 방지**: 사용자 입력 이스케이프
 - [ ] **민감 데이터**: 환경변수로 관리, 로그에 노출 방지
 
 ### ✅ Infrastructure Security
+
 - [ ] **HTTPS**: 모든 통신 암호화
 - [ ] **CORS**: 적절한 도메인 허용
 - [ ] **Rate Limiting**: API 남용 방지
@@ -87,6 +99,7 @@
 ## ⚡ Performance Optimization
 
 ### ✅ Frontend Performance
+
 - [ ] **번들 크기**: 불필요한 의존성 제거
 - [ ] **코드 스플리팅**: 페이지별 코드 분할
 - [ ] **이미지 최적화**: 적절한 포맷과 크기
@@ -94,6 +107,7 @@
 - [ ] **지연 로딩**: 필요한 시점에 로드
 
 ### ✅ Database Performance
+
 - [ ] **쿼리 최적화**: N+1 문제 해결
 - [ ] **인덱스**: 적절한 인덱스 설정
 - [ ] **데이터 타입**: 효율적인 데이터 타입 선택
@@ -101,6 +115,7 @@
 - [ ] **연결 관리**: 커넥션 풀 최적화
 
 ### ✅ Memory Management
+
 - [ ] **메모리 누수**: 이벤트 리스너 정리
 - [ ] **상태 관리**: 불필요한 상태 제거
 - [ ] **가비지 컬렉션**: 참조 해제
@@ -109,6 +124,7 @@
 ## 📚 Maintainability
 
 ### ✅ Code Documentation
+
 - [ ] **README**: 프로젝트 설명, 설치, 실행 방법
 - [ ] **API 문서**: 엔드포인트, 파라미터, 응답 형식
 - [ ] **타입 정의**: TypeScript 인터페이스 문서화
@@ -116,6 +132,7 @@
 - [ ] **아키텍처 다이어그램**: 시스템 구조 시각화
 
 ### ✅ Testing
+
 - [ ] **단위 테스트**: 핵심 비즈니스 로직 테스트
 - [ ] **통합 테스트**: API 엔드포인트 테스트
 - [ ] **E2E 테스트**: 사용자 시나리오 테스트
@@ -123,6 +140,7 @@
 - [ ] **테스트 격리**: 테스트 간 의존성 제거
 
 ### ✅ Version Control
+
 - [ ] **커밋 메시지**: 명확한 변경 사항 설명
 - [ ] **브랜치 전략**: Git Flow 또는 GitHub Flow
 - [ ] **코드 리뷰**: Pull Request 프로세스
@@ -132,6 +150,7 @@
 ## 🔧 Development Environment
 
 ### ✅ Tools & Configuration
+
 - [ ] **ESLint**: 코드 스타일 일관성
 - [ ] **Prettier**: 자동 포맷팅
 - [ ] **TypeScript**: 엄격한 타입 체크
@@ -139,6 +158,7 @@
 - [ ] **CI/CD**: 자동화된 빌드 및 배포
 
 ### ✅ Error Handling
+
 - [ ] **전역 에러 핸들러**: 예상치 못한 에러 처리
 - [ ] **에러 바운더리**: React 컴포넌트 에러 격리
 - [ ] **로깅**: 구조화된 로그 수집
@@ -148,6 +168,7 @@
 ## 📊 Monitoring & Analytics
 
 ### ✅ Application Monitoring
+
 - [ ] **성능 메트릭**: 응답 시간, 처리량 측정
 - [ ] **에러 추적**: 에러 발생률 모니터링
 - [ ] **사용자 행동**: 주요 액션 추적
@@ -155,6 +176,7 @@
 - [ ] **알림**: 임계값 초과 시 알림
 
 ### ✅ Business Metrics
+
 - [ ] **상담 신청율**: 방문자 대비 신청 비율
 - [ ] **전환율**: 단계별 전환율 추적
 - [ ] **사용자 만족도**: 피드백 수집

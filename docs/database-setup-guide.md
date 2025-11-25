@@ -1,4 +1,4 @@
-# VisionMakers 데이터베이스 설정 가이드
+# LeoFitTech 데이터베이스 설정 가이드
 
 ## 오류 상황
 
@@ -15,6 +15,7 @@ SupabaseError: Could not find the table 'public.consultations' in the schema cac
 Supabase Dashboard에서 다음 순서로 실행하세요:
 
 #### Step 1: SQL Editor에서 스키마 실행
+
 1. Supabase Dashboard 로그인
 2. SQL Editor 메뉴로 이동
 3. 아래 스키마 파일들을 순서대로 실행
@@ -47,6 +48,7 @@ AND table_name IN ('consultations', 'guided_consultations', 'free_consultations'
 ```
 
 예상 결과:
+
 ```
 consultations
 guided_consultations
@@ -58,19 +60,22 @@ free_consultations
 #### 메인 테이블 구조:
 
 **consultations (상담 기본 정보)**
+
 - id (UUID, Primary Key)
 - consultation_number (상담 번호)
 - type (guided/free)
 - status (pending/contacted/in_progress/completed/cancelled)
-- contact_* (연락처 정보)
+- contact\_\* (연락처 정보)
 
 **guided_consultations (가이드 상담 세부사항)**
+
 - consultation_id (FK to consultations)
 - service_type (서비스 유형)
 - project_size, budget, timeline
 - important_features (기능 요구사항)
 
 **free_consultations (자유 상담 세부사항)**
+
 - consultation_id (FK to consultations)
 - project_description (프로젝트 설명)
 - budget_range, timeline_preference
@@ -78,15 +83,18 @@ free_consultations
 ## 트러블슈팅
 
 ### 문제 1: 테이블이 생성되지 않음
+
 - SQL Editor에서 에러 메시지 확인
 - RLS 정책 때문에 접근이 제한될 수 있음
 - Service Role Key로 접근하는지 확인
 
 ### 문제 2: 권한 오류
+
 - Supabase Service Role Key가 올바른지 확인
 - RLS 정책이 올바르게 설정되었는지 확인
 
 ### 문제 3: 캐시 문제
+
 - Supabase Dashboard에서 "Refresh Schema Cache" 실행
 - 또는 잠시 기다린 후 다시 시도
 
@@ -107,6 +115,7 @@ curl -X POST http://localhost:3002/api/consultation-submit \
 ```
 
 정상 응답:
+
 ```json
 {
   "success": true,

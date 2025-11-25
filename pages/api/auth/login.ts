@@ -3,16 +3,20 @@
  * POST /api/auth/login
  */
 
-import { NextApiRequest, NextApiResponse } from 'next';
-import bcrypt from 'bcryptjs';
-import { z } from 'zod';
-import { generateAccessToken, generateRefreshToken, getPermissionsByRole } from '@/utils/jwt';
-import { supabaseAdmin } from '@/lib/supabase';
+import { NextApiRequest, NextApiResponse } from "next";
+import bcrypt from "bcryptjs";
+import { z } from "zod";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  getPermissionsByRole,
+} from "@/utils/jwt";
+import { supabaseAdmin } from "@/lib/supabase";
 
 // 로그인 요청 스키마
 const LoginSchema = z.object({
-  email: z.string().email('올바른 이메일 형식이 아닙니다'),
-  password: z.string().min(6, '비밀번호는 최소 6자 이상이어야 합니다'),
+  email: z.string().email("올바른 이메일 형식이 아닙니다"),
+  password: z.string().min(6, "비밀번호는 최소 6자 이상이어야 합니다"),
   rememberMe: z.boolean().optional(),
 });
 
@@ -53,12 +57,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<LoginResponse | LoginErrorResponse>
 ) {
-  if (req.method !== 'POST') {
+  if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
       error: {
-        code: 'METHOD_NOT_ALLOWED',
-        message: 'POST 메서드만 허용됩니다.',
+        code: "METHOD_NOT_ALLOWED",
+        message: "POST 메서드만 허용됩니다.",
       },
     });
   }
@@ -71,8 +75,8 @@ export default async function handler(
       return res.status(400).json({
         success: false,
         error: {
-          code: 'VALIDATION_ERROR',
-          message: '입력 데이터가 유효하지 않습니다.',
+          code: "VALIDATION_ERROR",
+          message: "입력 데이터가 유효하지 않습니다.",
           details: validationResult.error.errors,
         },
       });
@@ -88,8 +92,8 @@ export default async function handler(
       return res.status(401).json({
         success: false,
         error: {
-          code: 'INVALID_CREDENTIALS',
-          message: '이메일 또는 비밀번호가 올바르지 않습니다.',
+          code: "INVALID_CREDENTIALS",
+          message: "이메일 또는 비밀번호가 올바르지 않습니다.",
         },
       });
     }
@@ -99,13 +103,18 @@ export default async function handler(
 
     if (!isPasswordValid) {
       // 로그인 실패 로그 기록
-      await logLoginAttempt(email, false, req.headers['user-agent'] || '', getClientIP(req));
+      await logLoginAttempt(
+        email,
+        false,
+        req.headers["user-agent"] || "",
+        getClientIP(req)
+      );
 
       return res.status(401).json({
         success: false,
         error: {
-          code: 'INVALID_CREDENTIALS',
-          message: '이메일 또는 비밀번호가 올바르지 않습니다.',
+          code: "INVALID_CREDENTIALS",
+          message: "이메일 또는 비밀번호가 올바르지 않습니다.",
         },
       });
     }
@@ -115,8 +124,8 @@ export default async function handler(
       return res.status(403).json({
         success: false,
         error: {
-          code: 'ACCOUNT_DISABLED',
-          message: '비활성화된 계정입니다. 관리자에게 문의하세요.',
+          code: "ACCOUNT_DISABLED",
+          message: "비활성화된 계정입니다. 관리자에게 문의하세요.",
         },
       });
     }
@@ -137,7 +146,12 @@ export default async function handler(
     await storeRefreshToken(adminUser.id, refreshToken);
 
     // 7. 로그인 성공 로그 기록
-    await logLoginAttempt(email, true, req.headers['user-agent'] || '', getClientIP(req));
+    await logLoginAttempt(
+      email,
+      true,
+      req.headers["user-agent"] || "",
+      getClientIP(req)
+    );
 
     // 8. 마지막 로그인 시간 업데이트
     await updateLastLogin(adminUser.id);
@@ -156,19 +170,18 @@ export default async function handler(
         tokens: {
           accessToken,
           refreshToken,
-          expiresIn: process.env.JWT_EXPIRES_IN || '1h',
+          expiresIn: process.env.JWT_EXPIRES_IN || "1h",
         },
       },
     });
-
   } catch (error) {
-    console.error('Login API error:', error);
+    console.error("Login API error:", error);
 
     return res.status(500).json({
       success: false,
       error: {
-        code: 'INTERNAL_ERROR',
-        message: '로그인 처리 중 오류가 발생했습니다.',
+        code: "INTERNAL_ERROR",
+        message: "로그인 처리 중 오류가 발생했습니다.",
       },
     });
   }
@@ -181,7 +194,7 @@ interface AdminUser {
   email: string;
   password: string;
   name: string;
-  role: 'admin' | 'manager' | 'viewer';
+  role: "admin" | "manager" | "viewer";
   isActive: boolean;
 }
 
@@ -194,24 +207,24 @@ async function getAdminUser(email: string): Promise<AdminUser | null> {
 
   const testAdmins: AdminUser[] = [
     {
-      id: 'admin-001',
-      email: 'admin@visionmakers.com',
-      password: await bcrypt.hash('admin123!', 12), // 실제로는 미리 해시된 값 저장
-      name: '시스템 관리자',
-      role: 'admin',
+      id: "admin-001",
+      email: "admin@LeoFitTech.com",
+      password: await bcrypt.hash("admin123!", 12), // 실제로는 미리 해시된 값 저장
+      name: "시스템 관리자",
+      role: "admin",
       isActive: true,
     },
     {
-      id: 'manager-001',
-      email: 'manager@visionmakers.com',
-      password: await bcrypt.hash('manager123!', 12),
-      name: '상담 매니저',
-      role: 'manager',
+      id: "manager-001",
+      email: "manager@LeoFitTech.com",
+      password: await bcrypt.hash("manager123!", 12),
+      name: "상담 매니저",
+      role: "manager",
       isActive: true,
     },
   ];
 
-  return testAdmins.find(admin => admin.email === email) || null;
+  return testAdmins.find((admin) => admin.email === email) || null;
 
   // 실제 구현 예시:
   /*
@@ -240,7 +253,10 @@ async function getAdminUser(email: string): Promise<AdminUser | null> {
 /**
  * 리프레시 토큰 저장
  */
-async function storeRefreshToken(userId: string, refreshToken: string): Promise<void> {
+async function storeRefreshToken(
+  userId: string,
+  refreshToken: string
+): Promise<void> {
   // 실제로는 Redis나 데이터베이스에 저장
   // 현재는 로그만 출력
 
@@ -270,7 +286,9 @@ async function logLoginAttempt(
 ): Promise<void> {
   // Note: consultation_logs requires consultation_id, so admin login logs
   // are not recorded there. Consider creating a separate admin_logs table.
-  console.log(`Admin login ${success ? 'success' : 'failed'}: ${email} from ${ipAddress}`);
+  console.log(
+    `Admin login ${success ? "success" : "failed"}: ${email} from ${ipAddress}`
+  );
 }
 
 /**
@@ -295,10 +313,10 @@ async function updateLastLogin(userId: string): Promise<void> {
  * 클라이언트 IP 주소 추출
  */
 function getClientIP(req: NextApiRequest): string {
-  const forwarded = req.headers['x-forwarded-for'] as string;
+  const forwarded = req.headers["x-forwarded-for"] as string;
   const ip = forwarded
-    ? forwarded.split(',')[0].trim()
-    : req.socket.remoteAddress || 'unknown';
+    ? forwarded.split(",")[0].trim()
+    : req.socket.remoteAddress || "unknown";
 
   return ip;
 }

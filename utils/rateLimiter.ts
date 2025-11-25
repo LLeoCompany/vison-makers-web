@@ -1,11 +1,11 @@
 /**
  * 레이트 리미팅 시스템
- * VisionMakers API 요청 제한 관리
+ * LeoFitTech API 요청 제한 관리
  */
 
-import { NextApiRequest, NextApiResponse } from 'next';
-import { RateLimitError } from './errors';
-import { logger } from './logger';
+import { NextApiRequest, NextApiResponse } from "next";
+import { RateLimitError } from "./errors";
+import { logger } from "./logger";
 
 // 레이트 리미터 설정 인터페이스
 export interface RateLimitConfig {
@@ -39,7 +39,10 @@ export class MemoryRateLimiter {
   /**
    * 레이트 리미트 체크
    */
-  public check(identifier: string, config: RateLimitConfig): {
+  public check(
+    identifier: string,
+    config: RateLimitConfig
+  ): {
     allowed: boolean;
     remaining: number;
     resetTime: number;
@@ -61,11 +64,16 @@ export class MemoryRateLimiter {
     }
 
     // 윈도우 내 요청만 필터링
-    record.requests = record.requests.filter(timestamp => timestamp > windowStart);
+    record.requests = record.requests.filter(
+      (timestamp) => timestamp > windowStart
+    );
     record.count = record.requests.length;
 
     const allowed = record.count < config.maxRequests;
-    const remaining = Math.max(0, config.maxRequests - record.count - (allowed ? 1 : 0));
+    const remaining = Math.max(
+      0,
+      config.maxRequests - record.count - (allowed ? 1 : 0)
+    );
 
     if (allowed) {
       record.requests.push(now);
@@ -107,11 +115,11 @@ export class MemoryRateLimiter {
       }
     });
 
-    expired.forEach(identifier => this.records.delete(identifier));
+    expired.forEach((identifier) => this.records.delete(identifier));
 
     if (expired.length > 0) {
-      logger.debug('Rate limiter cleanup', {
-        action: 'cleanup_expired_records',
+      logger.debug("Rate limiter cleanup", {
+        action: "cleanup_expired_records",
         metadata: {
           expiredCount: expired.length,
           totalRecords: this.records.size,
@@ -138,10 +146,10 @@ const rateLimiter = new MemoryRateLimiter();
  * 기본 키 생성기 (IP 주소 기반)
  */
 function defaultKeyGenerator(req: NextApiRequest): string {
-  const forwarded = req.headers['x-forwarded-for'] as string;
+  const forwarded = req.headers["x-forwarded-for"] as string;
   const ip = forwarded
-    ? forwarded.split(',')[0].trim()
-    : req.socket.remoteAddress || 'unknown';
+    ? forwarded.split(",")[0].trim()
+    : req.socket.remoteAddress || "unknown";
 
   return `ip:${ip}`;
 }
@@ -157,9 +165,9 @@ export function withRateLimit(config: RateLimitConfig) {
     const result = rateLimiter.check(identifier, config);
 
     // 응답 헤더 설정
-    res.setHeader('X-RateLimit-Limit', config.maxRequests);
-    res.setHeader('X-RateLimit-Remaining', result.remaining);
-    res.setHeader('X-RateLimit-Reset', Math.ceil(result.resetTime / 1000));
+    res.setHeader("X-RateLimit-Limit", config.maxRequests);
+    res.setHeader("X-RateLimit-Remaining", result.remaining);
+    res.setHeader("X-RateLimit-Reset", Math.ceil(result.resetTime / 1000));
 
     if (!result.allowed) {
       // 제한 도달 콜백 실행
@@ -170,7 +178,7 @@ export function withRateLimit(config: RateLimitConfig) {
       // 보안 이벤트 로깅
       logger.securityEvent(
         `Rate limit exceeded for ${identifier}`,
-        'medium',
+        "medium",
         req,
         {
           metadata: {
@@ -182,7 +190,9 @@ export function withRateLimit(config: RateLimitConfig) {
         }
       );
 
-      throw new RateLimitError('요청 제한을 초과했습니다. 잠시 후 다시 시도해주세요.');
+      throw new RateLimitError(
+        "요청 제한을 초과했습니다. 잠시 후 다시 시도해주세요."
+      );
     }
 
     return true;
@@ -216,7 +226,9 @@ export function withUserRateLimit(config: RateLimitConfig) {
  */
 export function withEndpointRateLimit(config: RateLimitConfig) {
   const endpointKeyGenerator = (req: NextApiRequest): string => {
-    const baseKey = config.keyGenerator ? config.keyGenerator(req) : defaultKeyGenerator(req);
+    const baseKey = config.keyGenerator
+      ? config.keyGenerator(req)
+      : defaultKeyGenerator(req);
     return `${baseKey}:${req.method}:${req.url}`;
   };
 
@@ -235,10 +247,10 @@ export const rateLimitConfigs = {
     maxRequests: 3, // 3회
     windowMs: 10 * 60 * 1000, // 10분
     onLimitReached: (req: NextApiRequest, identifier: string) => {
-      logger.warn('Consultation submission rate limit exceeded', {
+      logger.warn("Consultation submission rate limit exceeded", {
         method: req.method,
         url: req.url,
-        userAgent: req.headers['user-agent'] as string,
+        userAgent: req.headers["user-agent"] as string,
         metadata: { identifier },
       });
     },
@@ -269,7 +281,7 @@ export const rateLimitConfigs = {
     onLimitReached: (req: NextApiRequest, identifier: string) => {
       logger.securityEvent(
         `Auth API rate limit exceeded for ${identifier}`,
-        'high',
+        "high",
         req,
         { metadata: { identifier } }
       );
@@ -290,7 +302,11 @@ export const rateLimitConfigs = {
 export class SlidingWindowRateLimiter {
   private windows = new Map<string, number[]>();
 
-  public check(identifier: string, maxRequests: number, windowMs: number): {
+  public check(
+    identifier: string,
+    maxRequests: number,
+    windowMs: number
+  ): {
     allowed: boolean;
     remaining: number;
   } {
@@ -301,7 +317,7 @@ export class SlidingWindowRateLimiter {
     const window = this.windows.get(identifier) || [];
 
     // 윈도우 밖의 요청 제거
-    const validRequests = window.filter(timestamp => timestamp > windowStart);
+    const validRequests = window.filter((timestamp) => timestamp > windowStart);
 
     const allowed = validRequests.length < maxRequests;
 
@@ -327,7 +343,9 @@ export class SlidingWindowRateLimiter {
     const oneHourAgo = now - 60 * 60 * 1000; // 1시간 전
 
     this.windows.forEach((window, identifier) => {
-      const validRequests = window.filter(timestamp => timestamp > oneHourAgo);
+      const validRequests = window.filter(
+        (timestamp) => timestamp > oneHourAgo
+      );
 
       if (validRequests.length === 0) {
         this.windows.delete(identifier);
@@ -362,8 +380,8 @@ export class AdaptiveRateLimiter {
       this.loadFactor = 1.0; // 기본 제한
     }
 
-    logger.info('Adaptive rate limiter updated', {
-      action: 'update_load_factor',
+    logger.info("Adaptive rate limiter updated", {
+      action: "update_load_factor",
       metadata: {
         cpuUsage,
         memoryUsage,
@@ -381,11 +399,11 @@ export class AdaptiveRateLimiter {
 }
 
 // 프로세스 종료 시 리소스 정리
-process.on('SIGTERM', () => {
+process.on("SIGTERM", () => {
   rateLimiter.destroy();
 });
 
-process.on('SIGINT', () => {
+process.on("SIGINT", () => {
   rateLimiter.destroy();
 });
 

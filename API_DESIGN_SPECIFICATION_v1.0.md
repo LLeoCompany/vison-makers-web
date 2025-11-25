@@ -1,6 +1,7 @@
-# VisionMakers 상담시스템 API 설계 명세서
+# LeoFitTech 상담시스템 API 설계 명세서
 
 ## 📋 문서 정보
+
 - **버전**: 1.0
 - **작성일**: 2024-09-17
 - **작성자**: Claude AI Assistant
@@ -12,12 +13,14 @@
 ## 🎯 시스템 개요
 
 ### 핵심 목표
+
 - Supabase를 활용한 확장 가능한 데이터베이스 구조
 - RESTful API 설계 원칙 준수
 - 실시간 데이터 처리 및 알림 시스템
 - 보안 강화 및 개인정보 보호
 
 ### 아키텍처 구조
+
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   Next.js API   │    │   Supabase      │
@@ -181,16 +184,16 @@ CREATE INDEX idx_consultation_stats_date ON consultation_stats(date DESC);
 
 ```typescript
 // .env.local
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+NEXT_PUBLIC_SUPABASE_URL = your_supabase_url;
+NEXT_PUBLIC_SUPABASE_ANON_KEY = your_supabase_anon_key;
+SUPABASE_SERVICE_ROLE_KEY = your_service_role_key;
 ```
 
 ### 2. Supabase 클라이언트 초기화
 
 ```typescript
 // lib/supabase.ts
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -215,9 +218,14 @@ export interface Database {
         Row: {
           id: string;
           consultation_number: string;
-          type: 'guided' | 'free';
-          status: 'pending' | 'reviewing' | 'contacted' | 'completed' | 'cancelled';
-          priority: 'low' | 'normal' | 'high' | 'urgent';
+          type: "guided" | "free";
+          status:
+            | "pending"
+            | "reviewing"
+            | "contacted"
+            | "completed"
+            | "cancelled";
+          priority: "low" | "normal" | "high" | "urgent";
           contact_name: string;
           contact_phone: string;
           contact_email: string;
@@ -234,24 +242,39 @@ export interface Database {
           reviewed_at?: string;
           contacted_at?: string;
         };
-        Insert: Omit<Database['public']['Tables']['consultations']['Row'], 'id' | 'created_at' | 'updated_at'>;
-        Update: Partial<Database['public']['Tables']['consultations']['Insert']>;
+        Insert: Omit<
+          Database["public"]["Tables"]["consultations"]["Row"],
+          "id" | "created_at" | "updated_at"
+        >;
+        Update: Partial<
+          Database["public"]["Tables"]["consultations"]["Insert"]
+        >;
       };
       guided_consultations: {
         Row: {
           id: string;
           consultation_id: string;
-          service_type: 'homepage' | 'shopping' | 'booking' | 'membership' | 'other';
-          project_size: 'small' | 'medium' | 'large';
-          budget: '100-300' | '300-800' | '800-1500' | '1500+' | 'consult';
-          timeline: '1month' | '2-3months' | '6months' | 'flexible';
+          service_type:
+            | "homepage"
+            | "shopping"
+            | "booking"
+            | "membership"
+            | "other";
+          project_size: "small" | "medium" | "large";
+          budget: "100-300" | "300-800" | "800-1500" | "1500+" | "consult";
+          timeline: "1month" | "2-3months" | "6months" | "flexible";
           important_features: string[];
           additional_requests?: string;
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['guided_consultations']['Row'], 'id' | 'created_at' | 'updated_at'>;
-        Update: Partial<Database['public']['Tables']['guided_consultations']['Insert']>;
+        Insert: Omit<
+          Database["public"]["Tables"]["guided_consultations"]["Row"],
+          "id" | "created_at" | "updated_at"
+        >;
+        Update: Partial<
+          Database["public"]["Tables"]["guided_consultations"]["Insert"]
+        >;
       };
       free_consultations: {
         Row: {
@@ -263,8 +286,13 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['free_consultations']['Row'], 'id' | 'created_at' | 'updated_at'>;
-        Update: Partial<Database['public']['Tables']['free_consultations']['Insert']>;
+        Insert: Omit<
+          Database["public"]["Tables"]["free_consultations"]["Row"],
+          "id" | "created_at" | "updated_at"
+        >;
+        Update: Partial<
+          Database["public"]["Tables"]["free_consultations"]["Insert"]
+        >;
       };
     };
   };
@@ -284,7 +312,7 @@ export interface Database {
 ```typescript
 // Request Body Types
 interface GuidedConsultationRequest {
-  type: 'guided';
+  type: "guided";
   serviceType: string;
   projectSize: string;
   budget: string;
@@ -296,7 +324,7 @@ interface GuidedConsultationRequest {
 }
 
 interface FreeConsultationRequest {
-  type: 'free';
+  type: "free";
   projectDescription: string;
   budget?: string;
   timeline?: string;
@@ -349,19 +377,22 @@ interface ConsultationErrorResponse {
 
 ```typescript
 // pages/api/consultation-submit.ts
-import { NextApiRequest, NextApiResponse } from 'next';
-import { supabaseAdmin } from '@/lib/supabase';
-import { ConsultationService } from '@/services/consultation';
-import { NotificationService } from '@/services/notification';
+import { NextApiRequest, NextApiResponse } from "next";
+import { supabaseAdmin } from "@/lib/supabase";
+import { ConsultationService } from "@/services/consultation";
+import { NotificationService } from "@/services/notification";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== 'POST') {
+  if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
-      error: { code: 'METHOD_NOT_ALLOWED', message: 'Only POST method allowed' }
+      error: {
+        code: "METHOD_NOT_ALLOWED",
+        message: "Only POST method allowed",
+      },
     });
   }
 
@@ -371,16 +402,16 @@ export default async function handler(
 
     // 2. IP 및 메타데이터 수집
     const metadata = {
-      ipAddress: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-      userAgent: req.headers['user-agent'],
+      ipAddress: req.headers["x-forwarded-for"] || req.connection.remoteAddress,
+      userAgent: req.headers["user-agent"],
       referrer: req.headers.referer,
-      ...validatedData.metadata
+      ...validatedData.metadata,
     };
 
     // 3. 상담 신청 생성
     const consultation = await ConsultationService.createConsultation({
       ...validatedData,
-      metadata
+      metadata,
     });
 
     // 4. 알림 발송
@@ -392,19 +423,18 @@ export default async function handler(
       data: {
         consultationId: consultation.id,
         consultationNumber: consultation.consultation_number,
-        estimatedContactTime: "1-2 business days"
-      }
+        estimatedContactTime: "1-2 business days",
+      },
     });
-
   } catch (error) {
-    console.error('Consultation submission error:', error);
+    console.error("Consultation submission error:", error);
 
     res.status(500).json({
       success: false,
       error: {
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to submit consultation'
-      }
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to submit consultation",
+      },
     });
   }
 }
@@ -431,7 +461,7 @@ interface ConsultationDetailResponse {
 
 ```typescript
 interface StatusUpdateRequest {
-  status: 'reviewing' | 'contacted' | 'completed' | 'cancelled';
+  status: "reviewing" | "contacted" | "completed" | "cancelled";
   notes?: string;
 }
 ```
@@ -480,11 +510,11 @@ CREATE POLICY "Only admins can update consultations" ON consultations
 ```typescript
 // middleware/auth.ts
 export function verifyApiKey(req: NextApiRequest) {
-  const apiKey = req.headers['x-api-key'];
-  const validKeys = process.env.VALID_API_KEYS?.split(',') || [];
+  const apiKey = req.headers["x-api-key"];
+  const validKeys = process.env.VALID_API_KEYS?.split(",") || [];
 
   if (!apiKey || !validKeys.includes(apiKey as string)) {
-    throw new Error('Invalid API key');
+    throw new Error("Invalid API key");
   }
 }
 ```
@@ -493,12 +523,16 @@ export function verifyApiKey(req: NextApiRequest) {
 
 ```typescript
 // utils/rateLimiter.ts
-import { NextApiRequest } from 'next';
+import { NextApiRequest } from "next";
 
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
 
-export function checkRateLimit(req: NextApiRequest, maxRequests = 5, windowMs = 60000) {
-  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+export function checkRateLimit(
+  req: NextApiRequest,
+  maxRequests = 5,
+  windowMs = 60000
+) {
+  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
   const now = Date.now();
 
   const record = requestCounts.get(ip as string);
@@ -525,38 +559,49 @@ export function checkRateLimit(req: NextApiRequest, maxRequests = 5, windowMs = 
 
 ```typescript
 // schemas/consultation.ts
-import { z } from 'zod';
+import { z } from "zod";
 
 export const ContactInfoSchema = z.object({
-  name: z.string().min(2, '이름은 2자 이상이어야 합니다').max(100),
-  phone: z.string().regex(/^[0-9\-\+\s]+$/, '올바른 전화번호 형식이 아닙니다'),
-  email: z.string().email('올바른 이메일 형식이 아닙니다'),
+  name: z.string().min(2, "이름은 2자 이상이어야 합니다").max(100),
+  phone: z.string().regex(/^[0-9\-\+\s]+$/, "올바른 전화번호 형식이 아닙니다"),
+  email: z.string().email("올바른 이메일 형식이 아닙니다"),
   company: z.string().max(200).optional(),
-  preferredContactTime: z.enum(['morning', 'afternoon', 'evening', 'anytime']).optional()
+  preferredContactTime: z
+    .enum(["morning", "afternoon", "evening", "anytime"])
+    .optional(),
 });
 
 export const GuidedConsultationSchema = z.object({
-  type: z.literal('guided'),
-  serviceType: z.enum(['homepage', 'shopping', 'booking', 'membership', 'other']),
-  projectSize: z.enum(['small', 'medium', 'large']),
-  budget: z.enum(['100-300', '300-800', '800-1500', '1500+', 'consult']),
-  timeline: z.enum(['1month', '2-3months', '6months', 'flexible']),
-  importantFeatures: z.array(z.enum(['mobile', 'seo', 'admin', 'payment'])),
+  type: z.literal("guided"),
+  serviceType: z.enum([
+    "homepage",
+    "shopping",
+    "booking",
+    "membership",
+    "other",
+  ]),
+  projectSize: z.enum(["small", "medium", "large"]),
+  budget: z.enum(["100-300", "300-800", "800-1500", "1500+", "consult"]),
+  timeline: z.enum(["1month", "2-3months", "6months", "flexible"]),
+  importantFeatures: z.array(z.enum(["mobile", "seo", "admin", "payment"])),
   additionalRequests: z.string().max(2000).optional(),
-  contact: ContactInfoSchema
+  contact: ContactInfoSchema,
 });
 
 export const FreeConsultationSchema = z.object({
-  type: z.literal('free'),
-  projectDescription: z.string().min(20, '최소 20자 이상 작성해주세요').max(2000),
+  type: z.literal("free"),
+  projectDescription: z
+    .string()
+    .min(20, "최소 20자 이상 작성해주세요")
+    .max(2000),
   budget: z.string().max(200).optional(),
   timeline: z.string().max(200).optional(),
-  contact: ContactInfoSchema
+  contact: ContactInfoSchema,
 });
 
 export const ConsultationRequestSchema = z.union([
   GuidedConsultationSchema,
-  FreeConsultationSchema
+  FreeConsultationSchema,
 ]);
 ```
 
@@ -564,9 +609,9 @@ export const ConsultationRequestSchema = z.union([
 
 ```typescript
 // services/consultation.ts
-import { supabaseAdmin } from '@/lib/supabase';
-import { ConsultationRequestSchema } from '@/schemas/consultation';
-import { generateConsultationNumber } from '@/utils/consultation';
+import { supabaseAdmin } from "@/lib/supabase";
+import { ConsultationRequestSchema } from "@/schemas/consultation";
+import { generateConsultationNumber } from "@/utils/consultation";
 
 export class ConsultationService {
   static async validateRequest(data: unknown) {
@@ -578,7 +623,7 @@ export class ConsultationService {
 
     // 트랜잭션 시작
     const { data: consultation, error: consultationError } = await supabaseAdmin
-      .from('consultations')
+      .from("consultations")
       .insert({
         consultation_number: consultationNumber,
         type: data.type,
@@ -592,7 +637,7 @@ export class ConsultationService {
         referrer_url: data.metadata?.referrer,
         utm_source: data.metadata?.utmSource,
         utm_medium: data.metadata?.utmMedium,
-        utm_campaign: data.metadata?.utmCampaign
+        utm_campaign: data.metadata?.utmCampaign,
       })
       .select()
       .single();
@@ -600,58 +645,52 @@ export class ConsultationService {
     if (consultationError) throw consultationError;
 
     // 타입별 세부 정보 저장
-    if (data.type === 'guided') {
+    if (data.type === "guided") {
       await this.createGuidedConsultation(consultation.id, data);
     } else {
       await this.createFreeConsultation(consultation.id, data);
     }
 
     // 로그 생성
-    await this.createLog(consultation.id, 'created', {
+    await this.createLog(consultation.id, "created", {
       type: data.type,
-      source: 'website'
+      source: "website",
     });
 
     return consultation;
   }
 
   static async createGuidedConsultation(consultationId: string, data: any) {
-    const { error } = await supabaseAdmin
-      .from('guided_consultations')
-      .insert({
-        consultation_id: consultationId,
-        service_type: data.serviceType,
-        project_size: data.projectSize,
-        budget: data.budget,
-        timeline: data.timeline,
-        important_features: data.importantFeatures,
-        additional_requests: data.additionalRequests
-      });
+    const { error } = await supabaseAdmin.from("guided_consultations").insert({
+      consultation_id: consultationId,
+      service_type: data.serviceType,
+      project_size: data.projectSize,
+      budget: data.budget,
+      timeline: data.timeline,
+      important_features: data.importantFeatures,
+      additional_requests: data.additionalRequests,
+    });
 
     if (error) throw error;
   }
 
   static async createFreeConsultation(consultationId: string, data: any) {
-    const { error } = await supabaseAdmin
-      .from('free_consultations')
-      .insert({
-        consultation_id: consultationId,
-        project_description: data.projectDescription,
-        budget_range: data.budget,
-        timeline_preference: data.timeline
-      });
+    const { error } = await supabaseAdmin.from("free_consultations").insert({
+      consultation_id: consultationId,
+      project_description: data.projectDescription,
+      budget_range: data.budget,
+      timeline_preference: data.timeline,
+    });
 
     if (error) throw error;
   }
 
   static async createLog(consultationId: string, action: string, details: any) {
-    await supabaseAdmin
-      .from('consultation_logs')
-      .insert({
-        consultation_id: consultationId,
-        action,
-        details
-      });
+    await supabaseAdmin.from("consultation_logs").insert({
+      consultation_id: consultationId,
+      action,
+      details,
+    });
   }
 }
 ```
@@ -664,7 +703,7 @@ export class ConsultationService {
 
 ```typescript
 // services/notification.ts
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 export class NotificationService {
   private static transporter = nodemailer.createTransporter({
@@ -673,8 +712,8 @@ export class NotificationService {
     secure: false,
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
+      pass: process.env.SMTP_PASS,
+    },
   });
 
   static async sendNewConsultationAlert(consultation: any) {
@@ -683,15 +722,15 @@ export class NotificationService {
       from: process.env.FROM_EMAIL,
       to: process.env.ADMIN_EMAIL,
       subject: `🔔 새로운 상담 신청 - ${consultation.consultation_number}`,
-      html: this.generateAdminEmailTemplate(consultation)
+      html: this.generateAdminEmailTemplate(consultation),
     });
 
     // 고객에게 접수 확인 메일
     await this.transporter.sendMail({
       from: process.env.FROM_EMAIL,
       to: consultation.contact_email,
-      subject: '✅ VisionMakers 상담 신청이 접수되었습니다',
-      html: this.generateCustomerEmailTemplate(consultation)
+      subject: "✅ LeoFitTech 상담 신청이 접수되었습니다",
+      html: this.generateCustomerEmailTemplate(consultation),
     });
   }
 
@@ -702,9 +741,13 @@ export class NotificationService {
       <p><strong>신청자:</strong> ${consultation.contact_name}</p>
       <p><strong>연락처:</strong> ${consultation.contact_phone}</p>
       <p><strong>이메일:</strong> ${consultation.contact_email}</p>
-      <p><strong>신청시간:</strong> ${new Date(consultation.created_at).toLocaleString('ko-KR')}</p>
+      <p><strong>신청시간:</strong> ${new Date(
+        consultation.created_at
+      ).toLocaleString("ko-KR")}</p>
 
-      <p><a href="${process.env.ADMIN_URL}/consultations/${consultation.id}">상세보기</a></p>
+      <p><a href="${process.env.ADMIN_URL}/consultations/${
+      consultation.id
+    }">상세보기</a></p>
     `;
   }
 
@@ -712,13 +755,15 @@ export class NotificationService {
     return `
       <h2>${consultation.contact_name}님, 상담 신청이 완료되었습니다! 🎉</h2>
 
-      <p>안녕하세요, VisionMakers입니다.</p>
+      <p>안녕하세요, LeoFitTech입니다.</p>
       <p>소중한 시간을 내어 상담을 신청해주셔서 감사합니다.</p>
 
       <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
         <h3>📋 신청 정보</h3>
         <p><strong>신청번호:</strong> ${consultation.consultation_number}</p>
-        <p><strong>신청일시:</strong> ${new Date(consultation.created_at).toLocaleString('ko-KR')}</p>
+        <p><strong>신청일시:</strong> ${new Date(
+          consultation.created_at
+        ).toLocaleString("ko-KR")}</p>
       </div>
 
       <h3>📞 다음 단계</h3>
@@ -734,7 +779,7 @@ export class NotificationService {
       <p>문의사항이 있으시면 언제든 <strong>010-9915-4724</strong>로 연락주세요.</p>
       <p>감사합니다.</p>
 
-      <p><small>© 2024 VisionMakers. All rights reserved.</small></p>
+      <p><small>© 2024 LeoFitTech. All rights reserved.</small></p>
     `;
   }
 }
@@ -756,37 +801,37 @@ export class SlackNotificationService {
           type: "header",
           text: {
             type: "plain_text",
-            text: "🔔 새로운 상담 신청"
-          }
+            text: "🔔 새로운 상담 신청",
+          },
         },
         {
           type: "section",
           fields: [
             {
               type: "mrkdwn",
-              text: `*신청번호:*\n${consultation.consultation_number}`
+              text: `*신청번호:*\n${consultation.consultation_number}`,
             },
             {
               type: "mrkdwn",
-              text: `*신청자:*\n${consultation.contact_name}`
+              text: `*신청자:*\n${consultation.contact_name}`,
             },
             {
               type: "mrkdwn",
-              text: `*연락처:*\n${consultation.contact_phone}`
+              text: `*연락처:*\n${consultation.contact_phone}`,
             },
             {
               type: "mrkdwn",
-              text: `*이메일:*\n${consultation.contact_email}`
-            }
-          ]
-        }
-      ]
+              text: `*이메일:*\n${consultation.contact_email}`,
+            },
+          ],
+        },
+      ],
     };
 
     await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(message)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(message),
     });
   }
 }
@@ -800,27 +845,27 @@ export class SlackNotificationService {
 
 ```typescript
 // __tests__/api/consultation-submit.test.ts
-import { createMocks } from 'node-mocks-http';
-import handler from '@/pages/api/consultation-submit';
+import { createMocks } from "node-mocks-http";
+import handler from "@/pages/api/consultation-submit";
 
-describe('/api/consultation-submit', () => {
-  test('guided consultation submission', async () => {
+describe("/api/consultation-submit", () => {
+  test("guided consultation submission", async () => {
     const { req, res } = createMocks({
-      method: 'POST',
+      method: "POST",
       body: {
-        type: 'guided',
-        serviceType: 'homepage',
-        projectSize: 'medium',
-        budget: '300-800',
-        timeline: '2-3months',
-        importantFeatures: ['mobile', 'seo'],
-        additionalRequests: '',
+        type: "guided",
+        serviceType: "homepage",
+        projectSize: "medium",
+        budget: "300-800",
+        timeline: "2-3months",
+        importantFeatures: ["mobile", "seo"],
+        additionalRequests: "",
         contact: {
-          name: '홍길동',
-          phone: '010-1234-5678',
-          email: 'test@example.com'
-        }
-      }
+          name: "홍길동",
+          phone: "010-1234-5678",
+          email: "test@example.com",
+        },
+      },
     });
 
     await handler(req, res);
@@ -837,26 +882,27 @@ describe('/api/consultation-submit', () => {
 
 ```typescript
 // __tests__/integration/consultation-flow.test.ts
-describe('Consultation Flow Integration', () => {
-  test('complete guided consultation flow', async () => {
+describe("Consultation Flow Integration", () => {
+  test("complete guided consultation flow", async () => {
     // 1. 상담 신청
     const submitResponse = await request(app)
-      .post('/api/consultation-submit')
+      .post("/api/consultation-submit")
       .send(mockGuidedConsultation);
 
     expect(submitResponse.status).toBe(201);
 
     // 2. 상담 조회
     const consultationId = submitResponse.body.data.consultationId;
-    const getResponse = await request(app)
-      .get(`/api/consultation/${consultationId}`);
+    const getResponse = await request(app).get(
+      `/api/consultation/${consultationId}`
+    );
 
     expect(getResponse.status).toBe(200);
 
     // 3. 상태 업데이트
     const updateResponse = await request(app)
       .patch(`/api/consultation/${consultationId}/status`)
-      .send({ status: 'reviewing' });
+      .send({ status: "reviewing" });
 
     expect(updateResponse.status).toBe(200);
   });
@@ -882,19 +928,19 @@ export class MonitoringService {
       endpoint,
       duration,
       success,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
   static async trackConversionFunnel(step: string, metadata?: any) {
     // 구글 애널리틱스 또는 기타 분석 도구 연동
-    await fetch('/api/analytics/track', {
-      method: 'POST',
+    await fetch("/api/analytics/track", {
+      method: "POST",
       body: JSON.stringify({
-        event: 'consultation_funnel',
+        event: "consultation_funnel",
         step,
-        metadata
-      })
+        metadata,
+      }),
     });
   }
 }
@@ -904,21 +950,25 @@ export class MonitoringService {
 
 ```typescript
 // pages/api/consultation/realtime-stats.ts
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const today = new Date().toISOString().split('T')[0];
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const today = new Date().toISOString().split("T")[0];
 
   const stats = await supabaseAdmin
-    .from('consultations')
-    .select('*')
-    .gte('created_at', `${today}T00:00:00.000Z`)
-    .lt('created_at', `${today}T23:59:59.999Z`);
+    .from("consultations")
+    .select("*")
+    .gte("created_at", `${today}T00:00:00.000Z`)
+    .lt("created_at", `${today}T23:59:59.999Z`);
 
   const realTimeData = {
     todayTotal: stats.data?.length || 0,
-    todayGuided: stats.data?.filter(c => c.type === 'guided').length || 0,
-    todayFree: stats.data?.filter(c => c.type === 'free').length || 0,
-    pendingReview: stats.data?.filter(c => c.status === 'pending').length || 0,
-    lastUpdate: new Date().toISOString()
+    todayGuided: stats.data?.filter((c) => c.type === "guided").length || 0,
+    todayFree: stats.data?.filter((c) => c.type === "free").length || 0,
+    pendingReview:
+      stats.data?.filter((c) => c.status === "pending").length || 0,
+    lastUpdate: new Date().toISOString(),
   };
 
   res.status(200).json({ success: true, data: realTimeData });
@@ -935,20 +985,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 // next.config.js
 module.exports = {
   env: {
-    ENVIRONMENT: process.env.NODE_ENV
+    ENVIRONMENT: process.env.NODE_ENV,
   },
   async headers() {
     return [
       {
-        source: '/api/:path*',
+        source: "/api/:path*",
         headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
-          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' }
-        ]
-      }
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET,POST,PUT,DELETE,OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Content-Type, Authorization",
+          },
+        ],
+      },
     ];
-  }
+  },
 };
 ```
 
@@ -972,9 +1028,9 @@ module.exports = {
 export async function createDatabaseBackup() {
   // 일일 백업 스크립트
   const backupData = await supabaseAdmin
-    .from('consultations')
-    .select('*, guided_consultations(*), free_consultations(*)')
-    .gte('created_at', getYesterday());
+    .from("consultations")
+    .select("*, guided_consultations(*), free_consultations(*)")
+    .gte("created_at", getYesterday());
 
   // S3 또는 다른 스토리지에 백업
   await uploadToStorage(`backup-${Date.now()}.json`, backupData);
@@ -1002,13 +1058,13 @@ curl -X POST http://localhost:3000/api/consultation-submit \
 
 ### 2. 에러 코드 레퍼런스
 
-| 코드 | 설명 | 해결방법 |
-|------|------|----------|
-| `VALIDATION_ERROR` | 입력 데이터 검증 실패 | 요청 데이터 형식 확인 |
-| `RATE_LIMIT_EXCEEDED` | 요청 제한 초과 | 잠시 후 재시도 |
-| `DATABASE_ERROR` | 데이터베이스 오류 | 관리자 문의 |
-| `EMAIL_SEND_FAILED` | 이메일 발송 실패 | 이메일 설정 확인 |
+| 코드                  | 설명                  | 해결방법              |
+| --------------------- | --------------------- | --------------------- |
+| `VALIDATION_ERROR`    | 입력 데이터 검증 실패 | 요청 데이터 형식 확인 |
+| `RATE_LIMIT_EXCEEDED` | 요청 제한 초과        | 잠시 후 재시도        |
+| `DATABASE_ERROR`      | 데이터베이스 오류     | 관리자 문의           |
+| `EMAIL_SEND_FAILED`   | 이메일 발송 실패      | 이메일 설정 확인      |
 
 ---
 
-이 API 설계 문서는 VisionMakers 상담시스템의 완전한 백엔드 구조를 제공하며, Supabase의 강력한 기능들을 최대한 활용하여 확장 가능하고 안전한 시스템을 구축할 수 있도록 설계되었습니다.
+이 API 설계 문서는 LeoFitTech 상담시스템의 완전한 백엔드 구조를 제공하며, Supabase의 강력한 기능들을 최대한 활용하여 확장 가능하고 안전한 시스템을 구축할 수 있도록 설계되었습니다.

@@ -1,6 +1,7 @@
 # 마케팅 이론 기반 상담신청 플로우 설계 문서
 
 ## 📋 목차
+
 1. [AIDA 모델 기반 랜딩 페이지 설계](#aida-모델-기반-랜딩-페이지-설계)
 2. [퍼널 전략 및 이탈률 최소화](#퍼널-전략-및-이탈률-최소화)
 3. [FAB 이론 적용한 서비스 소개](#fab-이론-적용한-서비스-소개)
@@ -27,7 +28,8 @@
 
     <SubHeadline>
       <SolutionPromise>
-        5분 만에 맞춤 견적을 확인하고<br />
+        5분 만에 맞춤 견적을 확인하고
+        <br />
         <BenefitText>합리적인 가격</BenefitText>으로 시작하세요
       </SolutionPromise>
     </SubHeadline>
@@ -91,7 +93,8 @@
         <ProblemIcon>😰</ProblemIcon>
         <ProblemTitle>견적이 너무 비싸요</ProblemTitle>
         <ProblemDescription>
-          다른 업체는 몇천만원씩...<br />
+          다른 업체는 몇천만원씩...
+          <br />
           우리 예산으로는 무리인가요?
         </ProblemDescription>
       </ProblemCard>
@@ -100,7 +103,8 @@
         <ProblemIcon>🤔</ProblemIcon>
         <ProblemTitle>뭘 해야 할지 모르겠어요</ProblemTitle>
         <ProblemDescription>
-          홈페이지? 쇼핑몰? 앱?<br />
+          홈페이지? 쇼핑몰? 앱?
+          <br />
           우리에게 맞는 게 뭔지...
         </ProblemDescription>
       </ProblemCard>
@@ -109,7 +113,8 @@
         <ProblemIcon>😤</ProblemIcon>
         <ProblemTitle>업체마다 말이 달라요</ProblemTitle>
         <ProblemDescription>
-          어떤 곳은 필요 없다고 하고<br />
+          어떤 곳은 필요 없다고 하고
+          <br />
           어떤 곳은 꼭 필요하다고 하고...
         </ProblemDescription>
       </ProblemCard>
@@ -119,7 +124,7 @@
   {/* 해결책 제시 */}
   <SolutionSection>
     <SolutionTitle>
-      <Highlight>VisionMakers</Highlight>는 달라요
+      <Highlight>LeoFitTech</Highlight>는 달라요
     </SolutionTitle>
 
     <SolutionGrid>
@@ -127,7 +132,8 @@
         <SolutionIcon>💡</SolutionIcon>
         <SolutionBenefit>정직한 컨설팅</SolutionBenefit>
         <SolutionDescription>
-          과도한 기능 추천 없이<br />
+          과도한 기능 추천 없이
+          <br />
           <Strong>정말 필요한 것만</Strong> 제안드려요
         </SolutionDescription>
       </SolutionItem>
@@ -136,7 +142,8 @@
         <SolutionIcon>💰</SolutionIcon>
         <SolutionBenefit>합리적인 가격</SolutionBenefit>
         <SolutionDescription>
-          대기업 절반 가격으로<br />
+          대기업 절반 가격으로
+          <br />
           <Strong>같은 품질</Strong>을 제공합니다
         </SolutionDescription>
       </SolutionItem>
@@ -153,9 +160,7 @@
 
     {/* 두 번째 CTA - 관심을 구체적 행동으로 */}
     <SecondaryCTA>
-      <CtaButton variant="secondary">
-        우리 프로젝트 견적 받기
-      </CtaButton>
+      <CtaButton variant="secondary">우리 프로젝트 견적 받기</CtaButton>
     </SecondaryCTA>
   </SolutionSection>
 </InterestSection>
@@ -167,7 +172,7 @@
 <DesireSection>
   {/* 사회적 증거 - 고객 후기 */}
   <SocialProofSection>
-    <SectionTitle>고객들이 말하는 VisionMakers</SectionTitle>
+    <SectionTitle>고객들이 말하는 LeoFitTech</SectionTitle>
 
     <TestimonialSlider>
       <Testimonial>
@@ -180,8 +185,8 @@
           </CustomerDetails>
         </CustomerInfo>
         <TestimonialContent>
-          "<Highlight>300만원 예산</Highlight>으로 홈페이지와 예약시스템까지 만들어주셨어요.
-          덕분에 <Strong>매출이 30% 증가</Strong>했습니다!"
+          "<Highlight>300만원 예산</Highlight>으로 홈페이지와 예약시스템까지
+          만들어주셨어요. 덕분에 <Strong>매출이 30% 증가</Strong>했습니다!"
         </TestimonialContent>
         <Rating>★★★★★</Rating>
       </Testimonial>
@@ -196,8 +201,8 @@
           </CustomerDetails>
         </CustomerInfo>
         <TestimonialContent>
-          "다른 업체는 <Highlight>2천만원</Highlight>이라고 했는데,
-          여기서는 <Strong>800만원</Strong>에 더 좋은 결과를 만들어주셨어요."
+          "다른 업체는 <Highlight>2천만원</Highlight>이라고 했는데, 여기서는{" "}
+          <Strong>800만원</Strong>에 더 좋은 결과를 만들어주셨어요."
         </TestimonialContent>
         <Rating>★★★★★</Rating>
       </Testimonial>
@@ -264,9 +269,7 @@
         <ConsultationOption primary>
           <OptionIcon>🎯</OptionIcon>
           <OptionTitle>5분 맞춤 상담</OptionTitle>
-          <OptionDescription>
-            간단한 질문으로 바로 견적 확인
-          </OptionDescription>
+          <OptionDescription>간단한 질문으로 바로 견적 확인</OptionDescription>
           <OptionBenefits>
             <Benefit>✓ 즉시 예상 견적</Benefit>
             <Benefit>✓ 맞춤 제안서</Benefit>
@@ -280,9 +283,7 @@
         <ConsultationOption>
           <OptionIcon>💬</OptionIcon>
           <OptionTitle>전화 상담</OptionTitle>
-          <OptionDescription>
-            자유롭게 상담받고 싶다면
-          </OptionDescription>
+          <OptionDescription>자유롭게 상담받고 싶다면</OptionDescription>
           <OptionBenefits>
             <Benefit>✓ 전문가 직접 상담</Benefit>
             <Benefit>✓ 복잡한 요구사항 OK</Benefit>
@@ -323,57 +324,57 @@
 ```typescript
 // 퍼널 단계 정의
 export const FUNNEL_STAGES = {
-  AWARENESS: 'awareness',        // 인지 - 랜딩 페이지 방문
-  INTEREST: 'interest',          // 관심 - 스크롤, 체류시간
-  CONSIDERATION: 'consideration', // 고려 - CTA 클릭
-  INTENT: 'intent',             // 의도 - 상담신청 시작
-  EVALUATION: 'evaluation',      // 평가 - 상담신청 진행
-  CONVERSION: 'conversion'       // 전환 - 상담신청 완료
+  AWARENESS: "awareness", // 인지 - 랜딩 페이지 방문
+  INTEREST: "interest", // 관심 - 스크롤, 체류시간
+  CONSIDERATION: "consideration", // 고려 - CTA 클릭
+  INTENT: "intent", // 의도 - 상담신청 시작
+  EVALUATION: "evaluation", // 평가 - 상담신청 진행
+  CONVERSION: "conversion", // 전환 - 상담신청 완료
 } as const;
 
 // 단계별 이탈 방지 전략
 export const RETENTION_STRATEGIES = {
   [FUNNEL_STAGES.AWARENESS]: {
-    strategy: '즉시 주의 집중',
+    strategy: "즉시 주의 집중",
     tactics: [
-      '강력한 헤드라인 (3초 내 메시지 전달)',
-      '시각적 임팩트 (애니메이션, 대비)',
-      '로딩 속도 최적화 (2초 이내)'
+      "강력한 헤드라인 (3초 내 메시지 전달)",
+      "시각적 임팩트 (애니메이션, 대비)",
+      "로딩 속도 최적화 (2초 이내)",
     ],
     exitIntentPrevention: {
-      trigger: 'mouse-leave',
-      action: 'exit-intent-popup',
-      message: '잠깐! 무료 견적만이라도 확인해보세요'
-    }
+      trigger: "mouse-leave",
+      action: "exit-intent-popup",
+      message: "잠깐! 무료 견적만이라도 확인해보세요",
+    },
   },
 
   [FUNNEL_STAGES.INTEREST]: {
-    strategy: '문제 공감 및 해결책 제시',
+    strategy: "문제 공감 및 해결책 제시",
     tactics: [
-      '고객 페인포인트 구체적 표현',
-      '사회적 증거 (고객 후기, 통계)',
-      '스크롤 트리거 애니메이션'
+      "고객 페인포인트 구체적 표현",
+      "사회적 증거 (고객 후기, 통계)",
+      "스크롤 트리거 애니메이션",
     ],
     scrollTracking: {
       milestones: [25, 50, 75, 100],
-      actions: ['show-sticky-cta', 'highlight-benefits', 'social-proof']
-    }
+      actions: ["show-sticky-cta", "highlight-benefits", "social-proof"],
+    },
   },
 
   [FUNNEL_STAGES.CONSIDERATION]: {
-    strategy: '행동 장벽 최소화',
+    strategy: "행동 장벽 최소화",
     tactics: [
-      'CTA 버튼 최적화 (크기, 색상, 위치)',
-      '선택의 부담 감소 (2개 옵션만)',
-      '안심 요소 강화 (무료, 빠른 응답)'
+      "CTA 버튼 최적화 (크기, 색상, 위치)",
+      "선택의 부담 감소 (2개 옵션만)",
+      "안심 요소 강화 (무료, 빠른 응답)",
     ],
     ctaOptimization: {
-      size: 'large',
-      color: '#FF6B35', // 주황색 - 행동 유도
-      position: 'sticky',
-      text: '지금 무료 상담 받기'
-    }
-  }
+      size: "large",
+      color: "#FF6B35", // 주황색 - 행동 유도
+      position: "sticky",
+      text: "지금 무료 상담 받기",
+    },
+  },
 };
 ```
 
@@ -392,15 +393,15 @@ const ExitIntentHandler = () => {
         setHasShown(true);
 
         // 분석 이벤트
-        gtag('event', 'exit_intent_triggered', {
-          funnel_stage: 'consideration',
-          time_on_page: performance.now() / 1000
+        gtag("event", "exit_intent_triggered", {
+          funnel_stage: "consideration",
+          time_on_page: performance.now() / 1000,
         });
       }
     };
 
-    document.addEventListener('mouseleave', handleMouseLeave);
-    return () => document.removeEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener("mouseleave", handleMouseLeave);
+    return () => document.removeEventListener("mouseleave", handleMouseLeave);
   }, [hasShown]);
 
   return (
@@ -410,20 +411,15 @@ const ExitIntentHandler = () => {
         <Offer>
           <OfferIcon>🎁</OfferIcon>
           <OfferText>
-            무료 견적서만이라도<br />
+            무료 견적서만이라도
+            <br />
             <Highlight>이메일로 받아보세요</Highlight>
           </OfferText>
         </Offer>
 
         <QuickForm>
-          <Input
-            placeholder="이메일 주소"
-            type="email"
-            autoFocus
-          />
-          <SubmitButton>
-            무료 견적서 받기
-          </SubmitButton>
+          <Input placeholder="이메일 주소" type="email" autoFocus />
+          <SubmitButton>무료 견적서 받기</SubmitButton>
         </QuickForm>
 
         <BenefitList>
@@ -452,14 +448,14 @@ const ScrollTriggeredCTA = () => {
       // 50% 스크롤 시 sticky CTA 표시
       if (progress > 50 && !isVisible) {
         setIsVisible(true);
-        gtag('event', 'sticky_cta_shown', {
-          scroll_percentage: progress
+        gtag("event", "sticky_cta_shown", {
+          scroll_percentage: progress,
         });
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [isVisible]);
 
   return (
@@ -469,12 +465,14 @@ const ScrollTriggeredCTA = () => {
         <CtaText>
           <Strong>무료 상담</Strong> 받고 맞춤 견적 확인하세요
         </CtaText>
-        <CtaButton onClick={() => {
-          gtag('event', 'sticky_cta_clicked', {
-            scroll_percentage: scrollProgress
-          });
-          // 상담신청 페이지로 이동
-        }}>
+        <CtaButton
+          onClick={() => {
+            gtag("event", "sticky_cta_clicked", {
+              scroll_percentage: scrollProgress,
+            });
+            // 상담신청 페이지로 이동
+          }}
+        >
           지금 신청하기
         </CtaButton>
       </CtaContent>
@@ -494,45 +492,45 @@ const ScrollTriggeredCTA = () => {
 const SERVICE_FAB_STRUCTURE = {
   homepage: {
     features: [
-      '반응형 웹디자인',
-      'SEO 최적화',
-      '빠른 로딩 속도',
-      '관리자 페이지'
+      "반응형 웹디자인",
+      "SEO 최적화",
+      "빠른 로딩 속도",
+      "관리자 페이지",
     ],
     advantages: [
-      '모든 기기에서 완벽 표시',
-      '검색 엔진 상위 노출',
-      '사용자 이탈률 감소',
-      '직접 내용 수정 가능'
+      "모든 기기에서 완벽 표시",
+      "검색 엔진 상위 노출",
+      "사용자 이탈률 감소",
+      "직접 내용 수정 가능",
     ],
     benefits: [
-      '더 많은 고객 유입',
-      '매출 증대',
-      '고객 만족도 향상',
-      '관리 비용 절약'
-    ]
+      "더 많은 고객 유입",
+      "매출 증대",
+      "고객 만족도 향상",
+      "관리 비용 절약",
+    ],
   },
 
   shopping: {
     features: [
-      '결제 시스템 연동',
-      '재고 관리 시스템',
-      '주문 관리 대시보드',
-      '고객 관리 CRM'
+      "결제 시스템 연동",
+      "재고 관리 시스템",
+      "주문 관리 대시보드",
+      "고객 관리 CRM",
     ],
     advantages: [
-      '안전한 온라인 결제',
-      '실시간 재고 추적',
-      '주문 처리 자동화',
-      '고객 데이터 분석'
+      "안전한 온라인 결제",
+      "실시간 재고 추적",
+      "주문 처리 자동화",
+      "고객 데이터 분석",
     ],
     benefits: [
-      '매출 채널 확대',
-      '운영 효율성 증대',
-      '고객 서비스 향상',
-      '데이터 기반 의사결정'
-    ]
-  }
+      "매출 채널 확대",
+      "운영 효율성 증대",
+      "고객 서비스 향상",
+      "데이터 기반 의사결정",
+    ],
+  },
 };
 
 // FAB 컴포넌트
@@ -542,7 +540,7 @@ const FABSection = ({ serviceType }) => {
   return (
     <FABContainer>
       <SectionTitle>
-        왜 <Highlight>VisionMakers</Highlight>를 선택해야 할까요?
+        왜 <Highlight>LeoFitTech</Highlight>를 선택해야 할까요?
       </SectionTitle>
 
       <FABGrid>
@@ -721,7 +719,7 @@ const BenefitFocusedMessages = () => {
     .service-title {
       font-size: 24px;
       font-weight: 700;
-      color: #2D3748;
+      color: #2d3748;
       margin-bottom: 8px;
     }
 
@@ -735,7 +733,7 @@ const BenefitFocusedMessages = () => {
 
 // CTA 버튼들의 일관성
 .cta-button-primary {
-  background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
   color: white;
   font-weight: 700;
   font-size: 18px;
@@ -754,11 +752,11 @@ const BenefitFocusedMessages = () => {
 .cta-button-secondary {
   @extend .cta-button-primary;
   background: white;
-  color: #FF6B35;
-  border: 2px solid #FF6B35;
+  color: #ff6b35;
+  border: 2px solid #ff6b35;
 
   &:hover {
-    background: #FF6B35;
+    background: #ff6b35;
     color: white;
   }
 }
@@ -814,9 +812,7 @@ const VisualFlowSection = () => {
 
         <BottomLeft>
           <ProjectDetails>
-            • 제작 기간: 4주
-            • 제작 비용: 800만원
-            • 고객 만족도: 5/5
+            • 제작 기간: 4주 • 제작 비용: 800만원 • 고객 만족도: 5/5
           </ProjectDetails>
         </BottomLeft>
 
@@ -838,22 +834,22 @@ const VisualFlowSection = () => {
   .main-headline {
     font-size: clamp(32px, 6vw, 64px);
     font-weight: 900;
-    color: #1A202C;
+    color: #1a202c;
     line-height: 1.2;
     margin-bottom: 16px;
 
     .highlight-text {
-      color: #FF6B35;
+      color: #ff6b35;
       position: relative;
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -4px;
         left: 0;
         width: 100%;
         height: 4px;
-        background: linear-gradient(90deg, #FF6B35, #F7931E);
+        background: linear-gradient(90deg, #ff6b35, #f7931e);
         border-radius: 2px;
       }
     }
@@ -863,7 +859,7 @@ const VisualFlowSection = () => {
   .sub-headline {
     font-size: clamp(18px, 4vw, 28px);
     font-weight: 600;
-    color: #4A5568;
+    color: #4a5568;
     line-height: 1.4;
     margin-bottom: 32px;
   }
@@ -872,7 +868,7 @@ const VisualFlowSection = () => {
   .section-title {
     font-size: clamp(24px, 5vw, 40px);
     font-weight: 800;
-    color: #2D3748;
+    color: #2d3748;
     text-align: center;
     margin-bottom: 48px;
   }
@@ -889,7 +885,7 @@ const VisualFlowSection = () => {
   .caption-text {
     font-size: 14px;
     font-weight: 400;
-    color: #A0AEC0;
+    color: #a0aec0;
     line-height: 1.4;
   }
 }
@@ -897,23 +893,23 @@ const VisualFlowSection = () => {
 // 컬러 계층 구조
 :root {
   // Primary Colors (최고 중요도)
-  --color-primary: #FF6B35;
-  --color-primary-dark: #E55A2B;
+  --color-primary: #ff6b35;
+  --color-primary-dark: #e55a2b;
 
   // Secondary Colors (중요도)
-  --color-secondary: #4299E1;
-  --color-secondary-dark: #3182CE;
+  --color-secondary: #4299e1;
+  --color-secondary-dark: #3182ce;
 
   // Neutral Colors (기본)
-  --color-text-primary: #1A202C;
-  --color-text-secondary: #4A5568;
+  --color-text-primary: #1a202c;
+  --color-text-secondary: #4a5568;
   --color-text-muted: #718096;
-  --color-text-subtle: #A0AEC0;
+  --color-text-subtle: #a0aec0;
 
   // Background Colors
-  --color-bg-primary: #FFFFFF;
-  --color-bg-secondary: #F7FAFC;
-  --color-bg-accent: #FFF5F2;
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f7fafc;
+  --color-bg-accent: #fff5f2;
 }
 ```
 
@@ -958,14 +954,16 @@ const LossAversionMessages = () => {
           <CostScenario>
             <TimeFrame>6개월 후</TimeFrame>
             <CostDescription>
-              경쟁사들이 온라인 시장 선점<br />
+              경쟁사들이 온라인 시장 선점
+              <br />
               <CostAmount>-1,500만원</CostAmount> 매출 기회 상실
             </CostDescription>
           </CostScenario>
           <CostScenario>
             <TimeFrame>1년 후</TimeFrame>
             <CostDescription>
-              디지털 전환 비용 2배 증가<br />
+              디지털 전환 비용 2배 증가
+              <br />
               <CostAmount>+3,000만원</CostAmount> 추가 비용 발생
             </CostDescription>
           </CostScenario>
@@ -977,8 +975,8 @@ const LossAversionMessages = () => {
         <ActionMessage>
           <ActionIcon>💡</ActionIcon>
           <ActionText>
-            <Strong>지금 상담 신청</Strong>하면<br />
-            이 모든 손실을 <Highlight>예방</Highlight>할 수 있습니다
+            <Strong>지금 상담 신청</Strong>하면
+            <br />이 모든 손실을 <Highlight>예방</Highlight>할 수 있습니다
           </ActionText>
         </ActionMessage>
         <ActionCTA>
@@ -1000,7 +998,7 @@ const SocialProofShowcase = () => {
   const [liveStats, setLiveStats] = useState({
     consultationsToday: 23,
     projectsCompleted: 1247,
-    activeUsers: 156
+    activeUsers: 156,
   });
 
   return (
@@ -1018,13 +1016,15 @@ const SocialProofShowcase = () => {
           <ActivityItem>
             <ActivityIcon>✅</ActivityIcon>
             <ActivityText>
-              <Strong>박○○님</Strong>의 프로젝트가 <Time>1시간 전</Time> 완료되었습니다
+              <Strong>박○○님</Strong>의 프로젝트가 <Time>1시간 전</Time>{" "}
+              완료되었습니다
             </ActivityText>
           </ActivityItem>
           <ActivityItem>
             <ActivityIcon>📞</ActivityIcon>
             <ActivityText>
-              오늘 <Strong>{liveStats.consultationsToday}명</Strong>이 상담 신청했습니다
+              오늘 <Strong>{liveStats.consultationsToday}명</Strong>이 상담
+              신청했습니다
             </ActivityText>
           </ActivityItem>
         </ActivityItems>
@@ -1068,7 +1068,7 @@ const SocialProofShowcase = () => {
           </ExpertInfo>
         </ExpertProfile>
         <EndorsementText>
-          "VisionMakers는 중소기업에게 가장 적합한 웹 솔루션을 제공합니다.
+          "LeoFitTech는 중소기업에게 가장 적합한 웹 솔루션을 제공합니다.
           <Highlight>합리적인 가격에 높은 품질</Highlight>을 원한다면 강력 추천합니다."
         </EndorsementText>
       </ExpertEndorsement>
@@ -1086,7 +1086,7 @@ const ScarcityUrgencyComponent = () => {
     days: 23,
     hours: 14,
     minutes: 32,
-    seconds: 45
+    seconds: 45,
   });
 
   const [slotsLeft, setSlotsLeft] = useState(7);
@@ -1133,13 +1133,13 @@ const ScarcityUrgencyComponent = () => {
 
         <SlotsVisualization>
           <SlotsGrid>
-            {Array.from({length: 15}, (_, i) => (
+            {Array.from({ length: 15 }, (_, i) => (
               <Slot
                 key={i}
-                filled={i < (15 - slotsLeft)}
-                className={i >= (15 - slotsLeft) ? 'available' : 'taken'}
+                filled={i < 15 - slotsLeft}
+                className={i >= 15 - slotsLeft ? "available" : "taken"}
               >
-                {i < (15 - slotsLeft) ? '✓' : '○'}
+                {i < 15 - slotsLeft ? "✓" : "○"}
               </Slot>
             ))}
           </SlotsGrid>
@@ -1147,9 +1147,7 @@ const ScarcityUrgencyComponent = () => {
             <SlotsRemaining>
               남은 슬롯: <Strong>{slotsLeft}개</Strong>
             </SlotsRemaining>
-            <SlotsWarning>
-              ⚠️ 빠르게 마감되고 있습니다
-            </SlotsWarning>
+            <SlotsWarning>⚠️ 빠르게 마감되고 있습니다</SlotsWarning>
           </SlotsStatus>
         </SlotsVisualization>
       </AvailableSlots>
@@ -1159,7 +1157,8 @@ const ScarcityUrgencyComponent = () => {
         <ActionMessage>
           <PulsingIcon>🚨</PulsingIcon>
           <ActionText>
-            지금 신청하지 않으면<br />
+            지금 신청하지 않으면
+            <br />
             <Highlight>다음 달까지 대기</Highlight>하셔야 합니다
           </ActionText>
         </ActionMessage>
@@ -1203,7 +1202,7 @@ const PricingAnchoringTable = () => {
             <CompanyType>B사</CompanyType>
           </HeaderCell>
           <HeaderCell highlight>
-            <CompanyName>VisionMakers</CompanyName>
+            <CompanyName>LeoFitTech</CompanyName>
             <CompanyType>우리</CompanyType>
             <RecommendedBadge>추천</RecommendedBadge>
           </HeaderCell>
@@ -1289,7 +1288,7 @@ const FocusedConsultationLanding = () => {
     <LandingContainer>
       {/* 네비게이션 최소화 - 이탈 방지 */}
       <MinimalHeader>
-        <Logo>VisionMakers</Logo>
+        <Logo>LeoFitTech</Logo>
         <TrustIndicator>
           <TrustIcon>🔒</TrustIcon>
           <TrustText>보안 연결</TrustText>
@@ -1304,9 +1303,7 @@ const FocusedConsultationLanding = () => {
             <MainHeadline>
               웹사이트 제작비 <Highlight>50% 절약</Highlight>하는 방법
             </MainHeadline>
-            <SubHeadline>
-              5분 상담으로 맞춤 견적을 확인하세요
-            </SubHeadline>
+            <SubHeadline>5분 상담으로 맞춤 견적을 확인하세요</SubHeadline>
           </AttentionGrabber>
 
           {/* 즉시 CTA */}
@@ -1324,7 +1321,7 @@ const FocusedConsultationLanding = () => {
         <ProblemSection>
           <ProblemTitle>이런 걱정 있으셨죠?</ProblemTitle>
           <ProblemCards>
-            {problems.map(problem => (
+            {problems.map((problem) => (
               <ProblemCard key={problem.id}>
                 <ProblemIcon>{problem.icon}</ProblemIcon>
                 <ProblemText>{problem.text}</ProblemText>
@@ -1350,9 +1347,7 @@ const FocusedConsultationLanding = () => {
           {/* 욕구 증폭 후 CTA */}
           <DesireCTA>
             <CtaHeadline>우리도 이런 성과를 낼 수 있을까요?</CtaHeadline>
-            <CtaButton variant="primary">
-              무료로 가능성 확인하기
-            </CtaButton>
+            <CtaButton variant="primary">무료로 가능성 확인하기</CtaButton>
           </DesireCTA>
         </DesireSection>
 
@@ -1373,9 +1368,7 @@ const FocusedConsultationLanding = () => {
                   <OptionIcon>🎯</OptionIcon>
                   <OptionTitle>5분 맞춤 상담</OptionTitle>
                   <OptionBenefit>즉시 견적 확인</OptionBenefit>
-                  <CtaButton size="large">
-                    맞춤 상담 시작하기
-                  </CtaButton>
+                  <CtaButton size="large">맞춤 상담 시작하기</CtaButton>
                 </ChoiceOption>
 
                 <ChoiceOption>
@@ -1414,9 +1407,7 @@ const FocusedConsultationLanding = () => {
       <StickyBottomCTA>
         <StickyContent>
           <StickyMessage>지금 상담 신청하고 30% 할인받기</StickyMessage>
-          <StickyButton>
-            무료 상담 신청
-          </StickyButton>
+          <StickyButton>무료 상담 신청</StickyButton>
         </StickyContent>
       </StickyBottomCTA>
     </LandingContainer>
@@ -1432,23 +1423,23 @@ export const CONSULTATION_FLOW_PATHS = {
   // Path 1: 즉시 상담 (1클릭)
   IMMEDIATE: {
     clicks: 1,
-    path: ['홈페이지 → 상담신청 완료'],
-    optimization: 'hero CTA에서 바로 간단한 폼으로 이동'
+    path: ["홈페이지 → 상담신청 완료"],
+    optimization: "hero CTA에서 바로 간단한 폼으로 이동",
   },
 
   // Path 2: 맞춤 상담 (2클릭)
   GUIDED: {
     clicks: 2,
-    path: ['홈페이지 → 상담 유형 선택 → 상담신청 완료'],
-    optimization: '유형 선택 후 바로 연락처만 입력'
+    path: ["홈페이지 → 상담 유형 선택 → 상담신청 완료"],
+    optimization: "유형 선택 후 바로 연락처만 입력",
   },
 
   // Path 3: 자세한 상담 (3클릭)
   DETAILED: {
     clicks: 3,
-    path: ['홈페이지 → 서비스 정보 → 상담 유형 선택 → 상담신청 완료'],
-    optimization: '최대 3단계로 제한, 각 단계 최소화'
-  }
+    path: ["홈페이지 → 서비스 정보 → 상담 유형 선택 → 상담신청 완료"],
+    optimization: "최대 3단계로 제한, 각 단계 최소화",
+  },
 };
 
 // 클릭 수 추적 및 최적화
@@ -1461,9 +1452,9 @@ export const useClickTracking = () => {
 
     // 3클릭 초과 시 경고
     if (newPath.length > 3) {
-      gtag('event', 'excessive_clicks', {
+      gtag("event", "excessive_clicks", {
         click_count: newPath.length,
-        click_path: newPath.join(' → ')
+        click_path: newPath.join(" → "),
       });
     }
   };
@@ -1482,46 +1473,46 @@ export const useClickTracking = () => {
 // CTA 버튼 A/B 테스트
 export const CTA_VARIANTS = {
   CONTROL: {
-    text: '상담 신청하기',
-    color: '#4299E1',
-    size: 'medium'
+    text: "상담 신청하기",
+    color: "#4299E1",
+    size: "medium",
   },
 
   VARIANT_A: {
-    text: '지금 무료 상담 받기',
-    color: '#FF6B35',
-    size: 'large'
+    text: "지금 무료 상담 받기",
+    color: "#FF6B35",
+    size: "large",
   },
 
   VARIANT_B: {
-    text: '5분만에 견적 확인하기',
-    color: '#48BB78',
-    size: 'large'
+    text: "5분만에 견적 확인하기",
+    color: "#48BB78",
+    size: "large",
   },
 
   VARIANT_C: {
-    text: '💬 무료로 상담받기',
-    color: '#FF6B35',
-    size: 'large'
-  }
+    text: "💬 무료로 상담받기",
+    color: "#FF6B35",
+    size: "large",
+  },
 };
 
 // 헤드라인 A/B 테스트
 export const HEADLINE_VARIANTS = {
-  CONTROL: '웹사이트 제작 전문 업체 VisionMakers',
+  CONTROL: "웹사이트 제작 전문 업체 LeoFitTech",
 
-  BENEFIT_FOCUSED: '웹사이트 제작비 50% 절약하는 방법',
+  BENEFIT_FOCUSED: "웹사이트 제작비 50% 절약하는 방법",
 
-  PROBLEM_FOCUSED: '웹사이트 제작, 복잡하고 비싸서 고민이세요?',
+  PROBLEM_FOCUSED: "웹사이트 제작, 복잡하고 비싸서 고민이세요?",
 
-  URGENCY_FOCUSED: '이번 달 한정! 웹사이트 제작 특가 이벤트',
+  URGENCY_FOCUSED: "이번 달 한정! 웹사이트 제작 특가 이벤트",
 
-  SOCIAL_PROOF: '1,247개 기업이 선택한 웹사이트 제작 서비스'
+  SOCIAL_PROOF: "1,247개 기업이 선택한 웹사이트 제작 서비스",
 };
 
 // A/B 테스트 구현
 const useABTest = (testName: string, variants: Record<string, any>) => {
-  const [selectedVariant, setSelectedVariant] = useState<string>('CONTROL');
+  const [selectedVariant, setSelectedVariant] = useState<string>("CONTROL");
 
   useEffect(() => {
     // 사용자 세그먼트 기반 변형 할당
@@ -1530,25 +1521,25 @@ const useABTest = (testName: string, variants: Record<string, any>) => {
     setSelectedVariant(assignedVariant);
 
     // 테스트 노출 이벤트 기록
-    gtag('event', 'ab_test_exposure', {
+    gtag("event", "ab_test_exposure", {
       test_name: testName,
       variant: assignedVariant,
-      user_segment: userSegment
+      user_segment: userSegment,
     });
   }, [testName, variants]);
 
   const trackConversion = (conversionType: string) => {
-    gtag('event', 'ab_test_conversion', {
+    gtag("event", "ab_test_conversion", {
       test_name: testName,
       variant: selectedVariant,
-      conversion_type: conversionType
+      conversion_type: conversionType,
     });
   };
 
   return {
     variant: variants[selectedVariant],
     variantName: selectedVariant,
-    trackConversion
+    trackConversion,
   };
 };
 ```
@@ -1586,18 +1577,18 @@ const generateOptimizationRecommendations = (metrics: any): string[] => {
   const recommendations: string[] = [];
 
   if (metrics.bounceRate > 60) {
-    recommendations.push('헤드라인 메시지 강화 필요');
-    recommendations.push('로딩 속도 개선 필요');
+    recommendations.push("헤드라인 메시지 강화 필요");
+    recommendations.push("로딩 속도 개선 필요");
   }
 
   if (metrics.ctaClickRate < 5) {
-    recommendations.push('CTA 버튼 색상/크기 변경 고려');
-    recommendations.push('CTA 문구 더 구체적으로 수정');
+    recommendations.push("CTA 버튼 색상/크기 변경 고려");
+    recommendations.push("CTA 문구 더 구체적으로 수정");
   }
 
   if (metrics.formAbandonmentRate > 30) {
-    recommendations.push('상담신청 폼 단순화 필요');
-    recommendations.push('필수 입력 항목 최소화');
+    recommendations.push("상담신청 폼 단순화 필요");
+    recommendations.push("필수 입력 항목 최소화");
   }
 
   return recommendations;
@@ -1610,72 +1601,64 @@ const generateOptimizationRecommendations = (metrics: any): string[] => {
 // 심리학 기반 마이크로카피 데이터베이스
 export const MICRO_COPY_VARIATIONS = {
   CTA_BUTTONS: {
-    URGENCY: [
-      '지금 신청하기',
-      '오늘 마감 - 신청하기',
-      '놓치기 전에 신청하기'
-    ],
+    URGENCY: ["지금 신청하기", "오늘 마감 - 신청하기", "놓치기 전에 신청하기"],
 
-    BENEFIT: [
-      '무료 견적 받기',
-      '맞춤 제안 받기',
-      '절약 금액 확인하기'
-    ],
+    BENEFIT: ["무료 견적 받기", "맞춤 제안 받기", "절약 금액 확인하기"],
 
     SOCIAL: [
-      '1,247명이 선택한 상담',
-      '베스트셀러 상담받기',
-      '추천 상담 신청하기'
-    ]
+      "1,247명이 선택한 상담",
+      "베스트셀러 상담받기",
+      "추천 상담 신청하기",
+    ],
   },
 
   FORM_LABELS: {
     FRIENDLY: {
-      name: '어떻게 불러드릴까요?',
-      phone: '연락받을 번호를 알려주세요',
-      email: '결과를 받을 이메일 주소는?'
+      name: "어떻게 불러드릴까요?",
+      phone: "연락받을 번호를 알려주세요",
+      email: "결과를 받을 이메일 주소는?",
     },
 
     PROFESSIONAL: {
-      name: '담당자 성함',
-      phone: '연락처',
-      email: '이메일 주소'
+      name: "담당자 성함",
+      phone: "연락처",
+      email: "이메일 주소",
     },
 
     BENEFIT_FOCUSED: {
-      name: '견적서에 기재될 담당자명',
-      phone: '견적 안내받을 연락처',
-      email: '맞춤 제안서 받을 이메일'
-    }
+      name: "견적서에 기재될 담당자명",
+      phone: "견적 안내받을 연락처",
+      email: "맞춤 제안서 받을 이메일",
+    },
   },
 
   ERROR_MESSAGES: {
     EMPATHETIC: {
-      required: '이 정보가 있어야 더 정확한 견적을 드릴 수 있어요',
-      email: '이메일 형식을 다시 확인해주세요',
-      phone: '연락처 형식을 확인해주세요 (예: 010-1234-5678)'
+      required: "이 정보가 있어야 더 정확한 견적을 드릴 수 있어요",
+      email: "이메일 형식을 다시 확인해주세요",
+      phone: "연락처 형식을 확인해주세요 (예: 010-1234-5678)",
     },
 
     INSTRUCTIONAL: {
-      required: '필수 입력 항목입니다',
-      email: '올바른 이메일 주소를 입력해주세요',
-      phone: '올바른 전화번호를 입력해주세요'
-    }
+      required: "필수 입력 항목입니다",
+      email: "올바른 이메일 주소를 입력해주세요",
+      phone: "올바른 전화번호를 입력해주세요",
+    },
   },
 
   SUCCESS_MESSAGES: {
     CELEBRATORY: [
-      '🎉 상담 신청 완료! 곧 연락드릴게요',
-      '✨ 신청해주셔서 감사해요! 24시간 내 연락드립니다',
-      '🚀 첫 걸음을 내디셨네요! 최고의 제안서로 보답하겠습니다'
+      "🎉 상담 신청 완료! 곧 연락드릴게요",
+      "✨ 신청해주셔서 감사해요! 24시간 내 연락드립니다",
+      "🚀 첫 걸음을 내디셨네요! 최고의 제안서로 보답하겠습니다",
     ],
 
     INFORMATIVE: [
-      '상담 신청이 완료되었습니다. 24시간 내 연락드리겠습니다.',
-      '신청해주신 정보로 맞춤 제안서를 준비하겠습니다.',
-      '담당자가 배정되었습니다. 곧 연락드리겠습니다.'
-    ]
-  }
+      "상담 신청이 완료되었습니다. 24시간 내 연락드리겠습니다.",
+      "신청해주신 정보로 맞춤 제안서를 준비하겠습니다.",
+      "담당자가 배정되었습니다. 곧 연락드리겠습니다.",
+    ],
+  },
 };
 
 // 마이크로카피 개인화
@@ -1688,11 +1671,11 @@ const usePersonalizedMicroCopy = (userContext: any) => {
       return variations.FRIENDLY || variations[0];
     }
 
-    if (userContext.trafficSource === 'google_ads') {
+    if (userContext.trafficSource === "google_ads") {
       return variations.BENEFIT_FOCUSED || variations[0];
     }
 
-    if (userContext.deviceType === 'mobile') {
+    if (userContext.deviceType === "mobile") {
       return variations.SHORT || variations[0];
     }
 

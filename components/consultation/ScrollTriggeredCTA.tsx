@@ -1,14 +1,14 @@
 /**
- * VisionMakers 스크롤 트리거 CTA 컴포넌트
+ * LeoFitTech 스크롤 트리거 CTA 컴포넌트
  * 사용자 스크롤 행동에 따른 동적 CTA 표시
  */
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 interface ScrollTriggeredCTAProps {
   threshold?: number;
-  variant?: 'default' | 'urgent' | 'discount';
+  variant?: "default" | "urgent" | "discount";
   message?: string;
   buttonText?: string;
   href?: string;
@@ -16,10 +16,10 @@ interface ScrollTriggeredCTAProps {
 
 export default function ScrollTriggeredCTA({
   threshold = 50,
-  variant = 'default',
+  variant = "default",
   message,
-  buttonText = '무료 상담 신청',
-  href = '/consultation/start'
+  buttonText = "무료 상담 신청",
+  href = "/consultation/start",
 }: ScrollTriggeredCTAProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -27,36 +27,37 @@ export default function ScrollTriggeredCTA({
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
-      const maxHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const maxHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const progress = (scrolled / maxHeight) * 100;
 
       setScrollProgress(progress);
       setIsVisible(progress > threshold);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [threshold]);
 
   const getVariantStyles = () => {
     switch (variant) {
-      case 'urgent':
-        return 'bg-red-500 hover:bg-red-600 text-white animate-pulse';
-      case 'discount':
-        return 'bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white';
+      case "urgent":
+        return "bg-red-500 hover:bg-red-600 text-white animate-pulse";
+      case "discount":
+        return "bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white";
       default:
-        return 'bg-blue-600 hover:bg-blue-700 text-white';
+        return "bg-blue-600 hover:bg-blue-700 text-white";
     }
   };
 
   const getDefaultMessage = () => {
     switch (variant) {
-      case 'urgent':
-        return '⚡ 24시간 내 연락드립니다!';
-      case 'discount':
-        return '🎉 런칭 기념 20% 할인!';
+      case "urgent":
+        return "⚡ 24시간 내 연락드립니다!";
+      case "discount":
+        return "🎉 런칭 기념 20% 할인!";
       default:
-        return '📞 전문가 상담 받기';
+        return "📞 전문가 상담 받기";
     }
   };
 
@@ -64,15 +65,10 @@ export default function ScrollTriggeredCTA({
 
   return (
     <>
-      <div className={`scroll-triggered-cta ${isVisible ? 'visible' : ''}`}>
+      <div className={`scroll-triggered-cta ${isVisible ? "visible" : ""}`}>
         <div className="cta-content">
-          <div className="message">
-            {message || getDefaultMessage()}
-          </div>
-          <Link
-            href={href}
-            className={`cta-button ${getVariantStyles()}`}
-          >
+          <div className="message">{message || getDefaultMessage()}</div>
+          <Link href={href} className={`cta-button ${getVariantStyles()}`}>
             {buttonText}
           </Link>
         </div>

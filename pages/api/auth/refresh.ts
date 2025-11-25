@@ -3,13 +3,18 @@
  * POST /api/auth/refresh
  */
 
-import { NextApiRequest, NextApiResponse } from 'next';
-import { z } from 'zod';
-import { verifyRefreshToken, generateAccessToken, generateRefreshToken, getPermissionsByRole } from '@/utils/jwt';
+import { NextApiRequest, NextApiResponse } from "next";
+import { z } from "zod";
+import {
+  verifyRefreshToken,
+  generateAccessToken,
+  generateRefreshToken,
+  getPermissionsByRole,
+} from "@/utils/jwt";
 
 // 토큰 갱신 요청 스키마
 const RefreshTokenSchema = z.object({
-  refreshToken: z.string().min(1, '리프레시 토큰이 필요합니다'),
+  refreshToken: z.string().min(1, "리프레시 토큰이 필요합니다"),
 });
 
 interface RefreshTokenResponse {
@@ -33,12 +38,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<RefreshTokenResponse | RefreshTokenErrorResponse>
 ) {
-  if (req.method !== 'POST') {
+  if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
       error: {
-        code: 'METHOD_NOT_ALLOWED',
-        message: 'POST 메서드만 허용됩니다.',
+        code: "METHOD_NOT_ALLOWED",
+        message: "POST 메서드만 허용됩니다.",
       },
     });
   }
@@ -51,8 +56,8 @@ export default async function handler(
       return res.status(400).json({
         success: false,
         error: {
-          code: 'VALIDATION_ERROR',
-          message: '리프레시 토큰이 필요합니다.',
+          code: "VALIDATION_ERROR",
+          message: "리프레시 토큰이 필요합니다.",
         },
       });
     }
@@ -67,21 +72,27 @@ export default async function handler(
       return res.status(401).json({
         success: false,
         error: {
-          code: 'INVALID_REFRESH_TOKEN',
-          message: error instanceof Error ? error.message : '리프레시 토큰이 유효하지 않습니다.',
+          code: "INVALID_REFRESH_TOKEN",
+          message:
+            error instanceof Error
+              ? error.message
+              : "리프레시 토큰이 유효하지 않습니다.",
         },
       });
     }
 
     // 3. 데이터베이스에서 리프레시 토큰 확인 (실제 구현에서는 필수)
-    const isTokenValid = await validateRefreshToken(decodedRefreshToken.id, refreshToken);
+    const isTokenValid = await validateRefreshToken(
+      decodedRefreshToken.id,
+      refreshToken
+    );
 
     if (!isTokenValid) {
       return res.status(401).json({
         success: false,
         error: {
-          code: 'REFRESH_TOKEN_REVOKED',
-          message: '리프레시 토큰이 취소되었거나 존재하지 않습니다.',
+          code: "REFRESH_TOKEN_REVOKED",
+          message: "리프레시 토큰이 취소되었거나 존재하지 않습니다.",
         },
       });
     }
@@ -96,8 +107,8 @@ export default async function handler(
       return res.status(401).json({
         success: false,
         error: {
-          code: 'USER_NOT_FOUND',
-          message: '사용자를 찾을 수 없거나 비활성화된 계정입니다.',
+          code: "USER_NOT_FOUND",
+          message: "사용자를 찾을 수 없거나 비활성화된 계정입니다.",
         },
       });
     }
@@ -115,10 +126,18 @@ export default async function handler(
     const newRefreshToken = generateRefreshToken(adminUser.id);
 
     // 6. 기존 리프레시 토큰 무효화 및 새 토큰 저장
-    await replaceRefreshToken(decodedRefreshToken.id, refreshToken, newRefreshToken);
+    await replaceRefreshToken(
+      decodedRefreshToken.id,
+      refreshToken,
+      newRefreshToken
+    );
 
     // 7. 토큰 갱신 로그 기록
-    await logTokenRefresh(adminUser.id, req.headers['user-agent'] || '', getClientIP(req));
+    await logTokenRefresh(
+      adminUser.id,
+      req.headers["user-agent"] || "",
+      getClientIP(req)
+    );
 
     // 8. 성공 응답
     return res.status(200).json({
@@ -126,18 +145,17 @@ export default async function handler(
       data: {
         accessToken: newAccessToken,
         refreshToken: newRefreshToken,
-        expiresIn: process.env.JWT_EXPIRES_IN || '1h',
+        expiresIn: process.env.JWT_EXPIRES_IN || "1h",
       },
     });
-
   } catch (error) {
-    console.error('Token refresh error:', error);
+    console.error("Token refresh error:", error);
 
     return res.status(500).json({
       success: false,
       error: {
-        code: 'INTERNAL_ERROR',
-        message: '토큰 갱신 처리 중 오류가 발생했습니다.',
+        code: "INTERNAL_ERROR",
+        message: "토큰 갱신 처리 중 오류가 발생했습니다.",
       },
     });
   }
@@ -149,14 +167,17 @@ interface AdminUser {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'manager' | 'viewer';
+  role: "admin" | "manager" | "viewer";
   isActive: boolean;
 }
 
 /**
  * 리프레시 토큰 유효성 확인
  */
-async function validateRefreshToken(userId: string, refreshToken: string): Promise<boolean> {
+async function validateRefreshToken(
+  userId: string,
+  refreshToken: string
+): Promise<boolean> {
   // 실제로는 데이터베이스나 Redis에서 확인
   // 현재는 항상 true 반환
 
@@ -192,22 +213,22 @@ async function getAdminUserById(userId: string): Promise<AdminUser | null> {
 
   const testAdmins: AdminUser[] = [
     {
-      id: 'admin-001',
-      email: 'admin@visionmakers.com',
-      name: '시스템 관리자',
-      role: 'admin',
+      id: "admin-001",
+      email: "admin@LeoFitTech.com",
+      name: "시스템 관리자",
+      role: "admin",
       isActive: true,
     },
     {
-      id: 'manager-001',
-      email: 'manager@visionmakers.com',
-      name: '상담 매니저',
-      role: 'manager',
+      id: "manager-001",
+      email: "manager@LeoFitTech.com",
+      name: "상담 매니저",
+      role: "manager",
       isActive: true,
     },
   ];
 
-  return testAdmins.find(admin => admin.id === userId) || null;
+  return testAdmins.find((admin) => admin.id === userId) || null;
 
   // 실제 구현 예시:
   /*
@@ -258,7 +279,10 @@ async function replaceRefreshToken(
 /**
  * 리프레시 토큰 무효화
  */
-async function revokeRefreshToken(userId: string, refreshToken: string): Promise<void> {
+async function revokeRefreshToken(
+  userId: string,
+  refreshToken: string
+): Promise<void> {
   console.log(`Revoking refresh token for user ${userId}`);
 
   // 실제 구현 예시:
@@ -274,7 +298,11 @@ async function revokeRefreshToken(userId: string, refreshToken: string): Promise
 /**
  * 토큰 갱신 로그 기록
  */
-async function logTokenRefresh(userId: string, userAgent: string, ipAddress: string): Promise<void> {
+async function logTokenRefresh(
+  userId: string,
+  userAgent: string,
+  ipAddress: string
+): Promise<void> {
   try {
     // 실제로는 consultation_logs 대신 별도의 admin_logs 테이블 사용 권장
     /*
@@ -295,7 +323,7 @@ async function logTokenRefresh(userId: string, userAgent: string, ipAddress: str
       });
     */
   } catch (error) {
-    console.error('Failed to log token refresh:', error);
+    console.error("Failed to log token refresh:", error);
   }
 }
 
@@ -303,10 +331,10 @@ async function logTokenRefresh(userId: string, userAgent: string, ipAddress: str
  * 클라이언트 IP 주소 추출
  */
 function getClientIP(req: NextApiRequest): string {
-  const forwarded = req.headers['x-forwarded-for'] as string;
+  const forwarded = req.headers["x-forwarded-for"] as string;
   const ip = forwarded
-    ? forwarded.split(',')[0].trim()
-    : req.socket.remoteAddress || 'unknown';
+    ? forwarded.split(",")[0].trim()
+    : req.socket.remoteAddress || "unknown";
 
   return ip;
 }

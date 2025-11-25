@@ -1,17 +1,17 @@
 /**
  * 구조화된 로깅 시스템
- * VisionMakers API 로그 관리 (Winston 없이 구현)
+ * LeoFitTech API 로그 관리 (Winston 없이 구현)
  */
 
-import { NextApiRequest } from 'next';
+import { NextApiRequest } from "next";
 
 // 로그 레벨 정의
 export enum LogLevel {
-  ERROR = 'error',
-  WARN = 'warn',
-  INFO = 'info',
-  HTTP = 'http',
-  DEBUG = 'debug',
+  ERROR = "error",
+  WARN = "warn",
+  INFO = "info",
+  HTTP = "http",
+  DEBUG = "debug",
 }
 
 // 로그 컨텍스트 인터페이스
@@ -49,9 +49,10 @@ interface LogEntry {
 // 로거 클래스
 export class Logger {
   private static instance: Logger;
-  private service: string = 'visionmakers-api';
-  private environment: string = process.env.NODE_ENV || 'development';
-  private logLevel: LogLevel = (process.env.LOG_LEVEL as LogLevel) || LogLevel.INFO;
+  private service: string = "LeoFitTech-api";
+  private environment: string = process.env.NODE_ENV || "development";
+  private logLevel: LogLevel =
+    (process.env.LOG_LEVEL as LogLevel) || LogLevel.INFO;
 
   private constructor() {}
 
@@ -76,7 +77,11 @@ export class Logger {
   }
 
   // 로그 엔트리 생성
-  private createLogEntry(level: LogLevel, message: string, context?: LogContext): LogEntry {
+  private createLogEntry(
+    level: LogLevel,
+    message: string,
+    context?: LogContext
+  ): LogEntry {
     return {
       timestamp: new Date().toISOString(),
       level,
@@ -93,20 +98,28 @@ export class Logger {
       return;
     }
 
-    const logString = JSON.stringify(entry, null, this.environment === 'development' ? 2 : 0);
+    const logString = JSON.stringify(
+      entry,
+      null,
+      this.environment === "development" ? 2 : 0
+    );
 
     // 개발 환경에서는 콘솔에 색상과 함께 출력
-    if (this.environment === 'development') {
+    if (this.environment === "development") {
       const colors = {
-        [LogLevel.ERROR]: '\x1b[31m', // 빨간색
-        [LogLevel.WARN]: '\x1b[33m',  // 노란색
-        [LogLevel.INFO]: '\x1b[36m',  // 청록색
-        [LogLevel.HTTP]: '\x1b[35m',  // 자주색
-        [LogLevel.DEBUG]: '\x1b[37m', // 흰색
+        [LogLevel.ERROR]: "\x1b[31m", // 빨간색
+        [LogLevel.WARN]: "\x1b[33m", // 노란색
+        [LogLevel.INFO]: "\x1b[36m", // 청록색
+        [LogLevel.HTTP]: "\x1b[35m", // 자주색
+        [LogLevel.DEBUG]: "\x1b[37m", // 흰색
       };
-      const reset = '\x1b[0m';
+      const reset = "\x1b[0m";
 
-      console.log(`${colors[entry.level]}[${entry.level.toUpperCase()}]${reset} ${entry.timestamp} ${entry.message}`);
+      console.log(
+        `${colors[entry.level]}[${entry.level.toUpperCase()}]${reset} ${
+          entry.timestamp
+        } ${entry.message}`
+      );
       if (entry.context) {
         console.log(`${colors[entry.level]}Context:${reset}`, entry.context);
       }
@@ -116,7 +129,7 @@ export class Logger {
     }
 
     // 프로덕션 환경에서 에러는 별도 처리
-    if (entry.level === LogLevel.ERROR && this.environment === 'production') {
+    if (entry.level === LogLevel.ERROR && this.environment === "production") {
       console.error(logString);
     }
   }
@@ -144,11 +157,11 @@ export class Logger {
 
   // 특수한 로깅 메서드들
   public apiRequest(req: NextApiRequest, context?: Partial<LogContext>): void {
-    this.http('API Request', {
+    this.http("API Request", {
       method: req.method,
       url: req.url,
       ip: this.getClientIP(req),
-      userAgent: req.headers['user-agent'],
+      userAgent: req.headers["user-agent"],
       ...context,
     });
   }
@@ -159,7 +172,7 @@ export class Logger {
     duration: number,
     context?: Partial<LogContext>
   ): void {
-    this.http('API Response', {
+    this.http("API Response", {
       method: req.method,
       url: req.url,
       statusCode,
@@ -174,7 +187,7 @@ export class Logger {
     req?: NextApiRequest,
     context?: Partial<LogContext>
   ): void {
-    this.error('API Error', {
+    this.error("API Error", {
       error: {
         name: error.name,
         message: error.message,
@@ -183,27 +196,29 @@ export class Logger {
       method: req?.method,
       url: req?.url,
       ip: req ? this.getClientIP(req) : undefined,
-      userAgent: req?.headers['user-agent'],
+      userAgent: req?.headers["user-agent"],
       ...context,
     });
   }
 
   public authEvent(
-    event: 'login' | 'logout' | 'token_refresh' | 'auth_failed',
+    event: "login" | "logout" | "token_refresh" | "auth_failed",
     userId?: string,
     req?: NextApiRequest,
     context?: Partial<LogContext>
   ): void {
-    const level = event === 'auth_failed' ? LogLevel.WARN : LogLevel.INFO;
-    this.writeLog(this.createLogEntry(level, `Auth Event: ${event}`, {
-      action: event,
-      userId,
-      method: req?.method,
-      url: req?.url,
-      ip: req ? this.getClientIP(req) : undefined,
-      userAgent: req?.headers['user-agent'],
-      ...context,
-    }));
+    const level = event === "auth_failed" ? LogLevel.WARN : LogLevel.INFO;
+    this.writeLog(
+      this.createLogEntry(level, `Auth Event: ${event}`, {
+        action: event,
+        userId,
+        method: req?.method,
+        url: req?.url,
+        ip: req ? this.getClientIP(req) : undefined,
+        userAgent: req?.headers["user-agent"],
+        ...context,
+      })
+    );
   }
 
   public businessEvent(
@@ -232,20 +247,25 @@ export class Logger {
 
   public securityEvent(
     event: string,
-    severity: 'low' | 'medium' | 'high' | 'critical',
+    severity: "low" | "medium" | "high" | "critical",
     req?: NextApiRequest,
     context?: Partial<LogContext>
   ): void {
-    const level = severity === 'critical' || severity === 'high' ? LogLevel.ERROR : LogLevel.WARN;
-    this.writeLog(this.createLogEntry(level, `Security Event: ${event}`, {
-      action: event,
-      method: req?.method,
-      url: req?.url,
-      ip: req ? this.getClientIP(req) : undefined,
-      userAgent: req?.headers['user-agent'] as string,
-      metadata: { severity },
-      ...context,
-    }));
+    const level =
+      severity === "critical" || severity === "high"
+        ? LogLevel.ERROR
+        : LogLevel.WARN;
+    this.writeLog(
+      this.createLogEntry(level, `Security Event: ${event}`, {
+        action: event,
+        method: req?.method,
+        url: req?.url,
+        ip: req ? this.getClientIP(req) : undefined,
+        userAgent: req?.headers["user-agent"] as string,
+        metadata: { severity },
+        ...context,
+      })
+    );
   }
 
   public databaseEvent(
@@ -270,21 +290,27 @@ export class Logger {
     context?: Partial<LogContext>
   ): void {
     const level = success ? LogLevel.INFO : LogLevel.ERROR;
-    this.writeLog(this.createLogEntry(level, `External Service: ${service} - ${operation}`, {
-      action: operation,
-      resource: service,
-      duration,
-      metadata: { success },
-      ...context,
-    }));
+    this.writeLog(
+      this.createLogEntry(
+        level,
+        `External Service: ${service} - ${operation}`,
+        {
+          action: operation,
+          resource: service,
+          duration,
+          metadata: { success },
+          ...context,
+        }
+      )
+    );
   }
 
   // 헬퍼 메서드들
   private getClientIP(req: NextApiRequest): string {
-    const forwarded = req.headers['x-forwarded-for'] as string;
+    const forwarded = req.headers["x-forwarded-for"] as string;
     const ip = forwarded
-      ? forwarded.split(',')[0].trim()
-      : req.socket.remoteAddress || 'unknown';
+      ? forwarded.split(",")[0].trim()
+      : req.socket.remoteAddress || "unknown";
     return ip;
   }
 }
@@ -308,7 +334,8 @@ export function withLogging<T extends any[]>(
 
     // 첫 번째 인자가 Request인 경우
     const req = args[0] as any;
-    const isApiRequest = req && typeof req === 'object' && 'method' in req && 'url' in req;
+    const isApiRequest =
+      req && typeof req === "object" && "method" in req && "url" in req;
 
     if (isApiRequest) {
       logger.apiRequest(req, { requestId, action: operationName });
@@ -323,7 +350,10 @@ export function withLogging<T extends any[]>(
         // 응답 상태 코드는 res에서 가져와야 함
         const res = args[1] as any;
         const statusCode = res?.statusCode || 200;
-        logger.apiResponse(req, statusCode, duration, { requestId, action: operationName });
+        logger.apiResponse(req, statusCode, duration, {
+          requestId,
+          action: operationName,
+        });
       } else if (operationName) {
         logger.performanceMetric(operationName, duration, { requestId });
       }
@@ -333,9 +363,13 @@ export function withLogging<T extends any[]>(
       const duration = Date.now() - start;
 
       if (isApiRequest) {
-        logger.apiError(error as Error, req, { requestId, action: operationName, duration });
+        logger.apiError(error as Error, req, {
+          requestId,
+          action: operationName,
+          duration,
+        });
       } else {
-        logger.error(`Operation failed: ${operationName || 'unknown'}`, {
+        logger.error(`Operation failed: ${operationName || "unknown"}`, {
           requestId,
           duration,
           error: {
@@ -370,8 +404,8 @@ export class LogCollector {
       level,
       message,
       context,
-      service: 'visionmakers-api',
-      environment: process.env.NODE_ENV || 'development',
+      service: "LeoFitTech-api",
+      environment: process.env.NODE_ENV || "development",
     };
 
     this.logs.push(entry);
@@ -389,7 +423,7 @@ export class LogCollector {
 
     // 실제 환경에서는 외부 로그 수집 서비스로 전송
     // (예: Elasticsearch, Splunk, CloudWatch 등)
-    logger.debug('Flushing logs to external service', {
+    logger.debug("Flushing logs to external service", {
       metadata: { count: logsToSend.length, logs: logsToSend },
     });
   }
@@ -413,23 +447,28 @@ export class LogCollector {
 export const logCollector = new LogCollector();
 
 // 프로세스 종료 시 로그 수집기 정리
-if (typeof process !== 'undefined') {
-  process.on('SIGTERM', () => {
+if (typeof process !== "undefined") {
+  process.on("SIGTERM", () => {
     logCollector.destroy();
   });
 
-  process.on('SIGINT', () => {
+  process.on("SIGINT", () => {
     logCollector.destroy();
   });
 }
 
 // 편의 함수들 (기존 코드와의 호환성)
 export const log = {
-  error: (message: string, context?: LogContext) => logger.error(message, context),
-  warn: (message: string, context?: LogContext) => logger.warn(message, context),
-  info: (message: string, context?: LogContext) => logger.info(message, context),
-  debug: (message: string, context?: LogContext) => logger.debug(message, context),
-  http: (message: string, context?: LogContext) => logger.http(message, context),
+  error: (message: string, context?: LogContext) =>
+    logger.error(message, context),
+  warn: (message: string, context?: LogContext) =>
+    logger.warn(message, context),
+  info: (message: string, context?: LogContext) =>
+    logger.info(message, context),
+  debug: (message: string, context?: LogContext) =>
+    logger.debug(message, context),
+  http: (message: string, context?: LogContext) =>
+    logger.http(message, context),
 };
 
 export default logger;

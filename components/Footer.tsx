@@ -17,7 +17,12 @@ const Footer = () => {
             </div> */}
             <div className="number">
               <div>
-                <Image src="/images/icon-phone.png" alt="전화" width={16} height={16} />
+                <Image
+                  src="/images/icon-phone.png"
+                  alt="전화"
+                  width={16}
+                  height={16}
+                />
                 010-9915-4724
               </div>
               <div>
@@ -55,7 +60,7 @@ const Footer = () => {
           <span>Help</span>
           <span>Privacy Policy</span>
         </div>
-        <span>Copyright © 2018 • VisionMakers</span>
+        <span>Copyright © 2018 • LeoFitTech</span>
       </div>
     </div>
   );

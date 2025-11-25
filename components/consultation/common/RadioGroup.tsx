@@ -1,9 +1,9 @@
 /**
- * VisionMakers 상담 시스템 라디오 그룹 컴포넌트
+ * LeoFitTech 상담 시스템 라디오 그룹 컴포넌트
  * 설계 문서 3. 사용자 인터페이스 설계 기반 - 일관된 선택 UI
  */
 
-import React from 'react';
+import React from "react";
 
 interface RadioOption {
   value: string;
@@ -26,8 +26,8 @@ export default function RadioGroup({
   value,
   onChange,
   options,
-  className = '',
-  error
+  className = "",
+  error,
 }: RadioGroupProps) {
   return (
     <div className={className}>
@@ -37,11 +37,12 @@ export default function RadioGroup({
             key={option.value}
             className={`
               relative flex items-start p-4 border-2 rounded-lg cursor-pointer transition-all duration-200
-              ${value === option.value
-                ? 'border-red-500 bg-red-50'
-                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+              ${
+                value === option.value
+                  ? "border-red-500 bg-red-50"
+                  : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
               }
-              ${error ? 'border-red-300' : ''}
+              ${error ? "border-red-300" : ""}
             `}
           >
             <input
@@ -54,13 +55,16 @@ export default function RadioGroup({
             />
 
             {/* 커스텀 라디오 버튼 */}
-            <div className={`
+            <div
+              className={`
               flex-shrink-0 w-5 h-5 mt-0.5 mr-3 border-2 rounded-full transition-all duration-200
-              ${value === option.value
-                ? 'border-red-500 bg-red-500'
-                : 'border-gray-300'
+              ${
+                value === option.value
+                  ? "border-red-500 bg-red-500"
+                  : "border-gray-300"
               }
-            `}>
+            `}
+            >
               {value === option.value && (
                 <div className="w-full h-full rounded-full bg-white transform scale-50"></div>
               )}
@@ -68,10 +72,12 @@ export default function RadioGroup({
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center">
-                <span className={`
+                <span
+                  className={`
                   font-medium text-base
-                  ${value === option.value ? 'text-red-700' : 'text-gray-900'}
-                `}>
+                  ${value === option.value ? "text-red-700" : "text-gray-900"}
+                `}
+                >
                   {option.label}
                 </span>
                 {option.recommended && (
@@ -81,10 +87,12 @@ export default function RadioGroup({
                 )}
               </div>
               {option.description && (
-                <p className={`
+                <p
+                  className={`
                   mt-1 text-sm
-                  ${value === option.value ? 'text-red-600' : 'text-gray-500'}
-                `}>
+                  ${value === option.value ? "text-red-600" : "text-gray-500"}
+                `}
+                >
                   {option.description}
                 </p>
               )}

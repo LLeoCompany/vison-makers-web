@@ -1,4 +1,4 @@
--- VisionMakers Database Schema Migration
+-- LeoFitTech Database Schema Migration
 -- 실행 순서: Supabase Dashboard > SQL Editor에서 실행
 
 -- ==========================================

@@ -1,9 +1,9 @@
 /**
  * 캐싱 시스템
- * VisionMakers API 성능 최적화용 캐시 관리
+ * LeoFitTech API 성능 최적화용 캐시 관리
  */
 
-import { logger } from './logger';
+import { logger } from "./logger";
 
 // 캐시 항목 인터페이스
 export interface CacheItem<T = any> {
@@ -174,8 +174,10 @@ export class MemoryCache<T = any> {
       totalMisses: this.stats.misses,
       hitRate: totalRequests > 0 ? (this.stats.hits / totalRequests) * 100 : 0,
       memoryUsage: this.getMemoryUsage(),
-      oldestItem: items.length > 0 ? Math.min(...items.map(item => item.created)) : 0,
-      newestItem: items.length > 0 ? Math.max(...items.map(item => item.created)) : 0,
+      oldestItem:
+        items.length > 0 ? Math.min(...items.map((item) => item.created)) : 0,
+      newestItem:
+        items.length > 0 ? Math.max(...items.map((item) => item.created)) : 0,
     };
   }
 
@@ -189,8 +191,8 @@ export class MemoryCache<T = any> {
       return keys;
     }
 
-    const regex = new RegExp(pattern.replace(/\*/g, '.*'));
-    return keys.filter(key => regex.test(key));
+    const regex = new RegExp(pattern.replace(/\*/g, ".*"));
+    return keys.filter((key) => regex.test(key));
   }
 
   /**
@@ -206,12 +208,12 @@ export class MemoryCache<T = any> {
       }
     });
 
-    expiredKeys.forEach(key => this.delete(key));
+    expiredKeys.forEach((key) => this.delete(key));
     this.stats.cleanups++;
 
     if (expiredKeys.length > 0) {
-      logger.debug('Cache cleanup completed', {
-        action: 'cache_cleanup',
+      logger.debug("Cache cleanup completed", {
+        action: "cache_cleanup",
         metadata: {
           expiredItems: expiredKeys.length,
           remainingItems: this.cache.size,
@@ -347,19 +349,19 @@ export const cacheManager = new CacheManager({
 // 네임스페이스별 캐시 인스턴스들
 export const caches = {
   // 통계 데이터 캐시 (5분)
-  stats: cacheManager.getCache('stats', { ttl: 5 * 60 * 1000 }),
+  stats: cacheManager.getCache("stats", { ttl: 5 * 60 * 1000 }),
 
   // 상담 상세 정보 캐시 (1분)
-  consultations: cacheManager.getCache('consultations', { ttl: 60 * 1000 }),
+  consultations: cacheManager.getCache("consultations", { ttl: 60 * 1000 }),
 
   // 설정 데이터 캐시 (1시간)
-  config: cacheManager.getCache('config', { ttl: 60 * 60 * 1000 }),
+  config: cacheManager.getCache("config", { ttl: 60 * 60 * 1000 }),
 
   // 사용자 세션 캐시 (30분)
-  sessions: cacheManager.getCache('sessions', { ttl: 30 * 60 * 1000 }),
+  sessions: cacheManager.getCache("sessions", { ttl: 30 * 60 * 1000 }),
 
   // API 응답 캐시 (짧은 시간)
-  apiResponses: cacheManager.getCache('api_responses', { ttl: 30 * 1000 }),
+  apiResponses: cacheManager.getCache("api_responses", { ttl: 30 * 1000 }),
 };
 
 /**
@@ -393,7 +395,7 @@ export const cacheHelpers = {
    * 통계 데이터 캐시 키 생성
    */
   statsKey: (type: string, period: string, filters?: Record<string, any>) => {
-    const filterStr = filters ? JSON.stringify(filters) : '';
+    const filterStr = filters ? JSON.stringify(filters) : "";
     return `stats:${type}:${period}:${btoa(filterStr)}`;
   },
 
@@ -405,8 +407,13 @@ export const cacheHelpers = {
   /**
    * 목록 캐시 키 생성
    */
-  listKey: (type: string, page: number, limit: number, filters?: Record<string, any>) => {
-    const filterStr = filters ? JSON.stringify(filters) : '';
+  listKey: (
+    type: string,
+    page: number,
+    limit: number,
+    filters?: Record<string, any>
+  ) => {
+    const filterStr = filters ? JSON.stringify(filters) : "";
     return `list:${type}:${page}:${limit}:${btoa(filterStr)}`;
   },
 
@@ -417,27 +424,27 @@ export const cacheHelpers = {
     consultation: (id: string) => {
       caches.consultations.delete(cacheHelpers.consultationKey(id));
       // 관련된 목록 캐시도 무효화
-      const listKeys = caches.consultations.keys('list:consultations:*');
-      listKeys.forEach(key => caches.consultations.delete(key));
+      const listKeys = caches.consultations.keys("list:consultations:*");
+      listKeys.forEach((key) => caches.consultations.delete(key));
     },
 
     stats: () => {
-      const statsKeys = caches.stats.keys('stats:*');
-      statsKeys.forEach(key => caches.stats.delete(key));
+      const statsKeys = caches.stats.keys("stats:*");
+      statsKeys.forEach((key) => caches.stats.delete(key));
     },
 
     all: () => {
-      Object.values(caches).forEach(cache => cache.clear());
+      Object.values(caches).forEach((cache) => cache.clear());
     },
   },
 };
 
 // 프로세스 종료 시 리소스 정리
-process.on('SIGTERM', () => {
+process.on("SIGTERM", () => {
   cacheManager.destroyAll();
 });
 
-process.on('SIGINT', () => {
+process.on("SIGINT", () => {
   cacheManager.destroyAll();
 });
 

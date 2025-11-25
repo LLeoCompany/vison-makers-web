@@ -1,5 +1,5 @@
 /**
- * VisionMakers 상담 시스템 레이아웃 컴포넌트
+ * LeoFitTech 상담 시스템 레이아웃 컴포넌트
  * 설계 문서 3. 사용자 인터페이스 설계 기반
  */
 
@@ -26,8 +26,8 @@ export default function ConsultationLayout({
   return (
     <>
       <Head>
-        <title>{title} | VisionMakers</title>
-        <meta name="description" content="VisionMakers 웹개발 상담 신청" />
+        <title>{title} | LeoFitTech</title>
+        <meta name="description" content="LeoFitTech 웹개발 상담 신청" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 

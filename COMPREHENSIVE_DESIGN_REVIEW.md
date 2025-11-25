@@ -1,4 +1,4 @@
-# VisionMakers API & 데이터베이스 설계 종합 검토 보고서
+# LeoFitTech API & 데이터베이스 설계 종합 검토 보고서
 
 ## 🔍 검토 개요
 
@@ -11,6 +11,7 @@
 ### ✅ 잘 설계된 부분
 
 #### 1. API 설계 우수사항
+
 - **RESTful 설계**: 명확한 리소스 기반 URL 구조
 - **버전 관리**: v1/v2 호환성 및 마이그레이션 가이드
 - **미들웨어 체인**: 횡단 관심사의 효과적 분리
@@ -18,6 +19,7 @@
 - **보안**: JWT + RLS 다층 보안 구조
 
 #### 2. 데이터베이스 설계 우수사항
+
 - **정규화**: 3NF 준수로 중복 최소화
 - **외래키 무결성**: 데이터 일관성 보장
 - **인덱스 전략**: 쿼리 패턴 기반 최적화
@@ -31,7 +33,9 @@
 ### 1. 아키텍처 레벨 개선사항
 
 #### 🔧 도메인 주도 설계(DDD) 적용 부족
+
 **문제점**: 모든 테이블이 단일 스키마에 혼재
+
 ```sql
 -- 현재: 모든 테이블이 public 스키마
 CREATE TABLE consultations (...);
@@ -40,6 +44,7 @@ CREATE TABLE api_logs (...);
 ```
 
 **개선안**: 도메인별 스키마 분리
+
 ```sql
 -- 도메인별 스키마 구조
 CREATE SCHEMA consultation_domain;
@@ -49,7 +54,9 @@ CREATE SCHEMA analytics_domain;
 ```
 
 #### 🔧 이벤트 소싱(Event Sourcing) 패턴 부재
+
 **문제점**: 상태 변경 추적이 제한적
+
 ```sql
 -- 현재: 단순 로깅
 CREATE TABLE consultation_logs (
@@ -60,6 +67,7 @@ CREATE TABLE consultation_logs (
 ```
 
 **개선안**: 완전한 이벤트 소싱
+
 ```sql
 CREATE TABLE system_domain.domain_events (
     event_id UUID NOT NULL,
@@ -75,7 +83,9 @@ CREATE TABLE system_domain.domain_events (
 ### 2. 보안 및 개인정보 보호 강화
 
 #### 🔧 개인정보 암호화 부재
+
 **문제점**: 개인정보가 평문으로 저장
+
 ```sql
 -- 현재: 평문 저장
 contact_name VARCHAR(100) NOT NULL,
@@ -84,6 +94,7 @@ contact_phone VARCHAR(20) NOT NULL,
 ```
 
 **개선안**: 암호화 + 해시 검색
+
 ```sql
 CREATE TABLE consultation_domain.contacts (
     -- 암호화된 개인정보
@@ -101,7 +112,9 @@ CREATE TABLE consultation_domain.contacts (
 ```
 
 #### 🔧 RBAC(Role-Based Access Control) 세분화
+
 **문제점**: 권한 관리가 단순함
+
 ```sql
 -- 현재: 단순한 역할 구조
 role admin_role DEFAULT 'viewer' NOT NULL,
@@ -109,6 +122,7 @@ permissions TEXT[] DEFAULT '{}',
 ```
 
 **개선안**: 세분화된 권한 시스템
+
 ```sql
 CREATE TABLE user_domain.roles (
     code VARCHAR(50) PRIMARY KEY,
@@ -128,7 +142,9 @@ CREATE TABLE user_domain.roles (
 ### 3. 성능 최적화 개선
 
 #### 🔧 파티셔닝 전략 부재
+
 **문제점**: 로그성 테이블의 무제한 증가
+
 ```sql
 -- 현재: 단일 테이블 구조
 CREATE TABLE api_logs (
@@ -137,6 +153,7 @@ CREATE TABLE api_logs (
 ```
 
 **개선안**: 날짜 기반 파티셔닝
+
 ```sql
 CREATE TABLE analytics_domain.daily_stats (
     date_key DATE NOT NULL
@@ -149,9 +166,11 @@ FOR VALUES FROM ('2024-12-01') TO ('2025-01-01');
 ```
 
 #### 🔧 Connection Pool 및 읽기 복제본 활용
+
 **문제점**: 단일 연결 구조로 확장성 제한
 
 **개선안**:
+
 - 읽기/쓰기 분리
 - Connection Pool 설정
 - 캐싱 계층 강화
@@ -159,7 +178,9 @@ FOR VALUES FROM ('2024-12-01') TO ('2025-01-01');
 ### 4. 관찰 가능성(Observability) 강화
 
 #### 🔧 분산 추적(Distributed Tracing) 부재
+
 **현재**: 단순 로깅
+
 ```sql
 CREATE TABLE api_logs (
     request_id UUID,
@@ -168,6 +189,7 @@ CREATE TABLE api_logs (
 ```
 
 **개선안**: OpenTelemetry 표준 준수
+
 ```sql
 CREATE TABLE system_domain.traces (
     trace_id UUID NOT NULL,
@@ -188,11 +210,14 @@ CREATE TABLE system_domain.traces (
 ### 1. SOLID 원칙 적용
 
 #### Single Responsibility Principle (SRP)
+
 - ✅ **개선**: 테이블별 단일 책임 분리
 - 상담 기본정보 / 연락처 / 메타데이터 / 세부사항 분리
 
 #### Open/Closed Principle (OCP)
+
 - ✅ **개선**: ENUM → 참조 테이블로 확장성 확보
+
 ```sql
 -- 확장 가능한 설계
 CREATE TABLE consultation_domain.statuses (
@@ -203,7 +228,9 @@ CREATE TABLE consultation_domain.statuses (
 ```
 
 #### Interface Segregation Principle (ISP)
+
 - ✅ **개선**: 뷰를 통한 인터페이스 분리
+
 ```sql
 -- 클라이언트별 전용 뷰
 CREATE VIEW consultation_summary AS
@@ -214,15 +241,19 @@ FROM consultation_domain.consultations;
 ### 2. DDD(Domain-Driven Design) 패턴
 
 #### Bounded Context
+
 - ✅ **개선**: 도메인별 스키마 분리
 - `consultation_domain`, `user_domain`, `system_domain`
 
 #### Aggregate Root
+
 - ✅ **개선**: `consultations`를 Aggregate Root로 설정
 - 모든 관련 엔티티는 이를 통해 접근
 
 #### Value Objects
+
 - ✅ **개선**: 연락처 정보를 Value Object로 설계
+
 ```sql
 CREATE TYPE contact_info AS (
     name_encrypted BYTEA,
@@ -234,12 +265,14 @@ CREATE TYPE contact_info AS (
 ### 3. CQRS(Command Query Responsibility Segregation)
 
 #### Command Side (쓰기)
+
 ```sql
 -- 쓰기용 정규화된 테이블
 CREATE TABLE consultation_domain.consultations (...);
 ```
 
 #### Query Side (읽기)
+
 ```sql
 -- 읽기용 비정규화된 뷰
 CREATE MATERIALIZED VIEW consultation_analytics AS
@@ -264,6 +297,7 @@ LEFT JOIN consultation_domain.guided_details gd ON c.id = gd.consultation_id;
 ### 1. 현재 SQL의 문제점과 개선사항
 
 #### 인덱스 생성 최적화
+
 ```sql
 -- 현재: 개별 인덱스 생성
 CREATE INDEX idx_consultations_type ON consultations(type);
@@ -276,6 +310,7 @@ WHERE is_deleted = FALSE;
 ```
 
 #### 트리거 성능 최적화
+
 ```sql
 -- 현재: 모든 변경에 대해 트리거 실행
 CREATE TRIGGER trigger_log_consultation_changes
@@ -291,6 +326,7 @@ CREATE TRIGGER trigger_log_consultation_changes
 ```
 
 #### 통계 계산 최적화
+
 ```sql
 -- 현재: 매번 전체 테이블 스캔
 SELECT COUNT(*) FROM consultations WHERE status = 'completed';
@@ -311,11 +347,13 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY consultation_stats_summary;
 ### 2. 배포 순서 최적화
 
 #### 현재 배포 순서의 문제점
+
 1. 외래키 제약 위반 가능성
 2. 다운타임 발생 위험
 3. 롤백 복잡성
 
 #### 개선된 무중단 배포 순서
+
 ```sql
 -- 1단계: 스키마 생성 (호환성 유지)
 CREATE SCHEMA IF NOT EXISTS consultation_domain;
@@ -339,13 +377,13 @@ DROP TABLE public.consultations;
 
 ### 현재 설계 vs 개선된 설계 비교
 
-| 항목 | 현재 설계 | 개선된 설계 | 개선율 |
-|------|-----------|-------------|--------|
-| 상담 조회 속도 | 150ms | 45ms | **70% 향상** |
-| 통계 계산 시간 | 2.5초 | 250ms | **90% 향상** |
-| 동시 사용자 지원 | 100명 | 1000명 | **10배 증가** |
-| 스토리지 효율성 | 기준 | -30% | **압축 효과** |
-| 장애 복구 시간 | 30분 | 5분 | **83% 단축** |
+| 항목             | 현재 설계 | 개선된 설계 | 개선율        |
+| ---------------- | --------- | ----------- | ------------- |
+| 상담 조회 속도   | 150ms     | 45ms        | **70% 향상**  |
+| 통계 계산 시간   | 2.5초     | 250ms       | **90% 향상**  |
+| 동시 사용자 지원 | 100명     | 1000명      | **10배 증가** |
+| 스토리지 효율성  | 기준      | -30%        | **압축 효과** |
+| 장애 복구 시간   | 30분      | 5분         | **83% 단축**  |
 
 ---
 
@@ -354,7 +392,9 @@ DROP TABLE public.consultations;
 ### 단계별 마이그레이션 계획
 
 #### Phase 1: 기초 보안 강화 (1주)
+
 1. **개인정보 암호화 적용**
+
    - `pg_crypto` 확장 설치
    - 개인정보 필드 암호화 마이그레이션
    - 해시 기반 검색 인덱스 생성
@@ -364,7 +404,9 @@ DROP TABLE public.consultations;
    - 세분화된 RLS 정책 적용
 
 #### Phase 2: 성능 최적화 (2주)
+
 1. **파티셔닝 적용**
+
    - 로그 테이블 파티셔닝
    - 통계 테이블 파티셔닝
 
@@ -374,7 +416,9 @@ DROP TABLE public.consultations;
    - 부분 인덱스 적용
 
 #### Phase 3: 아키텍처 개선 (3주)
+
 1. **도메인 분리**
+
    - 스키마별 테이블 이전
    - 네임스페이스 정리
 
@@ -383,7 +427,9 @@ DROP TABLE public.consultations;
    - 애그리게이트 버전 관리
 
 #### Phase 4: 관찰 가능성 강화 (2주)
+
 1. **분산 추적 시스템**
+
    - OpenTelemetry 통합
    - 메트릭 수집 강화
 
@@ -396,6 +442,7 @@ DROP TABLE public.consultations;
 ## 🔒 보안 체크리스트
 
 ### 필수 보안 조치
+
 - [ ] **개인정보 암호화**: AES-256 적용
 - [ ] **데이터베이스 암호화**: TDE(Transparent Data Encryption)
 - [ ] **접근 로그 암호화**: 민감정보 마스킹
@@ -406,6 +453,7 @@ DROP TABLE public.consultations;
 - [ ] **레이트 리미팅**: DDoS 공격 방어
 
 ### 컴플라이언스 준수
+
 - [ ] **GDPR**: 개인정보 처리 동의 및 삭제권 구현
 - [ ] **PIPEDA**: 개인정보보호법 준수
 - [ ] **ISO 27001**: 정보보안 관리체계 적용
@@ -415,9 +463,10 @@ DROP TABLE public.consultations;
 ## 🚀 마이그레이션 실행 가이드
 
 ### 1. 사전 준비
+
 ```bash
 # 백업 생성
-pg_dump visionmakers_db > backup_$(date +%Y%m%d_%H%M%S).sql
+pg_dump LeoFitTech_db > backup_$(date +%Y%m%d_%H%M%S).sql
 
 # 리소스 모니터링
 htop  # CPU/메모리 상태 확인
@@ -425,6 +474,7 @@ iostat -x 1  # 디스크 I/O 모니터링
 ```
 
 ### 2. 단계별 실행 스크립트
+
 ```sql
 -- 마이그레이션 체크포인트 테이블
 CREATE TABLE migration_checkpoints (
@@ -453,9 +503,10 @@ COMMIT;  -- 또는 ROLLBACK TO SAVEPOINT phase1_start;
 
 ## 💡 결론
 
-현재 VisionMakers API 및 데이터베이스 설계는 **견고한 기반**을 가지고 있으나, **엔터프라이즈급 확장성**과 **최신 설계 원칙** 적용을 위해 체계적인 개선이 필요합니다.
+현재 LeoFitTech API 및 데이터베이스 설계는 **견고한 기반**을 가지고 있으나, **엔터프라이즈급 확장성**과 **최신 설계 원칙** 적용을 위해 체계적인 개선이 필요합니다.
 
 **핵심 개선 효과**:
+
 - 🚀 **성능**: 70-90% 성능 향상
 - 🔒 **보안**: 개인정보보호법 완전 준수
 - 📈 **확장성**: 10배 동시 사용자 지원
@@ -466,6 +517,6 @@ COMMIT;  -- 또는 ROLLBACK TO SAVEPOINT phase1_start;
 
 ---
 
-*검토 완료일: 2024년 12월 17일*
-*설계 이론 기반: DDD, SOLID, CQRS, Event Sourcing*
-*보안 표준: GDPR, ISO 27001 준수*
+_검토 완료일: 2024년 12월 17일_
+_설계 이론 기반: DDD, SOLID, CQRS, Event Sourcing_
+_보안 표준: GDPR, ISO 27001 준수_

@@ -1,24 +1,20 @@
 // Example: Admin Dashboard Component
-// VisionMakers - Direct Supabase Usage Example
+// LeoFitTech - Direct Supabase Usage Example
 
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   getConsultations,
   getConsultationStats,
   updateConsultationStatus,
-} from '@/services/consultation';
-import {
-  loginAdmin,
-  logoutAdmin,
-  getUserById,
-} from '@/services/auth';
+} from "@/services/consultation";
+import { loginAdmin, logoutAdmin, getUserById } from "@/services/auth";
 import type {
   ConsultationDetailsView,
   ConsultationStatus,
   AdminUserRow,
-} from '@/types/database';
+} from "@/types/database";
 
 interface AdminDashboardProps {
   initialUser?: AdminUserRow;
@@ -26,23 +22,25 @@ interface AdminDashboardProps {
 
 export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
   const [user, setUser] = useState<AdminUserRow | null>(initialUser || null);
-  const [consultations, setConsultations] = useState<ConsultationDetailsView[]>([]);
+  const [consultations, setConsultations] = useState<ConsultationDetailsView[]>(
+    []
+  );
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Login form state
   const [loginForm, setLoginForm] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Filters state
   const [filters, setFilters] = useState({
-    status: '' as ConsultationStatus | '',
-    type: '' as 'guided' | 'free' | '',
-    search: '',
+    status: "" as ConsultationStatus | "",
+    type: "" as "guided" | "free" | "",
+    search: "",
     page: 1,
     limit: 10,
   });
@@ -77,7 +75,7 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
         setStats(statsResult.data);
       }
     } catch (error) {
-      setError('데이터를 불러오는 중 오류가 발생했습니다.');
+      setError("데이터를 불러오는 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
@@ -91,19 +89,19 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
     try {
       const result = await loginAdmin(loginForm, {
         userAgent: navigator.userAgent,
-        ipAddress: '127.0.0.1', // In real app, get from API
+        ipAddress: "127.0.0.1", // In real app, get from API
       });
 
       if (result.success && result.data) {
         setUser(result.data.user);
         // In real app, store tokens in secure storage
-        localStorage.setItem('accessToken', result.data.accessToken);
-        localStorage.setItem('refreshToken', result.data.refreshToken);
+        localStorage.setItem("accessToken", result.data.accessToken);
+        localStorage.setItem("refreshToken", result.data.refreshToken);
       } else {
-        setError(result.error?.message || '로그인에 실패했습니다.');
+        setError(result.error?.message || "로그인에 실패했습니다.");
       }
     } catch (error) {
-      setError('로그인 중 오류가 발생했습니다.');
+      setError("로그인 중 오류가 발생했습니다.");
     } finally {
       setIsLoggingIn(false);
     }
@@ -113,12 +111,15 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
     if (user) {
       await logoutAdmin(user.id);
       setUser(null);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
     }
   };
 
-  const handleStatusUpdate = async (consultationId: string, newStatus: ConsultationStatus) => {
+  const handleStatusUpdate = async (
+    consultationId: string,
+    newStatus: ConsultationStatus
+  ) => {
     try {
       const result = await updateConsultationStatus(consultationId, newStatus);
 
@@ -126,38 +127,40 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
         // Reload consultations
         loadDashboardData();
       } else {
-        setError(result.error?.message || '상태 업데이트에 실패했습니다.');
+        setError(result.error?.message || "상태 업데이트에 실패했습니다.");
       }
     } catch (error) {
-      setError('상태 업데이트 중 오류가 발생했습니다.');
+      setError("상태 업데이트 중 오류가 발생했습니다.");
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('ko-KR');
+    return new Date(dateString).toLocaleString("ko-KR");
   };
 
   const getStatusBadge = (status: ConsultationStatus) => {
     const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      contacted: 'bg-blue-100 text-blue-800',
-      in_progress: 'bg-purple-100 text-purple-800',
-      completed: 'bg-green-100 text-green-800',
-      cancelled: 'bg-red-100 text-red-800',
-      on_hold: 'bg-gray-100 text-gray-800',
+      pending: "bg-yellow-100 text-yellow-800",
+      contacted: "bg-blue-100 text-blue-800",
+      in_progress: "bg-purple-100 text-purple-800",
+      completed: "bg-green-100 text-green-800",
+      cancelled: "bg-red-100 text-red-800",
+      on_hold: "bg-gray-100 text-gray-800",
     };
 
     const labels = {
-      pending: '대기중',
-      contacted: '연락완료',
-      in_progress: '진행중',
-      completed: '완료',
-      cancelled: '취소',
-      on_hold: '보류',
+      pending: "대기중",
+      contacted: "연락완료",
+      in_progress: "진행중",
+      completed: "완료",
+      cancelled: "취소",
+      on_hold: "보류",
     };
 
     return (
-      <span className={`px-2 py-1 text-xs font-medium rounded-full ${colors[status]}`}>
+      <span
+        className={`px-2 py-1 text-xs font-medium rounded-full ${colors[status]}`}
+      >
         {labels[status]}
       </span>
     );
@@ -173,7 +176,7 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
               관리자 로그인
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              VisionMakers 관리자 대시보드
+              LeoFitTech 관리자 대시보드
             </p>
           </div>
 
@@ -185,7 +188,10 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
 
           <form className="mt-8 space-y-6" onSubmit={handleLogin}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 이메일
               </label>
               <input
@@ -194,14 +200,19 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
                 type="email"
                 required
                 value={loginForm.email}
-                onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                onChange={(e) =>
+                  setLoginForm({ ...loginForm, email: e.target.value })
+                }
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="admin@visionmakers.com"
+                placeholder="admin@LeoFitTech.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 비밀번호
               </label>
               <input
@@ -210,7 +221,9 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
                 type="password"
                 required
                 value={loginForm.password}
-                onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                onChange={(e) =>
+                  setLoginForm({ ...loginForm, password: e.target.value })
+                }
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="비밀번호"
               />
@@ -222,7 +235,7 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
                 disabled={isLoggingIn}
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoggingIn ? '로그인 중...' : '로그인'}
+                {isLoggingIn ? "로그인 중..." : "로그인"}
               </button>
             </div>
           </form>
@@ -230,8 +243,8 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
           <div className="mt-4 text-center text-sm text-gray-600">
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="font-medium mb-2">테스트 계정:</p>
-              <p>이메일: admin@visionmakers.com</p>
-              <p>비밀번호: VisionMakers2024!</p>
+              <p>이메일: admin@LeoFitTech.com</p>
+              <p>비밀번호: LeoFitTech2024!</p>
             </div>
           </div>
         </div>
@@ -247,7 +260,9 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">관리자 대시보드</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                관리자 대시보드
+              </h1>
               <p className="text-gray-600">안녕하세요, {user.full_name}님!</p>
             </div>
             <button
@@ -275,8 +290,12 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
                 <div className="flex items-center">
                   <div className="w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">전체 상담</dt>
-                      <dd className="text-lg font-medium text-gray-900">{stats.total}</dd>
+                      <dt className="text-sm font-medium text-gray-500 truncate">
+                        전체 상담
+                      </dt>
+                      <dd className="text-lg font-medium text-gray-900">
+                        {stats.total}
+                      </dd>
                     </dl>
                   </div>
                 </div>
@@ -288,8 +307,12 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
                 <div className="flex items-center">
                   <div className="w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">대기중</dt>
-                      <dd className="text-lg font-medium text-yellow-600">{stats.pending}</dd>
+                      <dt className="text-sm font-medium text-gray-500 truncate">
+                        대기중
+                      </dt>
+                      <dd className="text-lg font-medium text-yellow-600">
+                        {stats.pending}
+                      </dd>
                     </dl>
                   </div>
                 </div>
@@ -301,8 +324,12 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
                 <div className="flex items-center">
                   <div className="w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">완료</dt>
-                      <dd className="text-lg font-medium text-green-600">{stats.completed}</dd>
+                      <dt className="text-sm font-medium text-gray-500 truncate">
+                        완료
+                      </dt>
+                      <dd className="text-lg font-medium text-green-600">
+                        {stats.completed}
+                      </dd>
                     </dl>
                   </div>
                 </div>
@@ -314,8 +341,12 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
                 <div className="flex items-center">
                   <div className="w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">오늘</dt>
-                      <dd className="text-lg font-medium text-blue-600">{stats.today}</dd>
+                      <dt className="text-sm font-medium text-gray-500 truncate">
+                        오늘
+                      </dt>
+                      <dd className="text-lg font-medium text-blue-600">
+                        {stats.today}
+                      </dd>
                     </dl>
                   </div>
                 </div>
@@ -329,10 +360,18 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">상태</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  상태
+                </label>
                 <select
                   value={filters.status}
-                  onChange={(e) => setFilters({ ...filters, status: e.target.value as any, page: 1 })}
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      status: e.target.value as any,
+                      page: 1,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">전체</option>
@@ -345,10 +384,18 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">타입</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  타입
+                </label>
                 <select
                   value={filters.type}
-                  onChange={(e) => setFilters({ ...filters, type: e.target.value as any, page: 1 })}
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      type: e.target.value as any,
+                      page: 1,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">전체</option>
@@ -358,21 +405,33 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">검색</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  검색
+                </label>
                 <input
                   type="text"
                   value={filters.search}
-                  onChange={(e) => setFilters({ ...filters, search: e.target.value, page: 1 })}
+                  onChange={(e) =>
+                    setFilters({ ...filters, search: e.target.value, page: 1 })
+                  }
                   placeholder="이름, 이메일, 회사명으로 검색"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">표시 개수</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  표시 개수
+                </label>
                 <select
                   value={filters.limit}
-                  onChange={(e) => setFilters({ ...filters, limit: parseInt(e.target.value), page: 1 })}
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      limit: parseInt(e.target.value),
+                      page: 1,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value={10}>10개</option>
@@ -427,15 +486,21 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
                         {consultation.consultation_number}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{consultation.contact_name}</div>
-                        <div className="text-sm text-gray-500">{consultation.contact_email}</div>
+                        <div className="text-sm text-gray-900">
+                          {consultation.contact_name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {consultation.contact_email}
+                        </div>
                         {consultation.contact_company && (
-                          <div className="text-sm text-gray-500">{consultation.contact_company}</div>
+                          <div className="text-sm text-gray-500">
+                            {consultation.contact_company}
+                          </div>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                          {consultation.type === 'guided' ? '가이드' : '자유'}
+                          {consultation.type === "guided" ? "가이드" : "자유"}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -447,7 +512,12 @@ export default function AdminDashboard({ initialUser }: AdminDashboardProps) {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <select
                           value={consultation.status}
-                          onChange={(e) => handleStatusUpdate(consultation.id, e.target.value as ConsultationStatus)}
+                          onChange={(e) =>
+                            handleStatusUpdate(
+                              consultation.id,
+                              e.target.value as ConsultationStatus
+                            )
+                          }
                           className="text-sm border border-gray-300 rounded px-2 py-1"
                         >
                           <option value="pending">대기중</option>

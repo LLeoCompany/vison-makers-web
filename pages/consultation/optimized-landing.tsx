@@ -11,13 +11,13 @@ import { ConsultationProvider } from "@/contexts/ConsultationContext";
 
 // SEO 및 성능 최적화를 위한 메타데이터
 const pageMetadata = {
-  title: "웹사이트 제작비 50% 절약 - 무료 상담 신청 | VisionMakers",
+  title: "웹사이트 제작비 50% 절약 - 무료 상담 신청 | LeoFitTech",
   description:
     "대기업 절반 가격으로 같은 품질의 웹사이트를 제작해드립니다. 5분 상담으로 맞춤 견적을 확인하세요. 24시간 내 연락, 100% 무료 상담.",
   keywords:
     "웹사이트 제작, 홈페이지 제작, 온라인 쇼핑몰, 무료 상담, 견적, 저렴한 가격",
   ogImage: "/images/og-consultation-landing.jpg",
-  canonicalUrl: "https://visionmakers.co.kr/consultation/optimized-landing",
+  canonicalUrl: "https://LeoFitTech.co.kr/consultation/optimized-landing",
 };
 
 interface OptimizedLandingPageProps {
@@ -57,7 +57,7 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
         <meta property="og:description" content={pageMetadata.description} />
         <meta property="og:image" content={pageMetadata.ogImage} />
         <meta property="og:url" content={pageMetadata.canonicalUrl} />
-        <meta property="og:site_name" content="VisionMakers" />
+        <meta property="og:site_name" content="LeoFitTech" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -185,9 +185,9 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
               description: pageMetadata.description,
               provider: {
                 "@type": "Organization",
-                name: "VisionMakers",
-                url: "https://visionmakers.co.kr",
-                logo: "https://visionmakers.co.kr/logo.png",
+                name: "LeoFitTech",
+                url: "https://LeoFitTech.co.kr",
+                logo: "https://LeoFitTech.co.kr/logo.png",
                 contactPoint: {
                   "@type": "ContactPoint",
                   telephone: "+82-2-1234-5678",
@@ -311,7 +311,9 @@ const OptimizedLandingPage: React.FC<OptimizedLandingPageProps> = ({
         rel="stylesheet"
         href="/styles/consultation-landing.css"
         media="print"
-        onLoad={(e) => { (e.currentTarget as HTMLLinkElement).media = 'all'; }}
+        onLoad={(e) => {
+          (e.currentTarget as HTMLLinkElement).media = "all";
+        }}
       />
 
       {/* 서비스 워커 등록 (선택사항) */}

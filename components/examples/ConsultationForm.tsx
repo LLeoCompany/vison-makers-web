@@ -1,15 +1,15 @@
 // Example: Consultation Form Component
-// VisionMakers - Direct Supabase Usage Example
+// LeoFitTech - Direct Supabase Usage Example
 
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   createGuidedConsultation,
   createFreeConsultation,
   validateGuidedConsultationForm,
   validateFreeConsultationForm,
-} from '@/services/consultation';
+} from "@/services/consultation";
 import type {
   GuidedConsultationForm,
   FreeConsultationForm,
@@ -18,43 +18,46 @@ import type {
   BudgetRange,
   Timeline,
   ContactTimePreference,
-} from '@/types/database';
+} from "@/types/database";
 
 interface ConsultationFormProps {
   onSuccess?: (consultationNumber: string) => void;
   onError?: (error: string) => void;
 }
 
-export default function ConsultationForm({ onSuccess, onError }: ConsultationFormProps) {
-  const [type, setType] = useState<'guided' | 'free'>('guided');
+export default function ConsultationForm({
+  onSuccess,
+  onError,
+}: ConsultationFormProps) {
+  const [type, setType] = useState<"guided" | "free">("guided");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
   // Form state for guided consultation
   const [guidedForm, setGuidedForm] = useState<GuidedConsultationForm>({
-    contact_name: '',
-    contact_phone: '',
-    contact_email: '',
-    contact_company: '',
-    preferred_contact_time: 'anytime',
-    service_type: 'web_development',
-    project_size: 'medium',
-    budget: '1000_to_3000',
-    timeline: '1_3_months',
+    contact_name: "",
+    contact_phone: "",
+    contact_email: "",
+    contact_company: "",
+    preferred_contact_time: "anytime",
+    service_type: "web_development",
+    project_size: "medium",
+    budget: "1000_to_3000",
+    timeline: "1_3_months",
     important_features: [],
-    additional_requests: '',
+    additional_requests: "",
   });
 
   // Form state for free consultation
   const [freeForm, setFreeForm] = useState<FreeConsultationForm>({
-    contact_name: '',
-    contact_phone: '',
-    contact_email: '',
-    contact_company: '',
-    preferred_contact_time: 'anytime',
-    project_description: '',
-    budget_range: '',
-    timeline_preference: '',
+    contact_name: "",
+    contact_phone: "",
+    contact_email: "",
+    contact_company: "",
+    preferred_contact_time: "anytime",
+    project_description: "",
+    budget_range: "",
+    timeline_preference: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,13 +69,13 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
       // Get client metadata
       const metadata = {
         userAgent: navigator.userAgent,
-        ipAddress: '127.0.0.1', // In real app, get from API
+        ipAddress: "127.0.0.1", // In real app, get from API
         referrerUrl: document.referrer,
       };
 
       let result;
 
-      if (type === 'guided') {
+      if (type === "guided") {
         // Validate guided form
         const validation = validateGuidedConsultationForm(guidedForm);
         if (!validation.isValid) {
@@ -97,37 +100,40 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
       if (result.success && result.data) {
         onSuccess?.(result.data.consultationNumber);
         // Reset form
-        if (type === 'guided') {
+        if (type === "guided") {
           setGuidedForm({
-            contact_name: '',
-            contact_phone: '',
-            contact_email: '',
-            contact_company: '',
-            preferred_contact_time: 'anytime',
-            service_type: 'web_development',
-            project_size: 'medium',
-            budget: '1000_to_3000',
-            timeline: '1_3_months',
+            contact_name: "",
+            contact_phone: "",
+            contact_email: "",
+            contact_company: "",
+            preferred_contact_time: "anytime",
+            service_type: "web_development",
+            project_size: "medium",
+            budget: "1000_to_3000",
+            timeline: "1_3_months",
             important_features: [],
-            additional_requests: '',
+            additional_requests: "",
           });
         } else {
           setFreeForm({
-            contact_name: '',
-            contact_phone: '',
-            contact_email: '',
-            contact_company: '',
-            preferred_contact_time: 'anytime',
-            project_description: '',
-            budget_range: '',
-            timeline_preference: '',
+            contact_name: "",
+            contact_phone: "",
+            contact_email: "",
+            contact_company: "",
+            preferred_contact_time: "anytime",
+            project_description: "",
+            budget_range: "",
+            timeline_preference: "",
           });
         }
       } else {
-        onError?.(result.error?.message || '상담 신청 중 오류가 발생했습니다.');
+        onError?.(result.error?.message || "상담 신청 중 오류가 발생했습니다.");
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "알 수 없는 오류가 발생했습니다.";
       onError?.(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -143,22 +149,22 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
         <div className="flex space-x-4">
           <button
             type="button"
-            onClick={() => setType('guided')}
+            onClick={() => setType("guided")}
             className={`px-4 py-2 rounded-lg font-medium ${
-              type === 'guided'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              type === "guided"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
             가이드 상담
           </button>
           <button
             type="button"
-            onClick={() => setType('free')}
+            onClick={() => setType("free")}
             className={`px-4 py-2 rounded-lg font-medium ${
-              type === 'free'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              type === "free"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
             자유 상담
@@ -182,16 +188,26 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
         {/* Contact Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="contact_name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="contact_name"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               이름 *
             </label>
             <input
               type="text"
               id="contact_name"
-              value={type === 'guided' ? guidedForm.contact_name : freeForm.contact_name}
+              value={
+                type === "guided"
+                  ? guidedForm.contact_name
+                  : freeForm.contact_name
+              }
               onChange={(e) => {
-                if (type === 'guided') {
-                  setGuidedForm({ ...guidedForm, contact_name: e.target.value });
+                if (type === "guided") {
+                  setGuidedForm({
+                    ...guidedForm,
+                    contact_name: e.target.value,
+                  });
                 } else {
                   setFreeForm({ ...freeForm, contact_name: e.target.value });
                 }
@@ -202,16 +218,26 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
           </div>
 
           <div>
-            <label htmlFor="contact_phone" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="contact_phone"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               연락처 *
             </label>
             <input
               type="tel"
               id="contact_phone"
-              value={type === 'guided' ? guidedForm.contact_phone : freeForm.contact_phone}
+              value={
+                type === "guided"
+                  ? guidedForm.contact_phone
+                  : freeForm.contact_phone
+              }
               onChange={(e) => {
-                if (type === 'guided') {
-                  setGuidedForm({ ...guidedForm, contact_phone: e.target.value });
+                if (type === "guided") {
+                  setGuidedForm({
+                    ...guidedForm,
+                    contact_phone: e.target.value,
+                  });
                 } else {
                   setFreeForm({ ...freeForm, contact_phone: e.target.value });
                 }
@@ -222,16 +248,26 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
           </div>
 
           <div>
-            <label htmlFor="contact_email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="contact_email"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               이메일 *
             </label>
             <input
               type="email"
               id="contact_email"
-              value={type === 'guided' ? guidedForm.contact_email : freeForm.contact_email}
+              value={
+                type === "guided"
+                  ? guidedForm.contact_email
+                  : freeForm.contact_email
+              }
               onChange={(e) => {
-                if (type === 'guided') {
-                  setGuidedForm({ ...guidedForm, contact_email: e.target.value });
+                if (type === "guided") {
+                  setGuidedForm({
+                    ...guidedForm,
+                    contact_email: e.target.value,
+                  });
                 } else {
                   setFreeForm({ ...freeForm, contact_email: e.target.value });
                 }
@@ -242,16 +278,26 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
           </div>
 
           <div>
-            <label htmlFor="contact_company" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="contact_company"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               회사명
             </label>
             <input
               type="text"
               id="contact_company"
-              value={type === 'guided' ? guidedForm.contact_company : freeForm.contact_company}
+              value={
+                type === "guided"
+                  ? guidedForm.contact_company
+                  : freeForm.contact_company
+              }
               onChange={(e) => {
-                if (type === 'guided') {
-                  setGuidedForm({ ...guidedForm, contact_company: e.target.value });
+                if (type === "guided") {
+                  setGuidedForm({
+                    ...guidedForm,
+                    contact_company: e.target.value,
+                  });
                 } else {
                   setFreeForm({ ...freeForm, contact_company: e.target.value });
                 }
@@ -262,15 +308,22 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
         </div>
 
         <div>
-          <label htmlFor="preferred_contact_time" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="preferred_contact_time"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             선호 연락 시간
           </label>
           <select
             id="preferred_contact_time"
-            value={type === 'guided' ? guidedForm.preferred_contact_time : freeForm.preferred_contact_time}
+            value={
+              type === "guided"
+                ? guidedForm.preferred_contact_time
+                : freeForm.preferred_contact_time
+            }
             onChange={(e) => {
               const value = e.target.value as ContactTimePreference;
-              if (type === 'guided') {
+              if (type === "guided") {
                 setGuidedForm({ ...guidedForm, preferred_contact_time: value });
               } else {
                 setFreeForm({ ...freeForm, preferred_contact_time: value });
@@ -286,17 +339,25 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
         </div>
 
         {/* Guided Consultation Fields */}
-        {type === 'guided' && (
+        {type === "guided" && (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="service_type" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="service_type"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   서비스 타입 *
                 </label>
                 <select
                   id="service_type"
                   value={guidedForm.service_type}
-                  onChange={(e) => setGuidedForm({ ...guidedForm, service_type: e.target.value as ServiceType })}
+                  onChange={(e) =>
+                    setGuidedForm({
+                      ...guidedForm,
+                      service_type: e.target.value as ServiceType,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
@@ -313,13 +374,21 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
               </div>
 
               <div>
-                <label htmlFor="project_size" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="project_size"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   프로젝트 규모 *
                 </label>
                 <select
                   id="project_size"
                   value={guidedForm.project_size}
-                  onChange={(e) => setGuidedForm({ ...guidedForm, project_size: e.target.value as ProjectSize })}
+                  onChange={(e) =>
+                    setGuidedForm({
+                      ...guidedForm,
+                      project_size: e.target.value as ProjectSize,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
@@ -331,13 +400,21 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
               </div>
 
               <div>
-                <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="budget"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   예산 범위 *
                 </label>
                 <select
                   id="budget"
                   value={guidedForm.budget}
-                  onChange={(e) => setGuidedForm({ ...guidedForm, budget: e.target.value as BudgetRange })}
+                  onChange={(e) =>
+                    setGuidedForm({
+                      ...guidedForm,
+                      budget: e.target.value as BudgetRange,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
@@ -351,13 +428,21 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
               </div>
 
               <div>
-                <label htmlFor="timeline" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="timeline"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   타임라인 *
                 </label>
                 <select
                   id="timeline"
                   value={guidedForm.timeline}
-                  onChange={(e) => setGuidedForm({ ...guidedForm, timeline: e.target.value as Timeline })}
+                  onChange={(e) =>
+                    setGuidedForm({
+                      ...guidedForm,
+                      timeline: e.target.value as Timeline,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   required
                 >
@@ -378,18 +463,18 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                 {[
-                  'responsive_design',
-                  'cms',
-                  'seo_optimization',
-                  'cross_platform',
-                  'push_notifications',
-                  'offline_support',
-                  'payment_integration',
-                  'user_authentication',
-                  'admin_panel',
-                  'analytics',
-                  'social_login',
-                  'file_upload',
+                  "responsive_design",
+                  "cms",
+                  "seo_optimization",
+                  "cross_platform",
+                  "push_notifications",
+                  "offline_support",
+                  "payment_integration",
+                  "user_authentication",
+                  "admin_panel",
+                  "analytics",
+                  "social_login",
+                  "file_upload",
                 ].map((feature) => (
                   <label key={feature} className="flex items-center space-x-2">
                     <input
@@ -399,31 +484,47 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
                         if (e.target.checked) {
                           setGuidedForm({
                             ...guidedForm,
-                            important_features: [...guidedForm.important_features, feature],
+                            important_features: [
+                              ...guidedForm.important_features,
+                              feature,
+                            ],
                           });
                         } else {
                           setGuidedForm({
                             ...guidedForm,
-                            important_features: guidedForm.important_features.filter((f) => f !== feature),
+                            important_features:
+                              guidedForm.important_features.filter(
+                                (f) => f !== feature
+                              ),
                           });
                         }
                       }}
                       className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
-                    <span className="text-sm text-gray-700">{feature.replace(/_/g, ' ')}</span>
+                    <span className="text-sm text-gray-700">
+                      {feature.replace(/_/g, " ")}
+                    </span>
                   </label>
                 ))}
               </div>
             </div>
 
             <div>
-              <label htmlFor="additional_requests" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="additional_requests"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 추가 요청사항
               </label>
               <textarea
                 id="additional_requests"
                 value={guidedForm.additional_requests}
-                onChange={(e) => setGuidedForm({ ...guidedForm, additional_requests: e.target.value })}
+                onChange={(e) =>
+                  setGuidedForm({
+                    ...guidedForm,
+                    additional_requests: e.target.value,
+                  })
+                }
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
@@ -432,16 +533,24 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
         )}
 
         {/* Free Consultation Fields */}
-        {type === 'free' && (
+        {type === "free" && (
           <>
             <div>
-              <label htmlFor="project_description" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="project_description"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 프로젝트 설명 *
               </label>
               <textarea
                 id="project_description"
                 value={freeForm.project_description}
-                onChange={(e) => setFreeForm({ ...freeForm, project_description: e.target.value })}
+                onChange={(e) =>
+                  setFreeForm({
+                    ...freeForm,
+                    project_description: e.target.value,
+                  })
+                }
                 rows={6}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="프로젝트에 대해 자세히 설명해주세요..."
@@ -451,28 +560,41 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="budget_range" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="budget_range"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   예산 범위
                 </label>
                 <input
                   type="text"
                   id="budget_range"
                   value={freeForm.budget_range}
-                  onChange={(e) => setFreeForm({ ...freeForm, budget_range: e.target.value })}
+                  onChange={(e) =>
+                    setFreeForm({ ...freeForm, budget_range: e.target.value })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="예: 300-500만원"
                 />
               </div>
 
               <div>
-                <label htmlFor="timeline_preference" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="timeline_preference"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   희망 완성 시기
                 </label>
                 <input
                   type="text"
                   id="timeline_preference"
                   value={freeForm.timeline_preference}
-                  onChange={(e) => setFreeForm({ ...freeForm, timeline_preference: e.target.value })}
+                  onChange={(e) =>
+                    setFreeForm({
+                      ...freeForm,
+                      timeline_preference: e.target.value,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="예: 3개월 이내"
                 />
@@ -488,11 +610,11 @@ export default function ConsultationForm({ onSuccess, onError }: ConsultationFor
             disabled={isSubmitting}
             className={`w-full px-6 py-3 rounded-lg font-medium text-white ${
               isSubmitting
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             }`}
           >
-            {isSubmitting ? '제출 중...' : '상담 신청하기'}
+            {isSubmitting ? "제출 중..." : "상담 신청하기"}
           </button>
         </div>
       </form>

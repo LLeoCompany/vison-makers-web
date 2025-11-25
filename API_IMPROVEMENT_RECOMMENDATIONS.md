@@ -1,8 +1,9 @@
-# VisionMakers API 설계 개선 권장사항
+# LeoFitTech API 설계 개선 권장사항
 
 ## 🔍 현재 상태 평가
 
 ### ✅ 잘 구현된 부분
+
 1. **데이터베이스 정규화** - 중복 최소화, 무결성 보장
 2. **RESTful API 설계** - 자원 중심, 일관된 응답 구조
 3. **RLS 보안** - Supabase의 강력한 보안 기능 활용
@@ -14,6 +15,7 @@
 ### 1. **인증/인가 시스템 강화**
 
 **현재 문제점:**
+
 - 관리자 API에 대한 적절한 인증 시스템 부족
 - API 키 검증 로직이 구현되어 있지 않음
 - JWT 토큰 기반 인증 미구현
@@ -21,58 +23,60 @@
 **개선 방안:**
 
 #### A. JWT 기반 관리자 인증 추가
+
 ```typescript
 // middleware/auth.ts
-import jwt from 'jsonwebtoken';
-import { NextApiRequest } from 'next';
+import jwt from "jsonwebtoken";
+import { NextApiRequest } from "next";
 
 export interface AuthenticatedRequest extends NextApiRequest {
   user?: {
     id: string;
-    role: 'admin' | 'manager';
+    role: "admin" | "manager";
     permissions: string[];
   };
 }
 
 export function authenticateAdmin(req: AuthenticatedRequest) {
-  const token = req.headers.authorization?.replace('Bearer ', '');
+  const token = req.headers.authorization?.replace("Bearer ", "");
 
   if (!token) {
-    throw new Error('인증 토큰이 필요합니다');
+    throw new Error("인증 토큰이 필요합니다");
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
 
-    if (decoded.role !== 'admin' && decoded.role !== 'manager') {
-      throw new Error('관리자 권한이 필요합니다');
+    if (decoded.role !== "admin" && decoded.role !== "manager") {
+      throw new Error("관리자 권한이 필요합니다");
     }
 
     req.user = decoded;
     return decoded;
   } catch (error) {
-    throw new Error('유효하지 않은 인증 토큰입니다');
+    throw new Error("유효하지 않은 인증 토큰입니다");
   }
 }
 
 export function requirePermission(permission: string) {
   return (req: AuthenticatedRequest) => {
     if (!req.user?.permissions.includes(permission)) {
-      throw new Error('충분한 권한이 없습니다');
+      throw new Error("충분한 권한이 없습니다");
     }
   };
 }
 ```
 
 #### B. API 키 검증 시스템
+
 ```typescript
 // middleware/apiKey.ts
 export function verifyApiKey(req: NextApiRequest) {
-  const apiKey = req.headers['x-api-key'] as string;
-  const validKeys = process.env.VALID_API_KEYS?.split(',') || [];
+  const apiKey = req.headers["x-api-key"] as string;
+  const validKeys = process.env.VALID_API_KEYS?.split(",") || [];
 
   if (!apiKey || !validKeys.includes(apiKey)) {
-    throw new Error('유효하지 않은 API 키입니다');
+    throw new Error("유효하지 않은 API 키입니다");
   }
 }
 ```
@@ -80,15 +84,17 @@ export function verifyApiKey(req: NextApiRequest) {
 ### 2. **레이트 리미팅 구현**
 
 **현재 문제점:**
+
 - API 남용 방지 시스템 부족
 - DDoS 공격에 취약
 
 **개선 방안:**
 
 #### Redis 기반 레이트 리미터
+
 ```typescript
 // utils/rateLimiter.ts
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
 const redis = new Redis(process.env.REDIS_URL!);
 
@@ -116,7 +122,7 @@ export function withRateLimit(
   windowMs: number = 60000
 ) {
   return async (req: NextApiRequest, res: NextApiResponse, next: Function) => {
-    const identifier = req.ip || req.headers['x-forwarded-for'] as string;
+    const identifier = req.ip || (req.headers["x-forwarded-for"] as string);
 
     const allowed = await checkRateLimit(identifier, maxRequests, windowMs);
 
@@ -124,8 +130,8 @@ export function withRateLimit(
       return res.status(429).json({
         success: false,
         error: {
-          code: 'RATE_LIMIT_EXCEEDED',
-          message: '요청 제한을 초과했습니다. 잠시 후 다시 시도해주세요.',
+          code: "RATE_LIMIT_EXCEEDED",
+          message: "요청 제한을 초과했습니다. 잠시 후 다시 시도해주세요.",
         },
       });
     }
@@ -138,15 +144,17 @@ export function withRateLimit(
 ### 3. **캐싱 전략 도입**
 
 **현재 문제점:**
+
 - 통계 데이터 매번 DB 조회
 - 성능 최적화 부족
 
 **개선 방안:**
 
 #### Redis 캐싱 레이어
+
 ```typescript
 // services/cache.ts
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
 class CacheService {
   private redis: Redis;
@@ -160,7 +168,11 @@ class CacheService {
     return value ? JSON.parse(value) : null;
   }
 
-  async set<T>(key: string, value: T, ttlSeconds: number = 3600): Promise<void> {
+  async set<T>(
+    key: string,
+    value: T,
+    ttlSeconds: number = 3600
+  ): Promise<void> {
     await this.redis.setex(key, ttlSeconds, JSON.stringify(value));
   }
 
@@ -175,7 +187,7 @@ class CacheService {
 export const cacheService = new CacheService();
 
 // 사용 예시
-export async function getCachedStats(period: string = 'today') {
+export async function getCachedStats(period: string = "today") {
   const cacheKey = `stats:${period}`;
 
   let stats = await cacheService.get(cacheKey);
@@ -192,23 +204,25 @@ export async function getCachedStats(period: string = 'today') {
 ### 4. **에러 처리 및 로깅 개선**
 
 **현재 문제점:**
+
 - 통합된 에러 처리 시스템 부족
 - 구조화된 로깅 부족
 
 **개선 방안:**
 
 #### 통합 에러 핸들러
+
 ```typescript
 // utils/errorHandler.ts
 export class ApiError extends Error {
   constructor(
     message: string,
     public statusCode: number = 500,
-    public code: string = 'INTERNAL_ERROR',
+    public code: string = "INTERNAL_ERROR",
     public details?: any
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 }
 
@@ -228,15 +242,15 @@ export function handleApiError(error: any) {
   }
 
   // 예상치 못한 오류
-  console.error('Unexpected error:', error);
+  console.error("Unexpected error:", error);
 
   return {
     statusCode: 500,
     response: {
       success: false,
       error: {
-        code: 'INTERNAL_ERROR',
-        message: '서버 내부 오류가 발생했습니다.',
+        code: "INTERNAL_ERROR",
+        message: "서버 내부 오류가 발생했습니다.",
       },
     },
   };
@@ -256,27 +270,30 @@ export function withErrorHandler(handler: Function) {
 ```
 
 #### 구조화된 로깅
+
 ```typescript
 // utils/logger.ts
-import winston from 'winston';
+import winston from "winston";
 
 export const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
+  level: process.env.LOG_LEVEL || "info",
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
     winston.format.json()
   ),
   transports: [
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'logs/combined.log' }),
+    new winston.transports.File({ filename: "logs/error.log", level: "error" }),
+    new winston.transports.File({ filename: "logs/combined.log" }),
   ],
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }));
+if (process.env.NODE_ENV !== "production") {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    })
+  );
 }
 
 // API 호출 로깅 미들웨어
@@ -284,11 +301,11 @@ export function withLogging(handler: Function) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     const start = Date.now();
 
-    logger.info('API Request', {
+    logger.info("API Request", {
       method: req.method,
       url: req.url,
       ip: req.ip,
-      userAgent: req.headers['user-agent'],
+      userAgent: req.headers["user-agent"],
     });
 
     try {
@@ -296,7 +313,7 @@ export function withLogging(handler: Function) {
     } finally {
       const duration = Date.now() - start;
 
-      logger.info('API Response', {
+      logger.info("API Response", {
         method: req.method,
         url: req.url,
         statusCode: res.statusCode,
@@ -310,12 +327,14 @@ export function withLogging(handler: Function) {
 ### 5. **데이터베이스 최적화**
 
 **현재 문제점:**
+
 - N+1 쿼리 문제 가능성
 - 복잡한 조인 쿼리 성능 최적화 부족
 
 **개선 방안:**
 
 #### 데이터베이스 뷰 최적화
+
 ```sql
 -- 성능 최적화된 상담 상세 뷰
 CREATE MATERIALIZED VIEW consultation_details_optimized AS
@@ -359,12 +378,14 @@ CREATE TRIGGER trigger_refresh_consultation_details
 ### 6. **API 버전 관리**
 
 **현재 문제점:**
+
 - API 버전 관리 전략 부재
 - 하위 호환성 고려 부족
 
 **개선 방안:**
 
 #### API 버전 관리 시스템
+
 ```typescript
 // pages/api/v1/consultation-submit.ts
 // pages/api/v2/consultation-submit.ts
@@ -372,15 +393,16 @@ CREATE TRIGGER trigger_refresh_consultation_details
 // middleware/version.ts
 export function withApiVersion(version: string) {
   return (req: NextApiRequest, res: NextApiResponse, next: Function) => {
-    const requestedVersion = req.headers['api-version'] || req.query.version || 'v1';
+    const requestedVersion =
+      req.headers["api-version"] || req.query.version || "v1";
 
     if (requestedVersion !== version) {
       return res.status(400).json({
         success: false,
         error: {
-          code: 'VERSION_MISMATCH',
+          code: "VERSION_MISMATCH",
           message: `API 버전 ${requestedVersion}는 지원되지 않습니다. 현재 버전: ${version}`,
-          supportedVersions: ['v1', 'v2'],
+          supportedVersions: ["v1", "v2"],
         },
       });
     }
@@ -395,9 +417,10 @@ export function withApiVersion(version: string) {
 **개선 방안:**
 
 #### APM 통합
+
 ```typescript
 // utils/monitoring.ts
-import * as Sentry from '@sentry/nextjs';
+import * as Sentry from "@sentry/nextjs";
 
 export class MonitoringService {
   static initSentry() {
@@ -408,18 +431,22 @@ export class MonitoringService {
     });
   }
 
-  static trackPerformance(transaction: string, duration: number, success: boolean) {
+  static trackPerformance(
+    transaction: string,
+    duration: number,
+    success: boolean
+  ) {
     Sentry.addBreadcrumb({
-      category: 'api.performance',
+      category: "api.performance",
       message: `${transaction} completed in ${duration}ms`,
-      level: success ? 'info' : 'error',
-      data: { duration, success }
+      level: success ? "info" : "error",
+      data: { duration, success },
     });
   }
 
   static reportError(error: Error, context: any = {}) {
     Sentry.withScope((scope) => {
-      scope.setContext('api_context', context);
+      scope.setContext("api_context", context);
       Sentry.captureException(error);
     });
   }
@@ -429,34 +456,41 @@ export class MonitoringService {
 ## 🚀 구현 우선순위
 
 ### 높음 (즉시 구현)
+
 1. **인증/인가 시스템** - 보안 강화
 2. **에러 처리 통합** - 안정성 향상
 3. **레이트 리미팅** - 남용 방지
 
 ### 중간 (단기 구현)
+
 4. **캐싱 시스템** - 성능 최적화
 5. **로깅 시스템** - 디버깅 및 모니터링
 6. **API 버전 관리** - 확장성
 
 ### 낮음 (장기 구현)
+
 7. **데이터베이스 최적화** - 대용량 처리
 8. **모니터링 강화** - 운영 효율성
 
 ## 💡 추가 권장사항
 
 ### 1. **GraphQL 도입 고려**
+
 - REST API의 Over-fetching/Under-fetching 문제 해결
 - 프론트엔드에서 필요한 데이터만 요청 가능
 
 ### 2. **서버리스 함수 활용**
+
 - Supabase Edge Functions 또는 Vercel Functions 활용
 - 특정 비즈니스 로직의 서버리스 구현
 
 ### 3. **실시간 기능 강화**
+
 - Supabase Realtime을 활용한 실시간 상담 상태 업데이트
 - WebSocket 기반 관리자 대시보드
 
 ### 4. **데이터 분석 파이프라인**
+
 - ETL 프로세스 구축
 - 비즈니스 인텔리전스 대시보드 연동
 

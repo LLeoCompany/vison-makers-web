@@ -5,13 +5,14 @@
 ### ✅ Authentication & Authorization
 
 **현재 인증/인가 시스템:**
+
 ```typescript
 // ✅ 강력한 JWT 기반 인증 시스템 - utils/jwt.ts
 export interface JWTPayload {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'manager' | 'viewer';
+  role: "admin" | "manager" | "viewer";
   permissions: string[];
   iat?: number;
   exp?: number;
@@ -24,26 +25,23 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 // ✅ 역할 기반 권한 시스템 (RBAC)
 export const DEFAULT_PERMISSIONS = {
   admin: [
-    'admin',
-    'consultation:read',
-    'consultation:write',
-    'consultation:delete',
-    'stats:read',
-    'users:read',
-    'users:write',
-    'users:delete',
-    'logs:read',
+    "admin",
+    "consultation:read",
+    "consultation:write",
+    "consultation:delete",
+    "stats:read",
+    "users:read",
+    "users:write",
+    "users:delete",
+    "logs:read",
   ],
   manager: [
-    'consultation:read',
-    'consultation:write',
-    'stats:read',
-    'logs:read',
+    "consultation:read",
+    "consultation:write",
+    "stats:read",
+    "logs:read",
   ],
-  viewer: [
-    'consultation:read',
-    'stats:read',
-  ],
+  viewer: ["consultation:read", "stats:read"],
 } as const;
 
 // ✅ 세분화된 권한 검증 - middleware/auth.ts
@@ -63,6 +61,7 @@ export function requirePermission(permission: string) {
 **평가:** 인증/인가 시스템 우수 ✅
 
 **보안 강화 권장사항:**
+
 ```typescript
 // MFA (Multi-Factor Authentication) 지원
 export interface MFAConfig {
@@ -108,22 +107,24 @@ export class SecureSessionManager {
       deviceInfo,
       createdAt: new Date(),
       lastActivity: new Date(),
-      isActive: true
+      isActive: true,
     });
 
     return {
       accessToken: generateAccessToken(payload),
       refreshToken: generateRefreshToken(sessionId),
       expiresAt: new Date(Date.now() + parseMs(JWT_EXPIRES_IN)),
-      sessionId
+      sessionId,
     };
   }
 
   static generateDeviceFingerprint(deviceInfo: DeviceInfo): string {
     return crypto
-      .createHash('sha256')
-      .update(`${deviceInfo.userAgent}:${deviceInfo.screenResolution}:${deviceInfo.timezone}`)
-      .digest('hex');
+      .createHash("sha256")
+      .update(
+        `${deviceInfo.userAgent}:${deviceInfo.screenResolution}:${deviceInfo.timezone}`
+      )
+      .digest("hex");
   }
 }
 ```
@@ -131,12 +132,16 @@ export class SecureSessionManager {
 ### ✅ Rate Limiting System
 
 **현재 Rate Limiting 구현:**
+
 ```typescript
 // ✅ 포괄적인 Rate Limiting 시스템 - utils/rateLimiter.ts
 export class MemoryRateLimiter {
   private records = new Map<string, RequestRecord>();
 
-  public check(identifier: string, config: RateLimitConfig): {
+  public check(
+    identifier: string,
+    config: RateLimitConfig
+  ): {
     allowed: boolean;
     remaining: number;
     resetTime: number;
@@ -149,16 +154,16 @@ export class MemoryRateLimiter {
 // ✅ 엔드포인트별 차등 제한
 export const rateLimitConfigs = {
   consultationSubmit: {
-    maxRequests: 3,        // 3회
+    maxRequests: 3, // 3회
     windowMs: 10 * 60 * 1000, // 10분
   },
   authApi: {
-    maxRequests: 5,        // 5회
+    maxRequests: 5, // 5회
     windowMs: 15 * 60 * 1000, // 15분
   },
   adminApi: {
-    maxRequests: 100,      // 100회
-    windowMs: 60 * 1000,   // 1분
+    maxRequests: 100, // 100회
+    windowMs: 60 * 1000, // 1분
   },
 } as const;
 
@@ -175,6 +180,7 @@ export class AdaptiveRateLimiter {
 **평가:** Rate Limiting 시스템 우수 ✅
 
 **추가 보안 권장사항:**
+
 ```typescript
 // IP 평판 기반 차단
 export class IPReputationFilter {
@@ -184,18 +190,18 @@ export class IPReputationFilter {
   public checkIPReputation(ip: string): IPReputationResult {
     // 악성 IP 데이터베이스 확인
     if (this.isKnownMaliciousIP(ip)) {
-      return { allowed: false, reason: 'MALICIOUS_IP' };
+      return { allowed: false, reason: "MALICIOUS_IP" };
     }
 
     // 지리적 위치 기반 검증
     if (this.isUnusualLocation(ip)) {
-      return { allowed: false, reason: 'UNUSUAL_LOCATION' };
+      return { allowed: false, reason: "UNUSUAL_LOCATION" };
     }
 
     // 행동 패턴 분석
     const suspiciousActivity = this.analyzeBehavior(ip);
     if (suspiciousActivity.score > 0.8) {
-      return { allowed: false, reason: 'SUSPICIOUS_BEHAVIOR' };
+      return { allowed: false, reason: "SUSPICIOUS_BEHAVIOR" };
     }
 
     return { allowed: true };
@@ -208,7 +214,7 @@ export class IPReputationFilter {
     // - 스캔 패턴 감지
     return {
       score: 0.0,
-      indicators: []
+      indicators: [],
     };
   }
 }
@@ -217,7 +223,7 @@ export class IPReputationFilter {
 export class HoneypotBotDetection {
   public addHoneypotField(formData: any): boolean {
     // 숨겨진 필드가 채워져 있으면 봇으로 간주
-    const honeypotFields = ['website', 'url', 'homepage'];
+    const honeypotFields = ["website", "url", "homepage"];
 
     for (const field of honeypotFields) {
       if (formData[field] && formData[field].trim().length > 0) {
@@ -233,6 +239,7 @@ export class HoneypotBotDetection {
 ### ✅ Input Validation & Sanitization
 
 **현재 입력 검증:**
+
 ```typescript
 // ✅ 기본적인 XSS 방지 (추정)
 function isSafeInput(input: string): boolean {
@@ -243,23 +250,24 @@ function isSafeInput(input: string): boolean {
     /onerror/i,
     /<iframe/i,
     /<object/i,
-    /<embed/i
+    /<embed/i,
   ];
-  return !dangerousPatterns.some(pattern => pattern.test(input));
+  return !dangerousPatterns.some((pattern) => pattern.test(input));
 }
 
 // ✅ 기본적인 필드 검증
 if (!rawData.contact.name || !rawData.contact.phone || !rawData.contact.email) {
-  return res.status(400).json({ error: 'Missing contact information' });
+  return res.status(400).json({ error: "Missing contact information" });
 }
 ```
 
 **평가:** 기본적인 입력 검증 구현됨 ⚠️
 
 **보안 강화 권장사항:**
+
 ```typescript
-import DOMPurify from 'isomorphic-dompurify';
-import { z } from 'zod';
+import DOMPurify from "isomorphic-dompurify";
+import { z } from "zod";
 
 // 포괄적인 입력 검증 및 정제
 export class SecuritySanitizer {
@@ -268,8 +276,8 @@ export class SecuritySanitizer {
     return DOMPurify.sanitize(input, {
       ALLOWED_TAGS: [],
       ALLOWED_ATTR: [],
-      FORBID_TAGS: ['script', 'object', 'embed', 'iframe'],
-      FORBID_ATTR: ['onclick', 'onload', 'onerror', 'onmouseover']
+      FORBID_TAGS: ["script", "object", "embed", "iframe"],
+      FORBID_ATTR: ["onclick", "onload", "onerror", "onmouseover"],
     });
   }
 
@@ -281,20 +289,20 @@ export class SecuritySanitizer {
       /(\bor\b|\band\b).*?(\b=\b|\blike\b)/i,
       /(\bunion\b.*?\bselect\b)/i,
       /(\bdrop\b.*?\btable\b)/i,
-      /(\bexec\b.*?\b)/i
+      /(\bexec\b.*?\b)/i,
     ];
-    return sqlPatterns.some(pattern => pattern.test(input));
+    return sqlPatterns.some((pattern) => pattern.test(input));
   }
 
   // NoSQL Injection 방지
   static sanitizeNoSqlInput(input: any): any {
-    if (typeof input === 'string') {
-      return input.replace(/[{}$]/g, '');
+    if (typeof input === "string") {
+      return input.replace(/[{}$]/g, "");
     }
-    if (typeof input === 'object' && input !== null) {
+    if (typeof input === "object" && input !== null) {
       const sanitized: any = {};
       for (const [key, value] of Object.entries(input)) {
-        if (!key.startsWith('$') && !key.includes('.')) {
+        if (!key.startsWith("$") && !key.includes(".")) {
           sanitized[key] = this.sanitizeNoSqlInput(value);
         }
       }
@@ -305,54 +313,68 @@ export class SecuritySanitizer {
 
   // 경로 순회 공격 방지
   static sanitizeFilePath(filePath: string): string {
-    return path.normalize(filePath).replace(/^(\.\.[\/\\])+/, '');
+    return path.normalize(filePath).replace(/^(\.\.[\/\\])+/, "");
   }
 
   // CSRF 토큰 생성 및 검증
   static generateCSRFToken(): string {
-    return crypto.randomBytes(32).toString('hex');
+    return crypto.randomBytes(32).toString("hex");
   }
 
   static verifyCSRFToken(token: string, sessionToken: string): boolean {
     return crypto.timingSafeEqual(
-      Buffer.from(token, 'hex'),
-      Buffer.from(sessionToken, 'hex')
+      Buffer.from(token, "hex"),
+      Buffer.from(sessionToken, "hex")
     );
   }
 }
 
 // 스키마 기반 검증 강화
 export const SecureContactSchema = z.object({
-  name: z.string()
-    .min(1, '이름을 입력해주세요.')
-    .max(50, '이름은 50자를 초과할 수 없습니다.')
-    .regex(/^[가-힣a-zA-Z\s\-'\.]+$/, '이름에 허용되지 않는 문자가 포함되어 있습니다.')
-    .refine(val => !SecuritySanitizer.detectSqlInjection(val), '유효하지 않은 입력입니다.'),
+  name: z
+    .string()
+    .min(1, "이름을 입력해주세요.")
+    .max(50, "이름은 50자를 초과할 수 없습니다.")
+    .regex(
+      /^[가-힣a-zA-Z\s\-'\.]+$/,
+      "이름에 허용되지 않는 문자가 포함되어 있습니다."
+    )
+    .refine(
+      (val) => !SecuritySanitizer.detectSqlInjection(val),
+      "유효하지 않은 입력입니다."
+    ),
 
-  email: z.string()
-    .email('올바른 이메일 형식이 아닙니다.')
-    .max(100, '이메일은 100자를 초과할 수 없습니다.')
-    .refine(val => !val.includes('<script'), 'XSS 공격이 감지되었습니다.'),
+  email: z
+    .string()
+    .email("올바른 이메일 형식이 아닙니다.")
+    .max(100, "이메일은 100자를 초과할 수 없습니다.")
+    .refine((val) => !val.includes("<script"), "XSS 공격이 감지되었습니다."),
 
-  phone: z.string()
-    .regex(/^01[0-9]-[0-9]{4}-[0-9]{4}$/, '올바른 전화번호 형식이 아닙니다.')
-    .refine(val => !/[<>&"']/.test(val), '허용되지 않는 문자가 포함되어 있습니다.'),
+  phone: z
+    .string()
+    .regex(/^01[0-9]-[0-9]{4}-[0-9]{4}$/, "올바른 전화번호 형식이 아닙니다.")
+    .refine(
+      (val) => !/[<>&"']/.test(val),
+      "허용되지 않는 문자가 포함되어 있습니다."
+    ),
 
-  message: z.string()
-    .max(2000, '메시지는 2000자를 초과할 수 없습니다.')
-    .refine(val => {
+  message: z
+    .string()
+    .max(2000, "메시지는 2000자를 초과할 수 없습니다.")
+    .refine((val) => {
       const sanitized = SecuritySanitizer.sanitizeHtml(val);
       return sanitized.length > 0;
-    }, '유효하지 않은 내용입니다.')
+    }, "유효하지 않은 내용입니다."),
 });
 ```
 
 ### ✅ Password Security
 
 **현재 비밀번호 보안:**
+
 ```typescript
 // ✅ bcrypt 사용 - services/auth.ts
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
 // 비밀번호 해싱
 const hashedPassword = await bcrypt.hash(password, 12);
@@ -364,6 +386,7 @@ const isValid = await bcrypt.compare(password, hashedPassword);
 **평가:** 비밀번호 해싱 우수 ✅
 
 **추가 보안 권장사항:**
+
 ```typescript
 // 비밀번호 복잡도 정책
 export class PasswordPolicy {
@@ -375,7 +398,7 @@ export class PasswordPolicy {
     requireDigits: true,
     requireSpecialChars: true,
     preventCommonPasswords: true,
-    preventUserInfoInPassword: true
+    preventUserInfoInPassword: true,
   };
 
   static validate(password: string, userInfo?: UserInfo): ValidationResult {
@@ -383,61 +406,78 @@ export class PasswordPolicy {
 
     // 길이 검증
     if (password.length < this.REQUIREMENTS.minLength) {
-      errors.push(`비밀번호는 최소 ${this.REQUIREMENTS.minLength}자 이상이어야 합니다.`);
+      errors.push(
+        `비밀번호는 최소 ${this.REQUIREMENTS.minLength}자 이상이어야 합니다.`
+      );
     }
 
     if (password.length > this.REQUIREMENTS.maxLength) {
-      errors.push(`비밀번호는 최대 ${this.REQUIREMENTS.maxLength}자를 초과할 수 없습니다.`);
+      errors.push(
+        `비밀번호는 최대 ${this.REQUIREMENTS.maxLength}자를 초과할 수 없습니다.`
+      );
     }
 
     // 복잡도 검증
     if (this.REQUIREMENTS.requireUppercase && !/[A-Z]/.test(password)) {
-      errors.push('대문자를 포함해야 합니다.');
+      errors.push("대문자를 포함해야 합니다.");
     }
 
     if (this.REQUIREMENTS.requireLowercase && !/[a-z]/.test(password)) {
-      errors.push('소문자를 포함해야 합니다.');
+      errors.push("소문자를 포함해야 합니다.");
     }
 
     if (this.REQUIREMENTS.requireDigits && !/\d/.test(password)) {
-      errors.push('숫자를 포함해야 합니다.');
+      errors.push("숫자를 포함해야 합니다.");
     }
 
-    if (this.REQUIREMENTS.requireSpecialChars && !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-      errors.push('특수문자를 포함해야 합니다.');
+    if (
+      this.REQUIREMENTS.requireSpecialChars &&
+      !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+    ) {
+      errors.push("특수문자를 포함해야 합니다.");
     }
 
     // 일반적인 비밀번호 검증
     if (this.isCommonPassword(password)) {
-      errors.push('너무 일반적인 비밀번호입니다.');
+      errors.push("너무 일반적인 비밀번호입니다.");
     }
 
     // 사용자 정보 포함 검증
     if (userInfo && this.containsUserInfo(password, userInfo)) {
-      errors.push('비밀번호에 개인정보가 포함되어서는 안 됩니다.');
+      errors.push("비밀번호에 개인정보가 포함되어서는 안 됩니다.");
     }
 
     return {
       isValid: errors.length === 0,
       errors,
-      strength: this.calculateStrength(password)
+      strength: this.calculateStrength(password),
     };
   }
 
   private static isCommonPassword(password: string): boolean {
     const commonPasswords = [
-      'password', '123456', 'password123', 'admin', 'qwerty',
-      'letmein', 'welcome', 'monkey', '1234567890'
+      "password",
+      "123456",
+      "password123",
+      "admin",
+      "qwerty",
+      "letmein",
+      "welcome",
+      "monkey",
+      "1234567890",
     ];
     return commonPasswords.includes(password.toLowerCase());
   }
 
-  private static containsUserInfo(password: string, userInfo: UserInfo): boolean {
+  private static containsUserInfo(
+    password: string,
+    userInfo: UserInfo
+  ): boolean {
     const lowerPassword = password.toLowerCase();
     return (
       lowerPassword.includes(userInfo.name.toLowerCase()) ||
-      lowerPassword.includes(userInfo.email.split('@')[0].toLowerCase()) ||
-      lowerPassword.includes(userInfo.company?.toLowerCase() || '')
+      lowerPassword.includes(userInfo.email.split("@")[0].toLowerCase()) ||
+      lowerPassword.includes(userInfo.company?.toLowerCase() || "")
     );
   }
 
@@ -457,10 +497,10 @@ export class PasswordPolicy {
     const uniqueChars = new Set(password).size;
     score += Math.min(uniqueChars * 2, 20);
 
-    if (score < 30) return 'weak';
-    if (score < 60) return 'medium';
-    if (score < 90) return 'strong';
-    return 'very_strong';
+    if (score < 30) return "weak";
+    if (score < 60) return "medium";
+    if (score < 90) return "strong";
+    return "very_strong";
   }
 }
 
@@ -469,7 +509,7 @@ export class AccountLockoutPolicy {
   static readonly CONFIG = {
     maxFailedAttempts: 5,
     lockoutDurationMinutes: 15,
-    progressiveLockout: true // 반복 실패 시 잠금 시간 증가
+    progressiveLockout: true, // 반복 실패 시 잠금 시간 증가
   };
 
   static async handleFailedLogin(userId: string): Promise<LockoutResult> {
@@ -485,14 +525,14 @@ export class AccountLockoutPolicy {
       return {
         isLocked: true,
         remainingAttempts: 0,
-        lockoutExpiresAt: new Date(Date.now() + lockoutDuration)
+        lockoutExpiresAt: new Date(Date.now() + lockoutDuration),
       };
     }
 
     return {
       isLocked: false,
       remainingAttempts: this.CONFIG.maxFailedAttempts - newAttemptCount,
-      lockoutExpiresAt: null
+      lockoutExpiresAt: null,
     };
   }
 
@@ -502,8 +542,13 @@ export class AccountLockoutPolicy {
     }
 
     // 지수적 증가: 15분, 30분, 1시간, 2시간, 4시간
-    const multiplier = Math.pow(2, Math.floor(previousAttempts / this.CONFIG.maxFailedAttempts));
-    return this.CONFIG.lockoutDurationMinutes * 60 * 1000 * Math.min(multiplier, 16);
+    const multiplier = Math.pow(
+      2,
+      Math.floor(previousAttempts / this.CONFIG.maxFailedAttempts)
+    );
+    return (
+      this.CONFIG.lockoutDurationMinutes * 60 * 1000 * Math.min(multiplier, 16)
+    );
   }
 }
 ```
@@ -511,73 +556,85 @@ export class AccountLockoutPolicy {
 ### ✅ HTTPS & Transport Security
 
 **현재 전송 보안:**
+
 ```typescript
 // ✅ 환경변수로 HTTPS 설정 관리
 NEXT_PUBLIC_APP_URL=http://localhost:3000  // 개발환경
-// 프로덕션: https://visionmakers.com
+// 프로덕션: https://LeoFitTech.com
 
 // ✅ JWT 토큰에 보안 설정
 {
-  issuer: 'visionmakers-api',
-  audience: 'visionmakers-admin',
+  issuer: 'LeoFitTech-api',
+  audience: 'LeoFitTech-admin',
 }
 ```
 
 **개선 권장사항:**
+
 ```typescript
 // Security Headers 미들웨어
-export function securityHeaders(req: NextApiRequest, res: NextApiResponse): void {
+export function securityHeaders(
+  req: NextApiRequest,
+  res: NextApiResponse
+): void {
   // HTTPS 강제 (HSTS)
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  res.setHeader(
+    "Strict-Transport-Security",
+    "max-age=31536000; includeSubDomains; preload"
+  );
 
   // XSS 보호
-  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader("X-XSS-Protection", "1; mode=block");
 
   // MIME 타입 스니핑 방지
-  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader("X-Content-Type-Options", "nosniff");
 
   // 클릭재킹 방지
-  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader("X-Frame-Options", "DENY");
 
   // Referrer 정책
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
 
   // Content Security Policy
-  res.setHeader('Content-Security-Policy', [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: https:",
-    "font-src 'self'",
-    "connect-src 'self' https:",
-    "frame-ancestors 'none'",
-  ].join('; '));
+  res.setHeader(
+    "Content-Security-Policy",
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https:",
+      "font-src 'self'",
+      "connect-src 'self' https:",
+      "frame-ancestors 'none'",
+    ].join("; ")
+  );
 
   // Permissions Policy
-  res.setHeader('Permissions-Policy', [
-    'camera=()',
-    'microphone=()',
-    'geolocation=()',
-    'payment=(*)'
-  ].join(', '));
+  res.setHeader(
+    "Permissions-Policy",
+    ["camera=()", "microphone=()", "geolocation=()", "payment=(*)"].join(", ")
+  );
 }
 ```
 
 ## 📊 Security Implementation 점수 현황
 
 ### 🟢 우수한 영역 (90-100점)
+
 - **Authentication System**: JWT + RBAC 완벽 구현
 - **Rate Limiting**: 포괄적인 제한 시스템
 - **Password Security**: bcrypt 해싱 적용
 - **Authorization**: 세분화된 권한 관리
 
 ### 🟡 개선 필요 영역 (70-89점)
+
 - **Input Validation**: 기본적 검증만 구현
 - **Security Headers**: 미구현 상태
 - **MFA Support**: 다단계 인증 부재
 - **Session Management**: 기본적 구현
 
 ### 🔴 시급 개선 영역 (60-69점)
+
 - **CSRF Protection**: CSRF 토큰 미구현
 - **SQL Injection Prevention**: 기본적 방어만
 - **File Upload Security**: 파일 업로드 보안 부족
@@ -586,12 +643,15 @@ export function securityHeaders(req: NextApiRequest, res: NextApiResponse): void
 ## 🎯 보안 개선 Action Items
 
 ### 우선순위 1 (Critical)
+
 1. **Security Headers 구현**
+
    ```typescript
    // HTTPS, CSP, HSTS 등 필수 보안 헤더
    ```
 
 2. **CSRF Protection 추가**
+
    ```typescript
    // Double Submit Cookie 패턴 구현
    ```
@@ -603,11 +663,14 @@ export function securityHeaders(req: NextApiRequest, res: NextApiResponse): void
    ```
 
 ### 우선순위 2 (High)
+
 1. **Multi-Factor Authentication**
+
    - TOTP 기반 2FA 구현
    - 백업 코드 시스템
 
 2. **Advanced Session Management**
+
    - 디바이스 핑거프린팅
    - 동시 세션 제한
 
@@ -616,11 +679,14 @@ export function securityHeaders(req: NextApiRequest, res: NextApiResponse): void
    - 실시간 알림 시스템
 
 ### 우선순위 3 (Medium)
+
 1. **File Upload Security**
+
    - 파일 타입 검증
    - 바이러스 스캔 연동
 
 2. **IP Reputation Filtering**
+
    - 악성 IP 차단
    - 지리적 위치 기반 제한
 

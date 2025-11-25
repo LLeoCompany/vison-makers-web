@@ -1,5 +1,5 @@
 // Database Types - Generated from Supabase Schema
-// VisionMakers Consultation System
+// LeoFitTech Consultation System
 
 export type Json =
   | string
@@ -10,65 +10,69 @@ export type Json =
   | Json[];
 
 // ENUM Types
-export type ConsultationType = 'guided' | 'free';
+export type ConsultationType = "guided" | "free";
 
 export type ConsultationStatus =
-  | 'pending'
-  | 'contacted'
-  | 'in_progress'
-  | 'completed'
-  | 'cancelled'
-  | 'on_hold';
+  | "pending"
+  | "contacted"
+  | "in_progress"
+  | "completed"
+  | "cancelled"
+  | "on_hold";
 
-export type ConsultationPriority = 'low' | 'normal' | 'high' | 'urgent';
+export type ConsultationPriority = "low" | "normal" | "high" | "urgent";
 
-export type ContactTimePreference = 'morning' | 'afternoon' | 'evening' | 'anytime';
+export type ContactTimePreference =
+  | "morning"
+  | "afternoon"
+  | "evening"
+  | "anytime";
 
 export type ServiceType =
-  | 'web_development'
-  | 'mobile_app'
-  | 'desktop_app'
-  | 'ai_ml'
-  | 'blockchain'
-  | 'iot'
-  | 'consulting'
-  | 'maintenance'
-  | 'other';
+  | "web_development"
+  | "mobile_app"
+  | "desktop_app"
+  | "ai_ml"
+  | "blockchain"
+  | "iot"
+  | "consulting"
+  | "maintenance"
+  | "other";
 
-export type ProjectSize = 'small' | 'medium' | 'large' | 'enterprise';
+export type ProjectSize = "small" | "medium" | "large" | "enterprise";
 
 export type BudgetRange =
-  | 'under_1000'
-  | '1000_to_3000'
-  | '3000_to_5000'
-  | '5000_to_10000'
-  | 'over_10000'
-  | 'negotiable';
+  | "under_1000"
+  | "1000_to_3000"
+  | "3000_to_5000"
+  | "5000_to_10000"
+  | "over_10000"
+  | "negotiable";
 
 export type Timeline =
-  | 'asap'
-  | '1_month'
-  | '1_3_months'
-  | '3_6_months'
-  | '6_12_months'
-  | 'over_1_year'
-  | 'flexible';
+  | "asap"
+  | "1_month"
+  | "1_3_months"
+  | "3_6_months"
+  | "6_12_months"
+  | "over_1_year"
+  | "flexible";
 
-export type AdminRole = 'admin' | 'manager' | 'viewer';
+export type AdminRole = "admin" | "manager" | "viewer";
 
 export type ConsultationAction =
-  | 'created'
-  | 'updated'
-  | 'status_changed'
-  | 'assigned'
-  | 'contacted'
-  | 'completed'
-  | 'cancelled'
-  | 'note_added';
+  | "created"
+  | "updated"
+  | "status_changed"
+  | "assigned"
+  | "contacted"
+  | "completed"
+  | "cancelled"
+  | "note_added";
 
-export type ActorType = 'system' | 'admin' | 'api';
+export type ActorType = "system" | "admin" | "api";
 
-export type ConfigType = 'string' | 'number' | 'boolean' | 'json' | 'array';
+export type ConfigType = "string" | "number" | "boolean" | "json" | "array";
 
 // Database Schema Interface
 export interface Database {
@@ -149,11 +153,11 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: 'consultations_assigned_to_fkey';
-            columns: ['assigned_to'];
+            foreignKeyName: "consultations_assigned_to_fkey";
+            columns: ["assigned_to"];
             isOneToOne: false;
-            referencedRelation: 'admin_users';
-            referencedColumns: ['id'];
+            referencedRelation: "admin_users";
+            referencedColumns: ["id"];
           }
         ];
       };
@@ -205,11 +209,11 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: 'guided_consultations_consultation_id_fkey';
-            columns: ['consultation_id'];
+            foreignKeyName: "guided_consultations_consultation_id_fkey";
+            columns: ["consultation_id"];
             isOneToOne: true;
-            referencedRelation: 'consultations';
-            referencedColumns: ['id'];
+            referencedRelation: "consultations";
+            referencedColumns: ["id"];
           }
         ];
       };
@@ -252,11 +256,11 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: 'free_consultations_consultation_id_fkey';
-            columns: ['consultation_id'];
+            foreignKeyName: "free_consultations_consultation_id_fkey";
+            columns: ["consultation_id"];
             isOneToOne: true;
-            referencedRelation: 'consultations';
-            referencedColumns: ['id'];
+            referencedRelation: "consultations";
+            referencedColumns: ["id"];
           }
         ];
       };
@@ -329,11 +333,11 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: 'admin_users_created_by_fkey';
-            columns: ['created_by'];
+            foreignKeyName: "admin_users_created_by_fkey";
+            columns: ["created_by"];
             isOneToOne: false;
-            referencedRelation: 'admin_users';
-            referencedColumns: ['id'];
+            referencedRelation: "admin_users";
+            referencedColumns: ["id"];
           }
         ];
       };
@@ -379,11 +383,11 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: 'user_sessions_user_id_fkey';
-            columns: ['user_id'];
+            foreignKeyName: "user_sessions_user_id_fkey";
+            columns: ["user_id"];
             isOneToOne: false;
-            referencedRelation: 'admin_users';
-            referencedColumns: ['id'];
+            referencedRelation: "admin_users";
+            referencedColumns: ["id"];
           }
         ];
       };
@@ -435,11 +439,11 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: 'system_configs_updated_by_fkey';
-            columns: ['updated_by'];
+            foreignKeyName: "system_configs_updated_by_fkey";
+            columns: ["updated_by"];
             isOneToOne: false;
-            referencedRelation: 'admin_users';
-            referencedColumns: ['id'];
+            referencedRelation: "admin_users";
+            referencedColumns: ["id"];
           }
         ];
       };
@@ -491,11 +495,11 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: 'consultation_logs_consultation_id_fkey';
-            columns: ['consultation_id'];
+            foreignKeyName: "consultation_logs_consultation_id_fkey";
+            columns: ["consultation_id"];
             isOneToOne: false;
-            referencedRelation: 'consultations';
-            referencedColumns: ['id'];
+            referencedRelation: "consultations";
+            referencedColumns: ["id"];
           }
         ];
       };
@@ -773,21 +777,31 @@ export interface Database {
 }
 
 // Helper types for common operations
-export type ConsultationRow = Database['public']['Tables']['consultations']['Row'];
-export type ConsultationInsert = Database['public']['Tables']['consultations']['Insert'];
-export type ConsultationUpdate = Database['public']['Tables']['consultations']['Update'];
+export type ConsultationRow =
+  Database["public"]["Tables"]["consultations"]["Row"];
+export type ConsultationInsert =
+  Database["public"]["Tables"]["consultations"]["Insert"];
+export type ConsultationUpdate =
+  Database["public"]["Tables"]["consultations"]["Update"];
 
-export type GuidedConsultationRow = Database['public']['Tables']['guided_consultations']['Row'];
-export type GuidedConsultationInsert = Database['public']['Tables']['guided_consultations']['Insert'];
+export type GuidedConsultationRow =
+  Database["public"]["Tables"]["guided_consultations"]["Row"];
+export type GuidedConsultationInsert =
+  Database["public"]["Tables"]["guided_consultations"]["Insert"];
 
-export type FreeConsultationRow = Database['public']['Tables']['free_consultations']['Row'];
-export type FreeConsultationInsert = Database['public']['Tables']['free_consultations']['Insert'];
+export type FreeConsultationRow =
+  Database["public"]["Tables"]["free_consultations"]["Row"];
+export type FreeConsultationInsert =
+  Database["public"]["Tables"]["free_consultations"]["Insert"];
 
-export type AdminUserRow = Database['public']['Tables']['admin_users']['Row'];
-export type AdminUserInsert = Database['public']['Tables']['admin_users']['Insert'];
+export type AdminUserRow = Database["public"]["Tables"]["admin_users"]["Row"];
+export type AdminUserInsert =
+  Database["public"]["Tables"]["admin_users"]["Insert"];
 
-export type ConsultationDetailsView = Database['public']['Views']['consultation_details']['Row'];
-export type ConsultationStatusCountsView = Database['public']['Views']['consultation_status_counts']['Row'];
+export type ConsultationDetailsView =
+  Database["public"]["Views"]["consultation_details"]["Row"];
+export type ConsultationStatusCountsView =
+  Database["public"]["Views"]["consultation_status_counts"]["Row"];
 
 // API Response Types
 export interface ApiResponse<T> {

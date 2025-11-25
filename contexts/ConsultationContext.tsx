@@ -1,9 +1,15 @@
 /**
- * VisionMakers 상담 시스템 Context
+ * LeoFitTech 상담 시스템 Context
  * 설계 문서 2.3 기술 스택 기반 - React Context API 사용
  */
 
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  ReactNode,
+} from "react";
 import {
   ConsultationState,
   ConsultationAction,
@@ -14,8 +20,8 @@ import {
   Timeline,
   ImportantFeature,
   ContactInfo,
-  STORAGE_KEY
-} from '../types/consultation';
+  STORAGE_KEY,
+} from "../types/consultation";
 
 // 초기 상태
 const initialState: ConsultationState = {
@@ -31,130 +37,133 @@ const initialState: ConsultationState = {
     budget: null,
     timeline: null,
     importantFeatures: [],
-    additionalRequests: '',
-    contact: {}
+    additionalRequests: "",
+    contact: {},
   },
 
   free: {
-    description: '',
-    contact: {}
-  }
+    description: "",
+    contact: {},
+  },
 };
 
 // 리듀서 함수
-function consultationReducer(state: ConsultationState, action: ConsultationAction): ConsultationState {
+function consultationReducer(
+  state: ConsultationState,
+  action: ConsultationAction
+): ConsultationState {
   switch (action.type) {
-    case 'SET_TRACK_TYPE':
+    case "SET_TRACK_TYPE":
       return {
         ...state,
         trackType: action.payload,
-        totalSteps: action.payload === 'guided' ? 4 : 1,
-        currentStep: 1
+        totalSteps: action.payload === "guided" ? 4 : 1,
+        currentStep: 1,
       };
 
-    case 'SET_CURRENT_STEP':
+    case "SET_CURRENT_STEP":
       return {
         ...state,
-        currentStep: action.payload
+        currentStep: action.payload,
       };
 
-    case 'SET_LOADING':
+    case "SET_LOADING":
       return {
         ...state,
-        isLoading: action.payload
+        isLoading: action.payload,
       };
 
-    case 'SET_ERROR':
+    case "SET_ERROR":
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
       };
 
-    case 'SET_GUIDED_SERVICE_TYPE':
-      return {
-        ...state,
-        guided: {
-          ...state.guided,
-          serviceType: action.payload
-        }
-      };
-
-    case 'SET_GUIDED_PROJECT_SIZE':
+    case "SET_GUIDED_SERVICE_TYPE":
       return {
         ...state,
         guided: {
           ...state.guided,
-          projectSize: action.payload
-        }
+          serviceType: action.payload,
+        },
       };
 
-    case 'SET_GUIDED_BUDGET':
+    case "SET_GUIDED_PROJECT_SIZE":
       return {
         ...state,
         guided: {
           ...state.guided,
-          budget: action.payload
-        }
+          projectSize: action.payload,
+        },
       };
 
-    case 'SET_GUIDED_TIMELINE':
+    case "SET_GUIDED_BUDGET":
       return {
         ...state,
         guided: {
           ...state.guided,
-          timeline: action.payload
-        }
+          budget: action.payload,
+        },
       };
 
-    case 'SET_GUIDED_FEATURES':
+    case "SET_GUIDED_TIMELINE":
       return {
         ...state,
         guided: {
           ...state.guided,
-          importantFeatures: action.payload
-        }
+          timeline: action.payload,
+        },
       };
 
-    case 'SET_GUIDED_ADDITIONAL_REQUESTS':
+    case "SET_GUIDED_FEATURES":
       return {
         ...state,
         guided: {
           ...state.guided,
-          additionalRequests: action.payload
-        }
+          importantFeatures: action.payload,
+        },
       };
 
-    case 'SET_GUIDED_CONTACT':
+    case "SET_GUIDED_ADDITIONAL_REQUESTS":
       return {
         ...state,
         guided: {
           ...state.guided,
-          contact: { ...state.guided.contact, ...action.payload }
-        }
+          additionalRequests: action.payload,
+        },
       };
 
-    case 'SET_FREE_DESCRIPTION':
+    case "SET_GUIDED_CONTACT":
+      return {
+        ...state,
+        guided: {
+          ...state.guided,
+          contact: { ...state.guided.contact, ...action.payload },
+        },
+      };
+
+    case "SET_FREE_DESCRIPTION":
       return {
         ...state,
         free: {
           ...state.free,
-          description: action.payload
-        }
+          description: action.payload,
+        },
       };
 
-    case 'SET_FREE_CONTACT':
+    case "SET_FREE_CONTACT":
       return {
         ...state,
         free: {
           ...state.free,
-          contact: { ...state.free.contact, ...action.payload }
-        }
+          contact: { ...state.free.contact, ...action.payload },
+        },
       };
 
-    case 'RESET_STATE':
+    case "RESET_STATE":
       return initialState;
 
-    case 'LOAD_FROM_STORAGE':
+    case "LOAD_FROM_STORAGE":
       return action.payload;
 
     default:
@@ -178,14 +187,20 @@ interface ConsultationContextType {
   setFeatures: (features: ImportantFeature[]) => void;
   setAdditionalRequests: (requests: string) => void;
   setContact: (contact: Partial<ContactInfo>, trackType: TrackType) => void;
-  setFreeProject: (description: string, budget?: string, timeline?: string) => void;
+  setFreeProject: (
+    description: string,
+    budget?: string,
+    timeline?: string
+  ) => void;
   setFreeDescription: (description: string) => void;
   resetState: () => void;
   saveToStorage: () => void;
   canProceedToNext: () => boolean;
 }
 
-const ConsultationContext = createContext<ConsultationContextType | undefined>(undefined);
+const ConsultationContext = createContext<ConsultationContextType | undefined>(
+  undefined
+);
 
 // Provider 컴포넌트
 interface ConsultationProviderProps {
@@ -201,10 +216,10 @@ export function ConsultationProvider({ children }: ConsultationProviderProps) {
       const savedState = localStorage.getItem(STORAGE_KEY);
       if (savedState) {
         const parsedState = JSON.parse(savedState);
-        dispatch({ type: 'LOAD_FROM_STORAGE', payload: parsedState });
+        dispatch({ type: "LOAD_FROM_STORAGE", payload: parsedState });
       }
     } catch (error) {
-      console.warn('Failed to load state from localStorage:', error);
+      console.warn("Failed to load state from localStorage:", error);
     }
   }, []);
 
@@ -214,62 +229,66 @@ export function ConsultationProvider({ children }: ConsultationProviderProps) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       } catch (error) {
-        console.warn('Failed to save state to localStorage:', error);
+        console.warn("Failed to save state to localStorage:", error);
       }
     }
   }, [state]);
 
   // Helper functions
   const setTrackType = (trackType: TrackType) => {
-    dispatch({ type: 'SET_TRACK_TYPE', payload: trackType });
+    dispatch({ type: "SET_TRACK_TYPE", payload: trackType });
   };
 
   const nextStep = () => {
     if (state.currentStep < state.totalSteps) {
-      dispatch({ type: 'SET_CURRENT_STEP', payload: state.currentStep + 1 });
+      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
     }
   };
 
   const prevStep = () => {
     if (state.currentStep > 1) {
-      dispatch({ type: 'SET_CURRENT_STEP', payload: state.currentStep - 1 });
+      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep - 1 });
     }
   };
 
   const setServiceType = (serviceType: ServiceType) => {
-    dispatch({ type: 'SET_GUIDED_SERVICE_TYPE', payload: serviceType });
+    dispatch({ type: "SET_GUIDED_SERVICE_TYPE", payload: serviceType });
   };
 
   const setProjectSize = (size: ProjectSize) => {
-    dispatch({ type: 'SET_GUIDED_PROJECT_SIZE', payload: size });
+    dispatch({ type: "SET_GUIDED_PROJECT_SIZE", payload: size });
   };
 
   const setBudget = (budget: Budget) => {
-    dispatch({ type: 'SET_GUIDED_BUDGET', payload: budget });
+    dispatch({ type: "SET_GUIDED_BUDGET", payload: budget });
   };
 
   const setTimeline = (timeline: Timeline) => {
-    dispatch({ type: 'SET_GUIDED_TIMELINE', payload: timeline });
+    dispatch({ type: "SET_GUIDED_TIMELINE", payload: timeline });
   };
 
   const setFeatures = (features: ImportantFeature[]) => {
-    dispatch({ type: 'SET_GUIDED_FEATURES', payload: features });
+    dispatch({ type: "SET_GUIDED_FEATURES", payload: features });
   };
 
   const setAdditionalRequests = (requests: string) => {
-    dispatch({ type: 'SET_GUIDED_ADDITIONAL_REQUESTS', payload: requests });
+    dispatch({ type: "SET_GUIDED_ADDITIONAL_REQUESTS", payload: requests });
   };
 
   const setContact = (contact: Partial<ContactInfo>, trackType: TrackType) => {
-    if (trackType === 'guided') {
-      dispatch({ type: 'SET_GUIDED_CONTACT', payload: contact });
+    if (trackType === "guided") {
+      dispatch({ type: "SET_GUIDED_CONTACT", payload: contact });
     } else {
-      dispatch({ type: 'SET_FREE_CONTACT', payload: contact });
+      dispatch({ type: "SET_FREE_CONTACT", payload: contact });
     }
   };
 
-  const setFreeProject = (description: string, budget?: string, timeline?: string) => {
-    dispatch({ type: 'SET_FREE_DESCRIPTION', payload: description });
+  const setFreeProject = (
+    description: string,
+    budget?: string,
+    timeline?: string
+  ) => {
+    dispatch({ type: "SET_FREE_DESCRIPTION", payload: description });
     if (budget !== undefined) {
       // dispatch({ type: 'SET_FREE_BUDGET', payload: budget });
     }
@@ -279,19 +298,19 @@ export function ConsultationProvider({ children }: ConsultationProviderProps) {
   };
 
   const setFreeDescription = (description: string) => {
-    dispatch({ type: 'SET_FREE_DESCRIPTION', payload: description });
+    dispatch({ type: "SET_FREE_DESCRIPTION", payload: description });
   };
 
   const resetState = () => {
     localStorage.removeItem(STORAGE_KEY);
-    dispatch({ type: 'RESET_STATE' });
+    dispatch({ type: "RESET_STATE" });
   };
 
   const saveToStorage = () => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (error) {
-      console.warn('Failed to save state to localStorage:', error);
+      console.warn("Failed to save state to localStorage:", error);
     }
   };
 
@@ -299,7 +318,7 @@ export function ConsultationProvider({ children }: ConsultationProviderProps) {
   const canProceedToNext = (): boolean => {
     if (!state.trackType) return false;
 
-    if (state.trackType === 'guided') {
+    if (state.trackType === "guided") {
       switch (state.currentStep) {
         case 1:
           return !!state.guided.serviceType;
@@ -344,7 +363,7 @@ export function ConsultationProvider({ children }: ConsultationProviderProps) {
     setFreeDescription,
     resetState,
     saveToStorage,
-    canProceedToNext
+    canProceedToNext,
   };
 
   return (
@@ -358,7 +377,9 @@ export function ConsultationProvider({ children }: ConsultationProviderProps) {
 export function useConsultation() {
   const context = useContext(ConsultationContext);
   if (context === undefined) {
-    throw new Error('useConsultation must be used within a ConsultationProvider');
+    throw new Error(
+      "useConsultation must be used within a ConsultationProvider"
+    );
   }
   return context;
 }

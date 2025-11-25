@@ -3,8 +3,9 @@
 ## 📊 현재 아키텍처 구조 분석
 
 ### 🗂️ Layer 구조 현황
+
 ```
-visionmakers-web/
+LeoFitTech-web/
 ├── types/                    # 📝 Domain Layer
 │   └── database.ts          # 타입 정의, 엔티티
 ├── lib/                     # 🔧 Infrastructure Layer
@@ -24,6 +25,7 @@ visionmakers-web/
 ## ✅ Layer Separation 검토
 
 ### 🎨 Presentation Layer (React Components)
+
 **현재 상태 분석:**
 
 ```typescript
@@ -53,6 +55,7 @@ export default function ConsultationForm() {
 **평가:** Presentation Layer 분리 우수 ✅
 
 ### 💼 Business Logic Layer (Services)
+
 **현재 상태 분석:**
 
 ```typescript
@@ -61,7 +64,6 @@ export async function createGuidedConsultation(
   formData: GuidedConsultationForm,
   metadata?: ConsultationMetadata
 ): Promise<ApiResponse<ConsultationResult>> {
-
   // ✅ 입력 검증 (도메인 규칙)
   const validation = validateGuidedConsultationForm(formData);
   if (!validation.success) {
@@ -74,7 +76,7 @@ export async function createGuidedConsultation(
 
   // ✅ 인프라에 위임 (데이터 저장)
   const { data, error } = await supabaseAdmin
-    .from('consultations')
+    .from("consultations")
     .insert(consultationData);
 }
 
@@ -82,9 +84,11 @@ export async function createGuidedConsultation(
 export function generateConsultationNumber(): string {
   const today = new Date();
   const year = today.getFullYear().toString().slice(-2);
-  const month = (today.getMonth() + 1).toString().padStart(2, '0');
-  const day = today.getDate().toString().padStart(2, '0');
-  const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  const month = (today.getMonth() + 1).toString().padStart(2, "0");
+  const day = today.getDate().toString().padStart(2, "0");
+  const randomNum = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, "0");
   return `VM${year}${month}${day}${randomNum}`;
 }
 ```
@@ -92,18 +96,15 @@ export function generateConsultationNumber(): string {
 **평가:** Business Logic 분리 우수 ✅
 
 ### 🔧 Infrastructure Layer (External Services)
+
 **현재 상태 분석:**
 
 ```typescript
 // ✅ 외부 의존성 격리 - lib/supabase.ts
-export const supabase = createClient<Database>(
-  supabaseUrl,
-  supabaseAnonKey,
-  {
-    auth: { autoRefreshToken: false, persistSession: false },
-    realtime: { enabled: false },
-  }
-);
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  auth: { autoRefreshToken: false, persistSession: false },
+  realtime: { enabled: false },
+});
 
 export const supabaseAdmin = createClient<Database>(
   supabaseUrl,
@@ -123,6 +124,7 @@ export const supabaseAdmin = createClient<Database>(
 **평가:** Infrastructure Layer 분리 우수 ✅
 
 ### 📝 Domain Layer (Types & Entities)
+
 **현재 상태 분석:**
 
 ```typescript
@@ -141,9 +143,20 @@ export interface Database {
 }
 
 // ✅ 도메인 값 객체
-export type ConsultationType = 'guided' | 'free';
-export type ConsultationStatus = 'pending' | 'contacted' | 'in_progress' | 'completed' | 'cancelled' | 'on_hold';
-export type ServiceType = 'homepage' | 'shopping' | 'booking' | 'membership' | 'other';
+export type ConsultationType = "guided" | "free";
+export type ConsultationStatus =
+  | "pending"
+  | "contacted"
+  | "in_progress"
+  | "completed"
+  | "cancelled"
+  | "on_hold";
+export type ServiceType =
+  | "homepage"
+  | "shopping"
+  | "booking"
+  | "membership"
+  | "other";
 
 // ✅ 비즈니스 규칙 표현
 export interface GuidedConsultationForm {
@@ -151,9 +164,9 @@ export interface GuidedConsultationForm {
   contact_phone: string;
   contact_email: string;
   service_type: ServiceType;
-  project_size: 'small' | 'medium' | 'large';
-  budget: 'under_1000' | '1000_to_3000' | '3000_to_5000' | 'over_5000';
-  timeline: '1_month' | '1_3_months' | '3_6_months' | 'over_6_months';
+  project_size: "small" | "medium" | "large";
+  budget: "under_1000" | "1000_to_3000" | "3000_to_5000" | "over_5000";
+  timeline: "1_month" | "1_3_months" | "3_6_months" | "over_6_months";
   important_features: string[];
 }
 ```
@@ -186,7 +199,7 @@ types/database.ts
 ```typescript
 // ⚠️ 개선 권장 - 인터페이스 분리 원칙
 // 현재: 서비스가 Supabase에 직접 의존
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from "@/lib/supabase";
 
 // 개선: 인터페이스를 통한 의존성 역전
 interface ConsultationRepository {
@@ -204,15 +217,17 @@ class ConsultationService {
 ### 🔧 의존성 주입 개선 권장
 
 **현재 상태:**
+
 ```typescript
 // ❌ 하드코딩된 의존성
 export async function createGuidedConsultation() {
   // Supabase 클라이언트에 직접 의존
-  const { data, error } = await supabaseAdmin.from('consultations').insert();
+  const { data, error } = await supabaseAdmin.from("consultations").insert();
 }
 ```
 
 **개선 권장:**
+
 ```typescript
 // ✅ 의존성 주입 패턴
 interface DatabaseClient {
@@ -224,7 +239,7 @@ export function createConsultationService(db: DatabaseClient) {
     async createGuidedConsultation(formData: GuidedConsultationForm) {
       // 인터페이스를 통한 데이터 접근
       return await db.insertConsultation(transformedData);
-    }
+    },
   };
 }
 ```
@@ -232,6 +247,7 @@ export function createConsultationService(db: DatabaseClient) {
 ## 🏗️ Domain Design 검토
 
 ### ✅ 엔티티 정의
+
 ```typescript
 // ✅ 명확한 엔티티 식별
 1. Consultation (상담) - 핵심 엔티티
@@ -250,20 +266,46 @@ export function createConsultationService(db: DatabaseClient) {
 ```
 
 ### ✅ 값 객체 (Value Objects)
+
 ```typescript
 // ✅ 불변 값 객체 활용
-export type ConsultationStatus = 'pending' | 'contacted' | 'in_progress' | 'completed' | 'cancelled' | 'on_hold';
-export type ServiceType = 'homepage' | 'shopping' | 'booking' | 'membership' | 'other';
-export type ProjectSize = 'small' | 'medium' | 'large';
-export type Budget = 'under_1000' | '1000_to_3000' | '3000_to_5000' | 'over_5000';
+export type ConsultationStatus =
+  | "pending"
+  | "contacted"
+  | "in_progress"
+  | "completed"
+  | "cancelled"
+  | "on_hold";
+export type ServiceType =
+  | "homepage"
+  | "shopping"
+  | "booking"
+  | "membership"
+  | "other";
+export type ProjectSize = "small" | "medium" | "large";
+export type Budget =
+  | "under_1000"
+  | "1000_to_3000"
+  | "3000_to_5000"
+  | "over_5000";
 
 // ✅ 값 검증 로직
-export function validateConsultationStatus(status: string): status is ConsultationStatus {
-  return ['pending', 'contacted', 'in_progress', 'completed', 'cancelled', 'on_hold'].includes(status);
+export function validateConsultationStatus(
+  status: string
+): status is ConsultationStatus {
+  return [
+    "pending",
+    "contacted",
+    "in_progress",
+    "completed",
+    "cancelled",
+    "on_hold",
+  ].includes(status);
 }
 ```
 
 ### ⚠️ 집계 (Aggregates) 개선 권장
+
 ```typescript
 // 현재: 개별 엔티티 관리
 // 개선 권장: 집계 루트 패턴
@@ -282,6 +324,7 @@ interface ConsultationAggregate {
 ```
 
 ### ✅ 도메인 서비스
+
 ```typescript
 // ✅ 도메인 서비스 식별됨
 1. ConsultationService - 상담 관련 비즈니스 로직
@@ -301,28 +344,35 @@ export function generateConsultationNumber(): string {
 ## 📊 Clean Architecture 점수 현황
 
 ### 🟢 우수한 영역 (90-100점)
+
 - **Layer Separation**: 각 레이어 역할 명확히 분리됨
 - **Domain Modeling**: 엔티티, 값 객체 잘 정의됨
 - **Business Logic**: 서비스 레이어에 집중됨
 - **Presentation**: UI 로직과 비즈니스 로직 분리됨
 
 ### 🟡 개선 필요 영역 (70-89점)
+
 - **Dependency Inversion**: 인터페이스 활용 부족
 - **Aggregate Design**: 집계 패턴 미적용
 - **Repository Pattern**: 데이터 접근 추상화 부족
 
 ### 🔴 시급 개선 영역 (해당없음)
+
 - 현재 심각한 아키텍처 위반 사항 없음
 
 ## 🎯 개선 Action Items
 
 ### 우선순위 1 (High)
+
 1. **Repository 인터페이스 도입**
+
    ```typescript
    interface ConsultationRepository {
      create(data: ConsultationInsert): Promise<ApiResponse<Consultation>>;
      findById(id: string): Promise<ApiResponse<Consultation>>;
-     findAll(filters: ConsultationFilters): Promise<ApiResponse<Consultation[]>>;
+     findAll(
+       filters: ConsultationFilters
+     ): Promise<ApiResponse<Consultation[]>>;
    }
    ```
 
@@ -331,12 +381,14 @@ export function generateConsultationNumber(): string {
    // services/container.ts
    export const serviceContainer = {
      consultationService: createConsultationService(supabaseRepository),
-     authService: createAuthService(supabaseAuthRepository)
+     authService: createAuthService(supabaseAuthRepository),
    };
    ```
 
 ### 우선순위 2 (Medium)
+
 1. **집계 루트 패턴 적용**
+
    - Consultation 집계 생성
    - 비즈니스 규칙 캡슐화
 
@@ -345,7 +397,9 @@ export function generateConsultationNumber(): string {
    - 이벤트 핸들러 분리
 
 ### 우선순위 3 (Low)
+
 1. **CQRS 패턴 고려**
+
    - 조회와 명령 분리
    - 복잡한 쿼리 최적화
 

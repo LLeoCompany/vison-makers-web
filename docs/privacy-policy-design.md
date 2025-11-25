@@ -1,17 +1,20 @@
-# VisionMakers 개인정보 보호 정책 설계 문서
+# LeoFitTech 개인정보 보호 정책 설계 문서
 
 ## 📋 문서 개요
 
 ### 목적
-VisionMakers 상담 시스템에서 수집, 처리, 보관하는 개인정보에 대한 체계적인 보호 방안과 정책을 정의합니다.
+
+LeoFitTech 상담 시스템에서 수집, 처리, 보관하는 개인정보에 대한 체계적인 보호 방안과 정책을 정의합니다.
 
 ### 범위
+
 - 웹사이트 방문자 정보
 - 상담 신청자 개인정보
 - 마케팅 및 분석 데이터
 - 쿠키 및 추적 기술
 
 ### 법적 근거
+
 - 개인정보보호법 (한국)
 - 정보통신망 이용촉진 및 정보보호 등에 관한 법률
 - GDPR (EU 방문자 대응)
@@ -23,49 +26,56 @@ VisionMakers 상담 시스템에서 수집, 처리, 보관하는 개인정보에
 ### 1. 수집하는 개인정보 항목
 
 #### 1.1 필수 수집 정보
-| 수집 항목 | 수집 방법 | 수집 목적 | 보관 기간 |
-|-----------|-----------|-----------|-----------|
-| 성명 | 상담 신청 폼 | 상담 서비스 제공, 본인 확인 | 3년 |
-| 전화번호 | 상담 신청 폼 | 상담 연락, 서비스 안내 | 3년 |
-| 이메일 주소 | 상담 신청 폼 | 상담 결과 발송, 서비스 안내 | 3년 |
+
+| 수집 항목   | 수집 방법    | 수집 목적                   | 보관 기간 |
+| ----------- | ------------ | --------------------------- | --------- |
+| 성명        | 상담 신청 폼 | 상담 서비스 제공, 본인 확인 | 3년       |
+| 전화번호    | 상담 신청 폼 | 상담 연락, 서비스 안내      | 3년       |
+| 이메일 주소 | 상담 신청 폼 | 상담 결과 발송, 서비스 안내 | 3년       |
 
 #### 1.2 선택 수집 정보
-| 수집 항목 | 수집 방법 | 수집 목적 | 보관 기간 |
-|-----------|-----------|-----------|-----------|
-| 회사명 | 상담 신청 폼 | 맞춤형 상담 서비스 제공 | 3년 |
-| 프로젝트 설명 | 상담 신청 폼 | 상담 품질 향상 | 3년 |
-| 예산 범위 | 상담 신청 폼 | 적합한 솔루션 제안 | 3년 |
+
+| 수집 항목     | 수집 방법    | 수집 목적               | 보관 기간 |
+| ------------- | ------------ | ----------------------- | --------- |
+| 회사명        | 상담 신청 폼 | 맞춤형 상담 서비스 제공 | 3년       |
+| 프로젝트 설명 | 상담 신청 폼 | 상담 품질 향상          | 3년       |
+| 예산 범위     | 상담 신청 폼 | 적합한 솔루션 제안      | 3년       |
 
 #### 1.3 자동 수집 정보
-| 수집 항목 | 수집 방법 | 수집 목적 | 보관 기간 |
-|-----------|-----------|-----------|-----------|
-| IP 주소 | 서버 로그 | 보안, 통계 분석 | 1년 |
-| 브라우저 정보 | User-Agent | 서비스 최적화 | 1년 |
-| 접속 시간 | 서버 로그 | 서비스 이용 패턴 분석 | 1년 |
-| 페이지 경로 | 웹 분석 도구 | 사용자 경험 개선 | 1년 |
-| 쿠키 ID | 브라우저 | 맞춤형 서비스 제공 | 1년 |
+
+| 수집 항목     | 수집 방법    | 수집 목적             | 보관 기간 |
+| ------------- | ------------ | --------------------- | --------- |
+| IP 주소       | 서버 로그    | 보안, 통계 분석       | 1년       |
+| 브라우저 정보 | User-Agent   | 서비스 최적화         | 1년       |
+| 접속 시간     | 서버 로그    | 서비스 이용 패턴 분석 | 1년       |
+| 페이지 경로   | 웹 분석 도구 | 사용자 경험 개선      | 1년       |
+| 쿠키 ID       | 브라우저     | 맞춤형 서비스 제공    | 1년       |
 
 ### 2. 수집 및 이용 목적
 
 #### 2.1 상담 서비스 제공
+
 - 고객 문의 접수 및 처리
 - 맞춤형 상담 서비스 제공
 - 견적서 및 제안서 발송
 - 프로젝트 진행 상황 안내
 
 #### 2.2 서비스 개선
+
 - 웹사이트 이용 패턴 분석
 - 서비스 품질 향상
 - 신규 서비스 개발
 - 사용자 경험 최적화
 
 #### 2.3 마케팅 및 광고
+
 - 맞춤형 광고 제공
 - 서비스 안내 이메일 발송
 - 이벤트 및 프로모션 안내
 - 만족도 조사
 
 #### 2.4 법적 의무 이행
+
 - 전자상거래법상 기록 보관
 - 세무 관련 기록 유지
 - 분쟁 해결 및 법적 대응
@@ -77,24 +87,26 @@ VisionMakers 상담 시스템에서 수집, 처리, 보관하는 개인정보에
 ### 1. 데이터 암호화
 
 #### 1.1 전송 중 암호화
+
 ```typescript
 // HTTPS 강제 적용
 const securityHeaders = {
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-  'X-XSS-Protection': '1; mode=block',
-  'Referrer-Policy': 'strict-origin-when-cross-origin'
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "X-XSS-Protection": "1; mode=block",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
 };
 ```
 
 #### 1.2 저장 시 암호화
+
 ```typescript
 // 민감 정보 암호화 저장
-import crypto from 'crypto';
+import crypto from "crypto";
 
 export class PersonalDataEncryption {
-  private static readonly ALGORITHM = 'aes-256-gcm';
+  private static readonly ALGORITHM = "aes-256-gcm";
   private static readonly KEY = process.env.ENCRYPTION_KEY;
 
   static encrypt(text: string): {
@@ -105,13 +117,13 @@ export class PersonalDataEncryption {
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipher(this.ALGORITHM, this.KEY);
 
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
+    let encrypted = cipher.update(text, "utf8", "hex");
+    encrypted += cipher.final("hex");
 
     return {
       encrypted,
-      iv: iv.toString('hex'),
-      tag: cipher.getAuthTag().toString('hex')
+      iv: iv.toString("hex"),
+      tag: cipher.getAuthTag().toString("hex"),
     };
   }
 
@@ -121,10 +133,10 @@ export class PersonalDataEncryption {
     tag: string;
   }): string {
     const decipher = crypto.createDecipher(this.ALGORITHM, this.KEY);
-    decipher.setAuthTag(Buffer.from(encryptedData.tag, 'hex'));
+    decipher.setAuthTag(Buffer.from(encryptedData.tag, "hex"));
 
-    let decrypted = decipher.update(encryptedData.encrypted, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
+    let decrypted = decipher.update(encryptedData.encrypted, "hex", "utf8");
+    decrypted += decipher.final("utf8");
 
     return decrypted;
   }
@@ -134,6 +146,7 @@ export class PersonalDataEncryption {
 ### 2. 접근 제어
 
 #### 2.1 데이터베이스 접근 제한
+
 ```sql
 -- 개인정보 접근 권한 관리
 CREATE ROLE privacy_officer;
@@ -170,33 +183,36 @@ FROM consultations;
 ```
 
 #### 2.2 API 레벨 접근 제어
+
 ```typescript
 // 개인정보 접근 권한 미들웨어
-export function withPrivacyControl(requiredRole: 'admin' | 'privacy_officer' | 'customer_service') {
-  return function(handler: NextApiHandler): NextApiHandler {
+export function withPrivacyControl(
+  requiredRole: "admin" | "privacy_officer" | "customer_service"
+) {
+  return function (handler: NextApiHandler): NextApiHandler {
     return async (req: NextApiRequest, res: NextApiResponse) => {
       // 인증 확인
       const session = await getSession(req);
       if (!session) {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res.status(401).json({ error: "Unauthorized" });
       }
 
       // 권한 확인
       if (!hasPrivacyAccess(session.user, requiredRole)) {
-        logger.securityEvent('unauthorized_privacy_access', 'high', req, {
+        logger.securityEvent("unauthorized_privacy_access", "high", req, {
           userId: session.user.id,
           requiredRole,
-          userRole: session.user.role
+          userRole: session.user.role,
         });
-        return res.status(403).json({ error: 'Insufficient privacy access' });
+        return res.status(403).json({ error: "Insufficient privacy access" });
       }
 
       // 개인정보 접근 로그
-      logger.businessEvent('privacy_data_access', 'personal_data', {
+      logger.businessEvent("privacy_data_access", "personal_data", {
         userId: session.user.id,
         userRole: session.user.role,
         method: req.method,
-        url: req.url
+        url: req.url,
       });
 
       return handler(req, res);
@@ -208,6 +224,7 @@ export function withPrivacyControl(requiredRole: 'admin' | 'privacy_officer' | '
 ### 3. 데이터 최소화
 
 #### 3.1 수집 데이터 최소화
+
 ```typescript
 // 필수/선택 필드 명확한 구분
 export interface ConsultationFormValidation {
@@ -233,6 +250,7 @@ export interface ConsentSettings {
 ```
 
 #### 3.2 데이터 익명화
+
 ```typescript
 // 개인정보 익명화 처리
 export class DataAnonymizer {
@@ -252,9 +270,10 @@ export class DataAnonymizer {
 
   static pseudonymize(personalId: string): string {
     // 개인정보를 가명처리
-    return crypto.createHash('sha256')
+    return crypto
+      .createHash("sha256")
       .update(personalId + process.env.PSEUDONYM_SALT)
-      .digest('hex')
+      .digest("hex")
       .substring(0, 16);
   }
 }
@@ -267,6 +286,7 @@ export class DataAnonymizer {
 ### 1. 수집 단계
 
 #### 1.1 수집 동의 프로세스
+
 ```typescript
 // 동의 수집 컴포넌트
 export const PrivacyConsentForm: React.FC = () => {
@@ -285,32 +305,24 @@ export const PrivacyConsentForm: React.FC = () => {
         <label htmlFor="essential">
           [필수] 상담 서비스 제공을 위한 개인정보 수집 및 이용
         </label>
-        <button onClick={() => showDetails('essential')}>상세보기</button>
+        <button onClick={() => showDetails("essential")}>상세보기</button>
       </div>
 
       {/* 선택 동의 */}
       <div className="consent-item optional">
-        <input
-          type="checkbox"
-          id="marketing"
-          onChange={handleConsentChange}
-        />
+        <input type="checkbox" id="marketing" onChange={handleConsentChange} />
         <label htmlFor="marketing">
           [선택] 마케팅 활용을 위한 개인정보 수집 및 이용
         </label>
-        <button onClick={() => showDetails('marketing')}>상세보기</button>
+        <button onClick={() => showDetails("marketing")}>상세보기</button>
       </div>
 
       <div className="consent-item optional">
-        <input
-          type="checkbox"
-          id="analytics"
-          onChange={handleConsentChange}
-        />
+        <input type="checkbox" id="analytics" onChange={handleConsentChange} />
         <label htmlFor="analytics">
           [선택] 서비스 개선을 위한 이용 통계 분석
         </label>
-        <button onClick={() => showDetails('analytics')}>상세보기</button>
+        <button onClick={() => showDetails("analytics")}>상세보기</button>
       </div>
     </div>
   );
@@ -318,11 +330,12 @@ export const PrivacyConsentForm: React.FC = () => {
 ```
 
 #### 1.2 동의 이력 관리
+
 ```typescript
 // 동의 이력 저장
 interface ConsentRecord {
   userId: string;
-  consentType: 'essential' | 'marketing' | 'analytics' | 'thirdParty';
+  consentType: "essential" | "marketing" | "analytics" | "thirdParty";
   consentGiven: boolean;
   consentDate: string;
   ipAddress: string;
@@ -335,40 +348,49 @@ export async function recordConsent(
   consents: ConsentSettings,
   metadata: { ip: string; userAgent: string }
 ): Promise<void> {
-  const records: ConsentRecord[] = Object.entries(consents).map(([type, given]) => ({
-    userId,
-    consentType: type as keyof ConsentSettings,
-    consentGiven: given,
-    consentDate: new Date().toISOString(),
-    ipAddress: metadata.ip,
-    userAgent: metadata.userAgent,
-    privacyPolicyVersion: CURRENT_PRIVACY_POLICY_VERSION
-  }));
+  const records: ConsentRecord[] = Object.entries(consents).map(
+    ([type, given]) => ({
+      userId,
+      consentType: type as keyof ConsentSettings,
+      consentGiven: given,
+      consentDate: new Date().toISOString(),
+      ipAddress: metadata.ip,
+      userAgent: metadata.userAgent,
+      privacyPolicyVersion: CURRENT_PRIVACY_POLICY_VERSION,
+    })
+  );
 
-  await supabase.from('consent_records').insert(records);
+  await supabase.from("consent_records").insert(records);
 }
 ```
 
 ### 2. 보관 단계
 
 #### 2.1 보관 기간 관리
+
 ```typescript
 // 개인정보 보관 기간 설정
 export const RETENTION_PERIODS = {
   CONSULTATION_DATA: 3 * 365, // 3년 (일)
-  MARKETING_DATA: 2 * 365,    // 2년
-  WEB_LOGS: 1 * 365,         // 1년
-  CONSENT_RECORDS: 5 * 365,   // 5년 (법정 의무)
-  WITHDRAWAL_RECORDS: 5 * 365 // 5년
+  MARKETING_DATA: 2 * 365, // 2년
+  WEB_LOGS: 1 * 365, // 1년
+  CONSENT_RECORDS: 5 * 365, // 5년 (법정 의무)
+  WITHDRAWAL_RECORDS: 5 * 365, // 5년
 };
 
 // 자동 삭제 스케줄러
 export class DataRetentionScheduler {
   static async scheduleDataDeletion(): Promise<void> {
     const cutoffDates = {
-      consultation: new Date(Date.now() - RETENTION_PERIODS.CONSULTATION_DATA * 24 * 60 * 60 * 1000),
-      marketing: new Date(Date.now() - RETENTION_PERIODS.MARKETING_DATA * 24 * 60 * 60 * 1000),
-      webLogs: new Date(Date.now() - RETENTION_PERIODS.WEB_LOGS * 24 * 60 * 60 * 1000)
+      consultation: new Date(
+        Date.now() - RETENTION_PERIODS.CONSULTATION_DATA * 24 * 60 * 60 * 1000
+      ),
+      marketing: new Date(
+        Date.now() - RETENTION_PERIODS.MARKETING_DATA * 24 * 60 * 60 * 1000
+      ),
+      webLogs: new Date(
+        Date.now() - RETENTION_PERIODS.WEB_LOGS * 24 * 60 * 60 * 1000
+      ),
     };
 
     // 보관 기간 초과 데이터 식별
@@ -381,7 +403,9 @@ export class DataRetentionScheduler {
     await this.recordDeletionHistory(expiredData);
   }
 
-  private static async safeDeleteData(expiredData: ExpiredDataSummary): Promise<void> {
+  private static async safeDeleteData(
+    expiredData: ExpiredDataSummary
+  ): Promise<void> {
     // 1. 백업 생성
     await this.createDeletionBackup(expiredData);
 
@@ -400,6 +424,7 @@ export class DataRetentionScheduler {
 ### 3. 파기 단계
 
 #### 3.1 개인정보 파기 절차
+
 ```typescript
 // 개인정보 파기 프로세스
 export class PersonalDataDestruction {
@@ -410,42 +435,49 @@ export class PersonalDataDestruction {
 
     try {
       // 1. 파기 대상 검증
-      const validationResult = await this.validateDestructionRequest(destructionRequest);
+      const validationResult = await this.validateDestructionRequest(
+        destructionRequest
+      );
       if (!validationResult.isValid) {
-        throw new Error(`Invalid destruction request: ${validationResult.reason}`);
+        throw new Error(
+          `Invalid destruction request: ${validationResult.reason}`
+        );
       }
 
       // 2. 파기 전 백업 (법적 요구사항)
-      const backupResult = await this.createDestructionBackup(destructionRequest);
+      const backupResult = await this.createDestructionBackup(
+        destructionRequest
+      );
 
       // 3. 데이터 완전 삭제
-      const deletionResult = await this.performSecureDeletion(destructionRequest);
+      const deletionResult = await this.performSecureDeletion(
+        destructionRequest
+      );
 
       // 4. 파기 증명서 생성
       const certificate = await this.generateDestructionCertificate({
         requestId: destructionRequest.id,
         targetData: destructionRequest.targetData,
-        destructionMethod: 'secure_overwrite',
+        destructionMethod: "secure_overwrite",
         executedBy: destructionRequest.executedBy,
         executedAt: new Date().toISOString(),
-        verificationHash: deletionResult.verificationHash
+        verificationHash: deletionResult.verificationHash,
       });
 
       return {
         success: true,
         certificate,
         duration: Date.now() - startTime,
-        destroyedRecords: deletionResult.recordCount
+        destroyedRecords: deletionResult.recordCount,
       };
-
     } catch (error) {
-      logger.securityEvent('data_destruction_failed', 'high', undefined, {
+      logger.securityEvent("data_destruction_failed", "high", undefined, {
         destructionRequestId: destructionRequest.id,
         error: {
           name: error.name,
           message: error.message,
-          stack: error.stack
-        }
+          stack: error.stack,
+        },
       });
 
       throw error;
@@ -461,6 +493,7 @@ export class PersonalDataDestruction {
 ### 1. 개인정보 열람권
 
 #### 1.1 본인 확인 절차
+
 ```typescript
 // 본인 확인 API
 export async function verifyIdentityForDataAccess(
@@ -472,32 +505,33 @@ export async function verifyIdentityForDataAccess(
   // 1. 이메일/전화번호로 기본 확인
   const user = await findUserByContact(email, phone);
   if (!user) {
-    return res.status(404).json({ error: 'User not found' });
+    return res.status(404).json({ error: "User not found" });
   }
 
   // 2. 추가 인증 (SMS/이메일 인증)
   const isCodeValid = await verifyAuthenticationCode(user.id, verificationCode);
   if (!isCodeValid) {
     // 실패 로그 기록
-    logger.securityEvent('identity_verification_failed', 'medium', req, {
+    logger.securityEvent("identity_verification_failed", "medium", req, {
       userId: user.id,
-      verificationMethod: 'sms_email'
+      verificationMethod: "sms_email",
     });
-    return res.status(401).json({ error: 'Invalid verification code' });
+    return res.status(401).json({ error: "Invalid verification code" });
   }
 
   // 3. 임시 접근 토큰 생성
-  const accessToken = generateDataAccessToken(user.id, '1hour');
+  const accessToken = generateDataAccessToken(user.id, "1hour");
 
   res.json({
     success: true,
     accessToken,
-    expiresIn: 3600
+    expiresIn: 3600,
   });
 }
 ```
 
 #### 1.2 개인정보 열람 제공
+
 ```typescript
 // 개인정보 열람 API
 export async function getPersonalDataSummary(
@@ -507,7 +541,7 @@ export async function getPersonalDataSummary(
   // 토큰 검증
   const tokenValid = await validateDataAccessToken(accessToken, userId);
   if (!tokenValid) {
-    throw new Error('Invalid or expired access token');
+    throw new Error("Invalid or expired access token");
   }
 
   // 개인정보 수집
@@ -517,10 +551,10 @@ export async function getPersonalDataSummary(
   const maskedData = maskSensitiveFields(personalData);
 
   // 열람 기록
-  logger.businessEvent('personal_data_accessed', 'user_request', {
+  logger.businessEvent("personal_data_accessed", "user_request", {
     userId,
-    accessMethod: 'self_service_portal',
-    dataTypes: Object.keys(personalData)
+    accessMethod: "self_service_portal",
+    dataTypes: Object.keys(personalData),
   });
 
   return {
@@ -529,7 +563,7 @@ export async function getPersonalDataSummary(
     consentHistory: personalData.consents,
     dataCollectionSources: personalData.sources,
     retentionStatus: personalData.retention,
-    marketingPreferences: personalData.marketing
+    marketingPreferences: personalData.marketing,
   };
 }
 ```
@@ -537,6 +571,7 @@ export async function getPersonalDataSummary(
 ### 2. 개인정보 정정권
 
 #### 2.1 정정 요청 처리
+
 ```typescript
 // 개인정보 정정 API
 export async function requestPersonalDataCorrection(
@@ -546,44 +581,48 @@ export async function requestPersonalDataCorrection(
   // 1. 정정 가능 필드 확인
   const editableFields = await getEditableFields(userId);
   const invalidFields = correctionRequest.fields.filter(
-    field => !editableFields.includes(field.name)
+    (field) => !editableFields.includes(field.name)
   );
 
   if (invalidFields.length > 0) {
-    throw new Error(`Cannot modify fields: ${invalidFields.map(f => f.name).join(', ')}`);
+    throw new Error(
+      `Cannot modify fields: ${invalidFields.map((f) => f.name).join(", ")}`
+    );
   }
 
   // 2. 변경 사항 검증
-  const validationResult = await validateCorrectionData(correctionRequest.fields);
+  const validationResult = await validateCorrectionData(
+    correctionRequest.fields
+  );
   if (!validationResult.isValid) {
-    throw new Error(`Validation failed: ${validationResult.errors.join(', ')}`);
+    throw new Error(`Validation failed: ${validationResult.errors.join(", ")}`);
   }
 
   // 3. 변경 이력 기록 (변경 전 데이터 백업)
   const currentData = await getCurrentPersonalData(userId);
   await recordDataChangeHistory({
     userId,
-    changeType: 'correction',
+    changeType: "correction",
     previousData: currentData,
     requestedChanges: correctionRequest.fields,
     requestedBy: userId,
-    requestedAt: new Date().toISOString()
+    requestedAt: new Date().toISOString(),
   });
 
   // 4. 데이터 업데이트
   await updatePersonalData(userId, correctionRequest.fields);
 
   // 5. 정정 완료 로그
-  logger.businessEvent('personal_data_corrected', 'user_request', {
+  logger.businessEvent("personal_data_corrected", "user_request", {
     userId,
-    correctedFields: correctionRequest.fields.map(f => f.name),
-    requestId: correctionRequest.id
+    correctedFields: correctionRequest.fields.map((f) => f.name),
+    requestId: correctionRequest.id,
   });
 
   return {
     success: true,
-    correctedFields: correctionRequest.fields.map(f => f.name),
-    processedAt: new Date().toISOString()
+    correctedFields: correctionRequest.fields.map((f) => f.name),
+    processedAt: new Date().toISOString(),
   };
 }
 ```
@@ -591,6 +630,7 @@ export async function requestPersonalDataCorrection(
 ### 3. 개인정보 삭제권 (잊힐 권리)
 
 #### 3.1 삭제 요청 검증
+
 ```typescript
 // 개인정보 삭제 요청 검증
 export async function validateDeletionRequest(
@@ -611,7 +651,9 @@ export async function validateDeletionRequest(
   const activeProjects = await getActiveProjects(userId);
   if (activeProjects.length > 0) {
     validationIssues.push(
-      `Cannot delete data while projects are active: ${activeProjects.map(p => p.id).join(', ')}`
+      `Cannot delete data while projects are active: ${activeProjects
+        .map((p) => p.id)
+        .join(", ")}`
     );
   }
 
@@ -626,14 +668,16 @@ export async function validateDeletionRequest(
   return {
     canDelete: validationIssues.length === 0,
     issues: validationIssues,
-    estimatedDeletionDate: validationIssues.length === 0
-      ? addDays(new Date(), 30) // 30일 후 삭제
-      : null
+    estimatedDeletionDate:
+      validationIssues.length === 0
+        ? addDays(new Date(), 30) // 30일 후 삭제
+        : null,
   };
 }
 ```
 
 #### 3.2 단계적 삭제 프로세스
+
 ```typescript
 // 개인정보 삭제 프로세스
 export class PersonalDataDeletionProcess {
@@ -641,7 +685,6 @@ export class PersonalDataDeletionProcess {
     userId: string,
     deletionRequest: UserDeletionRequest
   ): Promise<DeletionProcessResult> {
-
     // 1단계: 삭제 요청 접수 및 확인
     const requestId = await this.recordDeletionRequest(userId, deletionRequest);
 
@@ -658,9 +701,9 @@ export class PersonalDataDeletionProcess {
 
     return {
       requestId,
-      status: 'grace_period_started',
+      status: "grace_period_started",
       gracePeriodEnds: addDays(new Date(), 30),
-      canWithdraw: true
+      canWithdraw: true,
     };
   }
 
@@ -679,26 +722,28 @@ export class PersonalDataDeletionProcess {
       await this.secureDeletePersonalData(userId);
 
       // 4. 삭제 완료 인증서 생성
-      const certificate = await this.generateDeletionCertificate(userId, requestId);
+      const certificate = await this.generateDeletionCertificate(
+        userId,
+        requestId
+      );
 
       // 5. 삭제 완료 통지 (삭제된 이메일이 아닌 다른 연락처로)
       await this.notifyDeletionCompletion(userId, certificate);
 
-      logger.businessEvent('personal_data_deleted', 'user_request', {
+      logger.businessEvent("personal_data_deleted", "user_request", {
         userId: `deleted_${Date.now()}`, // 익명화된 식별자
         requestId,
-        deletionMethod: 'secure_overwrite'
+        deletionMethod: "secure_overwrite",
       });
-
     } catch (error) {
-      logger.error('Personal data deletion failed', {
+      logger.error("Personal data deletion failed", {
         userId,
         requestId,
         error: {
           name: error.name,
           message: error.message,
-          stack: error.stack
-        }
+          stack: error.stack,
+        },
       });
 
       // 삭제 실패 시 관리자에게 알림
@@ -715,14 +760,18 @@ export class PersonalDataDeletionProcess {
 ### 1. 실시간 모니터링
 
 #### 1.1 개인정보 접근 모니터링
+
 ```typescript
 // 개인정보 접근 감시 시스템
 export class PrivacyAccessMonitor {
   private static suspiciousPatterns = [
-    { pattern: 'bulk_data_access', threshold: 100 }, // 1시간 내 100건 이상 접근
-    { pattern: 'off_hours_access', timeRange: { start: '22:00', end: '06:00' } },
-    { pattern: 'location_anomaly', maxDistance: 1000 }, // 1000km 이상 위치 변화
-    { pattern: 'failed_authentication', threshold: 5 } // 5회 이상 인증 실패
+    { pattern: "bulk_data_access", threshold: 100 }, // 1시간 내 100건 이상 접근
+    {
+      pattern: "off_hours_access",
+      timeRange: { start: "22:00", end: "06:00" },
+    },
+    { pattern: "location_anomaly", maxDistance: 1000 }, // 1000km 이상 위치 변화
+    { pattern: "failed_authentication", threshold: 5 }, // 5회 이상 인증 실패
   ];
 
   static async monitorAccess(accessEvent: PrivacyAccessEvent): Promise<void> {
@@ -744,12 +793,12 @@ export class PrivacyAccessMonitor {
     const anomalies: SecurityAnomaly[] = [];
 
     // 대량 접근 감지
-    const recentAccess = await this.getRecentAccessCount(event.userId, '1hour');
+    const recentAccess = await this.getRecentAccessCount(event.userId, "1hour");
     if (recentAccess > 100) {
       anomalies.push({
-        type: 'bulk_data_access',
-        severity: 'high',
-        details: `${recentAccess} records accessed in 1 hour`
+        type: "bulk_data_access",
+        severity: "high",
+        details: `${recentAccess} records accessed in 1 hour`,
       });
     }
 
@@ -757,9 +806,9 @@ export class PrivacyAccessMonitor {
     const accessHour = new Date(event.timestamp).getHours();
     if (accessHour >= 22 || accessHour <= 6) {
       anomalies.push({
-        type: 'off_hours_access',
-        severity: 'medium',
-        details: `Access at ${accessHour}:00`
+        type: "off_hours_access",
+        severity: "medium",
+        details: `Access at ${accessHour}:00`,
       });
     }
 
@@ -769,36 +818,36 @@ export class PrivacyAccessMonitor {
 ```
 
 #### 1.2 자동화된 보안 대응
+
 ```typescript
 // 자동 보안 대응 시스템
 export class AutomatedSecurityResponse {
   static async handleSecurityEvent(
     event: SecurityEvent,
-    severity: 'low' | 'medium' | 'high' | 'critical'
+    severity: "low" | "medium" | "high" | "critical"
   ): Promise<void> {
-
     switch (severity) {
-      case 'critical':
+      case "critical":
         // 즉시 계정 잠금 및 관리자 알림
         await this.lockUserAccount(event.userId);
-        await this.notifySecurityTeam(event, 'immediate');
+        await this.notifySecurityTeam(event, "immediate");
         await this.createIncidentTicket(event);
         break;
 
-      case 'high':
+      case "high":
         // 추가 인증 요구 및 감시 강화
         await this.requireAdditionalAuth(event.userId);
         await this.increaseMonitoringLevel(event.userId);
-        await this.notifySecurityTeam(event, 'urgent');
+        await this.notifySecurityTeam(event, "urgent");
         break;
 
-      case 'medium':
+      case "medium":
         // 경고 로그 및 일일 보고서 포함
         await this.logSecurityWarning(event);
         await this.addToDailyReport(event);
         break;
 
-      case 'low':
+      case "low":
         // 로그 기록만
         await this.logSecurityEvent(event);
         break;
@@ -810,18 +859,19 @@ export class AutomatedSecurityResponse {
 ### 2. 정기 감사
 
 #### 2.1 개인정보 보호 감사 체크리스트
+
 ```typescript
 // 정기 감사 자동화
 export class PrivacyComplianceAudit {
   private static auditChecklist = [
-    'data_collection_consent_verification',
-    'retention_period_compliance',
-    'access_control_effectiveness',
-    'encryption_status_check',
-    'deletion_request_processing',
-    'breach_response_readiness',
-    'staff_training_completion',
-    'vendor_compliance_status'
+    "data_collection_consent_verification",
+    "retention_period_compliance",
+    "access_control_effectiveness",
+    "encryption_status_check",
+    "deletion_request_processing",
+    "breach_response_readiness",
+    "staff_training_completion",
+    "vendor_compliance_status",
   ];
 
   static async conductMonthlyAudit(): Promise<AuditReport> {
@@ -839,15 +889,17 @@ export class PrivacyComplianceAudit {
     return report;
   }
 
-  private static async performAuditCheck(checkItem: string): Promise<AuditResult> {
+  private static async performAuditCheck(
+    checkItem: string
+  ): Promise<AuditResult> {
     switch (checkItem) {
-      case 'data_collection_consent_verification':
+      case "data_collection_consent_verification":
         return await this.auditConsentRecords();
 
-      case 'retention_period_compliance':
+      case "retention_period_compliance":
         return await this.auditDataRetention();
 
-      case 'access_control_effectiveness':
+      case "access_control_effectiveness":
         return await this.auditAccessControls();
 
       default:
@@ -864,6 +916,7 @@ export class PrivacyComplianceAudit {
 ### 1. 침해 감지 및 초기 대응
 
 #### 1.1 침해 감지 시스템
+
 ```typescript
 // 개인정보 침해 감지
 export class DataBreachDetection {
@@ -872,10 +925,12 @@ export class DataBreachDetection {
       await this.checkUnauthorizedAccess(),
       await this.checkDataExfiltration(),
       await this.checkSystemIntrusion(),
-      await this.checkDataIntegrityIssues()
+      await this.checkDataIntegrityIssues(),
     ];
 
-    const suspiciousActivity = indicators.filter(indicator => indicator.risk > 0.7);
+    const suspiciousActivity = indicators.filter(
+      (indicator) => indicator.risk > 0.7
+    );
 
     if (suspiciousActivity.length > 0) {
       await this.initiateBreachResponse(suspiciousActivity);
@@ -892,7 +947,7 @@ export class DataBreachDetection {
     const breachAssessment = await this.assessBreachScope(indicators);
 
     // 3. 필요시 시스템 격리
-    if (breachAssessment.severity === 'critical') {
+    if (breachAssessment.severity === "critical") {
       await this.isolateAffectedSystems();
     }
 
@@ -905,33 +960,38 @@ export class DataBreachDetection {
 ### 2. 침해 신고 및 통지
 
 #### 2.1 72시간 내 감독기관 신고
+
 ```typescript
 // 개인정보보호위원회 신고 자동화
 export class BreachNotification {
   static async notifyAuthorities(
     breachIncident: BreachIncident
   ): Promise<NotificationResult> {
-
     // 72시간 내 신고 의무 확인
     const timeSinceBreach = Date.now() - breachIncident.discoveredAt.getTime();
     const hoursElapsed = timeSinceBreach / (1000 * 60 * 60);
 
     if (hoursElapsed > 72) {
-      logger.error('Breach notification deadline exceeded', {
+      logger.error("Breach notification deadline exceeded", {
         breachId: breachIncident.id,
         hoursElapsed,
-        deadline: 72
+        deadline: 72,
       });
     }
 
     // 신고서 자동 생성
-    const notificationReport = await this.generateNotificationReport(breachIncident);
+    const notificationReport = await this.generateNotificationReport(
+      breachIncident
+    );
 
     // 감독기관 신고
     const submissionResult = await this.submitToAuthorities(notificationReport);
 
     // 신고 완료 기록
-    await this.recordNotificationSubmission(breachIncident.id, submissionResult);
+    await this.recordNotificationSubmission(
+      breachIncident.id,
+      submissionResult
+    );
 
     return submissionResult;
   }
@@ -951,8 +1011,8 @@ export class BreachNotification {
       preventiveMeasures: incident.preventiveActions,
       contactInformation: {
         dataProtectionOfficer: process.env.DPO_CONTACT,
-        organization: 'VisionMakers Co., Ltd.'
-      }
+        organization: "LeoFitTech Co., Ltd.",
+      },
     };
   }
 }
@@ -961,17 +1021,20 @@ export class BreachNotification {
 ### 3. 정보주체 통지
 
 #### 3.1 개인별 침해 통지
+
 ```typescript
 // 정보주체 통지 시스템
 export class IndividualNotification {
   static async notifyAffectedIndividuals(
     breachIncident: BreachIncident
   ): Promise<void> {
-
     for (const individual of breachIncident.affectedIndividuals) {
       try {
         // 개인별 위험도 평가
-        const riskLevel = await this.assessIndividualRisk(individual, breachIncident);
+        const riskLevel = await this.assessIndividualRisk(
+          individual,
+          breachIncident
+        );
 
         // 맞춤형 통지 메시지 생성
         const notificationMessage = await this.generatePersonalizedNotification(
@@ -981,20 +1044,28 @@ export class IndividualNotification {
         );
 
         // 다중 채널 통지 (이메일, SMS)
-        await this.sendMultiChannelNotification(individual, notificationMessage);
+        await this.sendMultiChannelNotification(
+          individual,
+          notificationMessage
+        );
 
         // 통지 완료 기록
-        await this.recordIndividualNotification(individual.id, breachIncident.id);
-
+        await this.recordIndividualNotification(
+          individual.id,
+          breachIncident.id
+        );
       } catch (error) {
-        logger.error('Failed to notify individual about breach', {
+        logger.error("Failed to notify individual about breach", {
           individualId: individual.id,
           breachId: breachIncident.id,
-          error
+          error,
         });
 
         // 실패한 통지는 수동 처리 큐에 추가
-        await this.addToManualNotificationQueue(individual.id, breachIncident.id);
+        await this.addToManualNotificationQueue(
+          individual.id,
+          breachIncident.id
+        );
       }
     }
   }
@@ -1008,22 +1079,25 @@ export class IndividualNotification {
 ### 1. 개인정보 처리방침 템플릿
 
 ```markdown
-# VisionMakers 개인정보 처리방침
+# LeoFitTech 개인정보 처리방침
 
 **시행일자: 2024년 1월 1일**
 **개정일자: 2024년 9월 19일**
 
 ## 1. 개인정보의 처리 목적
 
-VisionMakers('회사'라 함)는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 개인정보보호법 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.
+LeoFitTech('회사'라 함)는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 개인정보보호법 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.
 
 ### 가. 홈페이지 회원가입 및 관리
+
 - 회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별·인증, 회원자격 유지·관리, 서비스 부정이용 방지 목적으로 개인정보를 처리합니다.
 
 ### 나. 상품 또는 서비스 제공
+
 - 서비스 제공, 계약서·청구서 발송, 콘텐츠 제공, 맞춤서비스 제공, 본인인증을 목적으로 개인정보를 처리합니다.
 
 ### 다. 고충처리
+
 - 민원인의 신원 확인, 민원사항 확인, 사실조사를 위한 연락·통지, 처리결과 통보 목적으로 개인정보를 처리합니다.
 
 ## 2. 개인정보의 처리 및 보유기간
@@ -1033,11 +1107,13 @@ VisionMakers('회사'라 함)는 다음의 목적을 위하여 개인정보를 �
 ② 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다.
 
 ### 가. 상담 신청 서비스 제공
+
 - 보유근거: 계약이행, 요금정산, 민원처리 등
 - 보유기간: 3년
 - 관련법령: 전자상거래 등에서의 소비자보호에 관한 법률
 
 ### 나. 마케팅 및 광고에의 활용
+
 - 보유근거: 정보주체 동의
 - 보유기간: 동의철회 시까지 또는 2년
 - 관련법령: 개인정보보호법
@@ -1060,9 +1136,10 @@ VisionMakers('회사'라 함)는 다음의 목적을 위하여 개인정보를 �
 ① 회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보보호책임자를 지정하고 있습니다.
 
 ### 개인정보보호책임자
+
 - 성명: 홍길동
 - 직책: 개인정보보호책임자
-- 연락처: privacy@visionmakers.co.kr, 02-1234-5678
+- 연락처: privacy@LeoFitTech.co.kr, 02-1234-5678
 
 ② 정보주체께서는 회사의 서비스를 이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보보호책임자에게 문의하실 수 있습니다.
 
@@ -1098,4 +1175,4 @@ VisionMakers('회사'라 함)는 다음의 목적을 위하여 개인정보를 �
 3. **복구 계획**: 데이터 백업 및 복구 절차 수립
 4. **소통 체계**: 고객, 당국, 미디어 대응 매뉴얼
 
-이 설계 문서를 기반으로 VisionMakers는 고객의 개인정보를 안전하고 투명하게 보호하며, 관련 법령을 준수하는 신뢰할 수 있는 서비스를 제공할 수 있습니다.
+이 설계 문서를 기반으로 LeoFitTech는 고객의 개인정보를 안전하고 투명하게 보호하며, 관련 법령을 준수하는 신뢰할 수 있는 서비스를 제공할 수 있습니다.
