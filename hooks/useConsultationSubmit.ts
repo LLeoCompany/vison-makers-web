@@ -82,14 +82,9 @@ export const useConsultationSubmit = (): UseConsultationSubmitReturn => {
         });
       }
 
-      // 성공 시 완료 페이지로 이동
-      const queryParams = new URLSearchParams({
-        consultationId: response.data.consultationId,
-        consultationNumber: response.data.consultationNumber,
-        type: data.type
-      });
-
-      router.push(`/consultation/complete?${queryParams.toString()}`);
+      // 성공 시 알럿 표시 후 메인 페이지로 이동
+      alert(`상담 신청이 완료되었습니다!\n\n상담 번호: ${response.data.consultationNumber}\n영업일 기준 24시간 이내에 연락드리겠습니다.`);
+      router.push("/");
 
       return response;
 
@@ -136,26 +131,21 @@ const makeApiRequest = async (data: ConsultationRequest): Promise<ConsultationRe
   const startTime = performance.now();
 
   try {
-    const response = await fetch('/api/consultation-submit', {
+    const response = await fetch('/api/contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Version': 'v2',
-        'X-Request-ID': generateRequestId(),
-        'X-Client-Timestamp': new Date().toISOString()
       },
       body: JSON.stringify({
-        ...data,
-        // 메타데이터 추가
-        metadata: {
-          userAgent: navigator.userAgent,
-          referrer: document.referrer,
-          timestamp: new Date().toISOString(),
-          screenResolution: `${screen.width}x${screen.height}`,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          language: navigator.language,
-          platform: navigator.platform
-        }
+        type: data.type,
+        contact: data.contact,
+        serviceType: data.serviceType,
+        projectSize: data.projectSize,
+        budget: data.budget,
+        timeline: data.timeline,
+        importantFeatures: data.importantFeatures,
+        additionalRequests: data.additionalRequests,
+        projectDescription: data.projectDescription,
       })
     });
 

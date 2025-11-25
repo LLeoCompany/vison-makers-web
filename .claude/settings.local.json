@@ -17,7 +17,9 @@
       "WebFetch(domain:imweb.me)",
       "Bash(npx tsc:*)",
       "Bash(git rm:*)",
-      "WebFetch(domain:sub-devteam.gridge.co.kr)"
+      "WebFetch(domain:sub-devteam.gridge.co.kr)",
+      "Bash(cat:*)",
+      "Bash(python3:*)"
     ],
     "deny": [],
     "ask": []

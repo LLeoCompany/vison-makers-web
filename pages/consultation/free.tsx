@@ -22,6 +22,7 @@ const FreeConsultationPage: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -68,19 +69,45 @@ const FreeConsultationPage: React.FC = () => {
       return;
     }
 
-    setFreeDescription(formData.description);
-    setContact(
-      {
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        company: formData.company,
-        preferredContactTime: formData.preferredContactTime,
-      },
-      "free"
-    );
+    setIsSubmitting(true);
 
-    router.push("/consultation/complete");
+    try {
+      // API 호출 (Slack 알림)
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "free",
+          contact: {
+            name: formData.name,
+            phone: formData.phone,
+            email: formData.email,
+            company: formData.company || undefined,
+            preferredContactTime: formData.preferredContactTime,
+          },
+          projectDescription: formData.description,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error?.message || "상담 신청 중 오류가 발생했습니다.");
+      }
+
+      // 성공 시 알럿 표시 후 메인 페이지로 이동
+      alert(`상담 신청이 완료되었습니다!\n\n상담 번호: ${result.data.consultationNumber}\n영업일 기준 24시간 이내에 연락드리겠습니다.`);
+      router.push("/");
+    } catch (error) {
+      console.error("Submission error:", error);
+      setErrors({
+        description: error instanceof Error ? error.message : "상담 신청 중 오류가 발생했습니다.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactTimeOptions = [
@@ -376,22 +403,29 @@ const FreeConsultationPage: React.FC = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  className="bg-green-600 text-white px-12 py-4 rounded-xl font-semibold hover:bg-green-700 transition-colors text-lg flex items-center"
+                  disabled={isSubmitting}
+                  className={`px-12 py-4 rounded-xl font-semibold transition-colors text-lg flex items-center ${
+                    isSubmitting
+                      ? "bg-gray-400 text-white cursor-not-allowed"
+                      : "bg-green-600 text-white hover:bg-green-700"
+                  }`}
                 >
-                  상담 신청하기
-                  <svg
-                    className="w-5 h-5 ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
+                  {isSubmitting ? "처리 중..." : "상담 신청하기"}
+                  {!isSubmitting && (
+                    <svg
+                      className="w-5 h-5 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
                 </button>
               </div>
             </div>

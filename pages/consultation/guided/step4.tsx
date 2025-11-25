@@ -96,17 +96,23 @@ export default function GuidedStep4() {
       // 상담 데이터 준비
       const consultationData = {
         type: "guided" as const,
+        contact: {
+          name: state.guided.contact.name!,
+          phone: state.guided.contact.phone!,
+          email: state.guided.contact.email!,
+          company: state.guided.contact.company,
+          preferredContactTime: state.guided.contact.preferredContactTime,
+        },
         serviceType: state.guided.serviceType!,
         projectSize: state.guided.projectSize!,
         budget: state.guided.budget!,
         timeline: state.guided.timeline!,
         importantFeatures: state.guided.importantFeatures,
         additionalRequests: state.guided.additionalRequests,
-        contact: state.guided.contact as ContactInfo,
       };
 
-      // API 호출
-      const response = await fetch("/api/consultation-submit", {
+      // API 호출 (Slack 알림)
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,14 +120,15 @@ export default function GuidedStep4() {
         body: JSON.stringify(consultationData),
       });
 
-      if (!response.ok) {
-        throw new Error("상담 신청 중 오류가 발생했습니다.");
-      }
-
       const result = await response.json();
 
-      // 성공 시 완료 페이지로 이동
-      router.push(`/consultation/thanks?id=${result.consultationId}`);
+      if (!response.ok || !result.success) {
+        throw new Error(result.error?.message || "상담 신청 중 오류가 발생했습니다.");
+      }
+
+      // 성공 시 알럿 표시 후 메인 페이지로 이동
+      alert(`상담 신청이 완료되었습니다!\n\n상담 번호: ${result.data.consultationNumber}\n영업일 기준 24시간 이내에 연락드리겠습니다.`);
+      router.push("/");
     } catch (error) {
       console.error("Submission error:", error);
       setErrors({
