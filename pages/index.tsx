@@ -98,7 +98,8 @@ const Index = () => {
             >
               <div style={{ color: "var(--primary)", marginBottom: "4px" }}>
                 {"const"}{" "}
-                <span style={{ color: "var(--gray-800)" }}>project</span> = {"{"}
+                <span style={{ color: "var(--gray-800)" }}>project</span> ={" "}
+                {"{"}
               </div>
               <div style={{ paddingLeft: "12px", color: "var(--gray-500)" }}>
                 success:{" "}
@@ -252,7 +253,8 @@ const Index = () => {
                 style={{
                   width: "40px",
                   height: "40px",
-                  background: "linear-gradient(135deg, #22c55e 0%, #10b981 100%)",
+                  background:
+                    "linear-gradient(135deg, #22c55e 0%, #10b981 100%)",
                   borderRadius: "10px",
                   display: "flex",
                   alignItems: "center",
@@ -315,8 +317,7 @@ const Index = () => {
           <div className="hero-content">
             <Fade direction="up">
               <div className="hero-badge">
-                <span className="hero-badge-dot"></span>
-                앱 스토어 출시 5회 이상
+                <span className="hero-badge-dot"></span>앱 스토어 출시 5회 이상
               </div>
             </Fade>
             <Fade direction="up" delay={100}>
@@ -330,7 +331,7 @@ const Index = () => {
             </Fade>
             <Fade direction="up" delay={200}>
               <p className="text-body-lg hero-subtitle">
-                Flutter 전문 개발팀이 웹, 앱, 백엔드까지 원스톱으로 해결합니다.
+                전문 개발팀이 웹, 앱, 백엔드까지 원스톱으로 해결합니다.
                 <br />
                 MVP 최소 3주 완성, 앱 스토어 출시까지 책임집니다.
               </p>
@@ -434,8 +435,7 @@ const Index = () => {
                 <h3 className="feature-title text-h3">모바일 앱 개발</h3>
                 <p className="feature-description">
                   Flutter로 iOS/Android 동시 개발
-                  <br />
-                  앱 스토어 출시 및 심사 대응까지 완벽 지원
+                  <br />앱 스토어 출시 및 심사 대응까지 완벽 지원
                 </p>
               </div>
             </Fade>
@@ -522,9 +522,7 @@ const Index = () => {
               >
                 Why Choose Us
               </p>
-              <h2 className="text-h2">
-                LeoFitTech를 선택하는 이유
-              </h2>
+              <h2 className="text-h2">LeoFitTech를 선택하는 이유</h2>
               <p
                 className="text-body-lg text-secondary"
                 style={{
@@ -798,27 +796,92 @@ const Index = () => {
               <div className="card" style={{ padding: 0, overflow: "hidden" }}>
                 <div
                   style={{
-                    background: "linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)",
+                    background:
+                      "linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)",
                     padding: "var(--spacing-xl)",
                     color: "white",
                   }}
                 >
-                  <div style={{ fontSize: "2rem", marginBottom: "var(--spacing-sm)" }}>🏋️</div>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "var(--spacing-xs)" }}>
+                  <div
+                    style={{
+                      fontSize: "2rem",
+                      marginBottom: "var(--spacing-sm)",
+                    }}
+                  >
+                    🏋️
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: 700,
+                      marginBottom: "var(--spacing-xs)",
+                    }}
+                  >
                     브로 (체육관 관리 앱)
                   </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>Flutter (iOS/Android)</p>
+                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
+                    Flutter (iOS/Android)
+                  </p>
                 </div>
                 <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p className="text-body-sm" style={{ marginBottom: "var(--spacing-md)", color: "var(--text-secondary)" }}>
-                    회원 관리, 출석 체크, 푸시 알림 기능을 갖춘 체육관 통합 관리 솔루션
+                  <p
+                    className="text-body-sm"
+                    style={{
+                      marginBottom: "var(--spacing-md)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
+                    회원 관리, 출석 체크, 푸시 알림 기능을 갖춘 체육관 통합 관리
+                    솔루션
                   </p>
-                  <div style={{ display: "flex", gap: "var(--spacing-sm)", flexWrap: "wrap", marginBottom: "var(--spacing-md)" }}>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>Supabase</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>FCM</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>1.5개월</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "var(--spacing-sm)",
+                      flexWrap: "wrap",
+                      marginBottom: "var(--spacing-md)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      Supabase
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      FCM
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      1.5개월
+                    </span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-xs)", color: "var(--success-green)", fontSize: "0.875rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-xs)",
+                      color: "var(--success-green)",
+                      fontSize: "0.875rem",
+                    }}
+                  >
                     <span>✓</span> 앱 스토어 출시 완료
                   </div>
                 </div>
@@ -829,27 +892,91 @@ const Index = () => {
               <div className="card" style={{ padding: 0, overflow: "hidden" }}>
                 <div
                   style={{
-                    background: "linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)",
+                    background:
+                      "linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)",
                     padding: "var(--spacing-xl)",
                     color: "white",
                   }}
                 >
-                  <div style={{ fontSize: "2rem", marginBottom: "var(--spacing-sm)" }}>🌍</div>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "var(--spacing-xs)" }}>
+                  <div
+                    style={{
+                      fontSize: "2rem",
+                      marginBottom: "var(--spacing-sm)",
+                    }}
+                  >
+                    🌍
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: 700,
+                      marginBottom: "var(--spacing-xs)",
+                    }}
+                  >
                     Playplanet (상점 탐색)
                   </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>Flutter (iOS/Android)</p>
+                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
+                    Flutter (iOS/Android)
+                  </p>
                 </div>
                 <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p className="text-body-sm" style={{ marginBottom: "var(--spacing-md)", color: "var(--text-secondary)" }}>
+                  <p
+                    className="text-body-sm"
+                    style={{
+                      marginBottom: "var(--spacing-md)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
                     위치 기반 피드, 포인트 시스템, NICEPAY/PASS 결제 연동
                   </p>
-                  <div style={{ display: "flex", gap: "var(--spacing-sm)", flexWrap: "wrap", marginBottom: "var(--spacing-md)" }}>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>NICEPAY</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>PASS 인증</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>2개월</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "var(--spacing-sm)",
+                      flexWrap: "wrap",
+                      marginBottom: "var(--spacing-md)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      NICEPAY
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      PASS 인증
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      2개월
+                    </span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-xs)", color: "var(--success-green)", fontSize: "0.875rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-xs)",
+                      color: "var(--success-green)",
+                      fontSize: "0.875rem",
+                    }}
+                  >
                     <span>✓</span> 앱 스토어 출시 완료
                   </div>
                 </div>
@@ -860,27 +987,91 @@ const Index = () => {
               <div className="card" style={{ padding: 0, overflow: "hidden" }}>
                 <div
                   style={{
-                    background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
+                    background:
+                      "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
                     padding: "var(--spacing-xl)",
                     color: "white",
                   }}
                 >
-                  <div style={{ fontSize: "2rem", marginBottom: "var(--spacing-sm)" }}>📍</div>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "var(--spacing-xs)" }}>
+                  <div
+                    style={{
+                      fontSize: "2rem",
+                      marginBottom: "var(--spacing-sm)",
+                    }}
+                  >
+                    📍
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: 700,
+                      marginBottom: "var(--spacing-xs)",
+                    }}
+                  >
                     우링 (실시간 위치 추적)
                   </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>Flutter (iOS/Android)</p>
+                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
+                    Flutter (iOS/Android)
+                  </p>
                 </div>
                 <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p className="text-body-sm" style={{ marginBottom: "var(--spacing-md)", color: "var(--text-secondary)" }}>
+                  <p
+                    className="text-body-sm"
+                    style={{
+                      marginBottom: "var(--spacing-md)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
                     WebSocket 실시간 통신, 푸시 알림, 1인 풀스택 개발
                   </p>
-                  <div style={{ display: "flex", gap: "var(--spacing-sm)", flexWrap: "wrap", marginBottom: "var(--spacing-md)" }}>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>WebSocket</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>GPS</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>1개월</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "var(--spacing-sm)",
+                      flexWrap: "wrap",
+                      marginBottom: "var(--spacing-md)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      WebSocket
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      GPS
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      1개월
+                    </span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-xs)", color: "var(--success-green)", fontSize: "0.875rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-xs)",
+                      color: "var(--success-green)",
+                      fontSize: "0.875rem",
+                    }}
+                  >
                     <span>✓</span> 앱 스토어 출시 완료
                   </div>
                 </div>
@@ -891,27 +1082,91 @@ const Index = () => {
               <div className="card" style={{ padding: 0, overflow: "hidden" }}>
                 <div
                   style={{
-                    background: "linear-gradient(135deg, #eab308 0%, #ca8a04 100%)",
+                    background:
+                      "linear-gradient(135deg, #eab308 0%, #ca8a04 100%)",
                     padding: "var(--spacing-xl)",
                     color: "white",
                   }}
                 >
-                  <div style={{ fontSize: "2rem", marginBottom: "var(--spacing-sm)" }}>⛳</div>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "var(--spacing-xs)" }}>
+                  <div
+                    style={{
+                      fontSize: "2rem",
+                      marginBottom: "var(--spacing-sm)",
+                    }}
+                  >
+                    ⛳
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: 700,
+                      marginBottom: "var(--spacing-xs)",
+                    }}
+                  >
                     골프링 (골프장 예약)
                   </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>반응형 웹</p>
+                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
+                    반응형 웹
+                  </p>
                 </div>
                 <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p className="text-body-sm" style={{ marginBottom: "var(--spacing-md)", color: "var(--text-secondary)" }}>
+                  <p
+                    className="text-body-sm"
+                    style={{
+                      marginBottom: "var(--spacing-md)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
                     검색, 예약 시스템, 카카오 알림톡, Slack API 실시간 로그
                   </p>
-                  <div style={{ display: "flex", gap: "var(--spacing-sm)", flexWrap: "wrap", marginBottom: "var(--spacing-md)" }}>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>알림톡</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>Slack</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>3주</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "var(--spacing-sm)",
+                      flexWrap: "wrap",
+                      marginBottom: "var(--spacing-md)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      알림톡
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      Slack
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      3주
+                    </span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-xs)", color: "var(--success-green)", fontSize: "0.875rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-xs)",
+                      color: "var(--success-green)",
+                      fontSize: "0.875rem",
+                    }}
+                  >
                     <span>✓</span> 실제 서비스 운영 중
                   </div>
                 </div>
@@ -922,27 +1177,91 @@ const Index = () => {
               <div className="card" style={{ padding: 0, overflow: "hidden" }}>
                 <div
                   style={{
-                    background: "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
+                    background:
+                      "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
                     padding: "var(--spacing-xl)",
                     color: "white",
                   }}
                 >
-                  <div style={{ fontSize: "2rem", marginBottom: "var(--spacing-sm)" }}>📰</div>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "var(--spacing-xs)" }}>
+                  <div
+                    style={{
+                      fontSize: "2rem",
+                      marginBottom: "var(--spacing-sm)",
+                    }}
+                  >
+                    📰
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: 700,
+                      marginBottom: "var(--spacing-xs)",
+                    }}
+                  >
                     AboutKorea (글로벌 뉴스)
                   </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>Next.js + Flutter</p>
+                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
+                    Next.js + Flutter
+                  </p>
                 </div>
                 <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p className="text-body-sm" style={{ marginBottom: "var(--spacing-md)", color: "var(--text-secondary)" }}>
+                  <p
+                    className="text-body-sm"
+                    style={{
+                      marginBottom: "var(--spacing-md)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
                     소셜 로그인, 관리자 페이지, 다국어 지원 글로벌 서비스
                   </p>
-                  <div style={{ display: "flex", gap: "var(--spacing-sm)", flexWrap: "wrap", marginBottom: "var(--spacing-md)" }}>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>다국어</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>OAuth</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>1.5개월</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "var(--spacing-sm)",
+                      flexWrap: "wrap",
+                      marginBottom: "var(--spacing-md)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      다국어
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      OAuth
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      1.5개월
+                    </span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-xs)", color: "var(--success-green)", fontSize: "0.875rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-xs)",
+                      color: "var(--success-green)",
+                      fontSize: "0.875rem",
+                    }}
+                  >
                     <span>✓</span> 앱 스토어 출시 완료
                   </div>
                 </div>
@@ -953,27 +1272,91 @@ const Index = () => {
               <div className="card" style={{ padding: 0, overflow: "hidden" }}>
                 <div
                   style={{
-                    background: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
+                    background:
+                      "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
                     padding: "var(--spacing-xl)",
                     color: "white",
                   }}
                 >
-                  <div style={{ fontSize: "2rem", marginBottom: "var(--spacing-sm)" }}>💪</div>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "var(--spacing-xs)" }}>
+                  <div
+                    style={{
+                      fontSize: "2rem",
+                      marginBottom: "var(--spacing-sm)",
+                    }}
+                  >
+                    💪
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: 700,
+                      marginBottom: "var(--spacing-xs)",
+                    }}
+                  >
                     DevGym (자사 SaaS)
                   </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>웹 + Flutter</p>
+                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
+                    웹 + Flutter
+                  </p>
                 </div>
                 <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p className="text-body-sm" style={{ marginBottom: "var(--spacing-md)", color: "var(--text-secondary)" }}>
+                  <p
+                    className="text-body-sm"
+                    style={{
+                      marginBottom: "var(--spacing-md)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
                     체육관 통합 관리 SaaS, 관리자 웹 + 회원 앱 + 출석 앱
                   </p>
-                  <div style={{ display: "flex", gap: "var(--spacing-sm)", flexWrap: "wrap", marginBottom: "var(--spacing-md)" }}>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>SaaS</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>투자유치</span>
-                    <span style={{ background: "var(--gray-100)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem" }}>3개월</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "var(--spacing-sm)",
+                      flexWrap: "wrap",
+                      marginBottom: "var(--spacing-md)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      SaaS
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      투자유치
+                    </span>
+                    <span
+                      style={{
+                        background: "var(--gray-100)",
+                        padding: "4px 8px",
+                        borderRadius: "4px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      3개월
+                    </span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-xs)", color: "var(--success-green)", fontSize: "0.875rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-xs)",
+                      color: "var(--success-green)",
+                      fontSize: "0.875rem",
+                    }}
+                  >
                     <span>✓</span> 100만원 투자 유치
                   </div>
                 </div>
@@ -1022,114 +1405,408 @@ const Index = () => {
 
           <div className="grid grid-cols-3 gap-xl">
             <Fade direction="up" delay={100}>
-              <div className="card" style={{ textAlign: "center", position: "relative" }}>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "var(--spacing-sm)", color: "var(--text-primary)" }}>
+              <div
+                className="card"
+                style={{ textAlign: "center", position: "relative" }}
+              >
+                <h3
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: 700,
+                    marginBottom: "var(--spacing-sm)",
+                    color: "var(--text-primary)",
+                  }}
+                >
                   STANDARD
                 </h3>
-                <p className="text-body-sm" style={{ color: "var(--text-secondary)", marginBottom: "var(--spacing-lg)" }}>
+                <p
+                  className="text-body-sm"
+                  style={{
+                    color: "var(--text-secondary)",
+                    marginBottom: "var(--spacing-lg)",
+                  }}
+                >
                   스타트업 MVP, 간단한 웹사이트
                 </p>
                 <div style={{ marginBottom: "var(--spacing-lg)" }}>
-                  <span style={{ fontSize: "2.5rem", fontWeight: 700, color: "var(--primary)" }}>80</span>
-                  <span style={{ fontSize: "1.25rem", color: "var(--text-secondary)" }}>만원~</span>
+                  <span
+                    style={{
+                      fontSize: "2.5rem",
+                      fontWeight: 700,
+                      color: "var(--primary)",
+                    }}
+                  >
+                    80
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "1.25rem",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
+                    만원~
+                  </span>
                 </div>
-                <ul style={{ textAlign: "left", marginBottom: "var(--spacing-xl)", listStyle: "none", padding: 0 }}>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 반응형 웹사이트
+                <ul
+                  style={{
+                    textAlign: "left",
+                    marginBottom: "var(--spacing-xl)",
+                    listStyle: "none",
+                    padding: 0,
+                  }}
+                >
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
+                    반응형 웹사이트
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 5-7 페이지
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span> 5-7
+                    페이지
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 개발 기간 2주
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
+                    개발 기간 2주
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 수정 3회
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
+                    수정 3회
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> A/S 1개월
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span> A/S
+                    1개월
                   </li>
                 </ul>
-                <Link href="/consultation/start" className="btn btn-secondary" style={{ width: "100%" }}>
+                <Link
+                  href="/consultation/start"
+                  className="btn btn-secondary"
+                  style={{ width: "100%" }}
+                >
                   상담 신청
                 </Link>
               </div>
             </Fade>
 
             <Fade direction="up" delay={200}>
-              <div className="card" style={{ textAlign: "center", position: "relative", border: "2px solid var(--primary)", transform: "scale(1.05)" }}>
-                <div style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "var(--primary)", color: "white", padding: "4px 16px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 600 }}>
+              <div
+                className="card"
+                style={{
+                  textAlign: "center",
+                  position: "relative",
+                  border: "2px solid var(--primary)",
+                  transform: "scale(1.05)",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "-12px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "var(--primary)",
+                    color: "white",
+                    padding: "4px 16px",
+                    borderRadius: "20px",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                  }}
+                >
                   추천
                 </div>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "var(--spacing-sm)", color: "var(--primary)" }}>
+                <h3
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: 700,
+                    marginBottom: "var(--spacing-sm)",
+                    color: "var(--primary)",
+                  }}
+                >
                   DELUXE
                 </h3>
-                <p className="text-body-sm" style={{ color: "var(--text-secondary)", marginBottom: "var(--spacing-lg)" }}>
+                <p
+                  className="text-body-sm"
+                  style={{
+                    color: "var(--text-secondary)",
+                    marginBottom: "var(--spacing-lg)",
+                  }}
+                >
                   중소기업, 커뮤니티 앱
                 </p>
                 <div style={{ marginBottom: "var(--spacing-lg)" }}>
-                  <span style={{ fontSize: "2.5rem", fontWeight: 700, color: "var(--primary)" }}>180</span>
-                  <span style={{ fontSize: "1.25rem", color: "var(--text-secondary)" }}>만원~</span>
+                  <span
+                    style={{
+                      fontSize: "2.5rem",
+                      fontWeight: 700,
+                      color: "var(--primary)",
+                    }}
+                  >
+                    180
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "1.25rem",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
+                    만원~
+                  </span>
                 </div>
-                <ul style={{ textAlign: "left", marginBottom: "var(--spacing-xl)", listStyle: "none", padding: 0 }}>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 웹 + iOS/Android 앱
+                <ul
+                  style={{
+                    textAlign: "left",
+                    marginBottom: "var(--spacing-xl)",
+                    listStyle: "none",
+                    padding: 0,
+                  }}
+                >
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span> 웹
+                    + iOS/Android 앱
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 10-15 페이지
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
+                    10-15 페이지
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 개발 기간 4주
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
+                    개발 기간 4주
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 푸시 알림, 소셜 로그인
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
+                    푸시 알림, 소셜 로그인
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 앱 스토어 출시 포함
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span> 앱
+                    스토어 출시 포함
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> A/S 2개월
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span> A/S
+                    2개월
                   </li>
                 </ul>
-                <Link href="/consultation/start" className="btn btn-primary" style={{ width: "100%" }}>
+                <Link
+                  href="/consultation/start"
+                  className="btn btn-primary"
+                  style={{ width: "100%" }}
+                >
                   상담 신청
                 </Link>
               </div>
             </Fade>
 
             <Fade direction="up" delay={300}>
-              <div className="card" style={{ textAlign: "center", position: "relative" }}>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "var(--spacing-sm)", color: "var(--text-primary)" }}>
+              <div
+                className="card"
+                style={{ textAlign: "center", position: "relative" }}
+              >
+                <h3
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: 700,
+                    marginBottom: "var(--spacing-sm)",
+                    color: "var(--text-primary)",
+                  }}
+                >
                   PREMIUM
                 </h3>
-                <p className="text-body-sm" style={{ color: "var(--text-secondary)", marginBottom: "var(--spacing-lg)" }}>
+                <p
+                  className="text-body-sm"
+                  style={{
+                    color: "var(--text-secondary)",
+                    marginBottom: "var(--spacing-lg)",
+                  }}
+                >
                   대기업, 대규모 커머스
                 </p>
                 <div style={{ marginBottom: "var(--spacing-lg)" }}>
-                  <span style={{ fontSize: "2.5rem", fontWeight: 700, color: "var(--primary)" }}>350</span>
-                  <span style={{ fontSize: "1.25rem", color: "var(--text-secondary)" }}>만원~</span>
+                  <span
+                    style={{
+                      fontSize: "2.5rem",
+                      fontWeight: 700,
+                      color: "var(--primary)",
+                    }}
+                  >
+                    350
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "1.25rem",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
+                    만원~
+                  </span>
                 </div>
-                <ul style={{ textAlign: "left", marginBottom: "var(--spacing-xl)", listStyle: "none", padding: 0 }}>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 웹 + 앱 + 관리자
+                <ul
+                  style={{
+                    textAlign: "left",
+                    marginBottom: "var(--spacing-xl)",
+                    listStyle: "none",
+                    padding: 0,
+                  }}
+                >
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span> 웹
+                    + 앱 + 관리자
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 20+ 페이지
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span> 20+
+                    페이지
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 개발 기간 8주
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
+                    개발 기간 8주
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 결제, 정산 시스템
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
+                    결제, 정산 시스템
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", borderBottom: "1px solid var(--gray-100)", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 전담 PM 배정
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      borderBottom: "1px solid var(--gray-100)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
+                    전담 PM 배정
                   </li>
-                  <li style={{ padding: "var(--spacing-sm) 0", display: "flex", alignItems: "center", gap: "var(--spacing-sm)" }}>
-                    <span style={{ color: "var(--success-green)" }}>✓</span> A/S 3개월
+                  <li
+                    style={{
+                      padding: "var(--spacing-sm) 0",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "var(--spacing-sm)",
+                    }}
+                  >
+                    <span style={{ color: "var(--success-green)" }}>✓</span> A/S
+                    3개월
                   </li>
                 </ul>
-                <Link href="/consultation/start" className="btn btn-secondary" style={{ width: "100%" }}>
+                <Link
+                  href="/consultation/start"
+                  className="btn btn-secondary"
+                  style={{ width: "100%" }}
+                >
                   상담 신청
                 </Link>
               </div>
@@ -1137,21 +1814,64 @@ const Index = () => {
           </div>
 
           <Fade direction="up" delay={400}>
-            <div style={{ marginTop: "var(--spacing-3xl)", textAlign: "center" }}>
-              <p className="text-body-sm" style={{ color: "var(--text-secondary)", marginBottom: "var(--spacing-md)" }}>
+            <div
+              style={{ marginTop: "var(--spacing-3xl)", textAlign: "center" }}
+            >
+              <p
+                className="text-body-sm"
+                style={{
+                  color: "var(--text-secondary)",
+                  marginBottom: "var(--spacing-md)",
+                }}
+              >
                 추가 옵션
               </p>
-              <div style={{ display: "flex", justifyContent: "center", gap: "var(--spacing-lg)", flexWrap: "wrap" }}>
-                <span style={{ background: "var(--gray-100)", padding: "8px 16px", borderRadius: "20px", fontSize: "0.875rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "var(--spacing-lg)",
+                  flexWrap: "wrap",
+                }}
+              >
+                <span
+                  style={{
+                    background: "var(--gray-100)",
+                    padding: "8px 16px",
+                    borderRadius: "20px",
+                    fontSize: "0.875rem",
+                  }}
+                >
                   결제 기능 +50만원
                 </span>
-                <span style={{ background: "var(--gray-100)", padding: "8px 16px", borderRadius: "20px", fontSize: "0.875rem" }}>
+                <span
+                  style={{
+                    background: "var(--gray-100)",
+                    padding: "8px 16px",
+                    borderRadius: "20px",
+                    fontSize: "0.875rem",
+                  }}
+                >
                   실시간 채팅 +80만원
                 </span>
-                <span style={{ background: "var(--gray-100)", padding: "8px 16px", borderRadius: "20px", fontSize: "0.875rem" }}>
+                <span
+                  style={{
+                    background: "var(--gray-100)",
+                    padding: "8px 16px",
+                    borderRadius: "20px",
+                    fontSize: "0.875rem",
+                  }}
+                >
                   소셜 로그인 +20만원
                 </span>
-                <span style={{ background: "var(--gray-100)", padding: "8px 16px", borderRadius: "20px", fontSize: "0.875rem" }}>
+                <span
+                  style={{
+                    background: "var(--gray-100)",
+                    padding: "8px 16px",
+                    borderRadius: "20px",
+                    fontSize: "0.875rem",
+                  }}
+                >
                   푸시 알림 +40만원
                 </span>
               </div>
@@ -1166,9 +1886,7 @@ const Index = () => {
           <div className="cta-section">
             <div className="cta-content">
               <Fade direction="up">
-                <h2 className="cta-title text-h2">
-                  지금 바로 시작하세요
-                </h2>
+                <h2 className="cta-title text-h2">지금 바로 시작하세요</h2>
                 <p className="cta-subtitle text-body-lg">
                   무료 상담을 통해 프로젝트 견적과 일정을 확인해보세요.
                   <br />
@@ -1219,10 +1937,46 @@ const Index = () => {
                 <br />
                 함께 성장하는 개발 파트너
               </p>
-              <div style={{ display: "flex", gap: "var(--spacing-sm)", marginTop: "var(--spacing-md)" }}>
-                <span style={{ background: "var(--gray-800)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem", color: "var(--gray-400)" }}>Flutter</span>
-                <span style={{ background: "var(--gray-800)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem", color: "var(--gray-400)" }}>React</span>
-                <span style={{ background: "var(--gray-800)", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem", color: "var(--gray-400)" }}>Node.js</span>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "var(--spacing-sm)",
+                  marginTop: "var(--spacing-md)",
+                }}
+              >
+                <span
+                  style={{
+                    background: "var(--gray-800)",
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    fontSize: "0.75rem",
+                    color: "var(--gray-400)",
+                  }}
+                >
+                  Flutter
+                </span>
+                <span
+                  style={{
+                    background: "var(--gray-800)",
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    fontSize: "0.75rem",
+                    color: "var(--gray-400)",
+                  }}
+                >
+                  React
+                </span>
+                <span
+                  style={{
+                    background: "var(--gray-800)",
+                    padding: "4px 8px",
+                    borderRadius: "4px",
+                    fontSize: "0.75rem",
+                    color: "var(--gray-400)",
+                  }}
+                >
+                  Node.js
+                </span>
               </div>
             </div>
 
@@ -1282,7 +2036,9 @@ const Index = () => {
                 <br />
                 전라북도 전주시
                 <br />
-                <span style={{ fontSize: "0.875rem" }}>영업시간: 평일 09:00 - 18:00</span>
+                <span style={{ fontSize: "0.875rem" }}>
+                  영업시간: 평일 09:00 - 18:00
+                </span>
               </div>
             </div>
 
@@ -1307,7 +2063,10 @@ const Index = () => {
                 <br />
                 24시간 내 연락드립니다.
               </p>
-              <Link href="/consultation/start" className="btn btn-primary btn-sm">
+              <Link
+                href="/consultation/start"
+                className="btn btn-primary btn-sm"
+              >
                 무료 상담 신청
               </Link>
             </div>
