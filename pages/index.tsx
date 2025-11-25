@@ -317,7 +317,7 @@ const Index = () => {
           <div className="hero-content">
             <Fade direction="up">
               <div className="hero-badge">
-                <span className="hero-badge-dot"></span>앱 스토어 출시 5회 이상
+                {/* <span className="hero-badge-dot"></span>앱 스토어 출시 5회 이상 */}
               </div>
             </Fade>
             <Fade direction="up" delay={100}>
@@ -352,7 +352,7 @@ const Index = () => {
             <Fade direction="up" delay={400}>
               <div className="hero-stats">
                 <div className="hero-stat">
-                  <div className="hero-stat-value">5+</div>
+                  <div className="hero-stat-value">IOS/Android</div>
                   <div className="hero-stat-label">앱 스토어 출시</div>
                 </div>
                 <div className="hero-stat">
@@ -523,7 +523,7 @@ const Index = () => {
                 Why Choose Us
               </p>
               <h2 className="text-h2">LeoFitTech를 선택하는 이유</h2>
-              <p
+              {/* <p
                 className="text-body-lg text-secondary"
                 style={{
                   marginTop: "var(--spacing-md)",
@@ -531,7 +531,7 @@ const Index = () => {
                 }}
               >
                 앱 스토어 출시 5회 이상, 검증된 실력으로 신뢰를 드립니다
-              </p>
+              </p> */}
             </Fade>
           </div>
 
@@ -543,7 +543,7 @@ const Index = () => {
                 </div>
                 <h3 className="feature-title text-h3">앱 스토어 출시 전문</h3>
                 <p className="feature-description">
-                  Google Play, App Store 출시 경험 5회 이상
+                  Google Play, App Store 출시 경험
                   <br />
                   심사 가이드라인 숙지, 리젝 대응 경험 풍부
                 </p>
