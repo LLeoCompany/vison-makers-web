@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Modal from "@/components/common/Modal";
 
 const Sub = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,17 @@ const Sub = () => {
     details: "",
   });
   const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState<{
+    isOpen: boolean;
+    type: "success" | "error";
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    type: "success",
+    title: "",
+    message: "",
+  });
 
   const router = useRouter();
 
@@ -41,22 +53,54 @@ const Sub = () => {
       setLoading(false); // 로딩 종료
 
       if (response.ok) {
-        alert("문의가 정상적으로 접수되었습니다");
-        router.push("/"); // 루트 페이지로 이동
+        setModal({
+          isOpen: true,
+          type: "success",
+          title: "문의가 접수되었습니다!",
+          message: "빠른 시일 내에 연락드리겠습니다.",
+        });
       } else {
         console.error("Error sending message to Slack:", result.error);
-        alert(`Error: ${result.error}`);
+        setModal({
+          isOpen: true,
+          type: "error",
+          title: "오류가 발생했습니다",
+          message: result.error || "잠시 후 다시 시도해주세요.",
+        });
       }
     } catch (error: unknown) {
       setLoading(false); // 로딩 종료
       console.error("Error submitting form:", error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      alert(`Error: ${errorMessage}`);
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
+      setModal({
+        isOpen: true,
+        type: "error",
+        title: "오류가 발생했습니다",
+        message: errorMessage,
+      });
+    }
+  };
+
+  const handleModalClose = () => {
+    setModal((prev) => ({ ...prev, isOpen: false }));
+    if (modal.type === "success") {
+      router.push("/");
     }
   };
 
   return (
     <div className="sub">
+      {/* 성공/에러 모달 */}
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={handleModalClose}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        buttonText={modal.type === "success" ? "홈으로 돌아가기" : "확인"}
+        onConfirm={handleModalClose}
+      />
+
       <Header />
       <div className="content">
         <div className="content-box">

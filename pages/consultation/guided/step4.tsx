@@ -11,6 +11,7 @@ import {
   ContactInfo,
   CONTACT_TIME_DESCRIPTIONS,
 } from "../../../types/consultation";
+import Modal from "../../../components/common/Modal";
 
 const contactTimeOptions = [
   {
@@ -50,6 +51,19 @@ export default function GuidedStep4() {
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [modal, setModal] = useState<{
+    isOpen: boolean;
+    type: "success" | "error";
+    title: string;
+    message: string;
+    subMessage?: string;
+    consultationNumber?: string;
+  }>({
+    isOpen: false,
+    type: "success",
+    title: "",
+    message: "",
+  });
 
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {};
@@ -126,9 +140,15 @@ export default function GuidedStep4() {
         throw new Error(result.error?.message || "상담 신청 중 오류가 발생했습니다.");
       }
 
-      // 성공 시 알럿 표시 후 메인 페이지로 이동
-      alert(`상담 신청이 완료되었습니다!\n\n상담 번호: ${result.data.consultationNumber}\n영업일 기준 24시간 이내에 연락드리겠습니다.`);
-      router.push("/");
+      // 성공 시 모달 표시
+      setModal({
+        isOpen: true,
+        type: "success",
+        title: "상담 신청이 완료되었습니다!",
+        message: `상담 번호: ${result.data.consultationNumber}`,
+        subMessage: "영업일 기준 24시간 이내에 연락드리겠습니다.",
+        consultationNumber: result.data.consultationNumber,
+      });
     } catch (error) {
       console.error("Submission error:", error);
       setErrors({
@@ -160,8 +180,27 @@ export default function GuidedStep4() {
     setErrors((prev) => ({ ...prev, preferredContactTime: undefined }));
   };
 
+  const handleModalClose = () => {
+    setModal((prev) => ({ ...prev, isOpen: false }));
+    if (modal.type === "success") {
+      router.push("/");
+    }
+  };
+
   return (
     <ConsultationLayout title="연락처 입력" showProgress={true}>
+      {/* 성공/에러 모달 */}
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={handleModalClose}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        subMessage={modal.subMessage}
+        buttonText={modal.type === "success" ? "홈으로 돌아가기" : "확인"}
+        onConfirm={handleModalClose}
+      />
+
       <div className="container">
         <div className="card">
           {/* 헤더 */}

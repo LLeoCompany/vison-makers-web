@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useConsultation } from "../../contexts/ConsultationContext";
 import { ContactInfo } from "../../types/consultation";
+import Modal from "../../components/common/Modal";
 
 const FreeConsultationPage: React.FC = () => {
   const router = useRouter();
@@ -23,6 +24,18 @@ const FreeConsultationPage: React.FC = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [modal, setModal] = useState<{
+    isOpen: boolean;
+    type: "success" | "error";
+    title: string;
+    message: string;
+    subMessage?: string;
+  }>({
+    isOpen: false,
+    type: "success",
+    title: "",
+    message: "",
+  });
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -97,9 +110,14 @@ const FreeConsultationPage: React.FC = () => {
         throw new Error(result.error?.message || "상담 신청 중 오류가 발생했습니다.");
       }
 
-      // 성공 시 알럿 표시 후 메인 페이지로 이동
-      alert(`상담 신청이 완료되었습니다!\n\n상담 번호: ${result.data.consultationNumber}\n영업일 기준 24시간 이내에 연락드리겠습니다.`);
-      router.push("/");
+      // 성공 시 모달 표시
+      setModal({
+        isOpen: true,
+        type: "success",
+        title: "상담 신청이 완료되었습니다!",
+        message: `상담 번호: ${result.data.consultationNumber}`,
+        subMessage: "영업일 기준 24시간 이내에 연락드리겠습니다.",
+      });
     } catch (error) {
       console.error("Submission error:", error);
       setErrors({
@@ -117,8 +135,27 @@ const FreeConsultationPage: React.FC = () => {
     { value: "anytime", label: "언제든" },
   ];
 
+  const handleModalClose = () => {
+    setModal((prev) => ({ ...prev, isOpen: false }));
+    if (modal.type === "success") {
+      router.push("/");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      {/* 성공/에러 모달 */}
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={handleModalClose}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+        subMessage={modal.subMessage}
+        buttonText={modal.type === "success" ? "홈으로 돌아가기" : "확인"}
+        onConfirm={handleModalClose}
+      />
+
       {/* 헤더 - Toss 스타일 */}
       <div className="bg-white border-b border-gray-100 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
