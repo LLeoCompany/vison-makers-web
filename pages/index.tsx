@@ -1437,7 +1437,7 @@ const Index = () => {
                       color: "var(--primary)",
                     }}
                   >
-                    80
+                    50
                   </span>
                   <span
                     style={{
@@ -1579,7 +1579,7 @@ const Index = () => {
                       color: "var(--primary)",
                     }}
                   >
-                    180
+                    150
                   </span>
                   <span
                     style={{
@@ -1818,7 +1818,7 @@ const Index = () => {
             <div
               style={{ marginTop: "var(--spacing-3xl)", textAlign: "center" }}
             >
-              <p
+              {/* <p
                 className="text-body-sm"
                 style={{
                   color: "var(--text-secondary)",
@@ -1844,8 +1844,8 @@ const Index = () => {
                   }}
                 >
                   결제 기능 +50만원
-                </span>
-                <span
+                </span> */}
+                {/* <span
                   style={{
                     background: "var(--gray-100)",
                     padding: "8px 16px",
@@ -1854,8 +1854,8 @@ const Index = () => {
                   }}
                 >
                   실시간 채팅 +80만원
-                </span>
-                <span
+                </span> */}
+                {/* <span
                   style={{
                     background: "var(--gray-100)",
                     padding: "8px 16px",
@@ -1864,8 +1864,8 @@ const Index = () => {
                   }}
                 >
                   소셜 로그인 +20만원
-                </span>
-                <span
+                </span> */}
+                {/* <span
                   style={{
                     background: "var(--gray-100)",
                     padding: "8px 16px",
@@ -1873,11 +1873,11 @@ const Index = () => {
                     fontSize: "0.875rem",
                   }}
                 >
-                  푸시 알림 +40만원
-                </span>
+                  푸시 알림 +20만원
+                </span> */}
               </div>
-            </div>
-          </Fade>
+            {/* </div> */}
+          {/* </Fade> */}
         </div>
       </section>
 
