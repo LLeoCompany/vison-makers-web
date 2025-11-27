@@ -1875,9 +1875,9 @@ const Index = () => {
                 >
                   푸시 알림 +20만원
                 </span> */}
-              </div>
-            {/* </div> */}
-          {/* </Fade> */}
+              {/* </div> */}
+            </div>
+          </Fade>
         </div>
       </section>
 
