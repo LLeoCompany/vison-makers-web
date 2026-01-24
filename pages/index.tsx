@@ -276,7 +276,7 @@ const IndustryDemo = () => {
   );
 };
 
-// CountUp Animation (2 seconds)
+// CountUp Animation with Spring Effect
 const CountUp = ({
   end,
   suffix = "",
@@ -294,16 +294,31 @@ const CountUp = ({
 
   useEffect(() => {
     if (isInView) {
-      let start = 0;
-      const duration = 2000; // 2 seconds
+      const duration = 2000;
       const startTime = Date.now();
+      const overshoot = 1.15; // 15% overshoot for spring effect
 
       const timer = setInterval(() => {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        // Ease out cubic
-        const easeOut = 1 - Math.pow(1 - progress, 3);
-        const current = easeOut * end;
+
+        // Spring animation: overshoot then settle
+        let springValue;
+        if (progress < 0.7) {
+          // Phase 1: Accelerate to overshoot (0 to 70% of time)
+          const p = progress / 0.7;
+          springValue = p * p * overshoot;
+        } else if (progress < 0.85) {
+          // Phase 2: Bounce back (70% to 85% of time)
+          const p = (progress - 0.7) / 0.15;
+          springValue = overshoot - (overshoot - 0.97) * p;
+        } else {
+          // Phase 3: Settle to target (85% to 100% of time)
+          const p = (progress - 0.85) / 0.15;
+          springValue = 0.97 + 0.03 * p;
+        }
+
+        const current = springValue * end;
 
         if (progress >= 1) {
           setCount(end);
@@ -328,7 +343,106 @@ const CountUp = ({
   );
 };
 
-// Bento Item with Hover Text Morphing
+// Comparison Bar Component
+const ComparisonBar = ({
+  label,
+  oldValue,
+  oldLabel,
+  newValue,
+  newLabel,
+  unit,
+  reverse = false,
+}: {
+  label: string;
+  oldValue: number;
+  oldLabel: string;
+  newValue: number;
+  newLabel: string;
+  unit: string;
+  reverse?: boolean;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+  const maxValue = Math.max(oldValue, newValue);
+  const oldPercent = (oldValue / maxValue) * 100;
+  const newPercent = (newValue / maxValue) * 100;
+
+  return (
+    <div ref={ref} className="comparison-bar-container">
+      <div className="comparison-label">{label}</div>
+      <div className="comparison-bars">
+        {/* Old Way */}
+        <div className="bar-row">
+          <span className="bar-label old">기존 방식</span>
+          <div className="bar-wrapper">
+            <motion.div
+              className="bar old-bar"
+              initial={{ width: 0 }}
+              animate={isInView ? { width: `${oldPercent}%` } : { width: 0 }}
+              transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
+            />
+          </div>
+          <span className="bar-value old font-mono">{oldLabel}</span>
+        </div>
+        {/* Vision-Makers */}
+        <div className="bar-row">
+          <span className="bar-label new">Vision-Makers</span>
+          <div className="bar-wrapper">
+            <motion.div
+              className={`bar new-bar ${reverse ? "reverse" : ""}`}
+              initial={{ width: 0 }}
+              animate={isInView ? { width: `${newPercent}%` } : { width: 0 }}
+              transition={{ duration: 1.2, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            />
+          </div>
+          <span className="bar-value new font-mono">{newLabel}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Comparison Section Component
+const ComparisonSection = () => (
+  <div className="comparison-section">
+    <div className="comparison-header">
+      <span className="comparison-badge font-mono">VS COMPARISON</span>
+      <h3>왜 Vision-Makers인가?</h3>
+    </div>
+    <div className="comparison-grid">
+      <ComparisonBar
+        label="응답 속도"
+        oldValue={120}
+        oldLabel="120분"
+        newValue={0.02}
+        newLabel="1.2초"
+        unit="분"
+      />
+      <ComparisonBar
+        label="운영 비용"
+        oldValue={100}
+        oldLabel="100%"
+        newValue={35}
+        newLabel="35%"
+        unit="%"
+        reverse
+      />
+    </div>
+    <div className="comparison-summary">
+      <div className="summary-item">
+        <span className="summary-value font-mono text-cyan">6,000x</span>
+        <span className="summary-label">더 빠른 응답</span>
+      </div>
+      <div className="summary-divider" />
+      <div className="summary-item">
+        <span className="summary-value font-mono text-green">65%</span>
+        <span className="summary-label">비용 절감</span>
+      </div>
+    </div>
+  </div>
+);
+
+// Bento Item with Achievement Tag
 const BentoProofItem = ({
   icon: Icon,
   metric,
@@ -339,6 +453,7 @@ const BentoProofItem = ({
   hoverText,
   className,
   decimals,
+  achievementTag,
 }: {
   icon: React.ElementType;
   metric: number;
@@ -349,6 +464,7 @@ const BentoProofItem = ({
   hoverText?: string;
   className?: string;
   decimals?: number;
+  achievementTag?: string;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -359,6 +475,12 @@ const BentoProofItem = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {achievementTag && (
+        <div className="achievement-tag">
+          <CheckCircle size={12} strokeWidth={2} />
+          <span className="font-mono">{achievementTag}</span>
+        </div>
+      )}
       <div className="bento-content">
         <Icon size={className?.includes("large") ? 32 : 24} strokeWidth={1.5} className="text-cyan" />
         <div className="bento-metric">
@@ -753,6 +875,11 @@ export default function RAGLandingPage() {
               <IndustryDemo />
             </motion.div>
           </div>
+
+          {/* Comparison UI */}
+          <motion.div {...fadeInUp} transition={{ delay: 0.4 }}>
+            <ComparisonSection />
+          </motion.div>
         </div>
       </section>
 
@@ -819,6 +946,7 @@ export default function RAGLandingPage() {
               desc="피트니스 회원 이탈 예측"
               hoverText="→ 금융 고객 이탈 예측으로 확장"
               className="bento-large"
+              achievementTag="VERIFIED"
             />
 
             <BentoProofItem
@@ -829,6 +957,7 @@ export default function RAGLandingPage() {
               desc="운동 상담 AI"
               hoverText="→ 의료 상담 AI로 확장"
               className=""
+              achievementTag="92% Accuracy"
             />
 
             <BentoProofItem
@@ -838,6 +967,7 @@ export default function RAGLandingPage() {
               label="평균 응답시간"
               decimals={1}
               className=""
+              achievementTag="1.2s Response"
             />
 
             <BentoProofItem
@@ -848,6 +978,7 @@ export default function RAGLandingPage() {
               desc="AI 개인화 추천"
               hoverText="→ 고객 LTV 증가 전략으로 확장"
               className="bento-wide"
+              achievementTag="ROI 300%"
             />
 
             <BentoProofItem
@@ -856,6 +987,7 @@ export default function RAGLandingPage() {
               metricSuffix="주"
               label="구축 기간"
               className=""
+              achievementTag="8 Weeks"
             />
           </div>
         </div>
@@ -1390,6 +1522,158 @@ export default function RAGLandingPage() {
           background: var(--border-color);
         }
 
+        /* Comparison Section */
+        .comparison-section {
+          margin-top: 80px;
+          padding: 40px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 24px;
+        }
+
+        .comparison-header {
+          text-align: center;
+          margin-bottom: 40px;
+        }
+
+        .comparison-badge {
+          display: inline-block;
+          padding: 6px 14px;
+          background: var(--crimson-dim);
+          border: 1px solid var(--crimson);
+          border-radius: 100px;
+          color: var(--crimson);
+          font-size: 0.75rem;
+          letter-spacing: 0.05em;
+          margin-bottom: 16px;
+        }
+
+        .comparison-header h3 {
+          font-size: 1.5rem;
+          font-weight: 700;
+        }
+
+        .comparison-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+          margin-bottom: 40px;
+        }
+
+        .comparison-bar-container {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .comparison-label {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--text-secondary);
+        }
+
+        .comparison-bars {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .bar-row {
+          display: grid;
+          grid-template-columns: 120px 1fr 80px;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .bar-label {
+          font-size: 0.8rem;
+          font-weight: 500;
+        }
+
+        .bar-label.old {
+          color: var(--text-tertiary);
+        }
+
+        .bar-label.new {
+          color: var(--cyan);
+        }
+
+        .bar-wrapper {
+          height: 32px;
+          background: var(--bg-tertiary);
+          border-radius: 8px;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .bar {
+          height: 100%;
+          border-radius: 8px;
+          position: relative;
+        }
+
+        .old-bar {
+          background: linear-gradient(90deg, #3a3a4a, #4a4a5a);
+        }
+
+        .new-bar {
+          background: linear-gradient(90deg, var(--cyan), #00d4ff);
+          box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+        }
+
+        .new-bar.reverse {
+          background: linear-gradient(90deg, var(--green), #5ce096);
+          box-shadow: 0 0 20px rgba(72, 187, 120, 0.3);
+        }
+
+        .bar-value {
+          font-size: 0.9rem;
+          font-weight: 600;
+          text-align: right;
+        }
+
+        .bar-value.old {
+          color: var(--text-tertiary);
+        }
+
+        .bar-value.new {
+          color: var(--cyan);
+        }
+
+        .comparison-summary {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 40px;
+          padding: 24px;
+          background: var(--bg-tertiary);
+          border-radius: 16px;
+          border: 1px solid var(--border-color);
+        }
+
+        .summary-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .summary-value {
+          font-size: 2rem;
+          font-weight: 700;
+        }
+
+        .summary-label {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+        }
+
+        .summary-divider {
+          width: 1px;
+          height: 48px;
+          background: var(--border-color);
+        }
+
         /* Demo Window */
         .demo-window {
           background: var(--bg-secondary);
@@ -1684,10 +1968,44 @@ export default function RAGLandingPage() {
           padding: 28px;
           transition: all 0.3s;
           cursor: pointer;
+          position: relative;
+          overflow: hidden;
         }
 
         .bento-item:hover {
           border-color: var(--cyan);
+        }
+
+        .bento-item:hover .achievement-tag {
+          transform: translateY(0);
+          opacity: 1;
+        }
+
+        /* Achievement Tag */
+        .achievement-tag {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 6px 10px;
+          background: linear-gradient(
+            135deg,
+            rgba(72, 187, 120, 0.9) 0%,
+            rgba(72, 187, 120, 0.7) 100%
+          );
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(72, 187, 120, 0.5);
+          border-radius: 8px;
+          color: white;
+          font-size: 0.7rem;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+          box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+          transform: translateY(-4px);
+          opacity: 0.9;
+          transition: all 0.3s ease;
         }
 
         .bento-large {
@@ -2125,17 +2443,22 @@ export default function RAGLandingPage() {
           }
         }
 
-        /* Sticky CTA (Mobile) */
+        /* Sticky CTA (Mobile) - Glassmorphism */
         .sticky-cta {
           display: none;
           position: fixed;
           bottom: 0;
           left: 0;
           right: 0;
-          padding: 16px 24px;
-          background: rgba(10, 10, 15, 0.95);
+          padding: 16px 24px 24px;
+          background: linear-gradient(
+            to top,
+            rgba(10, 10, 15, 0.98) 0%,
+            rgba(10, 10, 15, 0.85) 50%,
+            rgba(10, 10, 15, 0) 100%
+          );
           backdrop-filter: blur(20px);
-          border-top: 1px solid var(--border-color);
+          -webkit-backdrop-filter: blur(20px);
           z-index: 999;
         }
 
@@ -2145,13 +2468,28 @@ export default function RAGLandingPage() {
           justify-content: center;
           gap: 8px;
           width: 100%;
-          padding: 16px;
-          background: var(--crimson);
+          padding: 18px;
+          background: linear-gradient(
+            135deg,
+            rgba(233, 69, 96, 0.9) 0%,
+            rgba(233, 69, 96, 0.7) 100%
+          );
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(233, 69, 96, 0.5);
+          box-shadow:
+            0 8px 32px rgba(233, 69, 96, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
           color: white;
           text-decoration: none;
-          border-radius: 12px;
+          border-radius: 16px;
           font-size: 1rem;
           font-weight: 600;
+          transition: all 0.3s ease;
+        }
+
+        .sticky-cta-btn:active {
+          transform: scale(0.98);
         }
 
         /* Footer */
@@ -2332,6 +2670,40 @@ export default function RAGLandingPage() {
 
           .rag-footer {
             padding-bottom: 100px;
+          }
+
+          /* Comparison Section Mobile */
+          .comparison-section {
+            margin-top: 48px;
+            padding: 24px;
+          }
+
+          .bar-row {
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+
+          .bar-label {
+            font-size: 0.75rem;
+          }
+
+          .bar-value {
+            text-align: left;
+            font-size: 0.85rem;
+          }
+
+          .comparison-summary {
+            flex-direction: column;
+            gap: 20px;
+          }
+
+          .summary-divider {
+            width: 48px;
+            height: 1px;
+          }
+
+          .summary-value {
+            font-size: 1.5rem;
           }
         }
 
