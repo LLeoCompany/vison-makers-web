@@ -6719,6 +6719,41 @@ export default function RAGLandingPage() {
           color: var(--text-secondary);
         }
 
+        /* Circle Gauge Component */
+        .circle-gauge {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .gauge-svg {
+          transform: rotate(0deg);
+        }
+
+        .gauge-content {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .gauge-value {
+          font-size: 1.3rem;
+          font-weight: 700;
+          line-height: 1.2;
+        }
+
+        .gauge-label {
+          font-size: 0.65rem;
+          color: var(--text-secondary);
+          margin-top: 2px;
+        }
+
         /* Step 1: Impact Metrics */
         .impact-metrics-grid {
           display: flex;
@@ -7166,7 +7201,7 @@ export default function RAGLandingPage() {
         .form-select {
           cursor: pointer;
           appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+          background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2716%27 height=%2716%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23888%27 stroke-width=%272%27%3E%3Cpath d=%27m6 9 6 6 6-6%27/%3E%3C/svg%3E");
           background-repeat: no-repeat;
           background-position: right 14px center;
         }
@@ -7344,19 +7379,21 @@ export default function RAGLandingPage() {
           border-radius: 4px;
         }
 
-        /* Floating CTA Animation */
-        .floating-cta {
-          animation: float-cta 3s ease-in-out infinite;
+        /* Floating CTA Animation - Enhanced */
+        .card-guide-text.floating-cta {
+          animation: float-cta-enhanced 3s ease-in-out infinite;
+          background: linear-gradient(135deg, rgba(0, 191, 255, 0.15) 0%, rgba(0, 191, 255, 0.08) 100%);
+          border-color: rgba(0, 191, 255, 0.4);
         }
 
-        @keyframes float-cta {
+        @keyframes float-cta-enhanced {
           0%, 100% {
             transform: translateY(0);
-            box-shadow: 0 4px 20px rgba(0, 191, 255, 0.15);
+            box-shadow: 0 4px 20px rgba(0, 191, 255, 0.2);
           }
           50% {
-            transform: translateY(-6px);
-            box-shadow: 0 8px 30px rgba(0, 191, 255, 0.25);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 191, 255, 0.35);
           }
         }
 
