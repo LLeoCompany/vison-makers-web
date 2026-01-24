@@ -21,7 +21,8 @@
       "Bash(cat:*)",
       "Bash(python3:*)",
       "Bash(ls:*)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

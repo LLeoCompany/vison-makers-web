@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
+import Head from "next/head";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Database,
@@ -30,6 +31,11 @@ import {
   Stethoscope,
   Factory,
   Headphones,
+  X,
+  ExternalLink,
+  Cpu,
+  Layers,
+  GitBranch,
 } from "lucide-react";
 
 // Animation variants
@@ -39,6 +45,306 @@ const fadeInUp = {
   viewport: { once: true, margin: "-50px" },
   transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] as const },
 };
+
+// Tech Stack Data
+const techLogos = [
+  { name: "LangChain", icon: "🔗" },
+  { name: "OpenAI", icon: "🤖" },
+  { name: "AWS", icon: "☁️" },
+  { name: "Next.js", icon: "▲" },
+  { name: "PostgreSQL", icon: "🐘" },
+  { name: "Redis", icon: "🔴" },
+  { name: "Docker", icon: "🐳" },
+  { name: "Kubernetes", icon: "☸️" },
+];
+
+// Service Data for Drawer
+const serviceData = {
+  rag: {
+    id: "rag",
+    title: "RAG 시스템 구축",
+    subtitle: "사내 데이터를 AI 자산으로",
+    badge: "보안 99.9%",
+    badgeColor: "#48BB78",
+    icon: Database,
+    caseStudy: {
+      title: "DevGym 지식 베이스 구축 사례",
+      metric: "92%",
+      metricLabel: "답변 정확도",
+      description: "10만+ 회원의 운동/영양 데이터를 벡터화하여 실시간 AI 상담 시스템 구축",
+    },
+    steps: [
+      { icon: FileText, title: "데이터 수집", desc: "PDF, DB, API 등 다양한 소스 통합" },
+      { icon: Cpu, title: "엔진 커스텀", desc: "귀사 도메인에 최적화된 임베딩" },
+      { icon: Zap, title: "실전 배포", desc: "8주 내 프로덕션 환경 배포" },
+    ],
+    ctaText: "사내 데이터 AI 자산화 진단받기",
+    formPlaceholder: "어떤 데이터를 AI로 활용하고 싶으신가요?",
+  },
+  chatbot: {
+    id: "chatbot",
+    title: "AI 챗봇 개발",
+    subtitle: "CS 비용 절감의 시작",
+    badge: "자동화 78%",
+    badgeColor: "#00BFFF",
+    icon: MessageSquare,
+    caseStudy: {
+      title: "DevGym CS 자동화 사례",
+      metric: "50%",
+      metricLabel: "CS 비용 절감",
+      description: "반복 문의의 78%를 AI가 즉시 응대, 상담원은 복잡한 케이스에 집중",
+    },
+    steps: [
+      { icon: MessageSquare, title: "대화 설계", desc: "귀사 CS 패턴 분석 및 시나리오 구축" },
+      { icon: Brain, title: "AI 학습", desc: "FAQ/매뉴얼 기반 지식 베이스 구축" },
+      { icon: Users, title: "운영 배포", desc: "1.2초 응답, 24/7 무중단 서비스" },
+    ],
+    ctaText: "인건비 절감 시뮬레이션 신청",
+    formPlaceholder: "현재 월 CS 문의량은 얼마나 되시나요?",
+  },
+  recommend: {
+    id: "recommend",
+    title: "AI 추천 시스템",
+    subtitle: "매출 성장의 엔진",
+    badge: "ROI 3배",
+    badgeColor: "#E94560",
+    icon: TrendingUp,
+    caseStudy: {
+      title: "DevGym 개인화 추천 사례",
+      metric: "42%",
+      metricLabel: "이탈률 감소",
+      description: "유저 행동 데이터 기반 개인화 추천으로 재구매율 3배, 이탈률 42% 감소",
+    },
+    steps: [
+      { icon: BarChart3, title: "데이터 분석", desc: "유저 행동/구매 패턴 심층 분석" },
+      { icon: Target, title: "알고리즘 설계", desc: "협업 필터링 + 콘텐츠 기반 하이브리드" },
+      { icon: TrendingUp, title: "A/B 테스트", desc: "지속적 최적화로 ROI 극대화" },
+    ],
+    ctaText: "매출 향상 엔진 설계 문의",
+    formPlaceholder: "현재 어떤 방식으로 추천을 제공하고 계신가요?",
+  },
+};
+
+type ServiceKey = keyof typeof serviceData;
+
+// Service Drawer Component
+const ServiceDrawer = ({
+  isOpen,
+  onClose,
+  serviceKey,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  serviceKey: ServiceKey | null;
+}) => {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const service = serviceKey ? serviceData[serviceKey] : null;
+
+  if (!service) return null;
+
+  const Icon = service.icon;
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            className="drawer-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+          <motion.div
+            className="service-drawer"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+          >
+            <div className="drawer-header">
+              <div className="drawer-title-group">
+                <div className="drawer-icon" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+                  <Icon size={20} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h3>{service.title}</h3>
+                  <p className="drawer-subtitle">{service.subtitle}</p>
+                </div>
+              </div>
+              <button onClick={onClose} className="drawer-close">
+                <X size={20} strokeWidth={1.5} />
+              </button>
+            </div>
+
+            <div className="drawer-content">
+              {/* Case Study Section */}
+              <div className="case-study-section">
+                <span className="section-tag font-mono">SUCCESS CASE</span>
+                <div className="case-study-card">
+                  <div className="case-metric">
+                    <span className="metric-value font-mono" style={{ color: service.badgeColor }}>
+                      {service.caseStudy.metric}
+                    </span>
+                    <span className="metric-label">{service.caseStudy.metricLabel}</span>
+                  </div>
+                  <h4>{service.caseStudy.title}</h4>
+                  <p>{service.caseStudy.description}</p>
+                </div>
+              </div>
+
+              {/* Build Steps Section */}
+              <div className="build-steps-section">
+                <span className="section-tag font-mono">BUILD PROCESS</span>
+                <div className="build-steps">
+                  {service.steps.map((step, i) => {
+                    const StepIcon = step.icon;
+                    return (
+                      <div key={i} className="build-step">
+                        <div className="step-number font-mono">{String(i + 1).padStart(2, "0")}</div>
+                        <div className="step-icon">
+                          <StepIcon size={20} strokeWidth={1.5} />
+                        </div>
+                        <h5>{step.title}</h5>
+                        <p>{step.desc}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Quick Contact Form */}
+              <div className="quick-contact-section">
+                <span className="section-tag font-mono">QUICK CONTACT</span>
+                <form className="quick-form" onSubmit={(e) => e.preventDefault()}>
+                  <input
+                    type="text"
+                    placeholder="담당자명"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  />
+                  <input
+                    type="email"
+                    placeholder="이메일"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                  <textarea
+                    placeholder={service.formPlaceholder}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    rows={3}
+                  />
+                  <button type="submit" className="quick-submit" style={{ background: service.badgeColor }}>
+                    {service.ctaText}
+                    <ArrowRight size={16} strokeWidth={1.5} />
+                  </button>
+                </form>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// Drawer Component for Technical Details (Legacy - kept for compatibility)
+const TechDrawer = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => (
+  <AnimatePresence>
+    {isOpen && (
+      <>
+        <motion.div
+          className="drawer-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        />
+        <motion.div
+          className="tech-drawer"
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "100%" }}
+          transition={{ type: "spring", damping: 30, stiffness: 300 }}
+        >
+          <div className="drawer-header">
+            <h3>Technical Specifications</h3>
+            <button onClick={onClose} className="drawer-close">
+              <X size={20} strokeWidth={1.5} />
+            </button>
+          </div>
+          <div className="drawer-content">
+            <div className="spec-group">
+              <div className="spec-icon">
+                <Cpu size={24} strokeWidth={1.5} />
+              </div>
+              <h4>하이브리드 RAG 엔진</h4>
+              <p>Keyword + Semantic 검색을 결합하여 전문 용어 인식률 95% 달성</p>
+              <ul>
+                <li>BM25 + Dense Retrieval 앙상블</li>
+                <li>Custom Embedding 모델 적용</li>
+                <li>Multi-vector 인덱싱</li>
+              </ul>
+            </div>
+            <div className="spec-group">
+              <div className="spec-icon">
+                <Layers size={24} strokeWidth={1.5} />
+              </div>
+              <h4>자체 최적화 파이프라인</h4>
+              <p>Llama-3 기반 파인튜닝으로 지연시간 80% 감소</p>
+              <ul>
+                <li>vLLM 추론 엔진</li>
+                <li>KV-Cache 최적화</li>
+                <li>배치 처리 자동화</li>
+              </ul>
+            </div>
+            <div className="spec-group">
+              <div className="spec-icon">
+                <GitBranch size={24} strokeWidth={1.5} />
+              </div>
+              <h4>실전 검증 알고리즘</h4>
+              <p>1.2억 건 로그 데이터 기반 지속적 개선</p>
+              <ul>
+                <li>A/B 테스트 자동화</li>
+                <li>피드백 루프 반영</li>
+                <li>Drift Detection 모니터링</li>
+              </ul>
+            </div>
+          </div>
+        </motion.div>
+      </>
+    )}
+  </AnimatePresence>
+);
+
+// Tech Logo Cloud Component
+const TechLogoCloud = () => (
+  <div className="tech-cloud">
+    <div className="tech-cloud-label font-mono">POWERED BY</div>
+    <div className="tech-logos">
+      {techLogos.map((tech, i) => (
+        <motion.div
+          key={tech.name}
+          className="tech-logo-item"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: i * 0.1 }}
+        >
+          <span className="tech-icon">{tech.icon}</span>
+          <span className="tech-name">{tech.name}</span>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+);
 
 // Industry Demo Data
 const industryDemos = {
@@ -747,7 +1053,7 @@ const StickyCTA = () => {
           className="sticky-cta"
         >
           <Link href="#contact" className="sticky-cta-btn">
-            무료 상담 신청
+            맞춤형 진단 신청
             <ArrowRight size={18} strokeWidth={1.5} />
           </Link>
         </motion.div>
@@ -758,6 +1064,17 @@ const StickyCTA = () => {
 
 export default function RAGLandingPage() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [activeService, setActiveService] = useState<ServiceKey | null>(null);
+  const [mobileServiceTab, setMobileServiceTab] = useState<ServiceKey>("rag");
+
+  const openServiceDrawer = (service: ServiceKey) => {
+    setActiveService(service);
+  };
+
+  const closeServiceDrawer = () => {
+    setActiveService(null);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -768,10 +1085,24 @@ export default function RAGLandingPage() {
   }, []);
 
   return (
-    <div className="rag-landing">
+    <>
+      <Head>
+        <link
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <div className="rag-landing">
+        {/* Noise Texture Overlay */}
+        <div className="noise-overlay" />
+
       {/* Particle Background */}
       <div className="particles-bg">
-        {[...Array(50)].map((_, i) => (
+        {[...Array(30)].map((_, i) => (
           <div
             key={i}
             className="particle"
@@ -785,61 +1116,76 @@ export default function RAGLandingPage() {
         ))}
       </div>
 
+      {/* Service Drawer */}
+      <ServiceDrawer
+        isOpen={activeService !== null}
+        onClose={closeServiceDrawer}
+        serviceKey={activeService}
+      />
+
+      {/* Tech Drawer */}
+      <TechDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+
       {/* Header */}
       <header className={`rag-header ${isScrolled ? "scrolled" : ""}`}>
         <div className="container">
           <nav className="rag-nav">
             <Link href="/" className="rag-logo">
               <Sparkles size={24} strokeWidth={1.5} className="text-cyan" />
-              <span>RAG Agency</span>
+              <span>Vision-Makers</span>
             </Link>
 
             <div className="nav-links">
-              <a href="#solutions">솔루션</a>
-              <a href="#proof">검증된 성과</a>
+              <a href="#comparison">비교</a>
+              <a href="#proof">성과</a>
               <a href="#security">보안</a>
               <a href="#contact">문의</a>
             </div>
 
             <Link href="#contact" className="nav-cta">
-              상담 신청
+              무료 AI 진단
               <ArrowRight size={16} strokeWidth={1.5} />
             </Link>
           </nav>
         </div>
       </header>
 
-      {/* Section 1: Hero with Industry Demo */}
+      {/* Section 1: Hero - Result First */}
       <section className="hero-section">
         <div className="container">
+          {/* Hero Badges */}
+          <motion.div {...fadeInUp} className="hero-badges">
+            <div className="hero-badge-item crimson">
+              <span className="font-mono">ROI 300%↑</span>
+            </div>
+            <div className="hero-badge-item green">
+              <span className="font-mono">10만+ 검증</span>
+            </div>
+            <div className="hero-badge-item cyan">
+              <span className="font-mono">92% 정확도</span>
+            </div>
+          </motion.div>
+
           <div className="hero-grid">
             <motion.div {...fadeInUp} className="hero-content">
-              <div className="hero-badge">
-                <CheckCircle size={14} strokeWidth={1.5} />
-                <span className="font-mono">10만+ 회원 데이터 검증 완료</span>
-              </div>
-
               <h1 className="hero-title">
-                이미{" "}
-                <span className="text-cyan font-mono">10만 회원</span> 데이터에서
+                환각 없는 AI,
                 <br />
-                검증된 <span className="text-crimson">RAG LLM</span> 플랫폼
+                <span className="text-cyan">ROI 3배</span>로 증명합니다
               </h1>
 
               <p className="hero-subtitle">
-                DevGym에서 실전 검증된 RAG 기술력을 귀사의 데이터에 이식합니다.
-                <br />
-                데이터 보안부터 실시간 검색까지, 엔터프라이즈급 AI 솔루션을
-                제공합니다.
+                10만 회원이 검증한 RAG 기술력을 귀사에 이식합니다.
               </p>
 
               <div className="hero-actions">
                 <Link href="#contact" className="btn-primary">
-                  무료 컨설팅 신청
+                  무료 AI 진단받기
                   <ArrowRight size={18} strokeWidth={1.5} />
                 </Link>
                 <a href="#proof" className="btn-secondary">
-                  DevGym 성과 보기
+                  성과 상세 보기
+                  <ExternalLink size={16} strokeWidth={1.5} />
                 </a>
               </div>
 
@@ -883,41 +1229,107 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
-      {/* Section 2: Solution Cards */}
+      {/* Main Message Section */}
+      <section className="main-message-section">
+        <div className="container">
+          <motion.div {...fadeInUp} className="main-message">
+            <h2>
+              검증된 RAG 기술을{" "}
+              <span className="text-glow">귀사</span>에 맞게 구축합니다
+            </h2>
+            <p>10만 회원이 검증한 엔진을 8주 내 귀사 비즈니스에 이식합니다.</p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Section 2: Service Cards with Drawer */}
       <section id="solutions" className="solutions-section">
         <div className="container">
           <motion.div {...fadeInUp} className="section-header">
-            <span className="section-label font-mono">SOLUTIONS</span>
+            <span className="section-label font-mono">SERVICES</span>
             <h2 className="section-title">
-              검증된 <span className="text-cyan">RAG 기술</span>을
-              <br />
-              귀사에 맞게 구축합니다
+              어떤 AI가 필요하신가요?
             </h2>
+            <p className="section-subtitle">
+              카드를 클릭하여 상세 사례와 구축 과정을 확인하세요
+            </p>
           </motion.div>
 
-          <div className="solutions-grid">
-            <SolutionCard
-              icon={Database}
-              title="RAG 시스템 구축"
-              description="기업 내부 데이터를 안전하게 벡터화하고, 실시간 검색이 가능한 지식 베이스를 구축합니다."
-              stats="데이터 보안 99.9%"
-            />
+          {/* Desktop: Grid */}
+          <div className="solutions-grid desktop-only">
+            {(["rag", "chatbot", "recommend"] as ServiceKey[]).map((key) => {
+              const service = serviceData[key];
+              const Icon = service.icon;
+              return (
+                <motion.div
+                  key={key}
+                  {...fadeInUp}
+                  className={`service-card ${key === "chatbot" ? "service-card-highlight" : ""}`}
+                  onClick={() => openServiceDrawer(key)}
+                >
+                  <div className="service-badge" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+                    <span className="font-mono">{service.badge}</span>
+                  </div>
+                  <div className="service-icon" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
+                    <Icon size={28} strokeWidth={1.5} />
+                  </div>
+                  <h3 className="service-title">{service.title}</h3>
+                  <p className="service-subtitle">{service.subtitle}</p>
+                  <div className="service-cta">
+                    상세 보기
+                    <ArrowRight size={14} strokeWidth={1.5} />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
 
-            <SolutionCard
-              icon={MessageSquare}
-              title="AI 챗봇 개발"
-              description="DevGym에서 78% 업무 자동화를 달성한 챗봇 로직을 귀사 환경에 맞게 이식합니다."
-              highlight="Most Popular"
-              stats="자동화율 78%"
-              isCenter
-            />
-
-            <SolutionCard
-              icon={TrendingUp}
-              title="추천 시스템"
-              description="10만 회원 행동 데이터 기반 추천 알고리즘으로 ROI 3배 향상을 검증했습니다."
-              stats="ROI 3배 향상"
-            />
+          {/* Mobile: Tabs */}
+          <div className="mobile-service-tabs mobile-only">
+            <div className="tab-buttons">
+              {(["rag", "chatbot", "recommend"] as ServiceKey[]).map((key) => {
+                const service = serviceData[key];
+                return (
+                  <button
+                    key={key}
+                    className={`tab-btn ${mobileServiceTab === key ? "active" : ""}`}
+                    onClick={() => setMobileServiceTab(key)}
+                    style={{ "--tab-color": service.badgeColor } as React.CSSProperties}
+                  >
+                    {service.title.split(" ")[0]}
+                  </button>
+                );
+              })}
+            </div>
+            <motion.div
+              key={mobileServiceTab}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="tab-content"
+              onClick={() => openServiceDrawer(mobileServiceTab)}
+            >
+              {(() => {
+                const service = serviceData[mobileServiceTab];
+                const Icon = service.icon;
+                return (
+                  <>
+                    <div className="service-badge" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+                      <span className="font-mono">{service.badge}</span>
+                    </div>
+                    <div className="service-icon" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
+                      <Icon size={32} strokeWidth={1.5} />
+                    </div>
+                    <h3>{service.title}</h3>
+                    <p>{service.subtitle}</p>
+                    <p className="tab-case">{service.caseStudy.description}</p>
+                    <div className="service-cta">
+                      상세 보기
+                      <ArrowRight size={14} strokeWidth={1.5} />
+                    </div>
+                  </>
+                );
+              })()}
+            </motion.div>
           </div>
         </div>
       </section>
@@ -1039,6 +1451,9 @@ export default function RAGLandingPage() {
             <ShieldCheck size={20} strokeWidth={1.5} />
             <span>SOC 2 Type II 준수 | ISO 27001 인증 예정</span>
           </motion.div>
+
+          {/* Tech Logo Cloud */}
+          <TechLogoCloud />
         </div>
       </section>
 
@@ -1203,26 +1618,26 @@ export default function RAGLandingPage() {
             <div className="footer-brand">
               <div className="footer-logo">
                 <Sparkles size={20} strokeWidth={1.5} className="text-cyan" />
-                <span>RAG Agency</span>
+                <span>Vision-Makers</span>
               </div>
-              <p>10만 유저가 검증한 실전 RAG 기술력</p>
+              <p>ROI 3배, 10만 유저가 검증한 RAG 플랫폼</p>
             </div>
 
             <div className="footer-links">
-              <a href="#solutions">솔루션</a>
-              <a href="#proof">검증된 성과</a>
+              <a href="#comparison">비교</a>
+              <a href="#proof">성과</a>
               <a href="#security">보안</a>
               <a href="#contact">문의</a>
             </div>
 
             <div className="footer-contact">
-              <span>contact@ragagency.ai</span>
+              <span>contact@vision-makers.ai</span>
               <span className="font-mono">24h 내 회신 보장</span>
             </div>
           </div>
 
           <div className="footer-bottom">
-            <p>&copy; 2024 RAG Agency. All rights reserved.</p>
+            <p>&copy; 2024 Vision-Makers. All rights reserved.</p>
             <div className="footer-legal">
               <Link href="/privacy-policy">개인정보처리방침</Link>
               <Link href="/terms">이용약관</Link>
@@ -1235,9 +1650,6 @@ export default function RAGLandingPage() {
       <StickyCTA />
 
       <style jsx global>{`
-        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
-        @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap");
-
         :root {
           --bg-primary: #0a0a0f;
           --bg-secondary: #12121a;
@@ -1295,6 +1707,24 @@ export default function RAGLandingPage() {
           padding: 0 24px;
         }
 
+        /* Noise Overlay */
+        .noise-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          pointer-events: none;
+          z-index: 1;
+          opacity: 0.02;
+          background: repeating-radial-gradient(
+            circle at 50% 50%,
+            transparent 0,
+            rgba(255,255,255,0.03) 1px,
+            transparent 2px
+          );
+        }
+
         /* Particles Background */
         .particles-bg {
           position: fixed;
@@ -1313,7 +1743,7 @@ export default function RAGLandingPage() {
           height: 2px;
           background: var(--cyan);
           border-radius: 50%;
-          opacity: 0.3;
+          opacity: 0.2;
           animation: float-particle linear infinite;
         }
 
@@ -1323,15 +1753,638 @@ export default function RAGLandingPage() {
             opacity: 0;
           }
           10% {
-            opacity: 0.3;
+            opacity: 0.2;
           }
           90% {
-            opacity: 0.3;
+            opacity: 0.2;
           }
           100% {
             transform: translateY(-100vh) scale(1);
             opacity: 0;
           }
+        }
+
+        /* Drawer Overlay */
+        .drawer-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(4px);
+          z-index: 1100;
+        }
+
+        /* Service Drawer */
+        .service-drawer {
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 480px;
+          max-width: 95vw;
+          height: 100vh;
+          background: linear-gradient(
+            180deg,
+            rgba(10, 10, 15, 0.98) 0%,
+            rgba(18, 18, 26, 0.99) 100%
+          );
+          backdrop-filter: blur(20px);
+          border-left: 1px solid var(--border-color);
+          z-index: 1200;
+          overflow-y: auto;
+        }
+
+        .drawer-title-group {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .drawer-icon {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 10px;
+        }
+
+        .drawer-subtitle {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+          margin-top: 2px;
+        }
+
+        .section-tag {
+          display: inline-block;
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+          letter-spacing: 0.1em;
+          margin-bottom: 12px;
+        }
+
+        .case-study-section {
+          margin-bottom: 32px;
+        }
+
+        .case-study-card {
+          padding: 24px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+        }
+
+        .case-metric {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+          margin-bottom: 12px;
+        }
+
+        .metric-value {
+          font-size: 2.5rem;
+          font-weight: 700;
+        }
+
+        .metric-label {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+        }
+
+        .case-study-card h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 8px;
+        }
+
+        .case-study-card p {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+        }
+
+        .build-steps-section {
+          margin-bottom: 32px;
+        }
+
+        .build-steps {
+          display: flex;
+          gap: 12px;
+        }
+
+        .build-step {
+          flex: 1;
+          padding: 16px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          text-align: center;
+        }
+
+        .step-number {
+          font-size: 0.7rem;
+          color: var(--cyan);
+          margin-bottom: 8px;
+        }
+
+        .step-icon {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--cyan-dim);
+          border-radius: 10px;
+          color: var(--cyan);
+          margin: 0 auto 8px;
+        }
+
+        .build-step h5 {
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .build-step p {
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+          line-height: 1.4;
+        }
+
+        .quick-contact-section {
+          padding-top: 24px;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .quick-form {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .quick-form input,
+        .quick-form textarea {
+          width: 100%;
+          padding: 14px 16px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          color: var(--text-primary);
+          font-size: 0.9rem;
+          font-family: inherit;
+          transition: border-color 0.2s;
+        }
+
+        .quick-form input:focus,
+        .quick-form textarea:focus {
+          outline: none;
+          border-color: var(--cyan);
+        }
+
+        .quick-form input::placeholder,
+        .quick-form textarea::placeholder {
+          color: var(--text-tertiary);
+        }
+
+        .quick-form textarea {
+          resize: none;
+        }
+
+        .quick-submit {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          padding: 16px;
+          border: none;
+          border-radius: 12px;
+          color: white;
+          font-size: 0.95rem;
+          font-weight: 600;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .quick-submit:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Tech Drawer */
+        .tech-drawer {
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 420px;
+          max-width: 90vw;
+          height: 100vh;
+          background: linear-gradient(
+            135deg,
+            rgba(18, 18, 26, 0.95) 0%,
+            rgba(26, 26, 36, 0.98) 100%
+          );
+          backdrop-filter: blur(20px);
+          border-left: 1px solid var(--border-color);
+          z-index: 1200;
+          overflow-y: auto;
+        }
+
+        .drawer-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 24px;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .drawer-header h3 {
+          font-size: 1.1rem;
+          font-weight: 600;
+        }
+
+        .drawer-close {
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .drawer-close:hover {
+          border-color: var(--cyan);
+          color: var(--cyan);
+        }
+
+        .drawer-content {
+          padding: 24px;
+        }
+
+        .spec-group {
+          padding: 24px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          margin-bottom: 16px;
+        }
+
+        .spec-icon {
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--cyan-dim);
+          border-radius: 12px;
+          color: var(--cyan);
+          margin-bottom: 16px;
+        }
+
+        .spec-group h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 8px;
+        }
+
+        .spec-group p {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          margin-bottom: 16px;
+        }
+
+        .spec-group ul {
+          list-style: none;
+          padding: 0;
+        }
+
+        .spec-group li {
+          font-size: 0.8rem;
+          color: var(--text-tertiary);
+          padding: 6px 0;
+          padding-left: 16px;
+          position: relative;
+        }
+
+        .spec-group li::before {
+          content: "→";
+          position: absolute;
+          left: 0;
+          color: var(--cyan);
+        }
+
+        /* Hero Badges */
+        .hero-badges {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          margin-bottom: 32px;
+          flex-wrap: wrap;
+        }
+
+        .hero-badge-item {
+          padding: 8px 16px;
+          border-radius: 100px;
+          font-size: 0.85rem;
+          font-weight: 600;
+        }
+
+        .hero-badge-item.crimson {
+          background: var(--crimson-dim);
+          border: 1px solid var(--crimson);
+          color: var(--crimson);
+        }
+
+        .hero-badge-item.green {
+          background: var(--green-dim);
+          border: 1px solid var(--green);
+          color: var(--green);
+        }
+
+        .hero-badge-item.cyan {
+          background: var(--cyan-dim);
+          border: 1px solid var(--cyan);
+          color: var(--cyan);
+        }
+
+        /* Tech Specs Button */
+        .tech-specs-btn-wrapper {
+          display: flex;
+          justify-content: center;
+          margin-top: 40px;
+        }
+
+        .tech-specs-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 14px 28px;
+          background: transparent;
+          border: 1px solid var(--border-color);
+          border-radius: 100px;
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .tech-specs-btn:hover {
+          border-color: var(--cyan);
+          color: var(--cyan);
+          background: var(--cyan-dim);
+        }
+
+        /* Tech Logo Cloud */
+        .tech-cloud {
+          margin-top: 60px;
+          padding-top: 40px;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .tech-cloud-label {
+          text-align: center;
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+          letter-spacing: 0.1em;
+          margin-bottom: 24px;
+        }
+
+        /* Main Message Section */
+        .main-message-section {
+          padding: 80px 0;
+          position: relative;
+          z-index: 1;
+        }
+
+        .main-message {
+          text-align: center;
+        }
+
+        .main-message h2 {
+          font-size: 2.5rem;
+          font-weight: 700;
+          line-height: 1.4;
+          margin-bottom: 16px;
+        }
+
+        .main-message p {
+          font-size: 1.1rem;
+          color: var(--text-secondary);
+        }
+
+        .text-glow {
+          color: var(--cyan);
+          text-shadow:
+            0 0 20px rgba(0, 191, 255, 0.5),
+            0 0 40px rgba(0, 191, 255, 0.3),
+            0 0 60px rgba(0, 191, 255, 0.1);
+          animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+          0%, 100% {
+            text-shadow:
+              0 0 20px rgba(0, 191, 255, 0.5),
+              0 0 40px rgba(0, 191, 255, 0.3),
+              0 0 60px rgba(0, 191, 255, 0.1);
+          }
+          50% {
+            text-shadow:
+              0 0 30px rgba(0, 191, 255, 0.7),
+              0 0 60px rgba(0, 191, 255, 0.5),
+              0 0 90px rgba(0, 191, 255, 0.3);
+          }
+        }
+
+        /* Service Cards */
+        .service-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 32px;
+          cursor: pointer;
+          transition: all 0.3s;
+          position: relative;
+        }
+
+        .service-card:hover {
+          transform: translateY(-8px);
+          border-color: var(--cyan);
+          box-shadow: 0 20px 60px rgba(0, 191, 255, 0.15);
+        }
+
+        .service-card-highlight {
+          border-color: var(--cyan);
+          background: linear-gradient(
+            135deg,
+            var(--bg-secondary) 0%,
+            rgba(0, 191, 255, 0.05) 100%
+          );
+        }
+
+        .service-badge {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          padding: 6px 12px;
+          border-radius: 100px;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .service-icon {
+          width: 56px;
+          height: 56px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 16px;
+          margin-bottom: 20px;
+        }
+
+        .service-title {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin-bottom: 8px;
+        }
+
+        .service-subtitle {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          margin-bottom: 20px;
+        }
+
+        .service-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.85rem;
+          color: var(--cyan);
+          font-weight: 500;
+        }
+
+        /* Mobile Service Tabs */
+        .mobile-service-tabs {
+          display: none;
+        }
+
+        .tab-buttons {
+          display: flex;
+          gap: 8px;
+          margin-bottom: 20px;
+        }
+
+        .tab-btn {
+          flex: 1;
+          padding: 12px 16px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          color: var(--text-secondary);
+          font-size: 0.85rem;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+          background: var(--bg-secondary);
+          border-color: var(--tab-color);
+          color: var(--tab-color);
+        }
+
+        .tab-content {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 24px;
+          text-align: center;
+          cursor: pointer;
+        }
+
+        .tab-content h3 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin-bottom: 8px;
+        }
+
+        .tab-content > p {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          margin-bottom: 16px;
+        }
+
+        .tab-case {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+          line-height: 1.6;
+          margin-bottom: 20px;
+          padding: 16px;
+          background: var(--bg-tertiary);
+          border-radius: 12px;
+        }
+
+        .tab-content .service-badge {
+          position: static;
+          display: inline-block;
+          margin-bottom: 16px;
+        }
+
+        .tab-content .service-icon {
+          margin: 0 auto 16px;
+        }
+
+        .tab-content .service-cta {
+          justify-content: center;
+        }
+
+        .desktop-only {
+          display: grid;
+        }
+
+        .mobile-only {
+          display: none;
+        }
+
+        .tech-logos {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 24px;
+        }
+
+        .tech-logo-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          background: var(--bg-tertiary);
+          border-radius: 8px;
+          filter: grayscale(100%);
+          opacity: 0.6;
+          transition: all 0.3s;
+        }
+
+        .tech-logo-item:hover {
+          filter: grayscale(0%);
+          opacity: 1;
+        }
+
+        .tech-icon {
+          font-size: 1.2rem;
+        }
+
+        .tech-name {
+          font-size: 0.8rem;
+          color: var(--text-secondary);
         }
 
         /* Header */
@@ -1856,7 +2909,7 @@ export default function RAGLandingPage() {
 
         /* Solutions Section */
         .solutions-section {
-          padding: 120px 0;
+          padding: 160px 0;
           position: relative;
           z-index: 1;
         }
@@ -1948,7 +3001,7 @@ export default function RAGLandingPage() {
 
         /* Proof Section */
         .proof-section {
-          padding: 120px 0;
+          padding: 160px 0;
           background: var(--bg-secondary);
           position: relative;
           z-index: 1;
@@ -2049,7 +3102,7 @@ export default function RAGLandingPage() {
 
         /* Security Section */
         .security-section {
-          padding: 120px 0;
+          padding: 160px 0;
           position: relative;
           z-index: 1;
         }
@@ -2114,7 +3167,7 @@ export default function RAGLandingPage() {
 
         /* Flow Section */
         .flow-section {
-          padding: 120px 0;
+          padding: 160px 0;
           background: var(--bg-secondary);
           position: relative;
           z-index: 1;
@@ -2175,7 +3228,7 @@ export default function RAGLandingPage() {
 
         /* Trust Section */
         .trust-section {
-          padding: 120px 0;
+          padding: 160px 0;
           position: relative;
           z-index: 1;
         }
@@ -2254,7 +3307,7 @@ export default function RAGLandingPage() {
 
         /* CTA Section */
         .cta-section {
-          padding: 120px 0;
+          padding: 160px 0;
           background: var(--bg-secondary);
           position: relative;
           z-index: 1;
@@ -2608,6 +3661,30 @@ export default function RAGLandingPage() {
             grid-template-columns: 1fr;
           }
 
+          .desktop-only {
+            display: none !important;
+          }
+
+          .mobile-only {
+            display: block !important;
+          }
+
+          .mobile-service-tabs {
+            display: block;
+          }
+
+          .main-message h2 {
+            font-size: 1.75rem;
+          }
+
+          .main-message-section {
+            padding: 60px 0;
+          }
+
+          .build-steps {
+            flex-direction: column;
+          }
+
           .bento-grid {
             grid-template-columns: 1fr;
           }
@@ -2744,6 +3821,7 @@ export default function RAGLandingPage() {
           position: relative;
         }
       `}</style>
-    </div>
+      </div>
+    </>
   );
 }
