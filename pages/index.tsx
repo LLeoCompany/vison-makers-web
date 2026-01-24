@@ -378,16 +378,16 @@ const ServicePopup = ({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop with blur */}
+          {/* v16.5 Backdrop with deep blur */}
           <motion.div
-            className="popup-overlay-v15"
+            className="popup-overlay-v16"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={onClose}
           />
-          {/* Centered Modal Container - v15.5 Premium Report Style */}
+          {/* v16.5 Technical Report Modal */}
           <motion.div
             className="popup-center-wrapper"
             initial={{ opacity: 0 }}
@@ -395,162 +395,201 @@ const ServicePopup = ({
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className={`service-popup-v15 ${isMobile ? "mobile-fullscreen" : ""}`}
-              initial={{ scale: 0.9, y: 30 }}
+              className={`report-popup-v16 ${isMobile ? "mobile-fullscreen" : ""}`}
+              initial={{ scale: 0.92, y: 40 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
-            {/* Compact Header */}
-            <div className="popup-header-v15">
-              <div className="popup-title-group">
-                <div className="popup-icon-v15" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
-                  <Icon size={22} strokeWidth={1.5} />
+            {/* Report Header */}
+            <div className="report-header">
+              <div className="report-title-area">
+                <div className="report-badge font-mono" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+                  TECHNICAL REPORT
                 </div>
-                <div>
-                  <h2>{service.title}</h2>
-                  <p className="font-mono">{service.badge}</p>
-                </div>
+                <h2>{service.title}</h2>
+                <p>{service.caseStudy.description}</p>
               </div>
-              <button onClick={onClose} className="popup-close-v15">
+              <button onClick={onClose} className="report-close">
                 <X size={20} strokeWidth={2} />
               </button>
             </div>
 
-            {/* Two Column Layout: Left=Visual, Right=Data */}
-            <div className="popup-body-v15">
-              {/* Left Column: Case Visual */}
-              <div className="popup-visual-col">
-                <div className="case-visual-card">
-                  <div className="case-visual-header">
-                    <span className="visual-tag font-mono">CASE STUDY</span>
-                    <span className="visual-badge font-mono" style={{ color: service.badgeColor }}>{service.caseStudy.metric}</span>
+            {/* Report Body: Two Columns */}
+            <div className="report-body">
+              {/* Left: Dashboard Mockup Visual */}
+              <div className="report-visual-panel">
+                <div className="dashboard-mockup">
+                  <div className="mockup-header">
+                    <div className="mockup-dots">
+                      <span></span><span></span><span></span>
+                    </div>
+                    <span className="mockup-title font-mono">RAG Dashboard v2.0</span>
                   </div>
-                  <h3 className="case-visual-title">{service.caseStudy.title}</h3>
-
-                  {/* Screenshot Grid */}
-                  <div className="case-screenshots-grid">
-                    {service.caseStudy.screenshots.map((shot, i) => (
-                      <motion.div
-                        key={i}
-                        className="screenshot-card"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.15 + i * 0.1, type: "spring" }}
-                      >
-                        <div className="screenshot-visual" style={{ borderColor: `${service.badgeColor}30` }}>
-                          <div className="screenshot-icon-large" style={{ color: service.badgeColor }}>
-                            {i === 0 && <BarChart3 size={28} strokeWidth={1.5} />}
-                            {i === 1 && <Database size={28} strokeWidth={1.5} />}
-                            {i === 2 && <Zap size={28} strokeWidth={1.5} />}
-                          </div>
-                        </div>
-                        <div className="screenshot-info">
-                          <span className="screenshot-title">{shot.title}</span>
-                          <span className="screenshot-desc">{shot.desc}</span>
-                        </div>
-                      </motion.div>
-                    ))}
+                  <div className="mockup-content">
+                    {/* Mini Chart */}
+                    <div className="mockup-chart-area">
+                      <div className="mini-chart-label font-mono">Query Performance</div>
+                      <div className="mini-bar-chart">
+                        {[65, 82, 91, 78, 95, 88, 92].map((val, i) => (
+                          <motion.div
+                            key={i}
+                            className="mini-bar"
+                            style={{ background: service.badgeColor }}
+                            initial={{ height: 0 }}
+                            animate={{ height: `${val}%` }}
+                            transition={{ delay: 0.3 + i * 0.08, type: "spring", stiffness: 100 }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    {/* Status Indicators */}
+                    <div className="mockup-stats">
+                      <div className="mockup-stat">
+                        <span className="stat-dot" style={{ background: "#48BB78" }}></span>
+                        <span className="font-mono">Accuracy 92%</span>
+                      </div>
+                      <div className="mockup-stat">
+                        <span className="stat-dot" style={{ background: "#00BFFF" }}></span>
+                        <span className="font-mono">Latency 1.2s</span>
+                      </div>
+                      <div className="mockup-stat">
+                        <span className="stat-dot" style={{ background: "#E94560" }}></span>
+                        <span className="font-mono">Uptime 99.9%</span>
+                      </div>
+                    </div>
+                    {/* Data Flow Visual */}
+                    <div className="mockup-flow">
+                      <div className="flow-node">
+                        <FileText size={14} />
+                        <span>Input</span>
+                      </div>
+                      <div className="flow-arrow">→</div>
+                      <div className="flow-node active" style={{ borderColor: service.badgeColor }}>
+                        <Cpu size={14} />
+                        <span>RAG</span>
+                      </div>
+                      <div className="flow-arrow">→</div>
+                      <div className="flow-node">
+                        <Sparkles size={14} />
+                        <span>Output</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
+                {/* Security Badge */}
+                <motion.div
+                  className="security-trust-badge"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
+                >
+                  <Shield size={16} strokeWidth={2} />
+                  <span>데이터 보안 격리 구축</span>
+                  <span className="trust-check">✓</span>
+                </motion.div>
               </div>
 
-              {/* Right Column: Data-Dense Info */}
-              <div className="popup-data-col">
-                {/* Performance Metrics */}
-                <div className="data-section metrics-section">
-                  <div className="data-section-header">
-                    <span className="data-tag font-mono">성과 지표</span>
+              {/* Right: Data Panel */}
+              <div className="report-data-panel">
+                {/* Performance Section with Bar Graphs */}
+                <div className="report-section">
+                  <div className="section-header-v16">
+                    <span className="section-tag-v16 font-mono">성과 METRICS</span>
                   </div>
-                  <div className="metrics-grid-v15">
-                    {service.bigMetrics.map((metric, i) => (
+                  <div className="performance-bars">
+                    {service.bigMetrics.slice(0, 2).map((metric, i) => (
                       <motion.div
                         key={i}
-                        className="metric-card-v15"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.1 + i * 0.08, type: "spring" }}
-                      >
-                        <span className="metric-value-v15 font-mono" style={{ color: metric.color }}>
-                          <DrawerCountUp
-                            end={metric.value}
-                            suffix={metric.suffix}
-                            color={metric.color}
-                            decimals={metric.value < 10 ? 1 : 0}
-                          />
-                        </span>
-                        <span className="metric-label-v15">{metric.label}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Technical Solution */}
-                <div className="data-section tech-section">
-                  <div className="data-section-header">
-                    <span className="data-tag font-mono">기술적 해결책</span>
-                  </div>
-                  <div className="tech-list-v15">
-                    {service.techSpecs.map((spec, i) => (
-                      <motion.div
-                        key={i}
-                        className="tech-item-v15"
-                        initial={{ opacity: 0, x: -10 }}
+                        className="perf-bar-item"
+                        initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.25 + i * 0.05 }}
+                        transition={{ delay: 0.2 + i * 0.1, type: "spring", stiffness: 100 }}
                       >
-                        <span className="tech-key font-mono">{spec.key}</span>
-                        <span className="tech-val font-mono" style={{ color: service.badgeColor }}>{spec.value}</span>
+                        <div className="perf-bar-header">
+                          <span className="perf-label">{metric.label}</span>
+                          <span className="perf-value font-mono" style={{ color: metric.color }}>
+                            <DrawerCountUp end={metric.value} suffix={metric.suffix} color={metric.color} decimals={metric.value < 10 ? 1 : 0} />
+                          </span>
+                        </div>
+                        <div className="perf-bar-track">
+                          <motion.div
+                            className="perf-bar-fill"
+                            style={{ background: `linear-gradient(90deg, ${metric.color}, ${metric.color}88)` }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${Math.min((metric.value / (metric.value > 100 ? metric.value * 1.2 : 100)) * 100, 100)}%` }}
+                            transition={{ delay: 0.4 + i * 0.1, duration: 0.8, ease: "easeOut" }}
+                          />
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                  <div className="metric-chips">
+                    {service.bigMetrics.slice(2).map((metric, i) => (
+                      <motion.div
+                        key={i}
+                        className="metric-chip"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.5 + i * 0.1, type: "spring", stiffness: 100 }}
+                      >
+                        <span className="chip-value font-mono" style={{ color: metric.color }}>
+                          <DrawerCountUp end={metric.value} suffix={metric.suffix} color={metric.color} decimals={metric.value < 10 ? 1 : 0} />
+                        </span>
+                        <span className="chip-label">{metric.label}</span>
                       </motion.div>
                     ))}
                   </div>
                 </div>
 
-                {/* Expected Outcome */}
-                <div className="data-section outcome-section">
-                  <div className="data-section-header">
-                    <span className="data-tag font-mono">기대 효과</span>
+                {/* Tech Terms with Tooltips */}
+                <div className="report-section">
+                  <div className="section-header-v16">
+                    <span className="section-tag-v16 font-mono">기술 STACK</span>
                   </div>
-                  <div className="outcome-list">
-                    {service.steps.map((step, i) => {
-                      const StepIcon = step.icon;
-                      return (
-                        <motion.div
-                          key={i}
-                          className="outcome-item"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.35 + i * 0.05 }}
-                        >
-                          <div className="outcome-icon" style={{ color: service.badgeColor }}>
-                            <StepIcon size={16} strokeWidth={1.5} />
-                          </div>
-                          <div className="outcome-text">
-                            <span className="outcome-title">{step.title}</span>
-                            <span className="outcome-desc">{step.desc}</span>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
+                  <div className="tech-terms-grid">
+                    {[
+                      { term: "HyDE 기법", desc: "Hypothetical Document Embedding으로 검색 정확도 향상" },
+                      { term: "심층 시맨틱 랭킹", desc: "BERT 기반 Cross-Encoder로 문맥 기반 재순위화" },
+                      { term: "청크 최적화", desc: "도메인별 최적 청크 사이즈 자동 탐지" },
+                      { term: "하이브리드 검색", desc: "BM25 + Dense Vector 앙상블 검색" },
+                    ].map((item, i) => (
+                      <motion.div
+                        key={i}
+                        className="tech-term-card"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 + i * 0.08, type: "spring", stiffness: 100 }}
+                      >
+                        <div className="term-header">
+                          <span className="term-name" style={{ color: service.badgeColor }}>{item.term}</span>
+                          <span className="term-tooltip-icon">?</span>
+                        </div>
+                        <p className="term-desc">{item.desc}</p>
+                      </motion.div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Bottom CTA */}
-            <div className="popup-cta-bar">
-              <button
+            {/* CTA Bar with Pulse */}
+            <div className="report-cta-bar">
+              <motion.button
                 type="button"
-                className="popup-cta-button"
-                style={{ background: `linear-gradient(135deg, ${service.badgeColor}, ${service.badgeColor}dd)` }}
+                className="report-cta-pulse"
+                style={{ background: `linear-gradient(135deg, ${service.badgeColor}, ${service.badgeColor}cc)` }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => {
                   onClose();
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('identity')?.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
-                <span>{service.ctaText}</span>
+                <span>우리 회사 전용 ROI 리포트 무료 신청</span>
                 <ArrowRight size={20} strokeWidth={2} />
-              </button>
+              </motion.button>
             </div>
             </motion.div>
           </motion.div>
@@ -1609,18 +1648,35 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
-      {/* v15.5: Our RAG Architecture Section */}
-      <section id="architecture" className="pipeline-section">
-        <div className="pipeline-circuit-bg" />
+      {/* v16.5: The Engine - Vision RAG Pipeline */}
+      <section id="architecture" className="pipeline-section-v16">
+        <div className="pipeline-glow-bg" />
+        <div className="data-flow-lines" />
         <div className="container">
           <motion.div {...fadeInUp} className="section-header">
-            <span className="section-label font-mono">OUR RAG ARCHITECTURE</span>
+            <div className="engine-badge font-mono">
+              <Cpu size={14} strokeWidth={2} />
+              <span>THE ENGINE</span>
+            </div>
             <h2 className="section-title">
-              <span className="text-cyan">데이터</span>가 <span className="text-green">답변</span>이 되기까지
+              Vision <span className="text-cyan">RAG</span> Pipeline
             </h2>
             <p className="section-subtitle">
-              Embedding → Vector DB → Reranking → LLM 응답 생성까지, 검증된 파이프라인
+              수집 → 검색 → 생성, 데이터가 지능으로 변환되는 과정
             </p>
+          </motion.div>
+
+          {/* Security Badge */}
+          <motion.div
+            className="pipeline-security-badge"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+          >
+            <Shield size={16} strokeWidth={2} />
+            <span>데이터 보안 격리 구축</span>
+            <span className="badge-verified font-mono">VERIFIED</span>
           </motion.div>
 
           {/* Desktop Pipeline (Horizontal) */}
@@ -1886,74 +1942,72 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
-      {/* v15.5: Company Identity Section */}
-      <section id="identity" className="identity-section">
-        <div className="identity-glow-bg" />
+      {/* v16.5: Company Identity - Final Statement */}
+      <section id="identity" className="identity-section-v16">
+        <div className="identity-gradient-bg" />
         <div className="container">
           <motion.div
-            {...fadeInUp}
-            className="identity-content"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 100 }}
+            className="identity-content-v16"
           >
-            <div className="identity-badge font-mono">
-              <Sparkles size={14} strokeWidth={2} />
-              <span>VISION-MAKERS IDENTITY</span>
-            </div>
+            {/* Strong One-Line Slogan */}
+            <motion.h2
+              className="identity-slogan"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+            >
+              <span className="slogan-main">RAG 기반 LLM 구축</span>
+              <span className="slogan-accent">전문 기업</span>
+            </motion.h2>
 
-            <h2 className="identity-headline">
-              <span className="text-cyan">RAG 기반 LLM</span> 서비스
-              <br />
-              외주 <span className="text-glow">전문</span> 기업
-            </h2>
+            <motion.p
+              className="identity-tagline"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+            >
+              10만 유저가 검증한 엔진을 귀사에 이식합니다
+            </motion.p>
 
-            <p className="identity-subtext">
-              일반 외주사와는 다릅니다. 10만 유저가 검증한 기술력으로 승부합니다.
-            </p>
-
-            {/* 3 Key Differentiators */}
-            <div className="identity-strengths">
+            {/* 3 Key Stats */}
+            <div className="identity-stats-row">
               <motion.div
-                className="strength-card"
+                className="identity-stat"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.1, type: "spring" }}
+                transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
               >
-                <div className="strength-icon" style={{ color: "#48BB78" }}>
-                  <CheckCircle size={32} strokeWidth={1.5} />
-                </div>
-                <h4>검증된 엔진</h4>
-                <p>DevGym 10만 회원이 실사용 중인 RAG 엔진. 정확도 92%, 보안 99.9%.</p>
-                <span className="strength-metric font-mono">100,000+ Users</span>
+                <span className="stat-number font-mono" style={{ color: "#48BB78" }}>100K+</span>
+                <span className="stat-text">검증 유저</span>
               </motion.div>
-
+              <div className="stat-divider-v16"></div>
               <motion.div
-                className="strength-card"
+                className="identity-stat"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.2, type: "spring" }}
+                transition={{ delay: 0.6, type: "spring", stiffness: 100 }}
               >
-                <div className="strength-icon" style={{ color: "#00BFFF" }}>
-                  <Zap size={32} strokeWidth={1.5} />
-                </div>
-                <h4>빠른 구축</h4>
-                <p>PoC 2주, 본 구축 8주 내 프로덕션 배포. 기존 시스템과 원활한 통합.</p>
-                <span className="strength-metric font-mono">8 Weeks MVP</span>
+                <span className="stat-number font-mono" style={{ color: "#00BFFF" }}>8주</span>
+                <span className="stat-text">MVP 구축</span>
               </motion.div>
-
+              <div className="stat-divider-v16"></div>
               <motion.div
-                className="strength-card"
+                className="identity-stat"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.3, type: "spring" }}
+                transition={{ delay: 0.7, type: "spring", stiffness: 100 }}
               >
-                <div className="strength-icon" style={{ color: "#E94560" }}>
-                  <Shield size={32} strokeWidth={1.5} />
-                </div>
-                <h4>보안 격리</h4>
-                <p>고객별 독립 벡터 DB, AES-256 암호화, LLM 학습 데이터 사용 완전 차단.</p>
-                <span className="strength-metric font-mono">SOC 2 Compliant</span>
+                <span className="stat-number font-mono" style={{ color: "#E94560" }}>99.9%</span>
+                <span className="stat-text">보안 격리</span>
               </motion.div>
             </div>
 
@@ -5630,6 +5684,593 @@ export default function RAGLandingPage() {
           }
         }
 
+        /* ===== v16.5 Technical Report Popup ===== */
+
+        .popup-overlay-v16 {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(5, 5, 15, 0.92);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          z-index: 1100;
+        }
+
+        .report-popup-v16 {
+          width: 100%;
+          max-width: 960px;
+          max-height: calc(100vh - 40px);
+          background: linear-gradient(
+            180deg,
+            rgba(10, 10, 20, 0.98) 0%,
+            rgba(15, 15, 25, 0.99) 100%
+          );
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 24px;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          box-shadow:
+            0 0 0 1px rgba(0, 191, 255, 0.1),
+            0 40px 80px -20px rgba(0, 0, 0, 0.8),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .report-popup-v16.mobile-fullscreen {
+          width: 100%;
+          height: 100%;
+          max-width: 100%;
+          max-height: 100%;
+          border-radius: 0;
+        }
+
+        .report-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          padding: 20px 24px;
+          border-bottom: 1px solid var(--border-color);
+          background: rgba(0, 0, 0, 0.3);
+        }
+
+        .report-title-area {
+          flex: 1;
+        }
+
+        .report-badge {
+          display: inline-block;
+          padding: 4px 10px;
+          border-radius: 6px;
+          font-size: 0.65rem;
+          letter-spacing: 0.1em;
+          margin-bottom: 8px;
+        }
+
+        .report-header h2 {
+          font-size: 1.3rem;
+          font-weight: 700;
+          margin-bottom: 6px;
+        }
+
+        .report-header p {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          line-height: 1.5;
+        }
+
+        .report-close {
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: transparent;
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .report-close:hover {
+          border-color: var(--crimson);
+          color: var(--crimson);
+        }
+
+        .report-body {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          flex: 1;
+          min-height: 0;
+          overflow: hidden;
+        }
+
+        /* Dashboard Mockup Panel */
+        .report-visual-panel {
+          padding: 20px;
+          background: radial-gradient(ellipse at top left, rgba(0, 191, 255, 0.03) 0%, transparent 50%);
+          border-right: 1px solid var(--border-color);
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .dashboard-mockup {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          overflow: hidden;
+        }
+
+        .mockup-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 14px;
+          background: var(--bg-tertiary);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .mockup-dots {
+          display: flex;
+          gap: 6px;
+        }
+
+        .mockup-dots span {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: var(--border-color);
+        }
+
+        .mockup-dots span:first-child { background: #ff5f56; }
+        .mockup-dots span:nth-child(2) { background: #ffbd2e; }
+        .mockup-dots span:nth-child(3) { background: #27ca3f; }
+
+        .mockup-title {
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+        }
+
+        .mockup-content {
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+        }
+
+        .mockup-chart-area {
+          background: var(--bg-tertiary);
+          border-radius: 10px;
+          padding: 12px;
+        }
+
+        .mini-chart-label {
+          font-size: 0.65rem;
+          color: var(--text-tertiary);
+          margin-bottom: 10px;
+        }
+
+        .mini-bar-chart {
+          display: flex;
+          align-items: flex-end;
+          gap: 6px;
+          height: 60px;
+        }
+
+        .mini-bar {
+          flex: 1;
+          border-radius: 4px 4px 0 0;
+          min-height: 10px;
+        }
+
+        .mockup-stats {
+          display: flex;
+          gap: 12px;
+        }
+
+        .mockup-stat {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.7rem;
+          color: var(--text-secondary);
+        }
+
+        .stat-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+        }
+
+        .mockup-flow {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 12px;
+          background: var(--bg-tertiary);
+          border-radius: 10px;
+        }
+
+        .flow-node {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 12px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          font-size: 0.7rem;
+          color: var(--text-secondary);
+        }
+
+        .flow-node.active {
+          background: rgba(0, 191, 255, 0.1);
+          border-color: var(--cyan);
+          color: var(--cyan);
+        }
+
+        .flow-arrow {
+          color: var(--text-tertiary);
+          font-size: 0.8rem;
+        }
+
+        .security-trust-badge {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          padding: 12px 16px;
+          background: linear-gradient(135deg, rgba(72, 187, 120, 0.1) 0%, rgba(72, 187, 120, 0.05) 100%);
+          border: 1px solid rgba(72, 187, 120, 0.3);
+          border-radius: 12px;
+          color: var(--green);
+          font-size: 0.85rem;
+          font-weight: 600;
+        }
+
+        .trust-check {
+          font-size: 1rem;
+        }
+
+        /* Data Panel */
+        .report-data-panel {
+          padding: 20px;
+          background: radial-gradient(ellipse at bottom right, rgba(233, 69, 96, 0.03) 0%, transparent 50%);
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .report-section {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 14px;
+          padding: 16px;
+        }
+
+        .section-header-v16 {
+          margin-bottom: 12px;
+        }
+
+        .section-tag-v16 {
+          font-size: 0.65rem;
+          color: var(--cyan);
+          letter-spacing: 0.1em;
+        }
+
+        .performance-bars {
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          margin-bottom: 14px;
+        }
+
+        .perf-bar-item {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .perf-bar-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .perf-label {
+          font-size: 0.8rem;
+          color: var(--text-secondary);
+        }
+
+        .perf-value {
+          font-size: 1.2rem;
+          font-weight: 700;
+        }
+
+        .perf-bar-track {
+          height: 8px;
+          background: var(--bg-tertiary);
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .perf-bar-fill {
+          height: 100%;
+          border-radius: 4px;
+        }
+
+        .metric-chips {
+          display: flex;
+          gap: 10px;
+        }
+
+        .metric-chip {
+          flex: 1;
+          padding: 10px;
+          background: var(--bg-tertiary);
+          border-radius: 10px;
+          text-align: center;
+        }
+
+        .chip-value {
+          font-size: 1.1rem;
+          font-weight: 700;
+          display: block;
+          margin-bottom: 2px;
+        }
+
+        .chip-label {
+          font-size: 0.65rem;
+          color: var(--text-tertiary);
+        }
+
+        .tech-terms-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+        }
+
+        .tech-term-card {
+          padding: 12px;
+          background: var(--bg-tertiary);
+          border-radius: 10px;
+        }
+
+        .term-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 6px;
+        }
+
+        .term-name {
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+
+        .term-tooltip-icon {
+          width: 16px;
+          height: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--bg-secondary);
+          border-radius: 50%;
+          font-size: 0.6rem;
+          color: var(--text-tertiary);
+          cursor: help;
+        }
+
+        .term-desc {
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+          line-height: 1.4;
+        }
+
+        /* CTA Bar with Pulse */
+        .report-cta-bar {
+          padding: 16px 24px;
+          border-top: 1px solid var(--border-color);
+          background: rgba(0, 0, 0, 0.3);
+        }
+
+        .report-cta-pulse {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          width: 100%;
+          padding: 16px 28px;
+          border: none;
+          border-radius: 14px;
+          color: white;
+          font-size: 1.05rem;
+          font-weight: 700;
+          font-family: inherit;
+          cursor: pointer;
+          animation: cta-pulse 2s ease-in-out infinite;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes cta-pulse {
+          0%, 100% {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+          }
+          50% {
+            box-shadow: 0 4px 30px rgba(0, 191, 255, 0.4), 0 0 20px rgba(0, 191, 255, 0.2);
+          }
+        }
+
+        /* ===== v16.5 Pipeline Section ===== */
+
+        .pipeline-section-v16 {
+          padding: 120px 0;
+          position: relative;
+          z-index: 1;
+          background: var(--bg-primary);
+          overflow: hidden;
+        }
+
+        .pipeline-glow-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background:
+            radial-gradient(ellipse 50% 40% at 20% 20%, rgba(138, 43, 226, 0.05) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 40% at 80% 80%, rgba(0, 191, 255, 0.05) 0%, transparent 60%);
+          pointer-events: none;
+        }
+
+        .data-flow-lines {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent 0%, var(--cyan) 50%, transparent 100%);
+          opacity: 0.1;
+          animation: flow-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes flow-pulse {
+          0%, 100% { opacity: 0.05; }
+          50% { opacity: 0.15; }
+        }
+
+        .engine-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          background: rgba(138, 43, 226, 0.1);
+          border: 1px solid rgba(138, 43, 226, 0.3);
+          border-radius: 30px;
+          color: #a78bfa;
+          font-size: 0.7rem;
+          letter-spacing: 0.15em;
+          margin-bottom: 16px;
+        }
+
+        .pipeline-security-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 20px;
+          background: linear-gradient(135deg, rgba(72, 187, 120, 0.1) 0%, rgba(72, 187, 120, 0.05) 100%);
+          border: 1px solid rgba(72, 187, 120, 0.3);
+          border-radius: 12px;
+          color: var(--green);
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin-bottom: 40px;
+        }
+
+        .badge-verified {
+          padding: 4px 8px;
+          background: rgba(72, 187, 120, 0.2);
+          border-radius: 6px;
+          font-size: 0.65rem;
+          letter-spacing: 0.1em;
+        }
+
+        /* ===== v16.5 Identity Section ===== */
+
+        .identity-section-v16 {
+          padding: 140px 0;
+          position: relative;
+          background: var(--bg-primary);
+          overflow: hidden;
+        }
+
+        .identity-gradient-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background:
+            radial-gradient(ellipse 80% 60% at 50% 20%, rgba(0, 191, 255, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 40% at 30% 80%, rgba(138, 43, 226, 0.06) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 40% at 70% 80%, rgba(233, 69, 96, 0.06) 0%, transparent 50%);
+          pointer-events: none;
+        }
+
+        .identity-content-v16 {
+          position: relative;
+          z-index: 1;
+          text-align: center;
+          max-width: 800px;
+          margin: 0 auto;
+        }
+
+        .identity-slogan {
+          font-size: 3.5rem;
+          font-weight: 800;
+          line-height: 1.2;
+          margin-bottom: 24px;
+        }
+
+        .slogan-main {
+          display: block;
+          background: linear-gradient(135deg, #ffffff 0%, #a0a0b0 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .slogan-accent {
+          display: block;
+          background: linear-gradient(135deg, var(--cyan) 0%, #00e5ff 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          text-shadow: 0 0 40px rgba(0, 191, 255, 0.3);
+        }
+
+        .identity-tagline {
+          font-size: 1.2rem;
+          color: var(--text-secondary);
+          margin-bottom: 48px;
+        }
+
+        .identity-stats-row {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 40px;
+          margin-bottom: 48px;
+        }
+
+        .identity-stat {
+          text-align: center;
+        }
+
+        .stat-number {
+          font-size: 2.5rem;
+          font-weight: 800;
+          display: block;
+          margin-bottom: 8px;
+        }
+
+        .stat-text {
+          font-size: 0.9rem;
+          color: var(--text-tertiary);
+        }
+
+        .stat-divider-v16 {
+          width: 1px;
+          height: 60px;
+          background: var(--border-color);
+        }
+
         /* ===== Pipeline Section (v14.0) ===== */
 
         .pipeline-section {
@@ -5966,6 +6607,97 @@ export default function RAGLandingPage() {
           .popup-visual-col {
             border-right: none;
             border-bottom: 1px solid var(--border-color);
+          }
+
+          /* v16.5 Report Popup Mobile */
+          .report-body {
+            grid-template-columns: 1fr;
+          }
+
+          .report-visual-panel {
+            border-right: none;
+            border-bottom: 1px solid var(--border-color);
+          }
+
+          .tech-terms-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 768px) {
+          /* v16.5 Mobile Styles */
+          .report-header h2 {
+            font-size: 1.1rem;
+          }
+
+          .report-header p {
+            font-size: 0.8rem;
+          }
+
+          .report-visual-panel,
+          .report-data-panel {
+            padding: 16px;
+          }
+
+          .mockup-content {
+            padding: 12px;
+          }
+
+          .perf-value {
+            font-size: 1rem;
+          }
+
+          .metric-chips {
+            flex-direction: column;
+            gap: 8px;
+          }
+
+          .report-cta-pulse {
+            font-size: 0.95rem;
+            padding: 14px 20px;
+          }
+
+          /* v16.5 Pipeline Mobile */
+          .pipeline-section-v16 {
+            padding: 80px 0;
+          }
+
+          .engine-badge {
+            font-size: 0.6rem;
+            padding: 6px 12px;
+          }
+
+          .pipeline-security-badge {
+            font-size: 0.8rem;
+            padding: 10px 16px;
+          }
+
+          /* v16.5 Identity Mobile */
+          .identity-section-v16 {
+            padding: 100px 0;
+          }
+
+          .identity-slogan {
+            font-size: 2rem;
+          }
+
+          .identity-tagline {
+            font-size: 1rem;
+            margin-bottom: 32px;
+          }
+
+          .identity-stats-row {
+            flex-direction: column;
+            gap: 24px;
+          }
+
+          .stat-divider-v16 {
+            width: 60px;
+            height: 1px;
+          }
+
+          .stat-number {
+            font-size: 2rem;
           }
         }
       `}</style>
