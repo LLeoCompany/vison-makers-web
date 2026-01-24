@@ -36,6 +36,11 @@ import {
   Cpu,
   Layers,
   GitBranch,
+  ChevronLeft,
+  Award,
+  BadgeCheck,
+  Settings,
+  Rocket,
 } from "lucide-react";
 
 // Animation variants
@@ -338,8 +343,8 @@ const CircleGauge = ({
   );
 };
 
-// Service Popup Modal Component (v14.0 Centered Modal)
-const ServicePopup = ({
+// v17.5 Funnel Modal - 4-Step Slide Storytelling
+const FunnelModal = ({
   isOpen,
   onClose,
   serviceKey,
@@ -348,12 +353,19 @@ const ServicePopup = ({
   onClose: () => void;
   serviceKey: ServiceKey | null;
 }) => {
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({ company: "", contact: "", field: "" });
   const [isMobile, setIsMobile] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const service = serviceKey ? serviceData[serviceKey] : null;
 
+  const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 4));
+  const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+  const goToStep = (step: number) => setCurrentStep(step);
+
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 900);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
@@ -362,6 +374,8 @@ const ServicePopup = ({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      setCurrentStep(1);
+      setSubmitted(false);
     } else {
       document.body.style.overflow = "";
     }
@@ -370,227 +384,573 @@ const ServicePopup = ({
     };
   }, [isOpen]);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate submission
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitted(true);
+    }, 1500);
+  };
+
   if (!service) return null;
 
-  const Icon = service.icon;
+  const stepLabels = ["성과 확인", "실전 사례", "프로세스", "상담 신청"];
+
+  // Step 1: Impact Metrics - Before/After Comparison
+  const Step1Impact = () => (
+    <motion.div
+      className="funnel-step-content"
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+    >
+      <div className="step-header">
+        <span className="step-badge font-mono" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+          STEP 1: IMPACT
+        </span>
+        <h2 className="step-title">수익을 만드는 엔진</h2>
+        <p className="step-subtitle">압도적인 성과, 숫자로 증명합니다</p>
+      </div>
+
+      <div className="impact-metrics-grid">
+        {/* Before/After Comparison Bars */}
+        <div className="comparison-section">
+          <div className="comparison-item">
+            <div className="comparison-label">
+              <span className="label-text">운영 비용</span>
+              <span className="comparison-badge font-mono" style={{ color: "#48BB78" }}>65% 절감</span>
+            </div>
+            <div className="comparison-bars">
+              <div className="bar-row">
+                <span className="bar-label font-mono">BEFORE</span>
+                <div className="bar-track">
+                  <motion.div
+                    className="bar-fill before"
+                    initial={{ width: 0 }}
+                    animate={{ width: "100%" }}
+                    transition={{ delay: 0.3, duration: 0.8 }}
+                  />
+                </div>
+                <span className="bar-value font-mono">100%</span>
+              </div>
+              <div className="bar-row">
+                <span className="bar-label font-mono">AFTER</span>
+                <div className="bar-track">
+                  <motion.div
+                    className="bar-fill after"
+                    style={{ background: `linear-gradient(90deg, ${service.badgeColor}, ${service.badgeColor}88)` }}
+                    initial={{ width: 0 }}
+                    animate={{ width: "35%" }}
+                    transition={{ delay: 0.5, duration: 0.8 }}
+                  />
+                </div>
+                <span className="bar-value font-mono" style={{ color: service.badgeColor }}>35%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="comparison-item">
+            <div className="comparison-label">
+              <span className="label-text">인건비 효율화</span>
+              <span className="comparison-badge font-mono" style={{ color: "#00BFFF" }}>9.3배 향상</span>
+            </div>
+            <div className="comparison-bars">
+              <div className="bar-row">
+                <span className="bar-label font-mono">BEFORE</span>
+                <div className="bar-track">
+                  <motion.div
+                    className="bar-fill before"
+                    initial={{ width: 0 }}
+                    animate={{ width: "11%" }}
+                    transition={{ delay: 0.4, duration: 0.8 }}
+                  />
+                </div>
+                <span className="bar-value font-mono">1x</span>
+              </div>
+              <div className="bar-row">
+                <span className="bar-label font-mono">AFTER</span>
+                <div className="bar-track">
+                  <motion.div
+                    className="bar-fill after"
+                    style={{ background: `linear-gradient(90deg, #00BFFF, #00BFFF88)` }}
+                    initial={{ width: 0 }}
+                    animate={{ width: "100%" }}
+                    transition={{ delay: 0.6, duration: 0.8 }}
+                  />
+                </div>
+                <span className="bar-value font-mono" style={{ color: "#00BFFF" }}>9.3x</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Key Metrics Gauges */}
+        <div className="gauges-row">
+          {service.bigMetrics.slice(0, 3).map((metric, i) => (
+            <motion.div
+              key={i}
+              className="gauge-card"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 + i * 0.1 }}
+            >
+              <CircleGauge
+                value={metric.value}
+                maxValue={metric.value > 100 ? metric.value * 1.2 : 100}
+                color={metric.color}
+                size={isMobile ? 80 : 100}
+                strokeWidth={isMobile ? 6 : 8}
+                label={metric.label}
+                suffix={metric.suffix}
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  // Step 2: Visual Proof - DevGym Screenshot
+  const Step2Proof = () => (
+    <motion.div
+      className="funnel-step-content"
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+    >
+      <div className="step-header">
+        <span className="step-badge font-mono" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+          STEP 2: PROOF
+        </span>
+        <h2 className="step-title">10만 유저가 검증한 실제 구동 화면</h2>
+        <p className="step-subtitle">DevGym SaaS에서 실시간 운영 중인 RAG 챗봇</p>
+      </div>
+
+      <div className="proof-visual">
+        <div className="chatbot-mockup">
+          <div className="mockup-header">
+            <div className="mockup-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span className="mockup-title font-mono">DevGym AI Assistant</span>
+            <div className="live-badge">
+              <span className="live-dot"></span>
+              <span className="font-mono">LIVE</span>
+            </div>
+          </div>
+          <div className="chat-content">
+            <motion.div
+              className="chat-message user"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <span>벤치프레스 자세 교정에 대해 알려주세요</span>
+            </motion.div>
+            <motion.div
+              className="chat-message bot"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <div className="bot-header">
+                <Bot size={16} />
+                <span className="font-mono">AI Assistant</span>
+                <span className="response-time font-mono">0.8s</span>
+              </div>
+              <p>벤치프레스 자세 교정을 위해 다음 3가지를 확인해주세요:</p>
+              <ul>
+                <li>견갑골 후인 및 하강 유지</li>
+                <li>손목 중립 포지션</li>
+                <li>발바닥 지면 접촉 안정화</li>
+              </ul>
+              <div className="source-tag font-mono">
+                <FileText size={12} />
+                출처: 피트니스 가이드 v3.2
+              </div>
+            </motion.div>
+            <motion.div
+              className="chat-message user"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9 }}
+            >
+              <span>관련 영상 추천해줘</span>
+            </motion.div>
+            <motion.div
+              className="chat-typing"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
+            >
+              <span></span><span></span><span></span>
+            </motion.div>
+          </div>
+        </div>
+
+        <div className="proof-stats">
+          <motion.div
+            className="proof-stat-item"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <span className="stat-icon" style={{ background: `${service.badgeColor}20` }}>
+              <Users size={20} style={{ color: service.badgeColor }} />
+            </span>
+            <div className="stat-info">
+              <span className="stat-value font-mono">100,000+</span>
+              <span className="stat-label">월간 활성 유저</span>
+            </div>
+          </motion.div>
+          <motion.div
+            className="proof-stat-item"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <span className="stat-icon" style={{ background: "rgba(72, 187, 120, 0.2)" }}>
+              <MessageSquare size={20} style={{ color: "#48BB78" }} />
+            </span>
+            <div className="stat-info">
+              <span className="stat-value font-mono">2.5M+</span>
+              <span className="stat-label">누적 대화 건수</span>
+            </div>
+          </motion.div>
+          <motion.div
+            className="proof-stat-item"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            <span className="stat-icon" style={{ background: "rgba(233, 69, 96, 0.2)" }}>
+              <Zap size={20} style={{ color: "#E94560" }} />
+            </span>
+            <div className="stat-info">
+              <span className="stat-value font-mono">0.9s</span>
+              <span className="stat-label">평균 응답 시간</span>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  // Step 3: Process Map
+  const Step3Process = () => (
+    <motion.div
+      className="funnel-step-content"
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+    >
+      <div className="step-header">
+        <span className="step-badge font-mono" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+          STEP 3: PROCESS
+        </span>
+        <h2 className="step-title">검증된 경험, 안전한 이식</h2>
+        <p className="step-subtitle">3단계 프로세스로 빠르고 안전하게 구축합니다</p>
+      </div>
+
+      <div className="process-map">
+        <motion.div
+          className="process-step"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="process-icon" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+            <Search size={28} strokeWidth={1.5} />
+          </div>
+          <div className="process-number font-mono">01</div>
+          <h3>데이터 분석</h3>
+          <p>귀사의 데이터 구조와 도메인 특성을 심층 분석하여 최적의 RAG 설계안을 도출합니다</p>
+          <ul className="process-checklist">
+            <li><CheckCircle size={14} /> 데이터 품질 진단</li>
+            <li><CheckCircle size={14} /> 도메인 용어 추출</li>
+            <li><CheckCircle size={14} /> 임베딩 전략 수립</li>
+          </ul>
+        </motion.div>
+
+        <div className="process-arrow">
+          <ArrowRight size={24} strokeWidth={1.5} />
+        </div>
+
+        <motion.div
+          className="process-step"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <div className="process-icon" style={{ background: "rgba(0, 191, 255, 0.2)", color: "#00BFFF" }}>
+            <Settings size={28} strokeWidth={1.5} />
+          </div>
+          <div className="process-number font-mono">02</div>
+          <h3>맞춤 엔진 튜닝</h3>
+          <p>DevGym에서 검증된 엔진을 귀사 요구사항에 맞게 파인튜닝합니다</p>
+          <ul className="process-checklist">
+            <li><CheckCircle size={14} /> 하이브리드 RAG 적용</li>
+            <li><CheckCircle size={14} /> 도메인 최적화</li>
+            <li><CheckCircle size={14} /> 성능 벤치마크</li>
+          </ul>
+        </motion.div>
+
+        <div className="process-arrow">
+          <ArrowRight size={24} strokeWidth={1.5} />
+        </div>
+
+        <motion.div
+          className="process-step"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <div className="process-icon" style={{ background: "rgba(72, 187, 120, 0.2)", color: "#48BB78" }}>
+            <Rocket size={28} strokeWidth={1.5} />
+          </div>
+          <div className="process-number font-mono">03</div>
+          <h3>즉시 이식 & 배포</h3>
+          <p>8주 내 프로덕션 환경에 안전하게 배포하고 모니터링을 시작합니다</p>
+          <ul className="process-checklist">
+            <li><CheckCircle size={14} /> 보안 격리 환경</li>
+            <li><CheckCircle size={14} /> 24/7 모니터링</li>
+            <li><CheckCircle size={14} /> 지속 최적화</li>
+          </ul>
+        </motion.div>
+      </div>
+
+      <motion.div
+        className="security-assurance"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+      >
+        <Shield size={20} strokeWidth={1.5} />
+        <span>모든 데이터는 격리된 보안 환경에서 처리됩니다</span>
+        <div className="security-badges">
+          <span className="security-badge font-mono">AES-256</span>
+          <span className="security-badge font-mono">TLS 1.3</span>
+          <span className="security-badge font-mono">SOC 2</span>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+
+  // Step 4: Contact Form
+  const Step4Contact = () => (
+    <motion.div
+      className="funnel-step-content"
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+    >
+      <div className="step-header">
+        <span className="step-badge font-mono" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+          STEP 4: ACTION
+        </span>
+        <h2 className="step-title">예상 수익 리포트 무료 신청</h2>
+        <p className="step-subtitle">24시간 내 전문가가 맞춤 분석 리포트를 전달합니다</p>
+      </div>
+
+      {submitted ? (
+        <motion.div
+          className="submit-success"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          <div className="success-icon">
+            <CheckCircle size={48} strokeWidth={1.5} />
+          </div>
+          <h3>신청이 완료되었습니다!</h3>
+          <p>24시간 내 전문가가 연락드리겠습니다.</p>
+          <button className="success-close-btn" onClick={onClose}>
+            닫기
+          </button>
+        </motion.div>
+      ) : (
+        <form className="contact-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">
+              <Building2 size={16} />
+              기업명
+            </label>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="회사명을 입력해주세요"
+              value={formData.company}
+              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">
+              <Users size={16} />
+              연락처 (이메일 또는 전화번호)
+            </label>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="example@company.com"
+              value={formData.contact}
+              onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">
+              <Target size={16} />
+              관심 분야
+            </label>
+            <select
+              className="form-select"
+              value={formData.field}
+              onChange={(e) => setFormData({ ...formData, field: e.target.value })}
+              required
+            >
+              <option value="">선택해주세요</option>
+              <option value="rag">RAG 시스템 구축</option>
+              <option value="chatbot">AI 챗봇 개발</option>
+              <option value="recommend">AI 추천 시스템</option>
+              <option value="consulting">AI 도입 컨설팅</option>
+              <option value="other">기타</option>
+            </select>
+          </div>
+
+          <motion.button
+            type="submit"
+            className="submit-cta-btn"
+            style={{ background: `linear-gradient(135deg, ${service.badgeColor}, ${service.badgeColor}cc)` }}
+            whileHover={{ scale: 1.02, boxShadow: `0 0 30px ${service.badgeColor}60` }}
+            whileTap={{ scale: 0.98 }}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <span className="loading-dots">
+                <span></span><span></span><span></span>
+              </span>
+            ) : (
+              <>
+                <span>무료 ROI 리포트 신청하기</span>
+                <Send size={18} strokeWidth={2} />
+              </>
+            )}
+          </motion.button>
+
+          <p className="form-note font-mono">
+            <Lock size={12} />
+            제출된 정보는 상담 목적으로만 사용됩니다
+          </p>
+        </form>
+      )}
+    </motion.div>
+  );
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* v16.5 Backdrop with deep blur */}
+          {/* Backdrop with deep blur */}
           <motion.div
-            className="popup-overlay-v16"
+            className="funnel-overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={onClose}
           />
-          {/* v16.5 Technical Report Modal */}
+
+          {/* Modal Container */}
           <motion.div
-            className="popup-center-wrapper"
+            className="funnel-modal-wrapper"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className={`report-popup-v16 ${isMobile ? "mobile-fullscreen" : ""}`}
+              className={`funnel-modal ${isMobile ? "mobile-fullscreen" : ""}`}
               initial={{ scale: 0.92, y: 40 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
             >
-            {/* Report Header */}
-            <div className="report-header">
-              <div className="report-title-area">
-                <div className="report-badge font-mono" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
-                  TECHNICAL REPORT
-                </div>
-                <h2>{service.title}</h2>
-                <p>{service.caseStudy.description}</p>
-              </div>
-              <button onClick={onClose} className="report-close">
+              {/* Close Button */}
+              <button onClick={onClose} className="funnel-close">
                 <X size={20} strokeWidth={2} />
               </button>
-            </div>
 
-            {/* Report Body: Two Columns */}
-            <div className="report-body">
-              {/* Left: Dashboard Mockup Visual */}
-              <div className="report-visual-panel">
-                <div className="dashboard-mockup">
-                  <div className="mockup-header">
-                    <div className="mockup-dots">
-                      <span></span><span></span><span></span>
-                    </div>
-                    <span className="mockup-title font-mono">RAG Dashboard v2.0</span>
-                  </div>
-                  <div className="mockup-content">
-                    {/* Mini Chart */}
-                    <div className="mockup-chart-area">
-                      <div className="mini-chart-label font-mono">Query Performance</div>
-                      <div className="mini-bar-chart">
-                        {[65, 82, 91, 78, 95, 88, 92].map((val, i) => (
-                          <motion.div
-                            key={i}
-                            className="mini-bar"
-                            style={{ background: service.badgeColor }}
-                            initial={{ height: 0 }}
-                            animate={{ height: `${val}%` }}
-                            transition={{ delay: 0.3 + i * 0.08, type: "spring", stiffness: 100 }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    {/* Status Indicators */}
-                    <div className="mockup-stats">
-                      <div className="mockup-stat">
-                        <span className="stat-dot" style={{ background: "#48BB78" }}></span>
-                        <span className="font-mono">Accuracy 92%</span>
-                      </div>
-                      <div className="mockup-stat">
-                        <span className="stat-dot" style={{ background: "#00BFFF" }}></span>
-                        <span className="font-mono">Latency 1.2s</span>
-                      </div>
-                      <div className="mockup-stat">
-                        <span className="stat-dot" style={{ background: "#E94560" }}></span>
-                        <span className="font-mono">Uptime 99.9%</span>
-                      </div>
-                    </div>
-                    {/* Data Flow Visual */}
-                    <div className="mockup-flow">
-                      <div className="flow-node">
-                        <FileText size={14} />
-                        <span>Input</span>
-                      </div>
-                      <div className="flow-arrow">→</div>
-                      <div className="flow-node active" style={{ borderColor: service.badgeColor }}>
-                        <Cpu size={14} />
-                        <span>RAG</span>
-                      </div>
-                      <div className="flow-arrow">→</div>
-                      <div className="flow-node">
-                        <Sparkles size={14} />
-                        <span>Output</span>
-                      </div>
-                    </div>
-                  </div>
+              {/* Step Indicator */}
+              <div className="step-indicator">
+                {[1, 2, 3, 4].map((step) => (
+                  <button
+                    key={step}
+                    className={`step-dot ${currentStep === step ? "active" : ""} ${currentStep > step ? "completed" : ""}`}
+                    onClick={() => goToStep(step)}
+                  >
+                    <span className="step-num font-mono">{step}</span>
+                    <span className="step-label">{stepLabels[step - 1]}</span>
+                  </button>
+                ))}
+                <div className="step-progress">
+                  <motion.div
+                    className="step-progress-fill"
+                    style={{ background: service.badgeColor }}
+                    initial={{ width: "0%" }}
+                    animate={{ width: `${((currentStep - 1) / 3) * 100}%` }}
+                    transition={{ duration: 0.3 }}
+                  />
                 </div>
+              </div>
 
-                {/* Security Badge */}
-                <motion.div
-                  className="security-trust-badge"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, type: "spring", stiffness: 100 }}
+              {/* Step Content */}
+              <div className="funnel-content">
+                <AnimatePresence mode="wait">
+                  {currentStep === 1 && <Step1Impact key="step1" />}
+                  {currentStep === 2 && <Step2Proof key="step2" />}
+                  {currentStep === 3 && <Step3Process key="step3" />}
+                  {currentStep === 4 && <Step4Contact key="step4" />}
+                </AnimatePresence>
+              </div>
+
+              {/* Navigation */}
+              <div className="funnel-nav">
+                <button
+                  className="nav-btn prev"
+                  onClick={prevStep}
+                  disabled={currentStep === 1}
                 >
-                  <Shield size={16} strokeWidth={2} />
-                  <span>데이터 보안 격리 구축</span>
-                  <span className="trust-check">✓</span>
-                </motion.div>
-              </div>
-
-              {/* Right: Data Panel */}
-              <div className="report-data-panel">
-                {/* Performance Section with Bar Graphs */}
-                <div className="report-section">
-                  <div className="section-header-v16">
-                    <span className="section-tag-v16 font-mono">성과 METRICS</span>
-                  </div>
-                  <div className="performance-bars">
-                    {service.bigMetrics.slice(0, 2).map((metric, i) => (
-                      <motion.div
-                        key={i}
-                        className="perf-bar-item"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 + i * 0.1, type: "spring", stiffness: 100 }}
-                      >
-                        <div className="perf-bar-header">
-                          <span className="perf-label">{metric.label}</span>
-                          <span className="perf-value font-mono" style={{ color: metric.color }}>
-                            <DrawerCountUp end={metric.value} suffix={metric.suffix} color={metric.color} decimals={metric.value < 10 ? 1 : 0} />
-                          </span>
-                        </div>
-                        <div className="perf-bar-track">
-                          <motion.div
-                            className="perf-bar-fill"
-                            style={{ background: `linear-gradient(90deg, ${metric.color}, ${metric.color}88)` }}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${Math.min((metric.value / (metric.value > 100 ? metric.value * 1.2 : 100)) * 100, 100)}%` }}
-                            transition={{ delay: 0.4 + i * 0.1, duration: 0.8, ease: "easeOut" }}
-                          />
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                  <div className="metric-chips">
-                    {service.bigMetrics.slice(2).map((metric, i) => (
-                      <motion.div
-                        key={i}
-                        className="metric-chip"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.5 + i * 0.1, type: "spring", stiffness: 100 }}
-                      >
-                        <span className="chip-value font-mono" style={{ color: metric.color }}>
-                          <DrawerCountUp end={metric.value} suffix={metric.suffix} color={metric.color} decimals={metric.value < 10 ? 1 : 0} />
-                        </span>
-                        <span className="chip-label">{metric.label}</span>
-                      </motion.div>
-                    ))}
-                  </div>
+                  <ChevronLeft size={18} />
+                  <span>이전</span>
+                </button>
+                <div className="nav-dots">
+                  {[1, 2, 3, 4].map((step) => (
+                    <span
+                      key={step}
+                      className={`nav-dot ${currentStep === step ? "active" : ""}`}
+                      style={currentStep === step ? { background: service.badgeColor } : {}}
+                    />
+                  ))}
                 </div>
-
-                {/* Tech Terms with Tooltips */}
-                <div className="report-section">
-                  <div className="section-header-v16">
-                    <span className="section-tag-v16 font-mono">기술 STACK</span>
-                  </div>
-                  <div className="tech-terms-grid">
-                    {[
-                      { term: "HyDE 기법", desc: "Hypothetical Document Embedding으로 검색 정확도 향상" },
-                      { term: "심층 시맨틱 랭킹", desc: "BERT 기반 Cross-Encoder로 문맥 기반 재순위화" },
-                      { term: "청크 최적화", desc: "도메인별 최적 청크 사이즈 자동 탐지" },
-                      { term: "하이브리드 검색", desc: "BM25 + Dense Vector 앙상블 검색" },
-                    ].map((item, i) => (
-                      <motion.div
-                        key={i}
-                        className="tech-term-card"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 + i * 0.08, type: "spring", stiffness: 100 }}
-                      >
-                        <div className="term-header">
-                          <span className="term-name" style={{ color: service.badgeColor }}>{item.term}</span>
-                          <span className="term-tooltip-icon">?</span>
-                        </div>
-                        <p className="term-desc">{item.desc}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+                {currentStep < 4 ? (
+                  <button className="nav-btn next" onClick={nextStep}>
+                    <span>다음</span>
+                    <ChevronRight size={18} />
+                  </button>
+                ) : (
+                  <button className="nav-btn next skip" onClick={onClose}>
+                    <span>닫기</span>
+                    <X size={18} />
+                  </button>
+                )}
               </div>
-            </div>
-
-            {/* CTA Bar with Pulse */}
-            <div className="report-cta-bar">
-              <motion.button
-                type="button"
-                className="report-cta-pulse"
-                style={{ background: `linear-gradient(135deg, ${service.badgeColor}, ${service.badgeColor}cc)` }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  onClose();
-                  document.getElementById('identity')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                <span>우리 회사 전용 ROI 리포트 무료 신청</span>
-                <ArrowRight size={20} strokeWidth={2} />
-              </motion.button>
-            </div>
             </motion.div>
           </motion.div>
         </>
@@ -598,6 +958,9 @@ const ServicePopup = ({
     </AnimatePresence>
   );
 };
+
+// Legacy ServicePopup reference - now using FunnelModal
+const ServicePopup = FunnelModal;
 
 // Drawer Component for Technical Details (Legacy - kept for compatibility)
 const TechDrawer = ({
@@ -1566,10 +1929,10 @@ export default function RAGLandingPage() {
                     {key === "chatbot" && "인건비 50%↓ / 1.2s 응답"}
                     {key === "recommend" && "ROI 300%↑ / 유저 유지율 강화"}
                   </div>
-                  {/* v14.0 Floating Guide */}
-                  <div className="card-guide-text">
+                  {/* v17.5 Floating CTA Guide */}
+                  <div className="card-guide-text floating-cta">
                     <span className="guide-pulse"></span>
-                    <span>성과 및 사례 확인하기</span>
+                    <span>무료 성과 리포트 보기</span>
                     <ArrowRight size={14} strokeWidth={1.5} />
                   </div>
                 </motion.button>
@@ -1942,7 +2305,7 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
-      {/* v16.5: Company Identity - Final Statement */}
+      {/* v17.5: Company Identity - Enhanced with Badges */}
       <section id="identity" className="identity-section-v16">
         <div className="identity-gradient-bg" />
         <div className="container">
@@ -1953,6 +2316,18 @@ export default function RAGLandingPage() {
             transition={{ type: "spring", stiffness: 100 }}
             className="identity-content-v16"
           >
+            {/* Partner Badge */}
+            <motion.div
+              className="identity-partner-badge"
+              initial={{ opacity: 0, y: -10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <Award size={16} strokeWidth={1.5} />
+              <span className="font-mono">ENTERPRISE AI PARTNER</span>
+            </motion.div>
+
             {/* Strong One-Line Slogan */}
             <motion.h2
               className="identity-slogan"
@@ -1961,8 +2336,8 @@ export default function RAGLandingPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
             >
-              <span className="slogan-main">RAG 기반 LLM 구축</span>
-              <span className="slogan-accent">전문 기업</span>
+              <span className="slogan-main">RAG 전문 외주사</span>
+              <span className="slogan-accent">Vision-Makers</span>
             </motion.h2>
 
             <motion.p
@@ -1972,8 +2347,31 @@ export default function RAGLandingPage() {
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
             >
-              10만 유저가 검증한 엔진을 귀사에 이식합니다
+              DevGym SaaS에서 10만 유저가 검증한 RAG 엔진을<br />
+              귀사 비즈니스에 맞춤 이식합니다
             </motion.p>
+
+            {/* Certification Badges */}
+            <motion.div
+              className="identity-certifications"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.45 }}
+            >
+              <div className="cert-badge">
+                <ShieldCheck size={16} strokeWidth={1.5} />
+                <span className="font-mono">SOC 2 Type II</span>
+              </div>
+              <div className="cert-badge">
+                <BadgeCheck size={16} strokeWidth={1.5} />
+                <span className="font-mono">ISO 27001</span>
+              </div>
+              <div className="cert-badge">
+                <Lock size={16} strokeWidth={1.5} />
+                <span className="font-mono">AES-256</span>
+              </div>
+            </motion.div>
 
             {/* 3 Key Stats */}
             <div className="identity-stats-row">
@@ -2010,6 +2408,19 @@ export default function RAGLandingPage() {
                 <span className="stat-text">보안 격리</span>
               </motion.div>
             </div>
+
+            {/* DevGym Reference */}
+            <motion.div
+              className="identity-reference"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.75 }}
+            >
+              <span className="ref-label">레퍼런스</span>
+              <span className="ref-logo font-mono">DevGym</span>
+              <span className="ref-desc">10만 유저 피트니스 SaaS 플랫폼</span>
+            </motion.div>
 
             {/* CTA */}
             <motion.div
@@ -6104,6 +6515,990 @@ export default function RAGLandingPage() {
           }
           50% {
             box-shadow: 0 4px 30px rgba(0, 191, 255, 0.4), 0 0 20px rgba(0, 191, 255, 0.2);
+          }
+        }
+
+        /* ===== v17.5 Funnel Modal Styles ===== */
+
+        .funnel-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(5, 5, 15, 0.95);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          z-index: 1100;
+        }
+
+        .funnel-modal-wrapper {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          z-index: 1101;
+        }
+
+        .funnel-modal {
+          width: 100%;
+          max-width: 900px;
+          max-height: calc(100vh - 40px);
+          background: linear-gradient(
+            180deg,
+            rgba(10, 10, 20, 0.99) 0%,
+            rgba(15, 15, 25, 1) 100%
+          );
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 24px;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          box-shadow:
+            0 0 0 1px rgba(0, 191, 255, 0.1),
+            0 40px 80px -20px rgba(0, 0, 0, 0.9),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+          position: relative;
+        }
+
+        .funnel-modal.mobile-fullscreen {
+          width: 100%;
+          height: 100%;
+          max-width: 100%;
+          max-height: 100%;
+          border-radius: 0;
+        }
+
+        .funnel-close {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s;
+          z-index: 10;
+        }
+
+        .funnel-close:hover {
+          border-color: var(--crimson);
+          color: var(--crimson);
+          background: rgba(233, 69, 96, 0.1);
+        }
+
+        /* Step Indicator */
+        .step-indicator {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+          padding: 24px 60px;
+          border-bottom: 1px solid var(--border-color);
+          background: rgba(0, 0, 0, 0.3);
+          position: relative;
+        }
+
+        .step-dot {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          opacity: 0.4;
+          transition: all 0.3s;
+          position: relative;
+          z-index: 1;
+        }
+
+        .step-dot.active,
+        .step-dot.completed {
+          opacity: 1;
+        }
+
+        .step-num {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--bg-secondary);
+          border: 2px solid var(--border-color);
+          border-radius: 50%;
+          color: var(--text-secondary);
+          font-size: 0.85rem;
+          font-weight: 600;
+          transition: all 0.3s;
+        }
+
+        .step-dot.active .step-num {
+          background: var(--cyan);
+          border-color: var(--cyan);
+          color: white;
+          box-shadow: 0 0 20px rgba(0, 191, 255, 0.5);
+        }
+
+        .step-dot.completed .step-num {
+          background: var(--green);
+          border-color: var(--green);
+          color: white;
+        }
+
+        .step-label {
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+          white-space: nowrap;
+        }
+
+        .step-dot.active .step-label {
+          color: var(--cyan);
+        }
+
+        .step-progress {
+          position: absolute;
+          left: 60px;
+          right: 60px;
+          top: 40px;
+          height: 2px;
+          background: var(--border-color);
+          z-index: 0;
+        }
+
+        .step-progress-fill {
+          height: 100%;
+          border-radius: 2px;
+        }
+
+        /* Funnel Content */
+        .funnel-content {
+          flex: 1;
+          overflow-y: auto;
+          padding: 32px;
+        }
+
+        .funnel-step-content {
+          min-height: 100%;
+        }
+
+        .step-header {
+          text-align: center;
+          margin-bottom: 32px;
+        }
+
+        .step-badge {
+          display: inline-block;
+          padding: 6px 14px;
+          border-radius: 8px;
+          font-size: 0.7rem;
+          letter-spacing: 0.1em;
+          margin-bottom: 16px;
+        }
+
+        .step-title {
+          font-size: 1.8rem;
+          font-weight: 700;
+          color: white;
+          margin-bottom: 8px;
+        }
+
+        .step-subtitle {
+          font-size: 1rem;
+          color: var(--text-secondary);
+        }
+
+        /* Step 1: Impact Metrics */
+        .impact-metrics-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+        }
+
+        .comparison-section {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+
+        .comparison-item {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          padding: 20px 24px;
+        }
+
+        .comparison-label {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 16px;
+        }
+
+        .label-text {
+          font-size: 1rem;
+          font-weight: 600;
+          color: white;
+        }
+
+        .comparison-badge {
+          font-size: 0.85rem;
+          font-weight: 700;
+        }
+
+        .comparison-bars {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .bar-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .bar-label {
+          width: 60px;
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+        }
+
+        .bar-track {
+          flex: 1;
+          height: 24px;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 6px;
+          overflow: hidden;
+        }
+
+        .bar-fill {
+          height: 100%;
+          border-radius: 6px;
+        }
+
+        .bar-fill.before {
+          background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+        }
+
+        .bar-value {
+          width: 50px;
+          text-align: right;
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+        }
+
+        .gauges-row {
+          display: flex;
+          justify-content: center;
+          gap: 24px;
+          flex-wrap: wrap;
+        }
+
+        .gauge-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          padding: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* Step 2: Visual Proof */
+        .proof-visual {
+          display: grid;
+          grid-template-columns: 1.2fr 1fr;
+          gap: 24px;
+          align-items: start;
+        }
+
+        .chatbot-mockup {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          overflow: hidden;
+        }
+
+        .chatbot-mockup .mockup-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          background: var(--bg-tertiary);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .live-badge {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-left: auto;
+          padding: 4px 10px;
+          background: rgba(72, 187, 120, 0.15);
+          border-radius: 20px;
+          font-size: 0.65rem;
+          color: var(--green);
+        }
+
+        .live-dot {
+          width: 6px;
+          height: 6px;
+          background: var(--green);
+          border-radius: 50%;
+          animation: live-pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes live-pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
+
+        .chat-content {
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          min-height: 280px;
+        }
+
+        .chat-message {
+          max-width: 85%;
+          padding: 12px 16px;
+          border-radius: 14px;
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+
+        .chat-message.user {
+          align-self: flex-end;
+          background: linear-gradient(135deg, var(--cyan), var(--cyan-dim));
+          color: white;
+          border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.bot {
+          align-self: flex-start;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-bottom-left-radius: 4px;
+          color: var(--text-primary);
+        }
+
+        .bot-header {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 8px;
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+        }
+
+        .response-time {
+          margin-left: auto;
+          color: var(--green);
+        }
+
+        .chat-message.bot p {
+          margin-bottom: 8px;
+        }
+
+        .chat-message.bot ul {
+          margin: 0;
+          padding-left: 16px;
+          font-size: 0.85rem;
+        }
+
+        .chat-message.bot li {
+          margin-bottom: 4px;
+        }
+
+        .source-tag {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-top: 10px;
+          padding: 6px 10px;
+          background: rgba(0, 191, 255, 0.1);
+          border-radius: 6px;
+          font-size: 0.7rem;
+          color: var(--cyan);
+        }
+
+        .chat-typing {
+          display: flex;
+          gap: 4px;
+          padding: 12px 16px;
+          background: var(--bg-tertiary);
+          border-radius: 14px;
+          width: fit-content;
+        }
+
+        .chat-typing span {
+          width: 8px;
+          height: 8px;
+          background: var(--text-tertiary);
+          border-radius: 50%;
+          animation: typing-bounce 1s ease-in-out infinite;
+        }
+
+        .chat-typing span:nth-child(2) { animation-delay: 0.1s; }
+        .chat-typing span:nth-child(3) { animation-delay: 0.2s; }
+
+        @keyframes typing-bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+
+        .proof-stats {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .proof-stat-item {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 14px;
+          padding: 16px 20px;
+        }
+
+        .stat-icon {
+          width: 44px;
+          height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 12px;
+        }
+
+        .stat-info {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .stat-info .stat-value {
+          font-size: 1.3rem;
+          font-weight: 700;
+          color: white;
+        }
+
+        .stat-info .stat-label {
+          font-size: 0.8rem;
+          color: var(--text-secondary);
+        }
+
+        /* Step 3: Process Map */
+        .process-map {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 16px;
+          flex-wrap: wrap;
+        }
+
+        .process-step {
+          flex: 1;
+          min-width: 220px;
+          max-width: 280px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          padding: 24px 20px;
+          text-align: center;
+          position: relative;
+        }
+
+        .process-icon {
+          width: 56px;
+          height: 56px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 16px;
+          margin: 0 auto 16px;
+        }
+
+        .process-number {
+          position: absolute;
+          top: 12px;
+          left: 12px;
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+        }
+
+        .process-step h3 {
+          font-size: 1.1rem;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: white;
+        }
+
+        .process-step p {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          line-height: 1.5;
+          margin-bottom: 16px;
+        }
+
+        .process-checklist {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          text-align: left;
+        }
+
+        .process-checklist li {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.8rem;
+          color: var(--text-secondary);
+          padding: 6px 0;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .process-checklist li:first-child {
+          border-top: none;
+        }
+
+        .process-checklist svg {
+          color: var(--green);
+          flex-shrink: 0;
+        }
+
+        .process-arrow {
+          display: flex;
+          align-items: center;
+          color: var(--text-tertiary);
+          padding-top: 60px;
+        }
+
+        .security-assurance {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 16px;
+          margin-top: 32px;
+          padding: 20px 24px;
+          background: linear-gradient(135deg, rgba(72, 187, 120, 0.1), rgba(72, 187, 120, 0.05));
+          border: 1px solid rgba(72, 187, 120, 0.2);
+          border-radius: 14px;
+          color: var(--green);
+          font-size: 0.9rem;
+        }
+
+        .security-badges {
+          display: flex;
+          gap: 8px;
+        }
+
+        .security-badge {
+          padding: 4px 10px;
+          background: rgba(72, 187, 120, 0.2);
+          border-radius: 6px;
+          font-size: 0.7rem;
+          color: var(--green);
+        }
+
+        /* Step 4: Contact Form */
+        .contact-form {
+          max-width: 480px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .form-label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+        }
+
+        .form-input,
+        .form-select {
+          padding: 14px 18px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          color: white;
+          font-size: 1rem;
+          font-family: inherit;
+          transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+          outline: none;
+          border-color: var(--cyan);
+          box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.1);
+        }
+
+        .form-input::placeholder {
+          color: var(--text-tertiary);
+        }
+
+        .form-select {
+          cursor: pointer;
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 14px center;
+        }
+
+        .form-select option {
+          background: var(--bg-primary);
+          color: white;
+        }
+
+        .submit-cta-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          width: 100%;
+          padding: 18px 28px;
+          border: none;
+          border-radius: 14px;
+          color: white;
+          font-size: 1.1rem;
+          font-weight: 700;
+          font-family: inherit;
+          cursor: pointer;
+          margin-top: 8px;
+          transition: all 0.3s;
+        }
+
+        .submit-cta-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        .loading-dots {
+          display: flex;
+          gap: 6px;
+        }
+
+        .loading-dots span {
+          width: 8px;
+          height: 8px;
+          background: white;
+          border-radius: 50%;
+          animation: loading-bounce 0.6s ease-in-out infinite;
+        }
+
+        .loading-dots span:nth-child(2) { animation-delay: 0.1s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.2s; }
+
+        @keyframes loading-bounce {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(0.6); }
+        }
+
+        .form-note {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+          text-align: center;
+        }
+
+        .submit-success {
+          text-align: center;
+          padding: 48px 24px;
+        }
+
+        .success-icon {
+          width: 80px;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(72, 187, 120, 0.15);
+          border-radius: 50%;
+          margin: 0 auto 24px;
+          color: var(--green);
+        }
+
+        .submit-success h3 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: white;
+          margin-bottom: 8px;
+        }
+
+        .submit-success p {
+          color: var(--text-secondary);
+          margin-bottom: 32px;
+        }
+
+        .success-close-btn {
+          padding: 14px 40px;
+          background: var(--cyan);
+          border: none;
+          border-radius: 12px;
+          color: white;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .success-close-btn:hover {
+          background: #00d4ff;
+        }
+
+        /* Funnel Navigation */
+        .funnel-nav {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 16px 32px;
+          border-top: 1px solid var(--border-color);
+          background: rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 20px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+          border-color: var(--cyan);
+          color: var(--cyan);
+        }
+
+        .nav-btn:disabled {
+          opacity: 0.3;
+          cursor: not-allowed;
+        }
+
+        .nav-btn.next {
+          background: var(--cyan);
+          border-color: var(--cyan);
+          color: white;
+        }
+
+        .nav-btn.next:hover {
+          background: #00d4ff;
+        }
+
+        .nav-btn.skip {
+          background: var(--bg-secondary);
+          border-color: var(--border-color);
+          color: var(--text-secondary);
+        }
+
+        .nav-dots {
+          display: flex;
+          gap: 8px;
+        }
+
+        .nav-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--border-color);
+          transition: all 0.3s;
+        }
+
+        .nav-dot.active {
+          width: 24px;
+          border-radius: 4px;
+        }
+
+        /* Floating CTA Animation */
+        .floating-cta {
+          animation: float-cta 3s ease-in-out infinite;
+        }
+
+        @keyframes float-cta {
+          0%, 100% {
+            transform: translateY(0);
+            box-shadow: 0 4px 20px rgba(0, 191, 255, 0.15);
+          }
+          50% {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 30px rgba(0, 191, 255, 0.25);
+          }
+        }
+
+        /* Identity Section Enhancements */
+        .identity-partner-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          background: linear-gradient(135deg, rgba(0, 191, 255, 0.1), rgba(138, 43, 226, 0.1));
+          border: 1px solid rgba(0, 191, 255, 0.3);
+          border-radius: 30px;
+          color: var(--cyan);
+          font-size: 0.7rem;
+          margin-bottom: 20px;
+        }
+
+        .identity-certifications {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          margin-bottom: 32px;
+          flex-wrap: wrap;
+        }
+
+        .cert-badge {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 14px;
+          background: rgba(72, 187, 120, 0.1);
+          border: 1px solid rgba(72, 187, 120, 0.3);
+          border-radius: 8px;
+          color: var(--green);
+          font-size: 0.75rem;
+        }
+
+        .identity-reference {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          margin-bottom: 32px;
+          padding: 16px 24px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+        }
+
+        .ref-label {
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+          padding: 4px 10px;
+          background: rgba(0, 191, 255, 0.1);
+          border-radius: 6px;
+        }
+
+        .ref-logo {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: var(--cyan);
+        }
+
+        .ref-desc {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+        }
+
+        /* Mobile Responsive for Funnel Modal */
+        @media (max-width: 768px) {
+          .funnel-content {
+            padding: 24px 16px;
+          }
+
+          .step-indicator {
+            padding: 16px;
+            gap: 8px;
+          }
+
+          .step-label {
+            display: none;
+          }
+
+          .step-progress {
+            display: none;
+          }
+
+          .step-title {
+            font-size: 1.4rem;
+          }
+
+          .proof-visual {
+            grid-template-columns: 1fr;
+          }
+
+          .process-map {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .process-arrow {
+            transform: rotate(90deg);
+            padding: 0;
+          }
+
+          .process-step {
+            max-width: 100%;
+          }
+
+          .gauges-row {
+            gap: 12px;
+          }
+
+          .gauge-card {
+            padding: 12px;
+          }
+
+          .security-assurance {
+            flex-direction: column;
+            text-align: center;
+          }
+
+          .funnel-nav {
+            padding: 12px 16px;
+          }
+
+          .nav-btn span {
+            display: none;
+          }
+
+          .nav-btn {
+            padding: 12px;
+          }
+
+          .identity-certifications {
+            gap: 8px;
+          }
+
+          .identity-reference {
+            flex-direction: column;
+            text-align: center;
+            gap: 8px;
           }
         }
 
