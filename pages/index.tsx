@@ -241,8 +241,105 @@ const DrawerCountUp = ({
   );
 };
 
-// Service Drawer/Modal Component (v13.0 Professional Report)
-const ServiceDrawer = ({
+// Circular Gauge Component (v14.0)
+const CircleGauge = ({
+  value,
+  maxValue = 100,
+  color,
+  size = 120,
+  strokeWidth = 10,
+  label,
+  suffix = "%",
+}: {
+  value: number;
+  maxValue?: number;
+  color: string;
+  size?: number;
+  strokeWidth?: number;
+  label: string;
+  suffix?: string;
+}) => {
+  const [animatedValue, setAnimatedValue] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const normalizedValue = Math.min(value, maxValue);
+  const progress = (animatedValue / maxValue) * circumference;
+
+  useEffect(() => {
+    if (isInView) {
+      const duration = 1800;
+      const startTime = Date.now();
+      const overshoot = 1.08;
+
+      const timer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const p = Math.min(elapsed / duration, 1);
+
+        let springValue;
+        if (p < 0.75) {
+          springValue = (p / 0.75) * (p / 0.75) * overshoot;
+        } else {
+          const decay = (p - 0.75) / 0.25;
+          springValue = overshoot - (overshoot - 1) * decay;
+        }
+
+        setAnimatedValue(springValue * normalizedValue);
+
+        if (p >= 1) {
+          setAnimatedValue(normalizedValue);
+          clearInterval(timer);
+        }
+      }, 16);
+
+      return () => clearInterval(timer);
+    }
+  }, [isInView, normalizedValue]);
+
+  return (
+    <div ref={ref} className="circle-gauge">
+      <svg width={size} height={size} className="gauge-svg">
+        {/* Background circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="rgba(255,255,255,0.1)"
+          strokeWidth={strokeWidth}
+        />
+        {/* Progress circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={circumference - progress}
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+          style={{
+            filter: `drop-shadow(0 0 8px ${color}80)`,
+            transition: "stroke-dashoffset 0.1s ease-out",
+          }}
+        />
+      </svg>
+      <div className="gauge-content">
+        <span className="gauge-value font-mono" style={{ color }}>
+          {Math.floor(animatedValue)}{suffix}
+        </span>
+        <span className="gauge-label">{label}</span>
+      </div>
+    </div>
+  );
+};
+
+// Service Popup Modal Component (v14.0 Centered Modal)
+const ServicePopup = ({
   isOpen,
   onClose,
   serviceKey,
@@ -251,12 +348,12 @@ const ServiceDrawer = ({
   onClose: () => void;
   serviceKey: ServiceKey | null;
 }) => {
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [isMobile, setIsMobile] = useState(false);
   const service = serviceKey ? serviceData[serviceKey] : null;
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkMobile = () => setIsMobile(window.innerWidth < 900);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
@@ -277,194 +374,172 @@ const ServiceDrawer = ({
 
   const Icon = service.icon;
 
-  // Mobile: Full-screen Modal / Desktop: Side Drawer
-  const drawerVariants = isMobile
-    ? {
-        initial: { y: "100%", opacity: 0 },
-        animate: { y: 0, opacity: 1 },
-        exit: { y: "100%", opacity: 0 },
-      }
-    : {
-        initial: { x: "100%" },
-        animate: { x: 0 },
-        exit: { x: "100%" },
-      };
-
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop with enhanced blur (v13.0) */}
+          {/* Backdrop with blur */}
           <motion.div
-            className="drawer-overlay-v13"
+            className="popup-overlay-v14"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={onClose}
           />
+          {/* Centered Modal */}
           <motion.div
-            className={`service-drawer-v13 ${isMobile ? "mobile-fullscreen" : ""}`}
-            variants={drawerVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ type: "spring", damping: 28, stiffness: 280 }}
+            className={`service-popup-v14 ${isMobile ? "mobile-fullscreen" : ""}`}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
           >
             {/* Header */}
-            <div className="drawer-header-v13">
-              <div className="drawer-title-group">
-                <div className="drawer-icon-v13" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
-                  <Icon size={24} strokeWidth={1.5} />
+            <div className="popup-header-v14">
+              <div className="popup-title-group">
+                <div className="popup-icon" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+                  <Icon size={28} strokeWidth={1.5} />
                 </div>
                 <div>
-                  <h3>{service.title}</h3>
-                  <p className="drawer-subtitle">{service.subtitle}</p>
+                  <h2>{service.title}</h2>
+                  <p>{service.subtitle}</p>
                 </div>
               </div>
-              <button onClick={onClose} className="drawer-close-v13">
+              <button onClick={onClose} className="popup-close">
                 <X size={24} strokeWidth={1.5} />
               </button>
             </div>
 
-            {/* Scrollable Content */}
-            <div className="drawer-scroll-content">
-              {/* 1. Big Metrics Section (v13.0) */}
-              <div className="big-metrics-section">
-                <span className="section-tag font-mono">KEY METRICS</span>
-                <div className="big-metrics-grid">
-                  {service.bigMetrics.map((metric, i) => (
-                    <motion.div
-                      key={i}
-                      className="big-metric-card"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: i * 0.1, type: "spring", stiffness: 200 }}
-                    >
-                      <div className="big-metric-value">
-                        <DrawerCountUp
-                          end={metric.value}
-                          suffix={metric.suffix}
-                          color={metric.color}
-                          decimals={metric.value < 10 ? 1 : 0}
-                        />
-                      </div>
-                      <div className="big-metric-label">{metric.label}</div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 2. Case Study Screenshots (v13.0) */}
-              <div className="case-screenshots-section">
-                <span className="section-tag font-mono">CASE STUDY</span>
-                <div className="case-study-header">
-                  <h4>{service.caseStudy.title}</h4>
-                  <p>{service.caseStudy.description}</p>
-                </div>
-                <div className="screenshots-grid">
-                  {service.caseStudy.screenshots.map((shot, i) => (
-                    <motion.div
-                      key={i}
-                      className="screenshot-card"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 + i * 0.1, type: "spring", stiffness: 150 }}
-                    >
-                      <div className="screenshot-placeholder" style={{ borderColor: `${service.badgeColor}40` }}>
-                        <div className="screenshot-icon" style={{ color: service.badgeColor }}>
-                          {i === 0 && <BarChart3 size={32} strokeWidth={1.5} />}
-                          {i === 1 && <Database size={32} strokeWidth={1.5} />}
-                          {i === 2 && <Zap size={32} strokeWidth={1.5} />}
-                        </div>
-                        <span className="screenshot-number font-mono">{String(i + 1).padStart(2, "0")}</span>
-                      </div>
-                      <h5>{shot.title}</h5>
-                      <p>{shot.desc}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 3. Tech Specs (Enhanced v13.0) */}
-              <div className="tech-specs-section-v13">
-                <span className="section-tag font-mono">TECH SPECS</span>
-                <div className="tech-specs-list">
-                  {service.techSpecs.map((spec, i) => (
-                    <motion.div
-                      key={i}
-                      className="tech-spec-row font-mono"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 + i * 0.05 }}
-                    >
-                      <span className="spec-key-v13">{spec.key}</span>
-                      <span className="spec-divider">→</span>
-                      <span className="spec-value-v13" style={{ color: service.badgeColor }}>{spec.value}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 4. Build Process */}
-              <div className="build-process-section">
-                <span className="section-tag font-mono">BUILD PROCESS</span>
-                <div className="build-steps-v13">
-                  {service.steps.map((step, i) => {
-                    const StepIcon = step.icon;
-                    return (
+            {/* Two Column Layout */}
+            <div className="popup-body">
+              {/* Left Column: Gauges & Metrics */}
+              <div className="popup-left-col">
+                <div className="gauge-section">
+                  <span className="section-tag font-mono">KEY METRICS</span>
+                  <div className="gauges-grid">
+                    {service.bigMetrics.slice(0, 2).map((metric, i) => (
                       <motion.div
                         key={i}
-                        className="build-step-v13"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.1 + i * 0.15, type: "spring", stiffness: 200 }}
+                      >
+                        <CircleGauge
+                          value={metric.value}
+                          maxValue={metric.value > 100 ? metric.value * 1.2 : 100}
+                          color={metric.color}
+                          size={100}
+                          strokeWidth={10}
+                          label={metric.label}
+                          suffix={metric.suffix}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+                  <div className="mini-metrics">
+                    {service.bigMetrics.slice(2).map((metric, i) => (
+                      <motion.div
+                        key={i}
+                        className="mini-metric"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 + i * 0.1, type: "spring" }}
+                        transition={{ delay: 0.3 + i * 0.1 }}
                       >
-                        <div className="step-number-v13 font-mono" style={{ color: service.badgeColor }}>
-                          {String(i + 1).padStart(2, "0")}
-                        </div>
-                        <div className="step-icon-v13" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
-                          <StepIcon size={20} strokeWidth={1.5} />
-                        </div>
-                        <div className="step-content-v13">
-                          <h5>{step.title}</h5>
-                          <p>{step.desc}</p>
-                        </div>
+                        <span className="mini-value font-mono" style={{ color: metric.color }}>
+                          <DrawerCountUp
+                            end={metric.value}
+                            suffix={metric.suffix}
+                            color={metric.color}
+                            decimals={metric.value < 10 ? 1 : 0}
+                          />
+                        </span>
+                        <span className="mini-label">{metric.label}</span>
                       </motion.div>
-                    );
-                  })}
+                    ))}
+                  </div>
+                </div>
+
+                {/* Tech Specs */}
+                <div className="popup-tech-specs">
+                  <span className="section-tag font-mono">TECH SPECS</span>
+                  <div className="specs-list">
+                    {service.techSpecs.map((spec, i) => (
+                      <motion.div
+                        key={i}
+                        className="spec-item font-mono"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.4 + i * 0.05 }}
+                      >
+                        <span className="spec-key">{spec.key}</span>
+                        <span className="spec-arrow">→</span>
+                        <span className="spec-val" style={{ color: service.badgeColor }}>{spec.value}</span>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* 5. Direct Form (Fixed at bottom) */}
-            <div className="direct-form-section">
-              <form className="direct-form" onSubmit={(e) => e.preventDefault()}>
-                <div className="form-row">
-                  <input
-                    type="text"
-                    placeholder="담당자명"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  />
-                  <input
-                    type="email"
-                    placeholder="이메일"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  />
+              {/* Right Column: Screenshots & Form */}
+              <div className="popup-right-col">
+                <div className="case-section">
+                  <span className="section-tag font-mono">CASE STUDY</span>
+                  <h4>{service.caseStudy.title}</h4>
+                  <p className="case-desc">{service.caseStudy.description}</p>
+                  <div className="screenshots-row">
+                    {service.caseStudy.screenshots.map((shot, i) => (
+                      <motion.div
+                        key={i}
+                        className="screenshot-item"
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 + i * 0.1, type: "spring" }}
+                      >
+                        <div className="screenshot-box" style={{ borderColor: `${service.badgeColor}50` }}>
+                          <div className="shot-icon" style={{ color: service.badgeColor }}>
+                            {i === 0 && <BarChart3 size={24} strokeWidth={1.5} />}
+                            {i === 1 && <Database size={24} strokeWidth={1.5} />}
+                            {i === 2 && <Zap size={24} strokeWidth={1.5} />}
+                          </div>
+                        </div>
+                        <span className="shot-title">{shot.title}</span>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-                <input
-                  type="tel"
-                  placeholder="연락처 (선택)"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                />
-                <button type="submit" className="direct-submit" style={{ background: service.badgeColor }}>
-                  {service.ctaText}
-                  <ArrowRight size={18} strokeWidth={1.5} />
-                </button>
-              </form>
+
+                {/* Direct Form */}
+                <div className="popup-form-section">
+                  <span className="section-tag font-mono">GET STARTED</span>
+                  <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
+                    <div className="form-inputs">
+                      <input
+                        type="text"
+                        placeholder="담당자명"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      />
+                      <input
+                        type="email"
+                        placeholder="이메일"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      />
+                      <input
+                        type="tel"
+                        placeholder="연락처"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      />
+                    </div>
+                    <button type="submit" className="popup-submit" style={{ background: service.badgeColor }}>
+                      {service.ctaText}
+                      <ArrowRight size={18} strokeWidth={1.5} />
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </motion.div>
         </>
@@ -1292,11 +1367,11 @@ export default function RAGLandingPage() {
   const [activeService, setActiveService] = useState<ServiceKey | null>(null);
   const [mobileServiceTab, setMobileServiceTab] = useState<ServiceKey>("rag");
 
-  const openServiceDrawer = (service: ServiceKey) => {
+  const openServicePopup = (service: ServiceKey) => {
     setActiveService(service);
   };
 
-  const closeServiceDrawer = () => {
+  const closeServicePopup = () => {
     setActiveService(null);
   };
 
@@ -1341,9 +1416,9 @@ export default function RAGLandingPage() {
       </div>
 
       {/* Service Drawer */}
-      <ServiceDrawer
+      <ServicePopup
         isOpen={activeService !== null}
-        onClose={closeServiceDrawer}
+        onClose={closeServicePopup}
         serviceKey={activeService}
       />
 
@@ -1364,7 +1439,7 @@ export default function RAGLandingPage() {
               <a href="#security">보안</a>
             </div>
 
-            <button onClick={() => openServiceDrawer("rag")} className="nav-cta">
+            <button onClick={() => openServicePopup("rag")} className="nav-cta">
               무료 AI 진단
               <ArrowRight size={16} strokeWidth={1.5} />
             </button>
@@ -1405,7 +1480,7 @@ export default function RAGLandingPage() {
             </p>
           </motion.div>
 
-          {/* 3-Action Cards (Bento Grid) */}
+          {/* 3-Action Cards (Bento Grid) - v14.0 with floating guide */}
           <div className="hero-cards-grid desktop-only">
             {(["rag", "chatbot", "recommend"] as ServiceKey[]).map((key, index) => {
               const service = serviceData[key];
@@ -1414,12 +1489,12 @@ export default function RAGLandingPage() {
                 <motion.button
                   key={key}
                   className={`hero-service-card ${key === "chatbot" ? "hero-card-highlight" : ""}`}
-                  onClick={() => openServiceDrawer(key)}
+                  onClick={() => openServicePopup(key)}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.03, y: -5 }}
                 >
                   {key === "chatbot" && (
                     <div className="most-popular-badge">
@@ -1439,8 +1514,10 @@ export default function RAGLandingPage() {
                     {key === "chatbot" && "인건비 50%↓ / 1.2s 응답"}
                     {key === "recommend" && "ROI 300%↑ / 유저 유지율 강화"}
                   </div>
-                  <div className="hero-card-cta">
-                    상세 보기
+                  {/* v14.0 Floating Guide */}
+                  <div className="card-guide-text">
+                    <span className="guide-pulse"></span>
+                    <span>성과 및 사례 확인하기</span>
                     <ArrowRight size={14} strokeWidth={1.5} />
                   </div>
                 </motion.button>
@@ -1457,7 +1534,7 @@ export default function RAGLandingPage() {
                 <motion.button
                   key={key}
                   className={`hero-service-card-mobile ${key === "chatbot" ? "hero-card-highlight" : ""}`}
-                  onClick={() => openServiceDrawer(key)}
+                  onClick={() => openServicePopup(key)}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -1519,7 +1596,225 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
-      {/* v13.0: Logo Cloud (바로 메인 배너 아래) */}
+      {/* v14.0: Professional RAG Pipeline Section */}
+      <section className="pipeline-section">
+        <div className="pipeline-circuit-bg" />
+        <div className="container">
+          <motion.div {...fadeInUp} className="section-header">
+            <span className="section-label font-mono">PROFESSIONAL RAG PIPELINE</span>
+            <h2 className="section-title">
+              <span className="text-cyan">데이터</span>가 답변이 되기까지
+            </h2>
+          </motion.div>
+
+          {/* Desktop Pipeline (Horizontal) */}
+          <div className="pipeline-flow desktop-only">
+            {/* Step 1: Data Ingestion */}
+            <motion.div
+              className="pipeline-step"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, type: "spring", stiffness: 150 }}
+            >
+              <div className="step-number font-mono">01</div>
+              <div className="step-icon-box">
+                <FileText size={28} strokeWidth={1.5} />
+              </div>
+              <h4>Data Ingestion</h4>
+              <div className="step-tags font-mono">
+                <span>PDF</span>
+                <span>DB</span>
+                <span>API</span>
+              </div>
+            </motion.div>
+
+            <div className="pipeline-arrow">
+              <motion.div
+                className="arrow-line"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              />
+              <ChevronRight size={20} strokeWidth={2} />
+            </div>
+
+            {/* Step 2: Embedding */}
+            <motion.div
+              className="pipeline-step"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 150 }}
+            >
+              <div className="step-number font-mono">02</div>
+              <div className="step-icon-box">
+                <Cpu size={28} strokeWidth={1.5} />
+              </div>
+              <h4>Embedding</h4>
+              <div className="step-tags font-mono">
+                <span>Vector</span>
+                <span>Chunk</span>
+              </div>
+            </motion.div>
+
+            <div className="pipeline-arrow">
+              <motion.div
+                className="arrow-line"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+              />
+              <ChevronRight size={20} strokeWidth={2} />
+            </div>
+
+            {/* Step 3: Vector DB */}
+            <motion.div
+              className="pipeline-step step-highlight"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, type: "spring", stiffness: 150 }}
+            >
+              <div className="step-number font-mono">03</div>
+              <div className="step-icon-box">
+                <Database size={28} strokeWidth={1.5} />
+              </div>
+              <h4>Vector DB</h4>
+              <div className="step-tags font-mono">
+                <span>Pinecone</span>
+                <span>Qdrant</span>
+              </div>
+            </motion.div>
+
+            <div className="pipeline-arrow">
+              <motion.div
+                className="arrow-line"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+              />
+              <ChevronRight size={20} strokeWidth={2} />
+            </div>
+
+            {/* Step 4: Retrieval */}
+            <motion.div
+              className="pipeline-step"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.7, type: "spring", stiffness: 150 }}
+            >
+              <div className="step-number font-mono">04</div>
+              <div className="step-icon-box">
+                <Search size={28} strokeWidth={1.5} />
+              </div>
+              <h4>Retrieval</h4>
+              <div className="step-tags font-mono">
+                <span>Semantic</span>
+                <span>Hybrid</span>
+              </div>
+            </motion.div>
+
+            <div className="pipeline-arrow">
+              <motion.div
+                className="arrow-line"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.8, duration: 0.5 }}
+              />
+              <ChevronRight size={20} strokeWidth={2} />
+            </div>
+
+            {/* Step 5: LLM Response */}
+            <motion.div
+              className="pipeline-step"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.9, type: "spring", stiffness: 150 }}
+            >
+              <div className="step-number font-mono">05</div>
+              <div className="step-icon-box">
+                <Bot size={28} strokeWidth={1.5} />
+              </div>
+              <h4>LLM Response</h4>
+              <div className="step-tags font-mono">
+                <span>Prompt Eng.</span>
+                <span>GPT-4</span>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Mobile Pipeline (Vertical) */}
+          <div className="pipeline-flow-mobile mobile-only">
+            {[
+              { num: "01", icon: FileText, title: "Data Ingestion", tags: ["PDF", "DB", "API"] },
+              { num: "02", icon: Cpu, title: "Embedding", tags: ["Vector", "Chunk"] },
+              { num: "03", icon: Database, title: "Vector DB", tags: ["Pinecone", "Qdrant"], highlight: true },
+              { num: "04", icon: Search, title: "Retrieval", tags: ["Semantic", "Hybrid"] },
+              { num: "05", icon: Bot, title: "LLM Response", tags: ["Prompt Eng.", "GPT-4"] },
+            ].map((step, i) => {
+              const StepIcon = step.icon;
+              return (
+                <motion.div
+                  key={i}
+                  className={`pipeline-step-mobile ${step.highlight ? "step-highlight" : ""}`}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, type: "spring" }}
+                >
+                  <div className="step-left">
+                    <div className="step-number font-mono">{step.num}</div>
+                    {i < 4 && <div className="step-line" />}
+                  </div>
+                  <div className="step-right">
+                    <div className="step-icon-box">
+                      <StepIcon size={24} strokeWidth={1.5} />
+                    </div>
+                    <div className="step-info">
+                      <h4>{step.title}</h4>
+                      <div className="step-tags font-mono">
+                        {step.tags.map((tag, j) => (
+                          <span key={j}>{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Tech Highlights */}
+          <motion.div
+            {...fadeInUp}
+            className="pipeline-highlights"
+          >
+            <div className="highlight-item font-mono">
+              <span className="highlight-label">Accuracy</span>
+              <span className="highlight-value text-cyan">92%</span>
+            </div>
+            <div className="highlight-divider" />
+            <div className="highlight-item font-mono">
+              <span className="highlight-label">Latency</span>
+              <span className="highlight-value text-green">&lt;1.2s</span>
+            </div>
+            <div className="highlight-divider" />
+            <div className="highlight-item font-mono">
+              <span className="highlight-label">Security</span>
+              <span className="highlight-value text-crimson">AES-256</span>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Logo Cloud */}
       <section className="logo-cloud-section">
         <div className="container">
           <TechLogoCloud />
@@ -1780,10 +2075,10 @@ export default function RAGLandingPage() {
 
         .section-tag {
           display: inline-block;
-          font-size: 0.7rem;
+          font-size: 0.65rem;
           color: var(--text-tertiary);
           letter-spacing: 0.1em;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
         }
 
         .case-study-section {
@@ -4664,6 +4959,670 @@ export default function RAGLandingPage() {
 
           .logo-cloud-section {
             padding: 40px 0;
+          }
+        }
+
+        /* ===== v14.0 Popup Modal Styles ===== */
+
+        .popup-overlay-v14 {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.8);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          z-index: 1100;
+        }
+
+        .service-popup-v14 {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 94%;
+          max-width: 920px;
+          max-height: 85vh;
+          background: linear-gradient(
+            180deg,
+            rgba(10, 10, 15, 0.98) 0%,
+            rgba(18, 18, 26, 0.99) 100%
+          );
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          z-index: 1200;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        .service-popup-v14.mobile-fullscreen {
+          width: 100%;
+          height: 100%;
+          max-width: 100%;
+          max-height: 100%;
+          border-radius: 0;
+          top: 0;
+          left: 0;
+          transform: none;
+        }
+
+        .popup-header-v14 {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px 24px;
+          border-bottom: 1px solid var(--border-color);
+          background: var(--bg-secondary);
+          flex-shrink: 0;
+        }
+
+        .popup-title-group {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .popup-icon {
+          width: 44px;
+          height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 12px;
+        }
+
+        .popup-header-v14 h2 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin-bottom: 2px;
+        }
+
+        .popup-header-v14 p {
+          font-size: 0.9rem;
+          color: var(--text-tertiary);
+        }
+
+        .popup-close {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .popup-close:hover {
+          border-color: var(--cyan);
+          color: var(--cyan);
+          transform: scale(1.05);
+        }
+
+        .popup-body {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          padding: 20px;
+          overflow-y: auto;
+          flex: 1;
+          min-height: 0;
+        }
+
+        .popup-left-col,
+        .popup-right-col {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        /* Gauge Section */
+        .gauge-section {
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          padding: 16px;
+        }
+
+        .gauges-grid {
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          margin-top: 12px;
+        }
+
+        .circle-gauge {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .gauge-svg {
+          transform: rotate(0deg);
+        }
+
+        .gauge-content {
+          position: absolute;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .gauge-value {
+          font-size: 1.4rem;
+          font-weight: 700;
+          line-height: 1;
+        }
+
+        .gauge-label {
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+          margin-top: 2px;
+        }
+
+        .mini-metrics {
+          display: flex;
+          justify-content: center;
+          gap: 16px;
+          margin-top: 12px;
+          padding-top: 12px;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .mini-metric {
+          text-align: center;
+        }
+
+        .mini-value {
+          font-size: 1.2rem;
+          font-weight: 700;
+          display: block;
+        }
+
+        .mini-label {
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+        }
+
+        /* Popup Tech Specs */
+        .popup-tech-specs {
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 14px;
+        }
+
+        .specs-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-top: 8px;
+        }
+
+        .spec-item {
+          display: flex;
+          align-items: center;
+          font-size: 0.8rem;
+        }
+
+        .spec-key {
+          color: var(--text-tertiary);
+          width: 80px;
+          flex-shrink: 0;
+        }
+
+        .spec-arrow {
+          color: var(--text-tertiary);
+          margin: 0 8px;
+        }
+
+        .spec-val {
+          flex: 1;
+        }
+
+        /* Case Section */
+        .case-section {
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          padding: 16px;
+        }
+
+        .case-section h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          margin: 8px 0 6px;
+        }
+
+        .case-desc {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          line-height: 1.5;
+          margin-bottom: 12px;
+        }
+
+        .screenshots-row {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+        }
+
+        .screenshot-item {
+          text-align: center;
+        }
+
+        .screenshot-box {
+          aspect-ratio: 4/3;
+          background: var(--bg-secondary);
+          border: 2px dashed;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 6px;
+        }
+
+        .shot-icon {
+          opacity: 0.5;
+        }
+
+        .shot-title {
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+        }
+
+        /* Popup Form */
+        .popup-form-section {
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 14px;
+        }
+
+        .popup-form {
+          margin-top: 8px;
+        }
+
+        .form-inputs {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 10px;
+        }
+
+        .popup-form input {
+          width: 100%;
+          padding: 10px 12px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          color: var(--text-primary);
+          font-size: 0.85rem;
+          font-family: inherit;
+          transition: border-color 0.2s;
+        }
+
+        .popup-form input:focus {
+          outline: none;
+          border-color: var(--cyan);
+        }
+
+        .popup-form input::placeholder {
+          color: var(--text-tertiary);
+        }
+
+        .popup-submit {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          padding: 12px;
+          border: none;
+          border-radius: 10px;
+          color: white;
+          font-size: 0.9rem;
+          font-weight: 600;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .popup-submit:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Card Guide Text (v14.0) */
+        .card-guide-text {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          margin-top: 16px;
+          padding: 12px 16px;
+          background: linear-gradient(135deg, var(--cyan-dim) 0%, rgba(0, 191, 255, 0.05) 100%);
+          border: 1px solid rgba(0, 191, 255, 0.3);
+          border-radius: 10px;
+          color: var(--cyan);
+          font-size: 0.85rem;
+          font-weight: 500;
+          animation: guide-float 3s ease-in-out infinite;
+        }
+
+        .guide-pulse {
+          width: 8px;
+          height: 8px;
+          background: var(--cyan);
+          border-radius: 50%;
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes guide-float {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-4px);
+          }
+        }
+
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 0 0 rgba(0, 191, 255, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 0 8px rgba(0, 191, 255, 0);
+          }
+        }
+
+        /* ===== Pipeline Section (v14.0) ===== */
+
+        .pipeline-section {
+          padding: 120px 0;
+          position: relative;
+          z-index: 1;
+          background: var(--bg-primary);
+          overflow: hidden;
+        }
+
+        .pipeline-circuit-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            radial-gradient(circle at 20% 30%, rgba(0, 191, 255, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(72, 187, 120, 0.03) 0%, transparent 50%),
+            linear-gradient(rgba(0, 191, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 191, 255, 0.02) 1px, transparent 1px);
+          background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+          animation: circuit-flow 20s linear infinite;
+          pointer-events: none;
+        }
+
+        @keyframes circuit-flow {
+          0% {
+            background-position: 0 0, 0 0, 0 0, 0 0;
+          }
+          100% {
+            background-position: 0 0, 0 0, 40px 40px, 40px 40px;
+          }
+        }
+
+        .pipeline-flow {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0;
+          margin-top: 60px;
+        }
+
+        .pipeline-step {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 28px 24px;
+          text-align: center;
+          min-width: 140px;
+          transition: all 0.3s;
+        }
+
+        .pipeline-step:hover {
+          border-color: var(--cyan);
+          transform: translateY(-4px);
+        }
+
+        .pipeline-step.step-highlight {
+          border-color: var(--cyan);
+          background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(0, 191, 255, 0.1) 100%);
+          box-shadow: 0 0 40px rgba(0, 191, 255, 0.15);
+        }
+
+        .pipeline-step .step-number {
+          font-size: 0.7rem;
+          color: var(--cyan);
+          margin-bottom: 12px;
+        }
+
+        .step-icon-box {
+          width: 56px;
+          height: 56px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--cyan-dim);
+          border-radius: 14px;
+          color: var(--cyan);
+          margin: 0 auto 12px;
+        }
+
+        .pipeline-step h4 {
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin-bottom: 10px;
+        }
+
+        .step-tags {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 6px;
+        }
+
+        .step-tags span {
+          padding: 4px 8px;
+          background: var(--bg-tertiary);
+          border-radius: 6px;
+          font-size: 0.65rem;
+          color: var(--text-tertiary);
+        }
+
+        .pipeline-arrow {
+          display: flex;
+          align-items: center;
+          color: var(--cyan);
+          padding: 0 8px;
+          position: relative;
+        }
+
+        .arrow-line {
+          width: 40px;
+          height: 2px;
+          background: linear-gradient(90deg, var(--cyan) 0%, rgba(0, 191, 255, 0.3) 100%);
+          transform-origin: left;
+          margin-right: -8px;
+        }
+
+        .pipeline-highlights {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 48px;
+          margin-top: 60px;
+          padding: 24px 48px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          max-width: 600px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .highlight-item {
+          text-align: center;
+        }
+
+        .highlight-label {
+          display: block;
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+          margin-bottom: 4px;
+        }
+
+        .highlight-value {
+          font-size: 1.25rem;
+          font-weight: 700;
+        }
+
+        .highlight-divider {
+          width: 1px;
+          height: 40px;
+          background: var(--border-color);
+        }
+
+        /* Mobile Pipeline */
+        .pipeline-flow-mobile {
+          display: none;
+          flex-direction: column;
+          gap: 0;
+          margin-top: 40px;
+        }
+
+        .pipeline-step-mobile {
+          display: flex;
+          gap: 16px;
+        }
+
+        .pipeline-step-mobile .step-left {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 40px;
+        }
+
+        .pipeline-step-mobile .step-number {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--cyan-dim);
+          border: 1px solid var(--cyan);
+          border-radius: 50%;
+          color: var(--cyan);
+          font-size: 0.75rem;
+          flex-shrink: 0;
+        }
+
+        .pipeline-step-mobile .step-line {
+          flex: 1;
+          width: 2px;
+          background: linear-gradient(180deg, var(--cyan) 0%, transparent 100%);
+          margin: 8px 0;
+        }
+
+        .pipeline-step-mobile .step-right {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          padding-bottom: 24px;
+        }
+
+        .pipeline-step-mobile .step-icon-box {
+          width: 48px;
+          height: 48px;
+          margin: 0;
+          flex-shrink: 0;
+        }
+
+        .pipeline-step-mobile .step-info h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 8px;
+        }
+
+        .pipeline-step-mobile.step-highlight .step-number {
+          background: var(--cyan);
+          color: var(--bg-primary);
+        }
+
+        /* v14.0 Responsive */
+        @media (max-width: 900px) {
+          .popup-body {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            padding: 16px;
+          }
+
+          .gauges-grid {
+            gap: 16px;
+          }
+
+          .screenshots-row {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .popup-header-v14 {
+            padding: 12px 16px;
+          }
+
+          .popup-header-v14 h2 {
+            font-size: 1.1rem;
+          }
+
+          .popup-body {
+            padding: 16px;
+          }
+
+          .pipeline-flow {
+            display: none;
+          }
+
+          .pipeline-flow-mobile {
+            display: flex;
+          }
+
+          .pipeline-section {
+            padding: 80px 0;
+          }
+
+          .pipeline-highlights {
+            flex-direction: column;
+            gap: 20px;
+            padding: 24px;
+          }
+
+          .highlight-divider {
+            width: 60px;
+            height: 1px;
+          }
+
+          .card-guide-text {
+            font-size: 0.8rem;
+            padding: 10px 12px;
           }
         }
       `}</style>
