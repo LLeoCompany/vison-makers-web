@@ -1,2118 +1,1709 @@
-import React, { useState, useEffect } from "react";
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Fade } from "react-awesome-reveal";
+import { motion, useInView } from "framer-motion";
+import {
+  Database,
+  Brain,
+  MessageSquare,
+  TrendingUp,
+  Shield,
+  Clock,
+  CheckCircle,
+  ArrowRight,
+  Zap,
+  Users,
+  Target,
+  ChevronRight,
+  Search,
+  FileText,
+  Bot,
+  Sparkles,
+  BarChart3,
+  Building2,
+  Send,
+} from "lucide-react";
 
-const Index = () => {
+// Animation variants
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-50px" },
+  transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] as const },
+};
+
+// Typing Animation Component
+const TypingDemo = () => {
+  const [displayText, setDisplayText] = useState("");
+  const [showSource, setShowSource] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const demoContent = {
+    query: "DevGym의 회원 이탈률 감소 전략은?",
+    response:
+      "DevGym은 AI 기반 개인화 추천으로 회원 이탈률을 42% 감소시켰습니다. 핵심 전략은 1) 운동 패턴 분석 2) 맞춤형 루틴 제안 3) 실시간 피드백 시스템입니다.",
+    sources: [
+      { title: "회원관리_데이터분석.pdf", page: "p.23" },
+      { title: "AI추천시스템_성과보고서.xlsx", page: "Sheet 3" },
+    ],
+  };
+
+  useEffect(() => {
+    const steps = [
+      // Step 1: Type query
+      () => {
+        let i = 0;
+        const typeQuery = setInterval(() => {
+          if (i <= demoContent.query.length) {
+            setDisplayText(demoContent.query.slice(0, i));
+            i++;
+          } else {
+            clearInterval(typeQuery);
+            setTimeout(() => setCurrentStep(1), 500);
+          }
+        }, 50);
+        return () => clearInterval(typeQuery);
+      },
+      // Step 2: Show response
+      () => {
+        setDisplayText("");
+        let i = 0;
+        const typeResponse = setInterval(() => {
+          if (i <= demoContent.response.length) {
+            setDisplayText(demoContent.response.slice(0, i));
+            i++;
+          } else {
+            clearInterval(typeResponse);
+            setTimeout(() => setCurrentStep(2), 300);
+          }
+        }, 20);
+        return () => clearInterval(typeResponse);
+      },
+      // Step 3: Show sources
+      () => {
+        setShowSource(true);
+        setTimeout(() => {
+          setShowSource(false);
+          setDisplayText("");
+          setCurrentStep(0);
+        }, 4000);
+      },
+    ];
+
+    const cleanup = steps[currentStep]?.();
+    return cleanup;
+  }, [currentStep]);
+
+  return (
+    <div className="demo-window">
+      {/* Mac Window Frame */}
+      <div className="demo-header">
+        <div className="demo-dots">
+          <span className="dot red"></span>
+          <span className="dot yellow"></span>
+          <span className="dot green"></span>
+        </div>
+        <span className="demo-title font-mono text-xs">RAG Engine v2.0</span>
+      </div>
+
+      <div className="demo-content">
+        {currentStep === 0 && (
+          <div className="demo-query">
+            <div className="flex items-center gap-2 mb-2">
+              <Search size={14} strokeWidth={1.5} className="text-cyan" />
+              <span className="text-xs text-gray-400">Query</span>
+            </div>
+            <p className="font-mono text-sm text-white">
+              {displayText}
+              <span className="cursor">|</span>
+            </p>
+          </div>
+        )}
+
+        {currentStep >= 1 && (
+          <div className="demo-response">
+            <div className="flex items-center gap-2 mb-2">
+              <Bot size={14} strokeWidth={1.5} className="text-cyan" />
+              <span className="text-xs text-gray-400">AI Response</span>
+            </div>
+            <p className="text-sm text-gray-200 leading-relaxed">
+              {displayText}
+              {currentStep === 1 && <span className="cursor">|</span>}
+            </p>
+          </div>
+        )}
+
+        {showSource && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="demo-sources"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <FileText size={14} strokeWidth={1.5} className="text-green" />
+              <span className="text-xs text-gray-400">Source Trace</span>
+            </div>
+            {demoContent.sources.map((source, i) => (
+              <div key={i} className="source-item">
+                <span className="text-cyan font-mono text-xs">
+                  [{i + 1}]
+                </span>
+                <span className="text-gray-300 text-xs">{source.title}</span>
+                <span className="text-gray-500 text-xs">{source.page}</span>
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// CountUp Animation
+const CountUp = ({
+  end,
+  suffix = "",
+  prefix = "",
+}: {
+  end: number;
+  suffix?: string;
+  prefix?: string;
+}) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      let start = 0;
+      const duration = 2000;
+      const increment = end / (duration / 16);
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= end) {
+          setCount(end);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(start));
+        }
+      }, 16);
+      return () => clearInterval(timer);
+    }
+  }, [isInView, end]);
+
+  return (
+    <span ref={ref} className="font-mono">
+      {prefix}
+      {count.toLocaleString()}
+      {suffix}
+    </span>
+  );
+};
+
+// Solution Card Component
+const SolutionCard = ({
+  icon: Icon,
+  title,
+  description,
+  highlight,
+  stats,
+  isCenter,
+}: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  highlight?: string;
+  stats: string;
+  isCenter?: boolean;
+}) => (
+  <motion.div
+    {...fadeInUp}
+    className={`solution-card ${isCenter ? "solution-card-highlight" : ""}`}
+  >
+    <div className="solution-icon">
+      <Icon size={28} strokeWidth={1.5} />
+    </div>
+    <h3 className="solution-title">{title}</h3>
+    <p className="solution-description">{description}</p>
+    {highlight && <span className="solution-highlight">{highlight}</span>}
+    <div className="solution-stats font-mono">{stats}</div>
+  </motion.div>
+);
+
+// Flow Step Component
+const FlowStep = ({
+  number,
+  icon: Icon,
+  title,
+  description,
+}: {
+  number: number;
+  icon: React.ElementType;
+  title: string;
+  description: string;
+}) => (
+  <motion.div {...fadeInUp} className="flow-step">
+    <div className="flow-number font-mono">{String(number).padStart(2, "0")}</div>
+    <div className="flow-icon">
+      <Icon size={24} strokeWidth={1.5} />
+    </div>
+    <h4 className="flow-title">{title}</h4>
+    <p className="flow-description">{description}</p>
+  </motion.div>
+);
+
+export default function RAGLandingPage() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="bg-white">
+    <div className="rag-landing">
+      {/* Particle Background */}
+      <div className="particles-bg">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="particle"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${3 + Math.random() * 4}s`,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Header */}
-      <header className={`header ${isScrolled ? "scrolled" : ""}`}>
+      <header className={`rag-header ${isScrolled ? "scrolled" : ""}`}>
         <div className="container">
-          <nav className="header-nav">
-            <Link href="/" className="logo">
-              LeoFitTech
+          <nav className="rag-nav">
+            <Link href="/" className="rag-logo">
+              <Sparkles size={24} strokeWidth={1.5} className="text-cyan" />
+              <span>RAG Agency</span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <ul className="nav-menu hidden md:flex">
-              <li>
-                <a href="#services" className="nav-link">
-                  서비스
-                </a>
-              </li>
-              <li>
-                <a href="#process" className="nav-link">
-                  진행과정
-                </a>
-              </li>
-              <li>
-                <a href="#portfolio" className="nav-link">
-                  포트폴리오
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="nav-link">
-                  회사소개
-                </a>
-              </li>
-              <li>
-                <Link
-                  href="/consultation/start"
-                  className="btn btn-primary btn-sm"
-                >
-                  무료 상담받기
-                </Link>
-              </li>
-            </ul>
-
-            {/* Mobile CTA Button */}
-            <div className="md:hidden">
-              <Link
-                href="/consultation/start"
-                className="btn btn-primary btn-sm"
-              >
-                상담신청
-              </Link>
+            <div className="nav-links">
+              <a href="#solutions">솔루션</a>
+              <a href="#proof">검증된 성과</a>
+              <a href="#process">진행 과정</a>
+              <a href="#contact">문의</a>
             </div>
+
+            <Link href="#contact" className="nav-cta">
+              상담 신청
+              <ArrowRight size={16} strokeWidth={1.5} />
+            </Link>
           </nav>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="hero">
-        {/* Animated Background Elements */}
-        <div className="hero-bg-elements">
-          {/* Floating Code Blocks - Left */}
-          <div
-            className="floating-element"
-            style={{
-              position: "absolute",
-              left: "5%",
-              top: "20%",
-              animation: "float 6s ease-in-out infinite",
-            }}
-          >
-            <div
-              style={{
-                background: "rgba(255,255,255,0.9)",
-                backdropFilter: "blur(10px)",
-                borderRadius: "12px",
-                padding: "16px 20px",
-                boxShadow: "0 8px 32px rgba(37, 99, 235, 0.1)",
-                border: "1px solid rgba(37, 99, 235, 0.1)",
-                fontFamily: "monospace",
-                fontSize: "13px",
-                color: "var(--gray-600)",
-              }}
-            >
-              <div style={{ color: "var(--primary)", marginBottom: "4px" }}>
-                {"const"}{" "}
-                <span style={{ color: "var(--gray-800)" }}>project</span> ={" "}
-                {"{"}
-              </div>
-              <div style={{ paddingLeft: "12px", color: "var(--gray-500)" }}>
-                success:{" "}
-                <span style={{ color: "var(--success-green)" }}>true</span>
-              </div>
-              <div>{"}"}</div>
-            </div>
-          </div>
-
-          {/* Floating Code Blocks - Right */}
-          <div
-            className="floating-element"
-            style={{
-              position: "absolute",
-              right: "8%",
-              top: "25%",
-              animation: "floatSlow 8s ease-in-out infinite",
-              animationDelay: "1s",
-            }}
-          >
-            <div
-              style={{
-                background: "rgba(255,255,255,0.9)",
-                backdropFilter: "blur(10px)",
-                borderRadius: "12px",
-                padding: "16px 20px",
-                boxShadow: "0 8px 32px rgba(37, 99, 235, 0.1)",
-                border: "1px solid rgba(37, 99, 235, 0.1)",
-                fontFamily: "monospace",
-                fontSize: "13px",
-              }}
-            >
-              <div style={{ color: "var(--secondary)" }}>
-                {"<"}
-                <span style={{ color: "var(--primary)" }}>Component</span>
-                {" />"}
-              </div>
-            </div>
-          </div>
-
-          {/* Terminal Window - Left Bottom */}
-          <div
-            className="floating-element"
-            style={{
-              position: "absolute",
-              left: "3%",
-              bottom: "15%",
-              animation: "floatSlow 7s ease-in-out infinite",
-              animationDelay: "2s",
-            }}
-          >
-            <div
-              style={{
-                background: "var(--gray-900)",
-                borderRadius: "12px",
-                padding: "12px 16px",
-                minWidth: "200px",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  gap: "6px",
-                  marginBottom: "10px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "50%",
-                    background: "#ef4444",
-                  }}
-                />
-                <div
-                  style={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "50%",
-                    background: "#eab308",
-                  }}
-                />
-                <div
-                  style={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "50%",
-                    background: "#22c55e",
-                  }}
-                />
-              </div>
-              <div
-                style={{
-                  fontFamily: "monospace",
-                  fontSize: "11px",
-                  color: "var(--gray-400)",
-                }}
-              >
-                <div>
-                  <span style={{ color: "var(--success-green)" }}>$</span> npm
-                  run build
-                </div>
-                <div style={{ color: "var(--success-green)" }}>
-                  Build successful
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Floating Icons - Right Bottom */}
-          <div
-            className="floating-element"
-            style={{
-              position: "absolute",
-              right: "5%",
-              bottom: "20%",
-              animation: "float 5s ease-in-out infinite",
-              animationDelay: "0.5s",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                gap: "12px",
-                background: "rgba(255,255,255,0.9)",
-                backdropFilter: "blur(10px)",
-                borderRadius: "16px",
-                padding: "16px",
-                boxShadow: "0 8px 32px rgba(37, 99, 235, 0.1)",
-                border: "1px solid rgba(37, 99, 235, 0.1)",
-              }}
-            >
-              <div
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  background: "var(--primary-gradient)",
-                  borderRadius: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "18px",
-                }}
-              >
-                <span role="img" aria-label="rocket">
-                  🚀
-                </span>
-              </div>
-              <div
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  background:
-                    "linear-gradient(135deg, #22c55e 0%, #10b981 100%)",
-                  borderRadius: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "18px",
-                }}
-              >
-                <span role="img" aria-label="check">
-                  ✓
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Decorative Dots */}
-          <div
-            style={{
-              position: "absolute",
-              left: "15%",
-              top: "60%",
-              width: "8px",
-              height: "8px",
-              background: "var(--primary)",
-              borderRadius: "50%",
-              opacity: 0.4,
-              animation: "pulse 3s infinite",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              right: "20%",
-              top: "40%",
-              width: "6px",
-              height: "6px",
-              background: "var(--secondary)",
-              borderRadius: "50%",
-              opacity: 0.3,
-              animation: "pulse 4s infinite",
-              animationDelay: "1s",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              left: "25%",
-              bottom: "30%",
-              width: "10px",
-              height: "10px",
-              background: "var(--accent-purple)",
-              borderRadius: "50%",
-              opacity: 0.25,
-              animation: "pulse 5s infinite",
-              animationDelay: "2s",
-            }}
-          />
-        </div>
-
+      {/* Section 1: Hero */}
+      <section className="hero-section">
         <div className="container">
-          <div className="hero-content">
-            <Fade direction="up">
+          <div className="hero-grid">
+            <motion.div {...fadeInUp} className="hero-content">
               <div className="hero-badge">
-                <span className="hero-badge-dot"></span>IOS/Android 앱 스토어
-                출시
+                <CheckCircle size={14} strokeWidth={1.5} />
+                <span className="font-mono">10만+ 회원 데이터 검증 완료</span>
               </div>
-            </Fade>
-            <Fade direction="up" delay={100}>
-              <h1 className="text-hero">
-                기획부터 런칭까지
+
+              <h1 className="hero-title">
+                이미{" "}
+                <span className="text-cyan font-mono">10만 회원</span> 데이터에서
                 <br />
-                <span style={{ color: "var(--primary)" }}>
-                  함께 성장하는 개발 파트너
-                </span>
+                검증된 <span className="text-crimson">RAG LLM</span> 플랫폼
               </h1>
-            </Fade>
-            <Fade direction="up" delay={200}>
-              <p className="text-body-lg hero-subtitle">
-                전문 개발팀이 웹, 앱, 백엔드까지 원스톱으로 해결합니다.
+
+              <p className="hero-subtitle">
+                DevGym에서 실전 검증된 RAG 기술력을 귀사의 데이터에 이식합니다.
                 <br />
-                MVP 최소 3주 완성, 앱 스토어 출시까지 책임집니다.
+                데이터 보안부터 실시간 검색까지, 엔터프라이즈급 AI 솔루션을
+                제공합니다.
               </p>
-            </Fade>
-            <Fade direction="up" delay={300}>
+
               <div className="hero-actions">
-                <Link
-                  href="/consultation/start"
-                  className="btn btn-primary btn-lg"
-                >
-                  무료 상담 시작하기
+                <Link href="#contact" className="btn-primary">
+                  무료 컨설팅 신청
+                  <ArrowRight size={18} strokeWidth={1.5} />
                 </Link>
-                <Link href="#portfolio" className="btn btn-secondary btn-lg">
-                  포트폴리오 보기
-                </Link>
+                <a href="#proof" className="btn-secondary">
+                  DevGym 성과 보기
+                </a>
               </div>
-            </Fade>
-            <Fade direction="up" delay={400}>
+
               <div className="hero-stats">
-                <div className="hero-stat">
-                  <div className="hero-stat-value">IOS/Android</div>
-                  <div className="hero-stat-label">앱 스토어 출시</div>
+                <div className="stat-item">
+                  <span className="stat-value font-mono">92%</span>
+                  <span className="stat-label">답변 정확도</span>
                 </div>
-                <div className="hero-stat">
-                  <div className="hero-stat-value">3주</div>
-                  <div className="hero-stat-label">MVP 완성</div>
+                <div className="stat-divider"></div>
+                <div className="stat-item">
+                  <span className="stat-value font-mono">1.2s</span>
+                  <span className="stat-label">평균 응답시간</span>
                 </div>
-                <div className="hero-stat">
-                  <div className="hero-stat-value">10년</div>
-                  <div className="hero-stat-label">테크 리더 경력</div>
-                </div>
-              </div>
-            </Fade>
-          </div>
-        </div>
-      </section>
-      {/* Services Section */}
-      <section
-        id="services"
-        className="section"
-        style={{
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: "url('/images/services-bg.svg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 1,
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <div className="text-center">
-            <Fade direction="up">
-              <p
-                className="text-body-sm"
-                style={{
-                  color: "var(--primary)",
-                  fontWeight: 600,
-                  marginBottom: "var(--spacing-sm)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Our Services
-              </p>
-              <h2 className="text-h2">
-                비즈니스 성장을 위한
-                <br />
-                <span style={{ color: "var(--primary)" }}>올인원 솔루션</span>
-              </h2>
-              <p
-                className="text-body-lg text-secondary"
-                style={{
-                  marginTop: "var(--spacing-md)",
-                  marginBottom: "var(--spacing-3xl)",
-                  maxWidth: "600px",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              >
-                복잡한 IT 프로젝트, 이제 한 팀에서 모두 해결하세요
-              </p>
-            </Fade>
-          </div>
-
-          <div className="feature-grid">
-            <Fade direction="up" delay={100}>
-              <div className="feature-card">
-                <div className="feature-icon feature-icon-gradient">
-                  <span style={{ fontSize: "1.5rem" }}>📱</span>
-                </div>
-                <h3 className="feature-title text-h3">모바일 앱 개발</h3>
-                <p className="feature-description">
-                  Flutter로 iOS/Android 동시 개발
-                  <br />앱 스토어 출시 및 심사 대응까지 완벽 지원
-                </p>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={200}>
-              <div className="feature-card">
-                <div className="feature-icon feature-icon-gradient">
-                  <span style={{ fontSize: "1.5rem" }}>🌐</span>
-                </div>
-                <h3 className="feature-title text-h3">웹 개발</h3>
-                <p className="feature-description">
-                  React, Next.js 기반 반응형 웹사이트
-                  <br />
-                  관리자 페이지, 랜딩 페이지, 커머스 플랫폼
-                </p>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={300}>
-              <div className="feature-card">
-                <div className="feature-icon feature-icon-gradient">
-                  <span style={{ fontSize: "1.5rem" }}>⚙️</span>
-                </div>
-                <h3 className="feature-title text-h3">백엔드 개발</h3>
-                <p className="feature-description">
-                  Node.js, NestJS로 안정적인 서버 구축
-                  <br />
-                  AWS 인프라, CI/CD 파이프라인 구성
-                </p>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={400}>
-              <div className="feature-card">
-                <div className="feature-icon feature-icon-gradient">
-                  <span style={{ fontSize: "1.5rem" }}>🔔</span>
-                </div>
-                <h3 className="feature-title text-h3">네이티브 기능</h3>
-                <p className="feature-description">
-                  푸시 알림, 소셜 로그인, 결제 연동
-                  <br />
-                  GPS 위치, 카카오 알림톡, 실시간 알림
-                </p>
-              </div>
-            </Fade>
-          </div>
-        </div>
-      </section>
-      {/* Why Choose Us Section */}
-      <section
-        className="section"
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          background: "var(--gray-50)",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: "url('/images/why-us-bg.svg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 1,
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <div className="text-center">
-            <Fade direction="up">
-              <p
-                className="text-body-sm"
-                style={{
-                  color: "var(--primary)",
-                  fontWeight: 600,
-                  marginBottom: "var(--spacing-sm)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Why Choose Us
-              </p>
-              <h2 className="text-h2">LeoFitTech를 선택하는 이유</h2>
-              {/* <p
-                className="text-body-lg text-secondary"
-                style={{
-                  marginTop: "var(--spacing-md)",
-                  marginBottom: "var(--spacing-3xl)",
-                }}
-              >
-                앱 스토어 출시 5회 이상, 검증된 실력으로 신뢰를 드립니다
-              </p> */}
-            </Fade>
-          </div>
-
-          <div className="feature-grid">
-            <Fade direction="up" delay={100}>
-              <div className="feature-card">
-                <div className="feature-icon">
-                  <span style={{ fontSize: "1.5rem" }}>🚀</span>
-                </div>
-                <h3 className="feature-title text-h3">앱 스토어 출시 전문</h3>
-                <p className="feature-description">
-                  Google Play, App Store 출시 경험
-                  <br />
-                  심사 가이드라인 숙지, 리젝 대응 경험 풍부
-                </p>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={200}>
-              <div className="feature-card">
-                <div className="feature-icon">
-                  <span style={{ fontSize: "1.5rem" }}>⚡</span>
-                </div>
-                <h3 className="feature-title text-h3">빠른 개발 속도</h3>
-                <p className="feature-description">
-                  MVP 최소 3주 완성, 1개월 풀패키지 가능
-                  <br />
-                  효율적인 프로세스와 템플릿 활용
-                </p>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={300}>
-              <div className="feature-card">
-                <div className="feature-icon">
-                  <span style={{ fontSize: "1.5rem" }}>🔒</span>
-                </div>
-                <h3 className="feature-title text-h3">책임감 있는 A/S</h3>
-                <p className="feature-description">
-                  출시 후 1~3개월 무상 유지보수 제공
-                  <br />
-                  긴급 버그 24시간 대응, 약속한 일정 준수
-                </p>
-              </div>
-            </Fade>
-          </div>
-        </div>
-      </section>
-
-      {/* Process Section */}
-      <section
-        id="process"
-        className="section"
-        style={{
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: "url('/images/process-bg.svg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 1,
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <div className="text-center">
-            <Fade direction="up">
-              <p
-                className="text-body-sm"
-                style={{
-                  color: "var(--primary)",
-                  fontWeight: 600,
-                  marginBottom: "var(--spacing-sm)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Process
-              </p>
-              <h2 className="text-h2">프로젝트 진행 과정</h2>
-              <p
-                className="text-body-lg text-secondary"
-                style={{
-                  marginTop: "var(--spacing-md)",
-                  marginBottom: "var(--spacing-3xl)",
-                }}
-              >
-                체계적인 프로세스로 성공적인 결과를 보장합니다
-              </p>
-            </Fade>
-          </div>
-
-          <div className="process-steps">
-            <Fade direction="up" delay={100}>
-              <div className="process-step">
-                <div className="process-number">1</div>
-                <h3 className="process-title text-h3">상담 및 견적</h3>
-                <p className="process-description">
-                  프로젝트 목표 파악, 요구사항 정리
-                  <br />
-                  기술 스택 제안 및 견적서 제공
-                </p>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={200}>
-              <div className="process-step">
-                <div className="process-number">2</div>
-                <h3 className="process-title text-h3">기획 & 설계</h3>
-                <p className="process-description">
-                  화면 설계서, DB 설계(ERD)
-                  <br />
-                  API 명세서 및 개발 일정 수립
-                </p>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={300}>
-              <div className="process-step">
-                <div className="process-number">3</div>
-                <h3 className="process-title text-h3">개발 & 테스트</h3>
-                <p className="process-description">
-                  애자일 방식, 주간 미팅
-                  <br />
-                  테크 리더 코드 리뷰로 품질 보장
-                </p>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={400}>
-              <div className="process-step">
-                <div className="process-number">4</div>
-                <h3 className="process-title text-h3">배포 & A/S</h3>
-                <p className="process-description">
-                  앱 스토어 등록 및 심사 대응
-                  <br />
-                  1~3개월 무상 유지보수 지원
-                </p>
-              </div>
-            </Fade>
-          </div>
-        </div>
-      </section>
-      {/* <FullpageSection name="content04">
-          <div className="content content04">
-            <div className="content-box">
-              <div className="title-box">
-                <Fade direction="up">
-                  <h2 className="title">
-                    비용결제 <span className="primaryColor">ZERO</span>!
-                  </h2>
-                </Fade>
-                <Fade delay={100} direction="up">
-                  <p className="sub-text">
-                    프로젝트 시작부터 매월 안정적인 금액을 납부하면서 <br />
-                    대표님의 비즈니스를 성장시킬 수 있습니다.
-                  </p>
-                </Fade>
-              </div>
-              <div className="list">
-                <Fade delay={200} direction="up">
-                  <div className="item">
-                    <div>
-                      <Image
-                        fetchPriority="high"
-                        src="/images/Piggybank-2.png"
-                        alt="Piggybank"
-                        width={100}
-                        height={90}
-                      />
-                      <div className="text">
-                        <h2>2천만원 이하</h2>
-                        <span>12개월 분납 가능</span>
-                      </div>
-                    </div>
-                    <div>
-                      <Image
-                        fetchPriority="high"
-                        src="/images/Isolation_Mode.png"
-                        alt="Isolation Mode"
-                        width={100}
-                        height={50}
-                        className="object-contain"
-                      />
-                      <div className="text">
-                        <h2>2천만원 이상</h2>
-                        <span>
-                          선납금 30% 이후
-                          <br />
-                          12개월 분납 가능
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Fade>
-              </div>
-            </div>
-          </div>
-        </FullpageSection> */}
-      {/* Portfolio Section */}
-      <section
-        id="portfolio"
-        className="section"
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          background: "var(--gray-50)",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: "url('/images/testimonials-bg.svg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 1,
-            pointerEvents: "none",
-          }}
-        />
-        <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <div className="text-center">
-            <Fade direction="up">
-              <p
-                className="text-body-sm"
-                style={{
-                  color: "var(--primary)",
-                  fontWeight: 600,
-                  marginBottom: "var(--spacing-sm)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Portfolio
-              </p>
-              <h2 className="text-h2">실제 출시된 프로젝트</h2>
-              <p
-                className="text-body-lg text-secondary"
-                style={{
-                  marginTop: "var(--spacing-md)",
-                  marginBottom: "var(--spacing-3xl)",
-                }}
-              >
-                앱 스토어에 출시된 실제 서비스들을 확인하세요
-              </p>
-            </Fade>
-          </div>
-
-          <div className="grid grid-cols-3 gap-xl">
-            <Fade direction="up" delay={100}>
-              <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)",
-                    padding: "var(--spacing-xl)",
-                    color: "white",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "2rem",
-                      marginBottom: "var(--spacing-sm)",
-                    }}
-                  >
-                    🏋️
-                  </div>
-                  <h3
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: 700,
-                      marginBottom: "var(--spacing-xs)",
-                    }}
-                  >
-                    브로 (체육관 관리 앱)
-                  </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
-                    Flutter (iOS/Android)
-                  </p>
-                </div>
-                <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p
-                    className="text-body-sm"
-                    style={{
-                      marginBottom: "var(--spacing-md)",
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    회원 관리, 출석 체크, 푸시 알림 기능을 갖춘 체육관 통합 관리
-                    솔루션
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "var(--spacing-sm)",
-                      flexWrap: "wrap",
-                      marginBottom: "var(--spacing-md)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      Supabase
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      FCM
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      1.5개월
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-xs)",
-                      color: "var(--success-green)",
-                      fontSize: "0.875rem",
-                    }}
-                  >
-                    <span>✓</span> 앱 스토어 출시 완료
-                  </div>
+                <div className="stat-divider"></div>
+                <div className="stat-item">
+                  <span className="stat-value font-mono">78%</span>
+                  <span className="stat-label">업무 자동화율</span>
                 </div>
               </div>
-            </Fade>
+            </motion.div>
 
-            <Fade direction="up" delay={200}>
-              <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)",
-                    padding: "var(--spacing-xl)",
-                    color: "white",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "2rem",
-                      marginBottom: "var(--spacing-sm)",
-                    }}
-                  >
-                    🌍
-                  </div>
-                  <h3
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: 700,
-                      marginBottom: "var(--spacing-xs)",
-                    }}
-                  >
-                    Playplanet (상점 탐색)
-                  </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
-                    Flutter (iOS/Android)
-                  </p>
-                </div>
-                <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p
-                    className="text-body-sm"
-                    style={{
-                      marginBottom: "var(--spacing-md)",
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    위치 기반 피드, 포인트 시스템, NICEPAY/PASS 결제 연동
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "var(--spacing-sm)",
-                      flexWrap: "wrap",
-                      marginBottom: "var(--spacing-md)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      NICEPAY
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      PASS 인증
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      2개월
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-xs)",
-                      color: "var(--success-green)",
-                      fontSize: "0.875rem",
-                    }}
-                  >
-                    <span>✓</span> 앱 스토어 출시 완료
-                  </div>
-                </div>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={300}>
-              <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
-                    padding: "var(--spacing-xl)",
-                    color: "white",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "2rem",
-                      marginBottom: "var(--spacing-sm)",
-                    }}
-                  >
-                    📍
-                  </div>
-                  <h3
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: 700,
-                      marginBottom: "var(--spacing-xs)",
-                    }}
-                  >
-                    우링 (실시간 위치 추적)
-                  </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
-                    Flutter (iOS/Android)
-                  </p>
-                </div>
-                <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p
-                    className="text-body-sm"
-                    style={{
-                      marginBottom: "var(--spacing-md)",
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    WebSocket 실시간 통신, 푸시 알림, 1인 풀스택 개발
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "var(--spacing-sm)",
-                      flexWrap: "wrap",
-                      marginBottom: "var(--spacing-md)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      WebSocket
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      GPS
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      1개월
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-xs)",
-                      color: "var(--success-green)",
-                      fontSize: "0.875rem",
-                    }}
-                  >
-                    <span>✓</span> 앱 스토어 출시 완료
-                  </div>
-                </div>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={400}>
-              <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #eab308 0%, #ca8a04 100%)",
-                    padding: "var(--spacing-xl)",
-                    color: "white",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "2rem",
-                      marginBottom: "var(--spacing-sm)",
-                    }}
-                  >
-                    ⛳
-                  </div>
-                  <h3
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: 700,
-                      marginBottom: "var(--spacing-xs)",
-                    }}
-                  >
-                    골프링 (골프장 예약)
-                  </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
-                    반응형 웹
-                  </p>
-                </div>
-                <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p
-                    className="text-body-sm"
-                    style={{
-                      marginBottom: "var(--spacing-md)",
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    검색, 예약 시스템, 카카오 알림톡, Slack API 실시간 로그
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "var(--spacing-sm)",
-                      flexWrap: "wrap",
-                      marginBottom: "var(--spacing-md)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      알림톡
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      Slack
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      3주
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-xs)",
-                      color: "var(--success-green)",
-                      fontSize: "0.875rem",
-                    }}
-                  >
-                    <span>✓</span> 실제 서비스 운영 중
-                  </div>
-                </div>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={500}>
-              <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
-                    padding: "var(--spacing-xl)",
-                    color: "white",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "2rem",
-                      marginBottom: "var(--spacing-sm)",
-                    }}
-                  >
-                    📰
-                  </div>
-                  <h3
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: 700,
-                      marginBottom: "var(--spacing-xs)",
-                    }}
-                  >
-                    AboutKorea (글로벌 뉴스)
-                  </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
-                    Next.js + Flutter
-                  </p>
-                </div>
-                <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p
-                    className="text-body-sm"
-                    style={{
-                      marginBottom: "var(--spacing-md)",
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    소셜 로그인, 관리자 페이지, 다국어 지원 글로벌 서비스
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "var(--spacing-sm)",
-                      flexWrap: "wrap",
-                      marginBottom: "var(--spacing-md)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      다국어
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      OAuth
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      1.5개월
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-xs)",
-                      color: "var(--success-green)",
-                      fontSize: "0.875rem",
-                    }}
-                  >
-                    <span>✓</span> 앱 스토어 출시 완료
-                  </div>
-                </div>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={600}>
-              <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
-                    padding: "var(--spacing-xl)",
-                    color: "white",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "2rem",
-                      marginBottom: "var(--spacing-sm)",
-                    }}
-                  >
-                    💪
-                  </div>
-                  <h3
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: 700,
-                      marginBottom: "var(--spacing-xs)",
-                    }}
-                  >
-                    DevGym (자사 SaaS)
-                  </h3>
-                  <p style={{ fontSize: "0.875rem", opacity: 0.9 }}>
-                    웹 + Flutter
-                  </p>
-                </div>
-                <div style={{ padding: "var(--spacing-lg)" }}>
-                  <p
-                    className="text-body-sm"
-                    style={{
-                      marginBottom: "var(--spacing-md)",
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    체육관 통합 관리 SaaS, 관리자 웹 + 회원 앱 + 출석 앱
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "var(--spacing-sm)",
-                      flexWrap: "wrap",
-                      marginBottom: "var(--spacing-md)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      SaaS
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      투자유치
-                    </span>
-                    <span
-                      style={{
-                        background: "var(--gray-100)",
-                        padding: "4px 8px",
-                        borderRadius: "4px",
-                        fontSize: "0.75rem",
-                      }}
-                    >
-                      3개월
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-xs)",
-                      color: "var(--success-green)",
-                      fontSize: "0.875rem",
-                    }}
-                  >
-                    <span>✓</span> 100만원 투자 유치
-                  </div>
-                </div>
-              </div>
-            </Fade>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section
-        id="pricing"
-        className="section"
-        style={{
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div className="container">
-          <div className="text-center">
-            <Fade direction="up">
-              <p
-                className="text-body-sm"
-                style={{
-                  color: "var(--primary)",
-                  fontWeight: 600,
-                  marginBottom: "var(--spacing-sm)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                }}
-              >
-                Pricing
-              </p>
-              <h2 className="text-h2">투명한 가격 정책</h2>
-              <p
-                className="text-body-lg text-secondary"
-                style={{
-                  marginTop: "var(--spacing-md)",
-                  marginBottom: "var(--spacing-3xl)",
-                }}
-              >
-                프로젝트 규모에 맞는 최적의 상품을 선택하세요
-              </p>
-            </Fade>
-          </div>
-
-          <div className="grid grid-cols-3 gap-xl">
-            <Fade direction="up" delay={100}>
-              <div
-                className="card"
-                style={{ textAlign: "center", position: "relative" }}
-              >
-                <h3
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: 700,
-                    marginBottom: "var(--spacing-sm)",
-                    color: "var(--text-primary)",
-                  }}
-                >
-                  STANDARD
-                </h3>
-                <p
-                  className="text-body-sm"
-                  style={{
-                    color: "var(--text-secondary)",
-                    marginBottom: "var(--spacing-lg)",
-                  }}
-                >
-                  스타트업 MVP, 간단한 웹사이트
-                </p>
-                <div style={{ marginBottom: "var(--spacing-lg)" }}>
-                  <span
-                    style={{
-                      fontSize: "2.5rem",
-                      fontWeight: 700,
-                      color: "var(--primary)",
-                    }}
-                  >
-                    50
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "1.25rem",
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    만원~
-                  </span>
-                </div>
-                <ul
-                  style={{
-                    textAlign: "left",
-                    marginBottom: "var(--spacing-xl)",
-                    listStyle: "none",
-                    padding: 0,
-                  }}
-                >
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
-                    반응형 웹사이트
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 5-7
-                    페이지
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
-                    개발 기간 2주
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
-                    수정 3회
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span> A/S
-                    1개월
-                  </li>
-                </ul>
-                <Link
-                  href="/consultation/start"
-                  className="btn btn-secondary"
-                  style={{ width: "100%" }}
-                >
-                  상담 신청
-                </Link>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={200}>
-              <div
-                className="card"
-                style={{
-                  textAlign: "center",
-                  position: "relative",
-                  border: "2px solid var(--primary)",
-                  transform: "scale(1.05)",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "-12px",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    background: "var(--primary)",
-                    color: "white",
-                    padding: "4px 16px",
-                    borderRadius: "20px",
-                    fontSize: "0.75rem",
-                    fontWeight: 600,
-                  }}
-                >
-                  추천
-                </div>
-                <h3
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: 700,
-                    marginBottom: "var(--spacing-sm)",
-                    color: "var(--primary)",
-                  }}
-                >
-                  DELUXE
-                </h3>
-                <p
-                  className="text-body-sm"
-                  style={{
-                    color: "var(--text-secondary)",
-                    marginBottom: "var(--spacing-lg)",
-                  }}
-                >
-                  중소기업, 커뮤니티 앱
-                </p>
-                <div style={{ marginBottom: "var(--spacing-lg)" }}>
-                  <span
-                    style={{
-                      fontSize: "2.5rem",
-                      fontWeight: 700,
-                      color: "var(--primary)",
-                    }}
-                  >
-                    150
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "1.25rem",
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    만원~
-                  </span>
-                </div>
-                <ul
-                  style={{
-                    textAlign: "left",
-                    marginBottom: "var(--spacing-xl)",
-                    listStyle: "none",
-                    padding: 0,
-                  }}
-                >
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 웹
-                    + iOS/Android 앱
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
-                    10-15 페이지
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
-                    개발 기간 4주
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
-                    푸시 알림, 소셜 로그인
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 앱
-                    스토어 출시 포함
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span> A/S
-                    2개월
-                  </li>
-                </ul>
-                <Link
-                  href="/consultation/start"
-                  className="btn btn-primary"
-                  style={{ width: "100%" }}
-                >
-                  상담 신청
-                </Link>
-              </div>
-            </Fade>
-
-            <Fade direction="up" delay={300}>
-              <div
-                className="card"
-                style={{ textAlign: "center", position: "relative" }}
-              >
-                <h3
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: 700,
-                    marginBottom: "var(--spacing-sm)",
-                    color: "var(--text-primary)",
-                  }}
-                >
-                  PREMIUM
-                </h3>
-                <p
-                  className="text-body-sm"
-                  style={{
-                    color: "var(--text-secondary)",
-                    marginBottom: "var(--spacing-lg)",
-                  }}
-                >
-                  대기업, 대규모 커머스
-                </p>
-                <div style={{ marginBottom: "var(--spacing-lg)" }}>
-                  <span
-                    style={{
-                      fontSize: "2.5rem",
-                      fontWeight: 700,
-                      color: "var(--primary)",
-                    }}
-                  >
-                    350
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "1.25rem",
-                      color: "var(--text-secondary)",
-                    }}
-                  >
-                    만원~
-                  </span>
-                </div>
-                <ul
-                  style={{
-                    textAlign: "left",
-                    marginBottom: "var(--spacing-xl)",
-                    listStyle: "none",
-                    padding: 0,
-                  }}
-                >
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 웹
-                    + 앱 + 관리자
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span> 20+
-                    페이지
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
-                    개발 기간 8주
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
-                    결제, 정산 시스템
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      borderBottom: "1px solid var(--gray-100)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span>{" "}
-                    전담 PM 배정
-                  </li>
-                  <li
-                    style={{
-                      padding: "var(--spacing-sm) 0",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "var(--spacing-sm)",
-                    }}
-                  >
-                    <span style={{ color: "var(--success-green)" }}>✓</span> A/S
-                    3개월
-                  </li>
-                </ul>
-                <Link
-                  href="/consultation/start"
-                  className="btn btn-secondary"
-                  style={{ width: "100%" }}
-                >
-                  상담 신청
-                </Link>
-              </div>
-            </Fade>
-          </div>
-
-          <Fade direction="up" delay={400}>
-            <div
-              style={{ marginTop: "var(--spacing-3xl)", textAlign: "center" }}
+            <motion.div
+              {...fadeInUp}
+              transition={{ delay: 0.2 }}
+              className="hero-demo"
             >
-              {/* <p
-                className="text-body-sm"
-                style={{
-                  color: "var(--text-secondary)",
-                  marginBottom: "var(--spacing-md)",
-                }}
-              >
-                추가 옵션
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: "var(--spacing-lg)",
-                  flexWrap: "wrap",
-                }}
-              >
-                <span
-                  style={{
-                    background: "var(--gray-100)",
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  결제 기능 +50만원
-                </span> */}
-                {/* <span
-                  style={{
-                    background: "var(--gray-100)",
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  실시간 채팅 +80만원
-                </span> */}
-                {/* <span
-                  style={{
-                    background: "var(--gray-100)",
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  소셜 로그인 +20만원
-                </span> */}
-                {/* <span
-                  style={{
-                    background: "var(--gray-100)",
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  푸시 알림 +20만원
-                </span> */}
-              {/* </div> */}
-            </div>
-          </Fade>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="section">
-        <div className="container">
-          <div className="cta-section">
-            <div className="cta-content">
-              <Fade direction="up">
-                <h2 className="cta-title text-h2">지금 바로 시작하세요</h2>
-                <p className="cta-subtitle text-body-lg">
-                  무료 상담을 통해 프로젝트 견적과 일정을 확인해보세요.
-                  <br />
-                  전문 컨설턴트가 24시간 내 연락드립니다.
-                </p>
-                <div className="hero-actions">
-                  <Link
-                    href="/consultation/start"
-                    className="cta-button btn btn-lg"
-                  >
-                    무료 상담 신청하기
-                  </Link>
-                </div>
-              </Fade>
-            </div>
+              <TypingDemo />
+            </motion.div>
           </div>
         </div>
       </section>
-      {/* Footer */}
-      <footer
-        style={{
-          background: "var(--gray-900)",
-          color: "var(--text-inverse)",
-          padding: "var(--spacing-4xl) 0 var(--spacing-xl)",
-        }}
-      >
+
+      {/* Section 2: Solution Cards */}
+      <section id="solutions" className="solutions-section">
         <div className="container">
-          <div className="grid grid-cols-4 gap-xl">
-            <div>
-              <h3
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: 700,
-                  color: "var(--white)",
-                  marginBottom: "var(--spacing-md)",
-                }}
-              >
-                LeoFitTech
-              </h3>
-              <p
-                style={{
-                  color: "var(--gray-400)",
-                  lineHeight: 1.7,
-                  marginBottom: "var(--spacing-md)",
-                }}
-              >
-                기획부터 런칭까지
-                <br />
-                함께 성장하는 개발 파트너
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "var(--spacing-sm)",
-                  marginTop: "var(--spacing-md)",
-                }}
-              >
-                <span
-                  style={{
-                    background: "var(--gray-800)",
-                    padding: "4px 8px",
-                    borderRadius: "4px",
-                    fontSize: "0.75rem",
-                    color: "var(--gray-400)",
-                  }}
-                >
-                  Flutter
-                </span>
-                <span
-                  style={{
-                    background: "var(--gray-800)",
-                    padding: "4px 8px",
-                    borderRadius: "4px",
-                    fontSize: "0.75rem",
-                    color: "var(--gray-400)",
-                  }}
-                >
-                  React
-                </span>
-                <span
-                  style={{
-                    background: "var(--gray-800)",
-                    padding: "4px 8px",
-                    borderRadius: "4px",
-                    fontSize: "0.75rem",
-                    color: "var(--gray-400)",
-                  }}
-                >
-                  Node.js
-                </span>
-              </div>
-            </div>
+          <motion.div {...fadeInUp} className="section-header">
+            <span className="section-label font-mono">SOLUTIONS</span>
+            <h2 className="section-title">
+              검증된 <span className="text-cyan">RAG 기술</span>을
+              <br />
+              귀사에 맞게 구축합니다
+            </h2>
+          </motion.div>
 
-            <div>
-              <h4
-                style={{
-                  fontWeight: 600,
-                  color: "var(--white)",
-                  marginBottom: "var(--spacing-md)",
-                }}
-              >
-                서비스
-              </h4>
-              <div style={{ color: "var(--gray-400)", lineHeight: 2 }}>
-                <Link
-                  href="#services"
-                  style={{ color: "var(--gray-400)", textDecoration: "none" }}
-                >
-                  모바일 앱 개발
-                </Link>
-                <br />
-                <Link
-                  href="#services"
-                  style={{ color: "var(--gray-400)", textDecoration: "none" }}
-                >
-                  웹 개발
-                </Link>
-                <br />
-                <Link
-                  href="#services"
-                  style={{ color: "var(--gray-400)", textDecoration: "none" }}
-                >
-                  백엔드 개발
-                </Link>
-                <br />
-                <Link
-                  href="#services"
-                  style={{ color: "var(--gray-400)", textDecoration: "none" }}
-                >
-                  앱 스토어 출시
-                </Link>
-              </div>
-            </div>
+          <div className="solutions-grid">
+            <SolutionCard
+              icon={Database}
+              title="RAG 시스템 구축"
+              description="기업 내부 데이터를 안전하게 벡터화하고, 실시간 검색이 가능한 지식 베이스를 구축합니다."
+              stats="데이터 보안 99.9%"
+            />
 
-            <div>
-              <h4
-                style={{
-                  fontWeight: 600,
-                  color: "var(--white)",
-                  marginBottom: "var(--spacing-md)",
-                }}
-              >
-                연락처
-              </h4>
-              <div style={{ color: "var(--gray-400)", lineHeight: 2 }}>
-                contact@leofittech.com
-                <br />
-                전라북도 전주시
-                <br />
-                <span style={{ fontSize: "0.875rem" }}>
-                  영업시간: 평일 09:00 - 18:00
-                </span>
-              </div>
-            </div>
+            <SolutionCard
+              icon={MessageSquare}
+              title="AI 챗봇 개발"
+              description="DevGym에서 78% 업무 자동화를 달성한 챗봇 로직을 귀사 환경에 맞게 이식합니다."
+              highlight="추천"
+              stats="자동화율 78%"
+              isCenter
+            />
 
-            <div>
-              <h4
-                style={{
-                  fontWeight: 600,
-                  color: "var(--white)",
-                  marginBottom: "var(--spacing-md)",
-                }}
-              >
-                상담 문의
-              </h4>
-              <p
-                style={{
-                  color: "var(--gray-400)",
-                  marginBottom: "var(--spacing-md)",
-                  lineHeight: 1.6,
-                }}
-              >
-                프로젝트에 대해 상담받고 싶으시다면
-                <br />
-                24시간 내 연락드립니다.
-              </p>
-              <Link
-                href="/consultation/start"
-                className="btn btn-primary btn-sm"
-              >
-                무료 상담 신청
-              </Link>
-            </div>
+            <SolutionCard
+              icon={TrendingUp}
+              title="추천 시스템"
+              description="10만 회원 행동 데이터 기반 추천 알고리즘으로 ROI 3배 향상을 검증했습니다."
+              stats="ROI 3배 향상"
+            />
           </div>
+        </div>
+      </section>
 
-          <div
-            style={{
-              borderTop: "1px solid var(--gray-800)",
-              paddingTop: "var(--spacing-xl)",
-              marginTop: "var(--spacing-3xl)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexWrap: "wrap",
-              gap: "var(--spacing-md)",
-            }}
-          >
-            <p style={{ color: "var(--gray-500)", fontSize: "0.875rem" }}>
-              © 2024 LeoFitTech. All rights reserved.
+      {/* Section 3: DevGym Proof (Bento Grid) */}
+      <section id="proof" className="proof-section">
+        <div className="container">
+          <motion.div {...fadeInUp} className="section-header">
+            <span className="section-label font-mono">PROVEN RESULTS</span>
+            <h2 className="section-title">
+              <span className="text-green">DevGym</span>에서 검증된
+              <br />
+              실전 성과
+            </h2>
+            <p className="section-subtitle">
+              데이터만 교체하면 8주 내 금융, 의료, 제조 맞춤형 서비스 완성
             </p>
-            <div
-              style={{
-                display: "flex",
-                gap: "var(--spacing-lg)",
-                fontSize: "0.875rem",
-              }}
-            >
-              <Link
-                href="/privacy-policy"
-                style={{ color: "var(--gray-500)", textDecoration: "none" }}
-              >
-                개인정보처리방침
-              </Link>
-              <Link
-                href="/terms"
-                style={{ color: "var(--gray-500)", textDecoration: "none" }}
-              >
-                이용약관
-              </Link>
+          </motion.div>
+
+          <div className="bento-grid">
+            <motion.div {...fadeInUp} className="bento-item bento-large">
+              <div className="bento-content">
+                <Users size={32} strokeWidth={1.5} className="text-cyan" />
+                <div className="bento-metric">
+                  <CountUp end={100000} suffix="+" />
+                </div>
+                <span className="bento-label">활성 회원</span>
+                <p className="bento-desc">
+                  실제 서비스에서 10만 명 이상의 사용자가 활용 중
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div {...fadeInUp} className="bento-item">
+              <div className="bento-content">
+                <Target size={24} strokeWidth={1.5} className="text-green" />
+                <div className="bento-metric font-mono">
+                  <CountUp end={92} suffix="%" />
+                </div>
+                <span className="bento-label">답변 정확도</span>
+              </div>
+            </motion.div>
+
+            <motion.div {...fadeInUp} className="bento-item">
+              <div className="bento-content">
+                <Zap size={24} strokeWidth={1.5} className="text-cyan" />
+                <div className="bento-metric font-mono">
+                  <CountUp end={1} prefix="" suffix=".2s" />
+                </div>
+                <span className="bento-label">평균 응답시간</span>
+              </div>
+            </motion.div>
+
+            <motion.div {...fadeInUp} className="bento-item bento-wide">
+              <div className="bento-content">
+                <BarChart3 size={24} strokeWidth={1.5} className="text-crimson" />
+                <div className="bento-metric font-mono">
+                  <CountUp end={42} suffix="%" />
+                </div>
+                <span className="bento-label">회원 이탈률 감소</span>
+                <p className="bento-desc">AI 개인화 추천으로 달성</p>
+              </div>
+            </motion.div>
+
+            <motion.div {...fadeInUp} className="bento-item">
+              <div className="bento-content">
+                <Clock size={24} strokeWidth={1.5} className="text-cyan" />
+                <div className="bento-metric font-mono">
+                  <CountUp end={8} suffix="주" />
+                </div>
+                <span className="bento-label">구축 기간</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4: RAG Flow */}
+      <section id="process" className="flow-section">
+        <div className="container">
+          <motion.div {...fadeInUp} className="section-header">
+            <span className="section-label font-mono">HOW IT WORKS</span>
+            <h2 className="section-title">
+              <span className="text-cyan">RAG</span> 파이프라인
+              <br />
+              작동 원리
+            </h2>
+          </motion.div>
+
+          <div className="flow-grid">
+            <FlowStep
+              number={1}
+              icon={FileText}
+              title="데이터 유입"
+              description="PDF, 문서, DB 등 기업 데이터를 안전하게 수집"
+            />
+            <div className="flow-connector">
+              <ChevronRight size={24} strokeWidth={1.5} />
+            </div>
+            <FlowStep
+              number={2}
+              icon={Database}
+              title="벡터화"
+              description="텍스트를 AI가 이해할 수 있는 벡터로 변환"
+            />
+            <div className="flow-connector">
+              <ChevronRight size={24} strokeWidth={1.5} />
+            </div>
+            <FlowStep
+              number={3}
+              icon={Brain}
+              title="지식 추출 (RAG)"
+              description="질문과 관련된 정보를 실시간으로 검색"
+            />
+            <div className="flow-connector">
+              <ChevronRight size={24} strokeWidth={1.5} />
+            </div>
+            <FlowStep
+              number={4}
+              icon={Bot}
+              title="AI 답변"
+              description="출처와 함께 정확한 답변 생성"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Section 5: Trust Metrics */}
+      <section className="trust-section">
+        <div className="container">
+          <motion.div {...fadeInUp} className="section-header">
+            <span className="section-label font-mono">TRUST</span>
+            <h2 className="section-title">
+              고객사가 선택한
+              <br />
+              <span className="text-cyan">신뢰의 이유</span>
+            </h2>
+          </motion.div>
+
+          <div className="trust-grid">
+            <motion.div {...fadeInUp} className="trust-card">
+              <Shield size={32} strokeWidth={1.5} className="text-cyan" />
+              <h3>데이터 보안</h3>
+              <p>
+                AWS 기반 엔터프라이즈급 보안
+                <br />
+                데이터는 귀사 서버에만 저장
+              </p>
+            </motion.div>
+
+            <motion.div {...fadeInUp} className="trust-card">
+              <Clock size={32} strokeWidth={1.5} className="text-green" />
+              <h3>24시간 지원</h3>
+              <p>
+                전담 엔지니어 배정
+                <br />
+                실시간 모니터링 및 대응
+              </p>
+            </motion.div>
+
+            <motion.div {...fadeInUp} className="trust-card">
+              <CheckCircle size={32} strokeWidth={1.5} className="text-crimson" />
+              <h3>성과 보장</h3>
+              <p>
+                KPI 미달성 시 추가 개발 무상
+                <br />
+                명확한 성과 측정 기준 제시
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Testimonial */}
+          <motion.div {...fadeInUp} className="testimonial">
+            <div className="testimonial-content">
+              <p>
+                &ldquo;DevGym의 RAG 시스템 도입 후 CS 문의가{" "}
+                <span className="text-cyan font-mono">60%</span> 감소했고, 회원
+                만족도는{" "}
+                <span className="text-green font-mono">35%</span>{" "}
+                상승했습니다. 데이터 기반 의사결정이 가능해졌어요.&rdquo;
+              </p>
+              <div className="testimonial-author">
+                <div className="author-avatar">K</div>
+                <div className="author-info">
+                  <span className="author-name">김** 대표</span>
+                  <span className="author-company">피트니스 프랜차이즈 A사</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Section 6: CTA Form */}
+      <section id="contact" className="cta-section">
+        <div className="container">
+          <div className="cta-grid">
+            <motion.div {...fadeInUp} className="cta-content">
+              <span className="section-label font-mono">GET STARTED</span>
+              <h2 className="cta-title">
+                지금 바로
+                <br />
+                <span className="text-cyan">무료 컨설팅</span>을 받아보세요
+              </h2>
+              <p className="cta-subtitle">
+                귀사의 데이터와 목표에 맞는 RAG 솔루션을 제안해 드립니다.
+              </p>
+
+              <div className="cta-benefits">
+                <div className="benefit-item">
+                  <CheckCircle size={18} strokeWidth={1.5} className="text-green" />
+                  <span>24시간 내 회신</span>
+                </div>
+                <div className="benefit-item">
+                  <CheckCircle size={18} strokeWidth={1.5} className="text-green" />
+                  <span>계약 의무 없음</span>
+                </div>
+                <div className="benefit-item">
+                  <CheckCircle size={18} strokeWidth={1.5} className="text-green" />
+                  <span>DevGym PDF 가이드 즉시 제공</span>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="cta-form-wrapper">
+              <form className="cta-form">
+                <div className="form-group">
+                  <label>담당자명</label>
+                  <input type="text" placeholder="홍길동" />
+                </div>
+
+                <div className="form-group">
+                  <label>이메일</label>
+                  <input type="email" placeholder="example@company.com" />
+                </div>
+
+                <div className="form-group">
+                  <label>연락처</label>
+                  <input type="tel" placeholder="010-1234-5678" />
+                </div>
+
+                <div className="form-group">
+                  <label>관심 서비스</label>
+                  <div className="checkbox-group">
+                    <label className="checkbox-item">
+                      <input type="checkbox" />
+                      <span>RAG 시스템 구축</span>
+                    </label>
+                    <label className="checkbox-item">
+                      <input type="checkbox" />
+                      <span>AI 챗봇</span>
+                    </label>
+                    <label className="checkbox-item">
+                      <input type="checkbox" />
+                      <span>추천 시스템</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>산업군</label>
+                  <select>
+                    <option value="">선택해주세요</option>
+                    <option value="finance">금융</option>
+                    <option value="healthcare">의료/헬스케어</option>
+                    <option value="manufacturing">제조</option>
+                    <option value="retail">유통/커머스</option>
+                    <option value="other">기타</option>
+                  </select>
+                </div>
+
+                <button type="submit" className="submit-btn">
+                  무료 상담 신청
+                  <Send size={18} strokeWidth={1.5} />
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="rag-footer">
+        <div className="container">
+          <div className="footer-content">
+            <div className="footer-brand">
+              <div className="footer-logo">
+                <Sparkles size={20} strokeWidth={1.5} className="text-cyan" />
+                <span>RAG Agency</span>
+              </div>
+              <p>10만 유저가 검증한 실전 RAG 기술력</p>
+            </div>
+
+            <div className="footer-links">
+              <a href="#solutions">솔루션</a>
+              <a href="#proof">검증된 성과</a>
+              <a href="#process">진행 과정</a>
+              <a href="#contact">문의</a>
+            </div>
+
+            <div className="footer-contact">
+              <span>contact@ragagency.ai</span>
+              <span className="font-mono">24h 내 회신 보장</span>
+            </div>
+          </div>
+
+          <div className="footer-bottom">
+            <p>&copy; 2024 RAG Agency. All rights reserved.</p>
+            <div className="footer-legal">
+              <Link href="/privacy-policy">개인정보처리방침</Link>
+              <Link href="/terms">이용약관</Link>
             </div>
           </div>
         </div>
       </footer>
+
+      <style jsx global>{`
+        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+        @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+
+        :root {
+          --bg-primary: #0a0a0f;
+          --bg-secondary: #12121a;
+          --bg-tertiary: #1a1a24;
+          --cyan: #00bfff;
+          --cyan-dim: rgba(0, 191, 255, 0.1);
+          --green: #48bb78;
+          --green-dim: rgba(72, 187, 120, 0.1);
+          --crimson: #e94560;
+          --crimson-dim: rgba(233, 69, 96, 0.1);
+          --text-primary: #ffffff;
+          --text-secondary: #a0a0b0;
+          --text-tertiary: #606070;
+          --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        html {
+          scroll-behavior: smooth;
+        }
+
+        body {
+          font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+            system-ui, sans-serif;
+          background: var(--bg-primary);
+          color: var(--text-primary);
+          line-height: 1.6;
+          overflow-x: hidden;
+        }
+
+        .font-mono {
+          font-family: "JetBrains Mono", monospace;
+        }
+
+        .text-cyan {
+          color: var(--cyan);
+        }
+
+        .text-green {
+          color: var(--green);
+        }
+
+        .text-crimson {
+          color: var(--crimson);
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 24px;
+        }
+
+        /* Particles Background */
+        .particles-bg {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          pointer-events: none;
+          z-index: 0;
+          overflow: hidden;
+        }
+
+        .particle {
+          position: absolute;
+          width: 2px;
+          height: 2px;
+          background: var(--cyan);
+          border-radius: 50%;
+          opacity: 0.3;
+          animation: float-particle linear infinite;
+        }
+
+        @keyframes float-particle {
+          0% {
+            transform: translateY(100vh) scale(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.3;
+          }
+          90% {
+            opacity: 0.3;
+          }
+          100% {
+            transform: translateY(-100vh) scale(1);
+            opacity: 0;
+          }
+        }
+
+        /* Header */
+        .rag-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 1000;
+          padding: 20px 0;
+          transition: all 0.3s ease;
+        }
+
+        .rag-header.scrolled {
+          background: rgba(10, 10, 15, 0.95);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid var(--border-color);
+          padding: 16px 0;
+        }
+
+        .rag-nav {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .rag-logo {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          text-decoration: none;
+        }
+
+        .nav-links {
+          display: flex;
+          gap: 40px;
+        }
+
+        .nav-links a {
+          color: var(--text-secondary);
+          text-decoration: none;
+          font-size: 0.9rem;
+          transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+          color: var(--cyan);
+        }
+
+        .nav-cta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 20px;
+          background: var(--crimson);
+          color: white;
+          text-decoration: none;
+          border-radius: 8px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+          background: #d63d55;
+          transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          padding: 120px 0 80px;
+          position: relative;
+          z-index: 1;
+        }
+
+        .hero-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 60px;
+          align-items: center;
+        }
+
+        .hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          background: var(--green-dim);
+          border: 1px solid var(--green);
+          border-radius: 100px;
+          font-size: 0.85rem;
+          color: var(--green);
+          margin-bottom: 24px;
+        }
+
+        .hero-title {
+          font-size: 3.5rem;
+          font-weight: 700;
+          line-height: 1.2;
+          margin-bottom: 24px;
+        }
+
+        .hero-subtitle {
+          font-size: 1.1rem;
+          color: var(--text-secondary);
+          line-height: 1.8;
+          margin-bottom: 32px;
+        }
+
+        .hero-actions {
+          display: flex;
+          gap: 16px;
+          margin-bottom: 48px;
+        }
+
+        .btn-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 16px 32px;
+          background: var(--crimson);
+          color: white;
+          text-decoration: none;
+          border-radius: 12px;
+          font-size: 1rem;
+          font-weight: 600;
+          transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+          background: #d63d55;
+          transform: translateY(-2px);
+          box-shadow: 0 10px 40px rgba(233, 69, 96, 0.3);
+        }
+
+        .btn-secondary {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 16px 32px;
+          background: transparent;
+          color: var(--text-primary);
+          text-decoration: none;
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          font-size: 1rem;
+          font-weight: 600;
+          transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+          border-color: var(--cyan);
+          color: var(--cyan);
+        }
+
+        .hero-stats {
+          display: flex;
+          align-items: center;
+          gap: 32px;
+        }
+
+        .stat-item {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .stat-value {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--cyan);
+        }
+
+        .stat-label {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+        }
+
+        .stat-divider {
+          width: 1px;
+          height: 40px;
+          background: var(--border-color);
+        }
+
+        /* Demo Window */
+        .demo-window {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .demo-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          background: var(--bg-tertiary);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .demo-dots {
+          display: flex;
+          gap: 6px;
+        }
+
+        .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+        }
+
+        .dot.red {
+          background: #ff5f57;
+        }
+        .dot.yellow {
+          background: #febc2e;
+        }
+        .dot.green {
+          background: #28c840;
+        }
+
+        .demo-title {
+          color: var(--text-tertiary);
+        }
+
+        .demo-content {
+          padding: 24px;
+          min-height: 280px;
+        }
+
+        .demo-query,
+        .demo-response,
+        .demo-sources {
+          margin-bottom: 20px;
+        }
+
+        .cursor {
+          animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+          0%,
+          50% {
+            opacity: 1;
+          }
+          51%,
+          100% {
+            opacity: 0;
+          }
+        }
+
+        .source-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 12px;
+          background: var(--bg-tertiary);
+          border-radius: 6px;
+          margin-top: 8px;
+        }
+
+        /* Section Styles */
+        .section-header {
+          text-align: center;
+          margin-bottom: 60px;
+        }
+
+        .section-label {
+          display: inline-block;
+          font-size: 0.85rem;
+          color: var(--cyan);
+          letter-spacing: 0.1em;
+          margin-bottom: 16px;
+        }
+
+        .section-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          line-height: 1.3;
+          margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+          font-size: 1.1rem;
+          color: var(--text-secondary);
+        }
+
+        /* Solutions Section */
+        .solutions-section {
+          padding: 120px 0;
+          position: relative;
+          z-index: 1;
+        }
+
+        .solutions-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+        }
+
+        .solution-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 32px;
+          transition: all 0.3s;
+        }
+
+        .solution-card:hover {
+          transform: translateY(-8px);
+          border-color: var(--cyan);
+          box-shadow: 0 20px 60px rgba(0, 191, 255, 0.1);
+        }
+
+        .solution-card-highlight {
+          border-color: var(--cyan);
+          background: linear-gradient(
+            135deg,
+            var(--bg-secondary) 0%,
+            rgba(0, 191, 255, 0.05) 100%
+          );
+          box-shadow: 0 0 60px rgba(0, 191, 255, 0.1);
+        }
+
+        .solution-icon {
+          width: 56px;
+          height: 56px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--cyan-dim);
+          border-radius: 14px;
+          color: var(--cyan);
+          margin-bottom: 20px;
+        }
+
+        .solution-title {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin-bottom: 12px;
+        }
+
+        .solution-description {
+          font-size: 0.95rem;
+          color: var(--text-secondary);
+          line-height: 1.7;
+          margin-bottom: 16px;
+        }
+
+        .solution-highlight {
+          display: inline-block;
+          padding: 4px 12px;
+          background: var(--crimson);
+          color: white;
+          font-size: 0.75rem;
+          font-weight: 600;
+          border-radius: 100px;
+          margin-bottom: 16px;
+        }
+
+        .solution-stats {
+          font-size: 0.9rem;
+          color: var(--cyan);
+          font-weight: 600;
+        }
+
+        /* Proof Section */
+        .proof-section {
+          padding: 120px 0;
+          background: var(--bg-secondary);
+          position: relative;
+          z-index: 1;
+        }
+
+        .bento-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          grid-template-rows: repeat(2, auto);
+          gap: 20px;
+        }
+
+        .bento-item {
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 28px;
+          transition: all 0.3s;
+        }
+
+        .bento-item:hover {
+          border-color: var(--cyan);
+        }
+
+        .bento-large {
+          grid-column: span 2;
+          grid-row: span 2;
+        }
+
+        .bento-wide {
+          grid-column: span 2;
+        }
+
+        .bento-content {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .bento-metric {
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 12px 0 8px;
+        }
+
+        .bento-large .bento-metric {
+          font-size: 3.5rem;
+        }
+
+        .bento-label {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+        }
+
+        .bento-desc {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+          margin-top: auto;
+          padding-top: 16px;
+        }
+
+        /* Flow Section */
+        .flow-section {
+          padding: 120px 0;
+          position: relative;
+          z-index: 1;
+        }
+
+        .flow-grid {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 16px;
+        }
+
+        .flow-step {
+          flex: 1;
+          max-width: 200px;
+          text-align: center;
+          padding: 24px 16px;
+        }
+
+        .flow-number {
+          font-size: 0.85rem;
+          color: var(--cyan);
+          margin-bottom: 16px;
+        }
+
+        .flow-icon {
+          width: 56px;
+          height: 56px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--cyan-dim);
+          border: 1px solid var(--cyan);
+          border-radius: 16px;
+          color: var(--cyan);
+          margin: 0 auto 16px;
+        }
+
+        .flow-title {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 8px;
+        }
+
+        .flow-description {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+        }
+
+        .flow-connector {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--border-color);
+          padding-top: 60px;
+        }
+
+        /* Trust Section */
+        .trust-section {
+          padding: 120px 0;
+          background: var(--bg-secondary);
+          position: relative;
+          z-index: 1;
+        }
+
+        .trust-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+          margin-bottom: 60px;
+        }
+
+        .trust-card {
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 32px;
+          text-align: center;
+        }
+
+        .trust-card h3 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          margin: 16px 0 12px;
+        }
+
+        .trust-card p {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          line-height: 1.7;
+        }
+
+        .testimonial {
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 24px;
+          padding: 48px;
+        }
+
+        .testimonial-content p {
+          font-size: 1.25rem;
+          line-height: 1.8;
+          margin-bottom: 32px;
+        }
+
+        .testimonial-author {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .author-avatar {
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--cyan-dim);
+          border-radius: 50%;
+          color: var(--cyan);
+          font-weight: 700;
+        }
+
+        .author-info {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .author-name {
+          font-weight: 600;
+        }
+
+        .author-company {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+          padding: 120px 0;
+          position: relative;
+          z-index: 1;
+        }
+
+        .cta-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 60px;
+          align-items: center;
+        }
+
+        .cta-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          line-height: 1.3;
+          margin-bottom: 16px;
+        }
+
+        .cta-subtitle {
+          font-size: 1.1rem;
+          color: var(--text-secondary);
+          margin-bottom: 32px;
+        }
+
+        .cta-benefits {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .benefit-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          color: var(--text-secondary);
+        }
+
+        .cta-form-wrapper {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 24px;
+          padding: 40px;
+        }
+
+        .cta-form {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .form-group label {
+          display: block;
+          font-size: 0.9rem;
+          font-weight: 500;
+          margin-bottom: 8px;
+          color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select {
+          width: 100%;
+          padding: 14px 16px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          color: var(--text-primary);
+          font-size: 1rem;
+          font-family: inherit;
+          transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+          outline: none;
+          border-color: var(--cyan);
+        }
+
+        .form-group input::placeholder {
+          color: var(--text-tertiary);
+        }
+
+        .checkbox-group {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .checkbox-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 16px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.2s;
+          font-size: 0.9rem;
+        }
+
+        .checkbox-item:hover {
+          border-color: var(--cyan);
+        }
+
+        .checkbox-item input {
+          width: auto;
+        }
+
+        .submit-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          padding: 16px;
+          background: var(--crimson);
+          color: white;
+          border: none;
+          border-radius: 12px;
+          font-size: 1rem;
+          font-weight: 600;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.2s;
+          margin-top: 8px;
+        }
+
+        .submit-btn:hover {
+          background: #d63d55;
+          transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .rag-footer {
+          padding: 60px 0 40px;
+          background: var(--bg-tertiary);
+          border-top: 1px solid var(--border-color);
+          position: relative;
+          z-index: 1;
+        }
+
+        .footer-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 40px;
+        }
+
+        .footer-logo {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 1.1rem;
+          font-weight: 700;
+          margin-bottom: 12px;
+        }
+
+        .footer-brand p {
+          color: var(--text-tertiary);
+          font-size: 0.9rem;
+        }
+
+        .footer-links {
+          display: flex;
+          gap: 32px;
+        }
+
+        .footer-links a {
+          color: var(--text-secondary);
+          text-decoration: none;
+          font-size: 0.9rem;
+          transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+          color: var(--cyan);
+        }
+
+        .footer-contact {
+          text-align: right;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+        }
+
+        .footer-bottom {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 24px;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .footer-bottom p {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+        }
+
+        .footer-legal {
+          display: flex;
+          gap: 24px;
+        }
+
+        .footer-legal a {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+
+        .footer-legal a:hover {
+          color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+          .hero-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+
+          .hero-title {
+            font-size: 2rem;
+          }
+
+          .hero-actions {
+            flex-direction: column;
+          }
+
+          .hero-stats {
+            flex-wrap: wrap;
+            gap: 20px;
+          }
+
+          .stat-divider {
+            display: none;
+          }
+
+          .nav-links {
+            display: none;
+          }
+
+          .solutions-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .bento-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .bento-large,
+          .bento-wide {
+            grid-column: span 1;
+            grid-row: span 1;
+          }
+
+          .flow-grid {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .flow-connector {
+            transform: rotate(90deg);
+            padding: 0;
+            margin: 8px 0;
+          }
+
+          .trust-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .cta-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .section-title {
+            font-size: 1.75rem;
+          }
+
+          .cta-title {
+            font-size: 1.75rem;
+          }
+
+          .footer-content {
+            flex-direction: column;
+            gap: 32px;
+          }
+
+          .footer-contact {
+            text-align: left;
+          }
+
+          .footer-bottom {
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+          }
+        }
+
+        .rag-landing {
+          position: relative;
+        }
+      `}</style>
     </div>
   );
-};
-
-export default Index;
+}
