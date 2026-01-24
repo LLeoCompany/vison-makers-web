@@ -58,7 +58,7 @@ const techLogos = [
   { name: "Kubernetes", icon: "☸️" },
 ];
 
-// Service Data for Drawer
+// Service Data for Drawer (v13.0 Enhanced)
 const serviceData = {
   rag: {
     id: "rag",
@@ -67,16 +67,34 @@ const serviceData = {
     badge: "보안 99.9%",
     badgeColor: "#48BB78",
     icon: Database,
+    // Big Metrics (v13.0)
+    bigMetrics: [
+      { value: 92, suffix: "%", label: "답변 정확도", color: "#48BB78" },
+      { value: 99.9, suffix: "%", label: "데이터 보안", color: "#00BFFF" },
+      { value: 8, suffix: "주", label: "구축 기간", color: "#E94560" },
+      { value: 100000, suffix: "+", label: "검증 유저", color: "#48BB78" },
+    ],
     caseStudy: {
       title: "DevGym 지식 베이스 구축 사례",
       metric: "92%",
       metricLabel: "답변 정확도",
       description: "10만+ 회원의 운동/영양 데이터를 벡터화하여 실시간 AI 상담 시스템 구축",
+      screenshots: [
+        { title: "관리자 대시보드", desc: "실시간 질의 모니터링 및 정확도 분석" },
+        { title: "벡터 DB 구조", desc: "도메인 최적화된 임베딩 파이프라인" },
+        { title: "API 연동 화면", desc: "기존 시스템과 원활한 통합" },
+      ],
     },
     steps: [
       { icon: FileText, title: "데이터 수집", desc: "PDF, DB, API 등 다양한 소스 통합" },
       { icon: Cpu, title: "엔진 커스텀", desc: "귀사 도메인에 최적화된 임베딩" },
       { icon: Zap, title: "실전 배포", desc: "8주 내 프로덕션 환경 배포" },
+    ],
+    techSpecs: [
+      { key: "Engine", value: "Hybrid RAG (BM25 + Dense)" },
+      { key: "Accuracy", value: "92% on domain queries" },
+      { key: "Latency", value: "<1.2s P95" },
+      { key: "Security", value: "AES-256, TLS 1.3, SOC2" },
     ],
     ctaText: "사내 데이터 AI 자산화 진단받기",
     formPlaceholder: "어떤 데이터를 AI로 활용하고 싶으신가요?",
@@ -88,16 +106,34 @@ const serviceData = {
     badge: "자동화 78%",
     badgeColor: "#00BFFF",
     icon: MessageSquare,
+    // Big Metrics (v13.0)
+    bigMetrics: [
+      { value: 50, suffix: "%", label: "CS 비용 절감", color: "#48BB78" },
+      { value: 78, suffix: "%", label: "자동화율", color: "#00BFFF" },
+      { value: 1.2, suffix: "s", label: "평균 응답", color: "#E94560" },
+      { value: 24, suffix: "/7", label: "무중단 서비스", color: "#48BB78" },
+    ],
     caseStudy: {
       title: "DevGym CS 자동화 사례",
       metric: "50%",
       metricLabel: "CS 비용 절감",
       description: "반복 문의의 78%를 AI가 즉시 응대, 상담원은 복잡한 케이스에 집중",
+      screenshots: [
+        { title: "챗봇 대화 UI", desc: "자연스러운 대화 흐름과 빠른 응답" },
+        { title: "CS 분석 대시보드", desc: "문의 유형별 자동화율 모니터링" },
+        { title: "상담원 핸드오프", desc: "복잡한 케이스의 원활한 인계" },
+      ],
     },
     steps: [
       { icon: MessageSquare, title: "대화 설계", desc: "귀사 CS 패턴 분석 및 시나리오 구축" },
       { icon: Brain, title: "AI 학습", desc: "FAQ/매뉴얼 기반 지식 베이스 구축" },
       { icon: Users, title: "운영 배포", desc: "1.2초 응답, 24/7 무중단 서비스" },
+    ],
+    techSpecs: [
+      { key: "Response", value: "1.2s average latency" },
+      { key: "Automation", value: "78% of inquiries" },
+      { key: "Handoff", value: "Seamless agent transfer" },
+      { key: "Integration", value: "Slack, Teams, Web SDK" },
     ],
     ctaText: "인건비 절감 시뮬레이션 신청",
     formPlaceholder: "현재 월 CS 문의량은 얼마나 되시나요?",
@@ -109,16 +145,34 @@ const serviceData = {
     badge: "ROI 3배",
     badgeColor: "#E94560",
     icon: TrendingUp,
+    // Big Metrics (v13.0)
+    bigMetrics: [
+      { value: 300, suffix: "%", label: "ROI 증가", color: "#E94560" },
+      { value: 42, suffix: "%", label: "이탈률 감소", color: "#48BB78" },
+      { value: 3, suffix: "x", label: "재구매율", color: "#00BFFF" },
+      { value: 35, suffix: "%", label: "매출 상승", color: "#E94560" },
+    ],
     caseStudy: {
       title: "DevGym 개인화 추천 사례",
       metric: "42%",
       metricLabel: "이탈률 감소",
       description: "유저 행동 데이터 기반 개인화 추천으로 재구매율 3배, 이탈률 42% 감소",
+      screenshots: [
+        { title: "개인화 추천 피드", desc: "유저별 맞춤 콘텐츠 큐레이션" },
+        { title: "A/B 테스트 대시보드", desc: "실시간 성과 비교 및 최적화" },
+        { title: "전환율 분석", desc: "추천 경로별 구매 전환 추적" },
+      ],
     },
     steps: [
       { icon: BarChart3, title: "데이터 분석", desc: "유저 행동/구매 패턴 심층 분석" },
       { icon: Target, title: "알고리즘 설계", desc: "협업 필터링 + 콘텐츠 기반 하이브리드" },
       { icon: TrendingUp, title: "A/B 테스트", desc: "지속적 최적화로 ROI 극대화" },
+    ],
+    techSpecs: [
+      { key: "Algorithm", value: "Hybrid CF + Content-based" },
+      { key: "Real-time", value: "Sub-100ms inference" },
+      { key: "Scale", value: "10M+ items supported" },
+      { key: "A/B Test", value: "Automated optimization" },
     ],
     ctaText: "매출 향상 엔진 설계 문의",
     formPlaceholder: "현재 어떤 방식으로 추천을 제공하고 계신가요?",
@@ -127,7 +181,67 @@ const serviceData = {
 
 type ServiceKey = keyof typeof serviceData;
 
-// Service Drawer Component
+// Big Metric CountUp Component for Drawer (v13.0)
+const DrawerCountUp = ({
+  end,
+  suffix = "",
+  color,
+  decimals = 0,
+}: {
+  end: number;
+  suffix?: string;
+  color: string;
+  decimals?: number;
+}) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      const duration = 1500;
+      const startTime = Date.now();
+      const overshoot = 1.12;
+
+      const timer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        let springValue;
+        if (progress < 0.7) {
+          const p = progress / 0.7;
+          springValue = p * p * overshoot;
+        } else if (progress < 0.85) {
+          const p = (progress - 0.7) / 0.15;
+          springValue = overshoot - (overshoot - 0.98) * p;
+        } else {
+          const p = (progress - 0.85) / 0.15;
+          springValue = 0.98 + 0.02 * p;
+        }
+
+        const current = springValue * end;
+        if (progress >= 1) {
+          setCount(end);
+          clearInterval(timer);
+        } else {
+          setCount(current);
+        }
+      }, 16);
+
+      return () => clearInterval(timer);
+    }
+  }, [isInView, end]);
+
+  const displayValue = decimals > 0 ? count.toFixed(decimals) : Math.floor(count).toLocaleString();
+
+  return (
+    <span ref={ref} className="font-mono" style={{ color }}>
+      {displayValue}{suffix}
+    </span>
+  );
+};
+
+// Service Drawer/Modal Component (v13.0 Professional Report)
 const ServiceDrawer = ({
   isOpen,
   onClose,
@@ -137,109 +251,196 @@ const ServiceDrawer = ({
   onClose: () => void;
   serviceKey: ServiceKey | null;
 }) => {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
+  const [isMobile, setIsMobile] = useState(false);
   const service = serviceKey ? serviceData[serviceKey] : null;
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   if (!service) return null;
 
   const Icon = service.icon;
 
+  // Mobile: Full-screen Modal / Desktop: Side Drawer
+  const drawerVariants = isMobile
+    ? {
+        initial: { y: "100%", opacity: 0 },
+        animate: { y: 0, opacity: 1 },
+        exit: { y: "100%", opacity: 0 },
+      }
+    : {
+        initial: { x: "100%" },
+        animate: { x: 0 },
+        exit: { x: "100%" },
+      };
+
   return (
     <AnimatePresence>
       {isOpen && (
         <>
+          {/* Backdrop with enhanced blur (v13.0) */}
           <motion.div
-            className="drawer-overlay"
+            className="drawer-overlay-v13"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             onClick={onClose}
           />
           <motion.div
-            className="service-drawer"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className={`service-drawer-v13 ${isMobile ? "mobile-fullscreen" : ""}`}
+            variants={drawerVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ type: "spring", damping: 28, stiffness: 280 }}
           >
-            <div className="drawer-header">
+            {/* Header */}
+            <div className="drawer-header-v13">
               <div className="drawer-title-group">
-                <div className="drawer-icon" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
-                  <Icon size={20} strokeWidth={1.5} />
+                <div className="drawer-icon-v13" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+                  <Icon size={24} strokeWidth={1.5} />
                 </div>
                 <div>
                   <h3>{service.title}</h3>
                   <p className="drawer-subtitle">{service.subtitle}</p>
                 </div>
               </div>
-              <button onClick={onClose} className="drawer-close">
-                <X size={20} strokeWidth={1.5} />
+              <button onClick={onClose} className="drawer-close-v13">
+                <X size={24} strokeWidth={1.5} />
               </button>
             </div>
 
-            <div className="drawer-content">
-              {/* Case Study Section */}
-              <div className="case-study-section">
-                <span className="section-tag font-mono">SUCCESS CASE</span>
-                <div className="case-study-card">
-                  <div className="case-metric">
-                    <span className="metric-value font-mono" style={{ color: service.badgeColor }}>
-                      {service.caseStudy.metric}
-                    </span>
-                    <span className="metric-label">{service.caseStudy.metricLabel}</span>
-                  </div>
-                  <h4>{service.caseStudy.title}</h4>
-                  <p>{service.caseStudy.description}</p>
+            {/* Scrollable Content */}
+            <div className="drawer-scroll-content">
+              {/* 1. Big Metrics Section (v13.0) */}
+              <div className="big-metrics-section">
+                <span className="section-tag font-mono">KEY METRICS</span>
+                <div className="big-metrics-grid">
+                  {service.bigMetrics.map((metric, i) => (
+                    <motion.div
+                      key={i}
+                      className="big-metric-card"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.1, type: "spring", stiffness: 200 }}
+                    >
+                      <div className="big-metric-value">
+                        <DrawerCountUp
+                          end={metric.value}
+                          suffix={metric.suffix}
+                          color={metric.color}
+                          decimals={metric.value < 10 ? 1 : 0}
+                        />
+                      </div>
+                      <div className="big-metric-label">{metric.label}</div>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
 
-              {/* Build Steps Section */}
-              <div className="build-steps-section">
+              {/* 2. Case Study Screenshots (v13.0) */}
+              <div className="case-screenshots-section">
+                <span className="section-tag font-mono">CASE STUDY</span>
+                <div className="case-study-header">
+                  <h4>{service.caseStudy.title}</h4>
+                  <p>{service.caseStudy.description}</p>
+                </div>
+                <div className="screenshots-grid">
+                  {service.caseStudy.screenshots.map((shot, i) => (
+                    <motion.div
+                      key={i}
+                      className="screenshot-card"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 + i * 0.1, type: "spring", stiffness: 150 }}
+                    >
+                      <div className="screenshot-placeholder" style={{ borderColor: `${service.badgeColor}40` }}>
+                        <div className="screenshot-icon" style={{ color: service.badgeColor }}>
+                          {i === 0 && <BarChart3 size={32} strokeWidth={1.5} />}
+                          {i === 1 && <Database size={32} strokeWidth={1.5} />}
+                          {i === 2 && <Zap size={32} strokeWidth={1.5} />}
+                        </div>
+                        <span className="screenshot-number font-mono">{String(i + 1).padStart(2, "0")}</span>
+                      </div>
+                      <h5>{shot.title}</h5>
+                      <p>{shot.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 3. Tech Specs (Enhanced v13.0) */}
+              <div className="tech-specs-section-v13">
+                <span className="section-tag font-mono">TECH SPECS</span>
+                <div className="tech-specs-list">
+                  {service.techSpecs.map((spec, i) => (
+                    <motion.div
+                      key={i}
+                      className="tech-spec-row font-mono"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 + i * 0.05 }}
+                    >
+                      <span className="spec-key-v13">{spec.key}</span>
+                      <span className="spec-divider">→</span>
+                      <span className="spec-value-v13" style={{ color: service.badgeColor }}>{spec.value}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 4. Build Process */}
+              <div className="build-process-section">
                 <span className="section-tag font-mono">BUILD PROCESS</span>
-                <div className="build-steps">
+                <div className="build-steps-v13">
                   {service.steps.map((step, i) => {
                     const StepIcon = step.icon;
                     return (
-                      <div key={i} className="build-step">
-                        <div className="step-number font-mono">{String(i + 1).padStart(2, "0")}</div>
-                        <div className="step-icon">
+                      <motion.div
+                        key={i}
+                        className="build-step-v13"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 + i * 0.1, type: "spring" }}
+                      >
+                        <div className="step-number-v13 font-mono" style={{ color: service.badgeColor }}>
+                          {String(i + 1).padStart(2, "0")}
+                        </div>
+                        <div className="step-icon-v13" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
                           <StepIcon size={20} strokeWidth={1.5} />
                         </div>
-                        <h5>{step.title}</h5>
-                        <p>{step.desc}</p>
-                      </div>
+                        <div className="step-content-v13">
+                          <h5>{step.title}</h5>
+                          <p>{step.desc}</p>
+                        </div>
+                      </motion.div>
                     );
                   })}
                 </div>
               </div>
+            </div>
 
-              {/* Tech Specs Section (NEW in v12.0) */}
-              <div className="tech-specs-section">
-                <span className="section-tag font-mono">TECH SPECS</span>
-                <div className="tech-specs-card">
-                  <div className="tech-spec-item font-mono">
-                    <span className="spec-key">Engine:</span>
-                    <span className="spec-value">Hybrid RAG (BM25 + Dense)</span>
-                  </div>
-                  <div className="tech-spec-item font-mono">
-                    <span className="spec-key">Latency:</span>
-                    <span className="spec-value">&lt;1.2s P95</span>
-                  </div>
-                  <div className="tech-spec-item font-mono">
-                    <span className="spec-key">Security:</span>
-                    <span className="spec-value">AES-256, TLS 1.3</span>
-                  </div>
-                  <div className="tech-spec-item font-mono">
-                    <span className="spec-key">Deploy:</span>
-                    <span className="spec-value">8 weeks to production</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Contact Form */}
-              <div className="quick-contact-section">
-                <span className="section-tag font-mono">QUICK CONTACT</span>
-                <form className="quick-form" onSubmit={(e) => e.preventDefault()}>
+            {/* 5. Direct Form (Fixed at bottom) */}
+            <div className="direct-form-section">
+              <form className="direct-form" onSubmit={(e) => e.preventDefault()}>
+                <div className="form-row">
                   <input
                     type="text"
                     placeholder="담당자명"
@@ -252,18 +453,18 @@ const ServiceDrawer = ({
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
-                  <textarea
-                    placeholder={service.formPlaceholder}
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    rows={3}
-                  />
-                  <button type="submit" className="quick-submit" style={{ background: service.badgeColor }}>
-                    {service.ctaText}
-                    <ArrowRight size={16} strokeWidth={1.5} />
-                  </button>
-                </form>
-              </div>
+                </div>
+                <input
+                  type="tel"
+                  placeholder="연락처 (선택)"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                />
+                <button type="submit" className="direct-submit" style={{ background: service.badgeColor }}>
+                  {service.ctaText}
+                  <ArrowRight size={18} strokeWidth={1.5} />
+                </button>
+              </form>
             </div>
           </motion.div>
         </>
@@ -1159,22 +1360,20 @@ export default function RAGLandingPage() {
             </Link>
 
             <div className="nav-links">
-              <a href="#comparison">비교</a>
-              <a href="#proof">성과</a>
+              <a href="#solutions">서비스</a>
               <a href="#security">보안</a>
-              <a href="#contact">문의</a>
             </div>
 
-            <Link href="#contact" className="nav-cta">
+            <button onClick={() => openServiceDrawer("rag")} className="nav-cta">
               무료 AI 진단
               <ArrowRight size={16} strokeWidth={1.5} />
-            </Link>
+            </button>
           </nav>
         </div>
       </header>
 
       {/* NEW HERO: 검증된 RAG 기술 섹션을 최상단 메인 배너로 */}
-      <section className="hero-funnel-section">
+      <section id="solutions" className="hero-funnel-section">
         <div className="container">
           {/* Grid Pattern Background */}
           <div className="grid-pattern" />
@@ -1320,102 +1519,14 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
-      {/* Section: Industry Demo */}
-      <section className="demo-section">
+      {/* v13.0: Logo Cloud (바로 메인 배너 아래) */}
+      <section className="logo-cloud-section">
         <div className="container">
-          <motion.div {...fadeInUp} className="section-header">
-            <span className="section-label font-mono">LIVE DEMO</span>
-            <h2 className="section-title">
-              산업별 <span className="text-cyan">RAG 데모</span>
-            </h2>
-            <p className="section-subtitle">
-              내 데이터도 될까? 실시간으로 확인해보세요.
-            </p>
-          </motion.div>
-
-          <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="demo-wrapper">
-            <IndustryDemo />
-          </motion.div>
-
-          {/* Comparison UI */}
-          <motion.div {...fadeInUp} transition={{ delay: 0.4 }}>
-            <ComparisonSection />
-          </motion.div>
+          <TechLogoCloud />
         </div>
       </section>
 
-      {/* Section 3: DevGym Proof (Bento Grid) */}
-      <section id="proof" className="proof-section">
-        <div className="container">
-          <motion.div {...fadeInUp} className="section-header">
-            <span className="section-label font-mono">PROVEN RESULTS</span>
-            <h2 className="section-title">
-              <span className="text-green">DevGym</span>에서 검증된
-              <br />
-              실전 성과
-            </h2>
-            <p className="section-subtitle">
-              데이터만 교체하면 8주 내 금융, 의료, 제조 맞춤형 서비스 완성
-            </p>
-          </motion.div>
-
-          <div className="bento-grid">
-            <BentoProofItem
-              icon={Users}
-              metric={100000}
-              metricSuffix="+"
-              label="활성 회원"
-              desc="피트니스 회원 이탈 예측"
-              hoverText="→ 금융 고객 이탈 예측으로 확장"
-              className="bento-large"
-              achievementTag="VERIFIED"
-            />
-
-            <BentoProofItem
-              icon={Target}
-              metric={92}
-              metricSuffix="%"
-              label="답변 정확도"
-              desc="운동 상담 AI"
-              hoverText="→ 의료 상담 AI로 확장"
-              className=""
-              achievementTag="92% Accuracy"
-            />
-
-            <BentoProofItem
-              icon={Zap}
-              metric={1.2}
-              metricSuffix="s"
-              label="평균 응답시간"
-              decimals={1}
-              className=""
-              achievementTag="1.2s Response"
-            />
-
-            <BentoProofItem
-              icon={BarChart3}
-              metric={42}
-              metricSuffix="%"
-              label="회원 이탈률 감소"
-              desc="AI 개인화 추천"
-              hoverText="→ 고객 LTV 증가 전략으로 확장"
-              className="bento-wide"
-              achievementTag="ROI 300%"
-            />
-
-            <BentoProofItem
-              icon={Clock}
-              metric={8}
-              metricSuffix="주"
-              label="구축 기간"
-              className=""
-              achievementTag="8 Weeks"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Section 4: Security Layer (NEW) */}
+      {/* Security Section */}
       <section id="security" className="security-section">
         <div className="container">
           <motion.div {...fadeInUp} className="section-header">
@@ -1461,163 +1572,6 @@ export default function RAGLandingPage() {
             <ShieldCheck size={20} strokeWidth={1.5} />
             <span>SOC 2 Type II 준수 | ISO 27001 인증 예정</span>
           </motion.div>
-
-          {/* Tech Logo Cloud */}
-          <TechLogoCloud />
-        </div>
-      </section>
-
-      {/* Section 5: RAG Flow */}
-      <section id="process" className="flow-section">
-        <div className="container">
-          <motion.div {...fadeInUp} className="section-header">
-            <span className="section-label font-mono">HOW IT WORKS</span>
-            <h2 className="section-title">
-              <span className="text-cyan">RAG</span> 파이프라인
-              <br />
-              작동 원리
-            </h2>
-          </motion.div>
-
-          <div className="flow-grid">
-            <FlowStep
-              number={1}
-              icon={FileText}
-              title="데이터 유입"
-              description="PDF, 문서, DB 등 기업 데이터를 안전하게 수집"
-            />
-            <div className="flow-connector">
-              <ChevronRight size={24} strokeWidth={1.5} />
-            </div>
-            <FlowStep
-              number={2}
-              icon={Database}
-              title="벡터화"
-              description="텍스트를 AI가 이해할 수 있는 벡터로 변환"
-            />
-            <div className="flow-connector">
-              <ChevronRight size={24} strokeWidth={1.5} />
-            </div>
-            <FlowStep
-              number={3}
-              icon={Brain}
-              title="지식 추출 (RAG)"
-              description="질문과 관련된 정보를 실시간으로 검색"
-            />
-            <div className="flow-connector">
-              <ChevronRight size={24} strokeWidth={1.5} />
-            </div>
-            <FlowStep
-              number={4}
-              icon={Bot}
-              title="AI 답변"
-              description="출처와 함께 정확한 답변 생성"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Section 6: Trust Metrics */}
-      <section className="trust-section">
-        <div className="container">
-          <motion.div {...fadeInUp} className="section-header">
-            <span className="section-label font-mono">TRUST</span>
-            <h2 className="section-title">
-              고객사가 선택한
-              <br />
-              <span className="text-cyan">신뢰의 이유</span>
-            </h2>
-          </motion.div>
-
-          <div className="trust-grid">
-            <motion.div {...fadeInUp} className="trust-card">
-              <Shield size={32} strokeWidth={1.5} className="text-cyan" />
-              <h3>데이터 보안</h3>
-              <p>
-                AWS 기반 엔터프라이즈급 보안
-                <br />
-                데이터는 귀사 서버에만 저장
-              </p>
-            </motion.div>
-
-            <motion.div {...fadeInUp} className="trust-card">
-              <Clock size={32} strokeWidth={1.5} className="text-green" />
-              <h3>24시간 지원</h3>
-              <p>
-                전담 엔지니어 배정
-                <br />
-                실시간 모니터링 및 대응
-              </p>
-            </motion.div>
-
-            <motion.div {...fadeInUp} className="trust-card">
-              <CheckCircle size={32} strokeWidth={1.5} className="text-crimson" />
-              <h3>성과 보장</h3>
-              <p>
-                KPI 미달성 시 추가 개발 무상
-                <br />
-                명확한 성과 측정 기준 제시
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Testimonial */}
-          <motion.div {...fadeInUp} className="testimonial">
-            <div className="testimonial-content">
-              <p>
-                &ldquo;DevGym의 RAG 시스템 도입 후 CS 문의가{" "}
-                <span className="text-cyan font-mono">60%</span> 감소했고, 회원
-                만족도는{" "}
-                <span className="text-green font-mono">35%</span>{" "}
-                상승했습니다. 데이터 기반 의사결정이 가능해졌어요.&rdquo;
-              </p>
-              <div className="testimonial-author">
-                <div className="author-avatar">K</div>
-                <div className="author-info">
-                  <span className="author-name">김** 대표</span>
-                  <span className="author-company">피트니스 프랜차이즈 A사</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Section 7: CTA Form */}
-      <section id="contact" className="cta-section">
-        <div className="container">
-          <div className="cta-grid">
-            <motion.div {...fadeInUp} className="cta-content">
-              <span className="section-label font-mono">GET STARTED</span>
-              <h2 className="cta-title">
-                지금 바로
-                <br />
-                <span className="text-cyan">무료 컨설팅</span>을 받아보세요
-              </h2>
-              <p className="cta-subtitle">
-                귀사의 데이터와 목표에 맞는 RAG 솔루션을 제안해 드립니다.
-              </p>
-
-              <div className="cta-benefits">
-                <div className="benefit-item">
-                  <CheckCircle size={18} strokeWidth={1.5} className="text-green" />
-                  <span>24시간 내 회신</span>
-                </div>
-                <div className="benefit-item">
-                  <CheckCircle size={18} strokeWidth={1.5} className="text-green" />
-                  <span>계약 의무 없음</span>
-                </div>
-                <div className="benefit-item">
-                  <CheckCircle size={18} strokeWidth={1.5} className="text-green" />
-                  <span>DevGym PDF 가이드 즉시 제공</span>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
-              <ConsultationForm />
-            </motion.div>
-          </div>
         </div>
       </section>
 
@@ -1634,10 +1588,8 @@ export default function RAGLandingPage() {
             </div>
 
             <div className="footer-links">
-              <a href="#comparison">비교</a>
-              <a href="#proof">성과</a>
+              <a href="#solutions">서비스</a>
               <a href="#security">보안</a>
-              <a href="#contact">문의</a>
             </div>
 
             <div className="footer-contact">
@@ -4256,6 +4208,462 @@ export default function RAGLandingPage() {
 
           .hero-stats-row .stat-item {
             width: 100%;
+          }
+        }
+
+        /* ===== v13.0 Enhanced Drawer Styles ===== */
+
+        /* Backdrop with stronger blur */
+        .drawer-overlay-v13 {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.7);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          z-index: 1100;
+        }
+
+        /* Service Drawer v13 */
+        .service-drawer-v13 {
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 560px;
+          max-width: 100vw;
+          height: 100vh;
+          background: linear-gradient(
+            180deg,
+            rgba(10, 10, 15, 0.98) 0%,
+            rgba(18, 18, 26, 0.99) 100%
+          );
+          border-left: 1px solid var(--border-color);
+          z-index: 1200;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .service-drawer-v13.mobile-fullscreen {
+          width: 100vw;
+          border-left: none;
+        }
+
+        .drawer-header-v13 {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 24px;
+          border-bottom: 1px solid var(--border-color);
+          background: var(--bg-secondary);
+          flex-shrink: 0;
+        }
+
+        .drawer-icon-v13 {
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 14px;
+        }
+
+        .drawer-header-v13 h3 {
+          font-size: 1.2rem;
+          font-weight: 700;
+        }
+
+        .drawer-close-v13 {
+          width: 44px;
+          height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .drawer-close-v13:hover {
+          border-color: var(--cyan);
+          color: var(--cyan);
+          transform: scale(1.05);
+        }
+
+        .drawer-scroll-content {
+          flex: 1;
+          overflow-y: auto;
+          padding: 24px;
+        }
+
+        /* Big Metrics Grid (v13.0) */
+        .big-metrics-section {
+          margin-bottom: 32px;
+        }
+
+        .big-metrics-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
+
+        .big-metric-card {
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          padding: 24px;
+          text-align: center;
+          transition: all 0.3s;
+        }
+
+        .big-metric-card:hover {
+          border-color: var(--cyan);
+          transform: translateY(-2px);
+        }
+
+        .big-metric-value {
+          font-size: 2.5rem;
+          font-weight: 700;
+          line-height: 1;
+          margin-bottom: 8px;
+        }
+
+        .big-metric-label {
+          font-size: 0.85rem;
+          color: var(--text-tertiary);
+        }
+
+        /* Case Screenshots (v13.0) */
+        .case-screenshots-section {
+          margin-bottom: 32px;
+        }
+
+        .case-study-header {
+          margin-bottom: 20px;
+        }
+
+        .case-study-header h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin-bottom: 8px;
+        }
+
+        .case-study-header p {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+        }
+
+        .screenshots-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+
+        .screenshot-card {
+          text-align: center;
+        }
+
+        .screenshot-placeholder {
+          aspect-ratio: 4/3;
+          background: var(--bg-tertiary);
+          border: 2px dashed;
+          border-radius: 12px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 12px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .screenshot-placeholder::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            135deg,
+            rgba(0, 191, 255, 0.03) 0%,
+            transparent 50%
+          );
+        }
+
+        .screenshot-icon {
+          opacity: 0.5;
+        }
+
+        .screenshot-number {
+          position: absolute;
+          top: 8px;
+          left: 8px;
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+        }
+
+        .screenshot-card h5 {
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .screenshot-card p {
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+          line-height: 1.4;
+        }
+
+        /* Tech Specs v13 */
+        .tech-specs-section-v13 {
+          margin-bottom: 32px;
+        }
+
+        .tech-specs-list {
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 16px 20px;
+        }
+
+        .tech-spec-row {
+          display: flex;
+          align-items: center;
+          padding: 12px 0;
+          border-bottom: 1px solid var(--border-color);
+          font-size: 0.85rem;
+        }
+
+        .tech-spec-row:last-child {
+          border-bottom: none;
+        }
+
+        .spec-key-v13 {
+          color: var(--text-tertiary);
+          width: 100px;
+          flex-shrink: 0;
+        }
+
+        .spec-divider {
+          color: var(--text-tertiary);
+          margin: 0 12px;
+        }
+
+        .spec-value-v13 {
+          flex: 1;
+        }
+
+        /* Build Process v13 */
+        .build-process-section {
+          margin-bottom: 24px;
+        }
+
+        .build-steps-v13 {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .build-step-v13 {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          padding: 16px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          transition: all 0.2s;
+        }
+
+        .build-step-v13:hover {
+          border-color: var(--cyan);
+        }
+
+        .step-number-v13 {
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        .step-icon-v13 {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 10px;
+          flex-shrink: 0;
+        }
+
+        .step-content-v13 h5 {
+          font-size: 0.95rem;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .step-content-v13 p {
+          font-size: 0.8rem;
+          color: var(--text-tertiary);
+        }
+
+        /* Direct Form (Fixed at bottom) */
+        .direct-form-section {
+          padding: 20px 24px;
+          background: var(--bg-secondary);
+          border-top: 1px solid var(--border-color);
+          flex-shrink: 0;
+        }
+
+        .direct-form {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+        }
+
+        .direct-form input {
+          width: 100%;
+          padding: 14px 16px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          color: var(--text-primary);
+          font-size: 0.9rem;
+          font-family: inherit;
+          transition: border-color 0.2s;
+        }
+
+        .direct-form input:focus {
+          outline: none;
+          border-color: var(--cyan);
+        }
+
+        .direct-form input::placeholder {
+          color: var(--text-tertiary);
+        }
+
+        .direct-submit {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          width: 100%;
+          padding: 16px;
+          border: none;
+          border-radius: 12px;
+          color: white;
+          font-size: 1rem;
+          font-weight: 600;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .direct-submit:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Logo Cloud Section */
+        .logo-cloud-section {
+          padding: 60px 0;
+          position: relative;
+          z-index: 1;
+          background: var(--bg-secondary);
+        }
+
+        /* Enhanced Glow Effect (v13.0) */
+        .text-glow {
+          color: var(--cyan);
+          text-shadow:
+            0 0 10px rgba(0, 191, 255, 0.8),
+            0 0 20px rgba(0, 191, 255, 0.6),
+            0 0 30px rgba(0, 191, 255, 0.4),
+            0 0 40px rgba(0, 191, 255, 0.2);
+          animation: glow-pulse-v13 2.5s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse-v13 {
+          0%, 100% {
+            text-shadow:
+              0 0 10px rgba(0, 191, 255, 0.8),
+              0 0 20px rgba(0, 191, 255, 0.6),
+              0 0 30px rgba(0, 191, 255, 0.4),
+              0 0 40px rgba(0, 191, 255, 0.2);
+          }
+          50% {
+            text-shadow:
+              0 0 15px rgba(0, 191, 255, 1),
+              0 0 30px rgba(0, 191, 255, 0.8),
+              0 0 45px rgba(0, 191, 255, 0.6),
+              0 0 60px rgba(0, 191, 255, 0.4);
+          }
+        }
+
+        /* Nav CTA as button */
+        .nav-cta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 20px;
+          background: var(--crimson);
+          color: white;
+          text-decoration: none;
+          border: none;
+          border-radius: 8px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+          background: #d63d55;
+          transform: translateY(-2px);
+        }
+
+        /* v13.0 Mobile Responsive */
+        @media (max-width: 768px) {
+          .big-metrics-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+          }
+
+          .big-metric-value {
+            font-size: 2rem;
+          }
+
+          .screenshots-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          .screenshot-placeholder {
+            aspect-ratio: 16/9;
+          }
+
+          .form-row {
+            grid-template-columns: 1fr;
+          }
+
+          .drawer-scroll-content {
+            padding: 20px 16px;
+          }
+
+          .direct-form-section {
+            padding: 16px;
+          }
+
+          .logo-cloud-section {
+            padding: 40px 0;
           }
         }
       `}</style>
