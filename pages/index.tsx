@@ -380,73 +380,98 @@ const ServicePopup = ({
         <>
           {/* Backdrop with blur */}
           <motion.div
-            className="popup-overlay-v14"
+            className="popup-overlay-v15"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={onClose}
           />
-          {/* Centered Modal */}
+          {/* Centered Modal Container - v15.5 Premium Report Style */}
           <motion.div
-            className={`service-popup-v14 ${isMobile ? "mobile-fullscreen" : ""}`}
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="popup-center-wrapper"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            {/* Header */}
-            <div className="popup-header-v14">
+            <motion.div
+              className={`service-popup-v15 ${isMobile ? "mobile-fullscreen" : ""}`}
+              initial={{ scale: 0.9, y: 30 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            >
+            {/* Compact Header */}
+            <div className="popup-header-v15">
               <div className="popup-title-group">
-                <div className="popup-icon" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
-                  <Icon size={28} strokeWidth={1.5} />
+                <div className="popup-icon-v15" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
+                  <Icon size={22} strokeWidth={1.5} />
                 </div>
                 <div>
                   <h2>{service.title}</h2>
-                  <p>{service.subtitle}</p>
+                  <p className="font-mono">{service.badge}</p>
                 </div>
               </div>
-              <button onClick={onClose} className="popup-close">
-                <X size={24} strokeWidth={1.5} />
+              <button onClick={onClose} className="popup-close-v15">
+                <X size={20} strokeWidth={2} />
               </button>
             </div>
 
-            {/* Two Column Layout */}
-            <div className="popup-body">
-              {/* Left Column: Gauges & Metrics */}
-              <div className="popup-left-col">
-                <div className="gauge-section">
-                  <span className="section-tag font-mono">KEY METRICS</span>
-                  <div className="gauges-grid">
-                    {service.bigMetrics.slice(0, 2).map((metric, i) => (
+            {/* Two Column Layout: Left=Visual, Right=Data */}
+            <div className="popup-body-v15">
+              {/* Left Column: Case Visual */}
+              <div className="popup-visual-col">
+                <div className="case-visual-card">
+                  <div className="case-visual-header">
+                    <span className="visual-tag font-mono">CASE STUDY</span>
+                    <span className="visual-badge font-mono" style={{ color: service.badgeColor }}>{service.caseStudy.metric}</span>
+                  </div>
+                  <h3 className="case-visual-title">{service.caseStudy.title}</h3>
+
+                  {/* Screenshot Grid */}
+                  <div className="case-screenshots-grid">
+                    {service.caseStudy.screenshots.map((shot, i) => (
                       <motion.div
                         key={i}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.1 + i * 0.15, type: "spring", stiffness: 200 }}
+                        className="screenshot-card"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15 + i * 0.1, type: "spring" }}
                       >
-                        <CircleGauge
-                          value={metric.value}
-                          maxValue={metric.value > 100 ? metric.value * 1.2 : 100}
-                          color={metric.color}
-                          size={100}
-                          strokeWidth={10}
-                          label={metric.label}
-                          suffix={metric.suffix}
-                        />
+                        <div className="screenshot-visual" style={{ borderColor: `${service.badgeColor}30` }}>
+                          <div className="screenshot-icon-large" style={{ color: service.badgeColor }}>
+                            {i === 0 && <BarChart3 size={28} strokeWidth={1.5} />}
+                            {i === 1 && <Database size={28} strokeWidth={1.5} />}
+                            {i === 2 && <Zap size={28} strokeWidth={1.5} />}
+                          </div>
+                        </div>
+                        <div className="screenshot-info">
+                          <span className="screenshot-title">{shot.title}</span>
+                          <span className="screenshot-desc">{shot.desc}</span>
+                        </div>
                       </motion.div>
                     ))}
                   </div>
-                  <div className="mini-metrics">
-                    {service.bigMetrics.slice(2).map((metric, i) => (
+                </div>
+              </div>
+
+              {/* Right Column: Data-Dense Info */}
+              <div className="popup-data-col">
+                {/* Performance Metrics */}
+                <div className="data-section metrics-section">
+                  <div className="data-section-header">
+                    <span className="data-tag font-mono">성과 지표</span>
+                  </div>
+                  <div className="metrics-grid-v15">
+                    {service.bigMetrics.map((metric, i) => (
                       <motion.div
                         key={i}
-                        className="mini-metric"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 + i * 0.1 }}
+                        className="metric-card-v15"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.1 + i * 0.08, type: "spring" }}
                       >
-                        <span className="mini-value font-mono" style={{ color: metric.color }}>
+                        <span className="metric-value-v15 font-mono" style={{ color: metric.color }}>
                           <DrawerCountUp
                             end={metric.value}
                             suffix={metric.suffix}
@@ -454,93 +479,80 @@ const ServicePopup = ({
                             decimals={metric.value < 10 ? 1 : 0}
                           />
                         </span>
-                        <span className="mini-label">{metric.label}</span>
+                        <span className="metric-label-v15">{metric.label}</span>
                       </motion.div>
                     ))}
                   </div>
                 </div>
 
-                {/* Tech Specs */}
-                <div className="popup-tech-specs">
-                  <span className="section-tag font-mono">TECH SPECS</span>
-                  <div className="specs-list">
+                {/* Technical Solution */}
+                <div className="data-section tech-section">
+                  <div className="data-section-header">
+                    <span className="data-tag font-mono">기술적 해결책</span>
+                  </div>
+                  <div className="tech-list-v15">
                     {service.techSpecs.map((spec, i) => (
                       <motion.div
                         key={i}
-                        className="spec-item font-mono"
+                        className="tech-item-v15"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.4 + i * 0.05 }}
+                        transition={{ delay: 0.25 + i * 0.05 }}
                       >
-                        <span className="spec-key">{spec.key}</span>
-                        <span className="spec-arrow">→</span>
-                        <span className="spec-val" style={{ color: service.badgeColor }}>{spec.value}</span>
+                        <span className="tech-key font-mono">{spec.key}</span>
+                        <span className="tech-val font-mono" style={{ color: service.badgeColor }}>{spec.value}</span>
                       </motion.div>
                     ))}
                   </div>
                 </div>
-              </div>
 
-              {/* Right Column: Screenshots & Form */}
-              <div className="popup-right-col">
-                <div className="case-section">
-                  <span className="section-tag font-mono">CASE STUDY</span>
-                  <h4>{service.caseStudy.title}</h4>
-                  <p className="case-desc">{service.caseStudy.description}</p>
-                  <div className="screenshots-row">
-                    {service.caseStudy.screenshots.map((shot, i) => (
-                      <motion.div
-                        key={i}
-                        className="screenshot-item"
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 + i * 0.1, type: "spring" }}
-                      >
-                        <div className="screenshot-box" style={{ borderColor: `${service.badgeColor}50` }}>
-                          <div className="shot-icon" style={{ color: service.badgeColor }}>
-                            {i === 0 && <BarChart3 size={24} strokeWidth={1.5} />}
-                            {i === 1 && <Database size={24} strokeWidth={1.5} />}
-                            {i === 2 && <Zap size={24} strokeWidth={1.5} />}
+                {/* Expected Outcome */}
+                <div className="data-section outcome-section">
+                  <div className="data-section-header">
+                    <span className="data-tag font-mono">기대 효과</span>
+                  </div>
+                  <div className="outcome-list">
+                    {service.steps.map((step, i) => {
+                      const StepIcon = step.icon;
+                      return (
+                        <motion.div
+                          key={i}
+                          className="outcome-item"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.35 + i * 0.05 }}
+                        >
+                          <div className="outcome-icon" style={{ color: service.badgeColor }}>
+                            <StepIcon size={16} strokeWidth={1.5} />
                           </div>
-                        </div>
-                        <span className="shot-title">{shot.title}</span>
-                      </motion.div>
-                    ))}
+                          <div className="outcome-text">
+                            <span className="outcome-title">{step.title}</span>
+                            <span className="outcome-desc">{step.desc}</span>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
                   </div>
-                </div>
-
-                {/* Direct Form */}
-                <div className="popup-form-section">
-                  <span className="section-tag font-mono">GET STARTED</span>
-                  <form className="popup-form" onSubmit={(e) => e.preventDefault()}>
-                    <div className="form-inputs">
-                      <input
-                        type="text"
-                        placeholder="담당자명"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      />
-                      <input
-                        type="email"
-                        placeholder="이메일"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      />
-                      <input
-                        type="tel"
-                        placeholder="연락처"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      />
-                    </div>
-                    <button type="submit" className="popup-submit" style={{ background: service.badgeColor }}>
-                      {service.ctaText}
-                      <ArrowRight size={18} strokeWidth={1.5} />
-                    </button>
-                  </form>
                 </div>
               </div>
             </div>
+
+            {/* Bottom CTA */}
+            <div className="popup-cta-bar">
+              <button
+                type="button"
+                className="popup-cta-button"
+                style={{ background: `linear-gradient(135deg, ${service.badgeColor}, ${service.badgeColor}dd)` }}
+                onClick={() => {
+                  onClose();
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <span>{service.ctaText}</span>
+                <ArrowRight size={20} strokeWidth={2} />
+              </button>
+            </div>
+            </motion.div>
           </motion.div>
         </>
       )}
@@ -1436,7 +1448,8 @@ export default function RAGLandingPage() {
 
             <div className="nav-links">
               <a href="#solutions">서비스</a>
-              <a href="#security">보안</a>
+              <a href="#architecture">기술</a>
+              <a href="#identity">회사소개</a>
             </div>
 
             <button onClick={() => openServicePopup("rag")} className="nav-cta">
@@ -1596,15 +1609,18 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
-      {/* v14.0: Professional RAG Pipeline Section */}
-      <section className="pipeline-section">
+      {/* v15.5: Our RAG Architecture Section */}
+      <section id="architecture" className="pipeline-section">
         <div className="pipeline-circuit-bg" />
         <div className="container">
           <motion.div {...fadeInUp} className="section-header">
-            <span className="section-label font-mono">PROFESSIONAL RAG PIPELINE</span>
+            <span className="section-label font-mono">OUR RAG ARCHITECTURE</span>
             <h2 className="section-title">
-              <span className="text-cyan">데이터</span>가 답변이 되기까지
+              <span className="text-cyan">데이터</span>가 <span className="text-green">답변</span>이 되기까지
             </h2>
+            <p className="section-subtitle">
+              Embedding → Vector DB → Reranking → LLM 응답 생성까지, 검증된 파이프라인
+            </p>
           </motion.div>
 
           {/* Desktop Pipeline (Horizontal) */}
@@ -1870,6 +1886,95 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
+      {/* v15.5: Company Identity Section */}
+      <section id="identity" className="identity-section">
+        <div className="identity-glow-bg" />
+        <div className="container">
+          <motion.div
+            {...fadeInUp}
+            className="identity-content"
+          >
+            <div className="identity-badge font-mono">
+              <Sparkles size={14} strokeWidth={2} />
+              <span>VISION-MAKERS IDENTITY</span>
+            </div>
+
+            <h2 className="identity-headline">
+              <span className="text-cyan">RAG 기반 LLM</span> 서비스
+              <br />
+              외주 <span className="text-glow">전문</span> 기업
+            </h2>
+
+            <p className="identity-subtext">
+              일반 외주사와는 다릅니다. 10만 유저가 검증한 기술력으로 승부합니다.
+            </p>
+
+            {/* 3 Key Differentiators */}
+            <div className="identity-strengths">
+              <motion.div
+                className="strength-card"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1, type: "spring" }}
+              >
+                <div className="strength-icon" style={{ color: "#48BB78" }}>
+                  <CheckCircle size={32} strokeWidth={1.5} />
+                </div>
+                <h4>검증된 엔진</h4>
+                <p>DevGym 10만 회원이 실사용 중인 RAG 엔진. 정확도 92%, 보안 99.9%.</p>
+                <span className="strength-metric font-mono">100,000+ Users</span>
+              </motion.div>
+
+              <motion.div
+                className="strength-card"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, type: "spring" }}
+              >
+                <div className="strength-icon" style={{ color: "#00BFFF" }}>
+                  <Zap size={32} strokeWidth={1.5} />
+                </div>
+                <h4>빠른 구축</h4>
+                <p>PoC 2주, 본 구축 8주 내 프로덕션 배포. 기존 시스템과 원활한 통합.</p>
+                <span className="strength-metric font-mono">8 Weeks MVP</span>
+              </motion.div>
+
+              <motion.div
+                className="strength-card"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, type: "spring" }}
+              >
+                <div className="strength-icon" style={{ color: "#E94560" }}>
+                  <Shield size={32} strokeWidth={1.5} />
+                </div>
+                <h4>보안 격리</h4>
+                <p>고객별 독립 벡터 DB, AES-256 암호화, LLM 학습 데이터 사용 완전 차단.</p>
+                <span className="strength-metric font-mono">SOC 2 Compliant</span>
+              </motion.div>
+            </div>
+
+            {/* CTA */}
+            <motion.div
+              {...fadeInUp}
+              className="identity-cta"
+            >
+              <button
+                onClick={() => openServicePopup("rag")}
+                className="identity-cta-button"
+              >
+                <span>무료 기술 진단 받기</span>
+                <ArrowRight size={20} strokeWidth={2} />
+              </button>
+              <span className="identity-cta-note font-mono">24시간 내 전문가 회신</span>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="rag-footer">
         <div className="container">
@@ -1884,7 +1989,8 @@ export default function RAGLandingPage() {
 
             <div className="footer-links">
               <a href="#solutions">서비스</a>
-              <a href="#security">보안</a>
+              <a href="#architecture">기술</a>
+              <a href="#identity">회사소개</a>
             </div>
 
             <div className="footer-contact">
@@ -3802,6 +3908,154 @@ export default function RAGLandingPage() {
           transform: scale(0.98);
         }
 
+        /* ===== v15.5 Identity Section ===== */
+        .identity-section {
+          padding: 120px 0;
+          position: relative;
+          background: var(--bg-primary);
+          overflow: hidden;
+        }
+
+        .identity-glow-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background:
+            radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0, 191, 255, 0.08) 0%, transparent 60%),
+            radial-gradient(ellipse 40% 30% at 20% 80%, rgba(72, 187, 120, 0.05) 0%, transparent 50%),
+            radial-gradient(ellipse 40% 30% at 80% 80%, rgba(233, 69, 96, 0.05) 0%, transparent 50%);
+          pointer-events: none;
+        }
+
+        .identity-content {
+          position: relative;
+          z-index: 1;
+          text-align: center;
+          max-width: 900px;
+          margin: 0 auto;
+        }
+
+        .identity-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          background: var(--cyan-dim);
+          border: 1px solid rgba(0, 191, 255, 0.3);
+          border-radius: 30px;
+          color: var(--cyan);
+          font-size: 0.7rem;
+          letter-spacing: 0.1em;
+          margin-bottom: 24px;
+        }
+
+        .identity-headline {
+          font-size: 2.8rem;
+          font-weight: 800;
+          line-height: 1.3;
+          margin-bottom: 20px;
+        }
+
+        .identity-subtext {
+          font-size: 1.1rem;
+          color: var(--text-secondary);
+          max-width: 600px;
+          margin: 0 auto 48px;
+          line-height: 1.7;
+        }
+
+        .identity-strengths {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+          margin-bottom: 48px;
+        }
+
+        .strength-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 32px 24px;
+          text-align: center;
+          transition: all 0.3s ease;
+        }
+
+        .strength-card:hover {
+          border-color: var(--cyan);
+          transform: translateY(-5px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .strength-icon {
+          width: 64px;
+          height: 64px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--bg-tertiary);
+          border-radius: 16px;
+          margin: 0 auto 20px;
+        }
+
+        .strength-card h4 {
+          font-size: 1.2rem;
+          font-weight: 700;
+          margin-bottom: 12px;
+        }
+
+        .strength-card p {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+          margin-bottom: 16px;
+        }
+
+        .strength-metric {
+          display: inline-block;
+          padding: 6px 14px;
+          background: var(--bg-tertiary);
+          border-radius: 20px;
+          color: var(--cyan);
+          font-size: 0.75rem;
+          letter-spacing: 0.05em;
+        }
+
+        .identity-cta {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .identity-cta-button {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 16px 40px;
+          background: linear-gradient(135deg, var(--cyan) 0%, #0099cc 100%);
+          border: none;
+          border-radius: 14px;
+          color: white;
+          font-size: 1.1rem;
+          font-weight: 700;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 20px rgba(0, 191, 255, 0.3);
+        }
+
+        .identity-cta-button:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 30px rgba(0, 191, 255, 0.4);
+        }
+
+        .identity-cta-note {
+          font-size: 0.8rem;
+          color: var(--text-tertiary);
+        }
+
         /* Footer */
         .rag-footer {
           padding: 60px 0 40px;
@@ -4962,28 +5216,37 @@ export default function RAGLandingPage() {
           }
         }
 
-        /* ===== v14.0 Popup Modal Styles ===== */
+        /* ===== v15.5 Premium Report Popup Styles ===== */
 
-        .popup-overlay-v14 {
+        .popup-overlay-v15 {
           position: fixed;
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0, 0, 0, 0.8);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
+          background: rgba(0, 0, 0, 0.85);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
           z-index: 1100;
         }
 
-        .service-popup-v14 {
+        .popup-center-wrapper {
           position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 94%;
-          max-width: 920px;
-          max-height: 85vh;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1200;
+          padding: 20px;
+        }
+
+        .service-popup-v15 {
+          width: 100%;
+          max-width: 900px;
+          max-height: calc(100vh - 40px);
           background: linear-gradient(
             180deg,
             rgba(10, 10, 15, 0.98) 0%,
@@ -4991,314 +5254,337 @@ export default function RAGLandingPage() {
           );
           border: 1px solid var(--border-color);
           border-radius: 20px;
-          z-index: 1200;
           display: flex;
           flex-direction: column;
           overflow: hidden;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
         }
 
-        .service-popup-v14.mobile-fullscreen {
+        .service-popup-v15.mobile-fullscreen {
           width: 100%;
           height: 100%;
           max-width: 100%;
           max-height: 100%;
           border-radius: 0;
-          top: 0;
-          left: 0;
-          transform: none;
         }
 
-        .popup-header-v14 {
+        .popup-center-wrapper:has(.mobile-fullscreen) {
+          padding: 0;
+        }
+
+        /* v15.5 Header */
+        .popup-header-v15 {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 16px 24px;
+          padding: 16px 20px;
           border-bottom: 1px solid var(--border-color);
           background: var(--bg-secondary);
           flex-shrink: 0;
         }
 
-        .popup-title-group {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-        }
-
-        .popup-icon {
-          width: 44px;
-          height: 44px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 12px;
-        }
-
-        .popup-header-v14 h2 {
-          font-size: 1.25rem;
-          font-weight: 700;
-          margin-bottom: 2px;
-        }
-
-        .popup-header-v14 p {
-          font-size: 0.9rem;
-          color: var(--text-tertiary);
-        }
-
-        .popup-close {
+        .popup-icon-v15 {
           width: 40px;
           height: 40px;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-color);
           border-radius: 10px;
+        }
+
+        .popup-header-v15 h2 {
+          font-size: 1.15rem;
+          font-weight: 700;
+          margin-bottom: 2px;
+        }
+
+        .popup-header-v15 p {
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+          letter-spacing: 0.05em;
+        }
+
+        .popup-close-v15 {
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: transparent;
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
           color: var(--text-secondary);
           cursor: pointer;
           transition: all 0.2s;
         }
 
-        .popup-close:hover {
-          border-color: var(--cyan);
-          color: var(--cyan);
-          transform: scale(1.05);
+        .popup-close-v15:hover {
+          border-color: var(--crimson);
+          color: var(--crimson);
+          background: rgba(233, 69, 96, 0.1);
         }
 
-        .popup-body {
+        /* v15.5 Body: Two Column Layout */
+        .popup-body-v15 {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 20px;
-          padding: 20px;
-          overflow-y: auto;
+          gap: 0;
           flex: 1;
           min-height: 0;
+          overflow: hidden;
         }
 
-        .popup-left-col,
-        .popup-right-col {
+        /* Left: Visual Column */
+        .popup-visual-col {
+          padding: 20px;
+          background: var(--bg-primary);
+          border-right: 1px solid var(--border-color);
+          overflow-y: auto;
+        }
+
+        .case-visual-card {
+          height: 100%;
           display: flex;
           flex-direction: column;
-          gap: 16px;
         }
 
-        /* Gauge Section */
-        .gauge-section {
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-color);
-          border-radius: 16px;
-          padding: 16px;
-        }
-
-        .gauges-grid {
+        .case-visual-header {
           display: flex;
-          justify-content: center;
-          gap: 20px;
-          margin-top: 12px;
-        }
-
-        .circle-gauge {
-          position: relative;
-          display: flex;
+          justify-content: space-between;
           align-items: center;
-          justify-content: center;
-        }
-
-        .gauge-svg {
-          transform: rotate(0deg);
-        }
-
-        .gauge-content {
-          position: absolute;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .gauge-value {
-          font-size: 1.4rem;
-          font-weight: 700;
-          line-height: 1;
-        }
-
-        .gauge-label {
-          font-size: 0.7rem;
-          color: var(--text-tertiary);
-          margin-top: 2px;
-        }
-
-        .mini-metrics {
-          display: flex;
-          justify-content: center;
-          gap: 16px;
-          margin-top: 12px;
-          padding-top: 12px;
-          border-top: 1px solid var(--border-color);
-        }
-
-        .mini-metric {
-          text-align: center;
-        }
-
-        .mini-value {
-          font-size: 1.2rem;
-          font-weight: 700;
-          display: block;
-        }
-
-        .mini-label {
-          font-size: 0.7rem;
-          color: var(--text-tertiary);
-        }
-
-        /* Popup Tech Specs */
-        .popup-tech-specs {
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-color);
-          border-radius: 12px;
-          padding: 14px;
-        }
-
-        .specs-list {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          margin-top: 8px;
-        }
-
-        .spec-item {
-          display: flex;
-          align-items: center;
-          font-size: 0.8rem;
-        }
-
-        .spec-key {
-          color: var(--text-tertiary);
-          width: 80px;
-          flex-shrink: 0;
-        }
-
-        .spec-arrow {
-          color: var(--text-tertiary);
-          margin: 0 8px;
-        }
-
-        .spec-val {
-          flex: 1;
-        }
-
-        /* Case Section */
-        .case-section {
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-color);
-          border-radius: 16px;
-          padding: 16px;
-        }
-
-        .case-section h4 {
-          font-size: 1rem;
-          font-weight: 600;
-          margin: 8px 0 6px;
-        }
-
-        .case-desc {
-          font-size: 0.85rem;
-          color: var(--text-secondary);
-          line-height: 1.5;
           margin-bottom: 12px;
         }
 
-        .screenshots-row {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 8px;
+        .visual-tag {
+          font-size: 0.65rem;
+          color: var(--text-tertiary);
+          letter-spacing: 0.1em;
         }
 
-        .screenshot-item {
-          text-align: center;
+        .visual-badge {
+          font-size: 1.5rem;
+          font-weight: 700;
         }
 
-        .screenshot-box {
-          aspect-ratio: 4/3;
+        .case-visual-title {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 16px;
+          line-height: 1.4;
+        }
+
+        .case-screenshots-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          flex: 1;
+        }
+
+        .screenshot-card {
+          display: flex;
+          gap: 12px;
+          padding: 12px;
           background: var(--bg-secondary);
-          border: 2px dashed;
-          border-radius: 10px;
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          transition: all 0.2s;
+        }
+
+        .screenshot-card:hover {
+          border-color: var(--cyan);
+          transform: translateX(4px);
+        }
+
+        .screenshot-visual {
+          width: 60px;
+          height: 60px;
+          flex-shrink: 0;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 6px;
-        }
-
-        .shot-icon {
-          opacity: 0.5;
-        }
-
-        .shot-title {
-          font-size: 0.7rem;
-          color: var(--text-tertiary);
-        }
-
-        /* Popup Form */
-        .popup-form-section {
           background: var(--bg-tertiary);
+          border: 1px solid;
+          border-radius: 10px;
+        }
+
+        .screenshot-icon-large {
+          opacity: 0.8;
+        }
+
+        .screenshot-info {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 4px;
+        }
+
+        .screenshot-title {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+
+        .screenshot-desc {
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+          line-height: 1.4;
+        }
+
+        /* Right: Data Column */
+        .popup-data-col {
+          padding: 20px;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .data-section {
+          background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           border-radius: 12px;
           padding: 14px;
         }
 
-        .popup-form {
-          margin-top: 8px;
-        }
-
-        .form-inputs {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
+        .data-section-header {
           margin-bottom: 10px;
         }
 
-        .popup-form input {
-          width: 100%;
-          padding: 10px 12px;
-          background: var(--bg-secondary);
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          color: var(--text-primary);
-          font-size: 0.85rem;
-          font-family: inherit;
-          transition: border-color 0.2s;
+        .data-tag {
+          font-size: 0.65rem;
+          color: var(--cyan);
+          letter-spacing: 0.1em;
         }
 
-        .popup-form input:focus {
-          outline: none;
-          border-color: var(--cyan);
+        /* Metrics Grid */
+        .metrics-grid-v15 {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
         }
 
-        .popup-form input::placeholder {
+        .metric-card-v15 {
+          padding: 12px;
+          background: var(--bg-tertiary);
+          border-radius: 10px;
+          text-align: center;
+        }
+
+        .metric-value-v15 {
+          font-size: 1.4rem;
+          font-weight: 700;
+          display: block;
+          margin-bottom: 4px;
+        }
+
+        .metric-label-v15 {
+          font-size: 0.7rem;
           color: var(--text-tertiary);
         }
 
-        .popup-submit {
+        /* Tech List */
+        .tech-list-v15 {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .tech-item-v15 {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 10px;
+          background: var(--bg-tertiary);
+          border-radius: 8px;
+        }
+
+        .tech-key {
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+        }
+
+        .tech-val {
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        /* Outcome List */
+        .outcome-list {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .outcome-item {
+          display: flex;
+          gap: 10px;
+          align-items: flex-start;
+        }
+
+        .outcome-icon {
+          width: 28px;
+          height: 28px;
+          flex-shrink: 0;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 8px;
-          width: 100%;
-          padding: 12px;
-          border: none;
-          border-radius: 10px;
-          color: white;
-          font-size: 0.9rem;
+          background: var(--bg-tertiary);
+          border-radius: 8px;
+        }
+
+        .outcome-text {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .outcome-title {
+          font-size: 0.8rem;
           font-weight: 600;
+          color: var(--text-primary);
+        }
+
+        .outcome-desc {
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+          line-height: 1.4;
+        }
+
+        /* Bottom CTA Bar */
+        .popup-cta-bar {
+          padding: 16px 20px;
+          border-top: 1px solid var(--border-color);
+          background: var(--bg-secondary);
+        }
+
+        .popup-cta-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          width: 100%;
+          padding: 14px 24px;
+          border: none;
+          border-radius: 12px;
+          color: white;
+          font-size: 1rem;
+          font-weight: 700;
           font-family: inherit;
           cursor: pointer;
           transition: all 0.3s;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .popup-submit:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        .popup-cta-button:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 30px rgba(0, 191, 255, 0.3);
+        }
+
+        /* Popup Title Group - shared */
+        .popup-title-group {
+          display: flex;
+          align-items: center;
+          gap: 12px;
         }
 
         /* Card Guide Text (v14.0) */
@@ -5585,16 +5871,28 @@ export default function RAGLandingPage() {
         }
 
         @media (max-width: 768px) {
-          .popup-header-v14 {
-            padding: 12px 16px;
+          /* v15.5 Popup Mobile */
+          .popup-body-v15 {
+            grid-template-columns: 1fr;
           }
 
-          .popup-header-v14 h2 {
-            font-size: 1.1rem;
-          }
-
-          .popup-body {
+          .popup-visual-col {
+            border-right: none;
+            border-bottom: 1px solid var(--border-color);
             padding: 16px;
+          }
+
+          .popup-data-col {
+            padding: 16px;
+          }
+
+          .metrics-grid-v15 {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+          }
+
+          .metric-value-v15 {
+            font-size: 1.2rem;
           }
 
           .pipeline-flow {
@@ -5623,6 +5921,51 @@ export default function RAGLandingPage() {
           .card-guide-text {
             font-size: 0.8rem;
             padding: 10px 12px;
+          }
+
+          /* Identity Section Mobile */
+          .identity-section {
+            padding: 80px 0;
+          }
+
+          .identity-headline {
+            font-size: 1.8rem;
+          }
+
+          .identity-subtext {
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+          }
+
+          .identity-strengths {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          .strength-card {
+            padding: 24px 20px;
+          }
+
+          .strength-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+          }
+
+          .identity-cta-button {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 900px) {
+          .popup-body-v15 {
+            grid-template-columns: 1fr;
+          }
+
+          .popup-visual-col {
+            border-right: none;
+            border-bottom: 1px solid var(--border-color);
           }
         }
       `}</style>
