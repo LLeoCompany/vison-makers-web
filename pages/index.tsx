@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Database,
   Brain,
@@ -20,8 +20,16 @@ import {
   Bot,
   Sparkles,
   BarChart3,
-  Building2,
   Send,
+  Lock,
+  Server,
+  Eye,
+  KeyRound,
+  ShieldCheck,
+  Building2,
+  Stethoscope,
+  Factory,
+  Headphones,
 } from "lucide-react";
 
 // Animation variants
@@ -32,70 +40,159 @@ const fadeInUp = {
   transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] as const },
 };
 
-// Typing Animation Component
-const TypingDemo = () => {
+// Industry Demo Data
+const industryDemos = {
+  contract: {
+    icon: Building2,
+    label: "계약서",
+    color: "#00BFFF",
+    query: "갑과 을의 계약 해지 조건은?",
+    response:
+      "계약서 제12조에 따르면, 갑은 30일 전 서면 통보로 해지 가능하며, 을은 미납 시 즉시 해지권이 있습니다. 단, 제15조의 손해배상 조항이 적용됩니다.",
+    sources: [
+      { title: "용역계약서_2024.pdf", page: "p.12" },
+      { title: "계약해지조항_법률검토.docx", page: "Section 3" },
+    ],
+  },
+  log: {
+    icon: Server,
+    label: "로그",
+    color: "#48BB78",
+    query: "지난 주 서버 다운타임 원인은?",
+    response:
+      "분석 결과, 11월 15일 03:24 메모리 누수로 인한 OOM Kill이 원인입니다. Node.js 힙 메모리가 8GB 한도 초과 후 프로세스가 강제 종료되었습니다.",
+    sources: [
+      { title: "server_error_log_1115.json", page: "Line 2847" },
+      { title: "kubernetes_events.yaml", page: "Pod restart" },
+    ],
+  },
+  emr: {
+    icon: Stethoscope,
+    label: "EMR",
+    color: "#E94560",
+    query: "환자 김OO의 최근 혈압 추이는?",
+    response:
+      "최근 30일 평균 혈압은 138/88mmHg로 경계성 고혈압 단계입니다. 11월 10일 복약 변경 후 5mmHg 감소 추세를 보이고 있습니다.",
+    sources: [
+      { title: "환자차트_김OO.pdf", page: "혈압 기록" },
+      { title: "투약이력_2024.xlsx", page: "11월 처방" },
+    ],
+  },
+  support: {
+    icon: Headphones,
+    label: "상담기록",
+    color: "#00BFFF",
+    query: "고객 불만 패턴 TOP 3는?",
+    response:
+      "최근 90일 분석 결과: 1) 배송 지연 (32%) 2) 상품 품질 (24%) 3) 교환/환불 절차 (18%). 배송 지연은 특정 물류센터에 집중되어 있습니다.",
+    sources: [
+      { title: "CS_티켓분석_Q4.pdf", page: "p.8" },
+      { title: "VOC_Dashboard.xlsx", page: "Summary" },
+    ],
+  },
+};
+
+type IndustryKey = keyof typeof industryDemos;
+
+// Skeleton Loading Component
+const SkeletonLoader = () => (
+  <div className="skeleton-container">
+    <div className="skeleton-line skeleton-short"></div>
+    <div className="skeleton-line skeleton-long"></div>
+    <div className="skeleton-line skeleton-medium"></div>
+    <div className="skeleton-line skeleton-long"></div>
+  </div>
+);
+
+// Typing Demo Component with Industry Selection
+const IndustryDemo = () => {
+  const [selectedIndustry, setSelectedIndustry] = useState<IndustryKey>("contract");
+  const [isLoading, setIsLoading] = useState(false);
   const [displayText, setDisplayText] = useState("");
   const [showSource, setShowSource] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [phase, setPhase] = useState<"query" | "response" | "sources">("query");
 
-  const demoContent = {
-    query: "DevGym의 회원 이탈률 감소 전략은?",
-    response:
-      "DevGym은 AI 기반 개인화 추천으로 회원 이탈률을 42% 감소시켰습니다. 핵심 전략은 1) 운동 패턴 분석 2) 맞춤형 루틴 제안 3) 실시간 피드백 시스템입니다.",
-    sources: [
-      { title: "회원관리_데이터분석.pdf", page: "p.23" },
-      { title: "AI추천시스템_성과보고서.xlsx", page: "Sheet 3" },
-    ],
+  const demo = industryDemos[selectedIndustry];
+
+  const handleIndustryChange = (industry: IndustryKey) => {
+    if (industry === selectedIndustry) return;
+    setIsLoading(true);
+    setDisplayText("");
+    setShowSource(false);
+    setPhase("query");
+
+    setTimeout(() => {
+      setSelectedIndustry(industry);
+      setIsLoading(false);
+    }, 800);
   };
 
   useEffect(() => {
-    const steps = [
-      // Step 1: Type query
-      () => {
-        let i = 0;
-        const typeQuery = setInterval(() => {
-          if (i <= demoContent.query.length) {
-            setDisplayText(demoContent.query.slice(0, i));
-            i++;
-          } else {
-            clearInterval(typeQuery);
-            setTimeout(() => setCurrentStep(1), 500);
-          }
-        }, 50);
-        return () => clearInterval(typeQuery);
-      },
-      // Step 2: Show response
-      () => {
-        setDisplayText("");
-        let i = 0;
-        const typeResponse = setInterval(() => {
-          if (i <= demoContent.response.length) {
-            setDisplayText(demoContent.response.slice(0, i));
-            i++;
-          } else {
-            clearInterval(typeResponse);
-            setTimeout(() => setCurrentStep(2), 300);
-          }
-        }, 20);
-        return () => clearInterval(typeResponse);
-      },
-      // Step 3: Show sources
-      () => {
-        setShowSource(true);
-        setTimeout(() => {
-          setShowSource(false);
-          setDisplayText("");
-          setCurrentStep(0);
-        }, 4000);
-      },
-    ];
+    if (isLoading) return;
 
-    const cleanup = steps[currentStep]?.();
-    return cleanup;
-  }, [currentStep]);
+    let timeout: NodeJS.Timeout;
+    let interval: NodeJS.Timeout;
+
+    if (phase === "query") {
+      let i = 0;
+      interval = setInterval(() => {
+        if (i <= demo.query.length) {
+          setDisplayText(demo.query.slice(0, i));
+          i++;
+        } else {
+          clearInterval(interval);
+          timeout = setTimeout(() => setPhase("response"), 500);
+        }
+      }, 50);
+    } else if (phase === "response") {
+      setDisplayText("");
+      let i = 0;
+      interval = setInterval(() => {
+        if (i <= demo.response.length) {
+          setDisplayText(demo.response.slice(0, i));
+          i++;
+        } else {
+          clearInterval(interval);
+          timeout = setTimeout(() => setPhase("sources"), 300);
+        }
+      }, 15);
+    } else if (phase === "sources") {
+      setShowSource(true);
+      timeout = setTimeout(() => {
+        setShowSource(false);
+        setDisplayText("");
+        setPhase("query");
+      }, 4000);
+    }
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [phase, isLoading, demo]);
 
   return (
     <div className="demo-window">
+      {/* Industry Tabs */}
+      <div className="demo-tabs">
+        {(Object.keys(industryDemos) as IndustryKey[]).map((key) => {
+          const Icon = industryDemos[key].icon;
+          return (
+            <button
+              key={key}
+              onClick={() => handleIndustryChange(key)}
+              className={`demo-tab ${selectedIndustry === key ? "active" : ""}`}
+              style={{
+                "--tab-color": industryDemos[key].color,
+              } as React.CSSProperties}
+            >
+              <Icon size={14} strokeWidth={1.5} />
+              <span>{industryDemos[key].label}</span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Mac Window Frame */}
       <div className="demo-header">
         <div className="demo-dots">
@@ -107,67 +204,89 @@ const TypingDemo = () => {
       </div>
 
       <div className="demo-content">
-        {currentStep === 0 && (
-          <div className="demo-query">
-            <div className="flex items-center gap-2 mb-2">
-              <Search size={14} strokeWidth={1.5} className="text-cyan" />
-              <span className="text-xs text-gray-400">Query</span>
-            </div>
-            <p className="font-mono text-sm text-white">
-              {displayText}
-              <span className="cursor">|</span>
-            </p>
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <motion.div
+              key="skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <SkeletonLoader />
+            </motion.div>
+          ) : (
+            <motion.div
+              key={selectedIndustry}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {phase === "query" && (
+                <div className="demo-query">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Search size={14} strokeWidth={1.5} className="text-cyan" />
+                    <span className="text-xs text-gray-400">Query</span>
+                  </div>
+                  <p className="font-mono text-sm text-white">
+                    {displayText}
+                    <span className="cursor">|</span>
+                  </p>
+                </div>
+              )}
 
-        {currentStep >= 1 && (
-          <div className="demo-response">
-            <div className="flex items-center gap-2 mb-2">
-              <Bot size={14} strokeWidth={1.5} className="text-cyan" />
-              <span className="text-xs text-gray-400">AI Response</span>
-            </div>
-            <p className="text-sm text-gray-200 leading-relaxed">
-              {displayText}
-              {currentStep === 1 && <span className="cursor">|</span>}
-            </p>
-          </div>
-        )}
+              {(phase === "response" || phase === "sources") && (
+                <div className="demo-response">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Bot size={14} strokeWidth={1.5} style={{ color: demo.color }} />
+                    <span className="text-xs text-gray-400">AI Response</span>
+                  </div>
+                  <p className="text-sm text-gray-200 leading-relaxed">
+                    {displayText}
+                    {phase === "response" && <span className="cursor">|</span>}
+                  </p>
+                </div>
+              )}
 
-        {showSource && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="demo-sources"
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <FileText size={14} strokeWidth={1.5} className="text-green" />
-              <span className="text-xs text-gray-400">Source Trace</span>
-            </div>
-            {demoContent.sources.map((source, i) => (
-              <div key={i} className="source-item">
-                <span className="text-cyan font-mono text-xs">
-                  [{i + 1}]
-                </span>
-                <span className="text-gray-300 text-xs">{source.title}</span>
-                <span className="text-gray-500 text-xs">{source.page}</span>
-              </div>
-            ))}
-          </motion.div>
-        )}
+              {showSource && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="demo-sources"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <FileText size={14} strokeWidth={1.5} className="text-green" />
+                    <span className="text-xs text-gray-400">Source Trace</span>
+                  </div>
+                  {demo.sources.map((source, i) => (
+                    <div key={i} className="source-item">
+                      <span className="font-mono text-xs" style={{ color: demo.color }}>
+                        [{i + 1}]
+                      </span>
+                      <span className="text-gray-300 text-xs">{source.title}</span>
+                      <span className="text-gray-500 text-xs">{source.page}</span>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
 };
 
-// CountUp Animation
+// CountUp Animation (2 seconds)
 const CountUp = ({
   end,
   suffix = "",
   prefix = "",
+  decimals = 0,
 }: {
   end: number;
   suffix?: string;
   prefix?: string;
+  decimals?: number;
 }) => {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
@@ -176,29 +295,127 @@ const CountUp = ({
   useEffect(() => {
     if (isInView) {
       let start = 0;
-      const duration = 2000;
-      const increment = end / (duration / 16);
+      const duration = 2000; // 2 seconds
+      const startTime = Date.now();
+
       const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Ease out cubic
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = easeOut * end;
+
+        if (progress >= 1) {
           setCount(end);
           clearInterval(timer);
         } else {
-          setCount(Math.floor(start));
+          setCount(current);
         }
       }, 16);
+
       return () => clearInterval(timer);
     }
   }, [isInView, end]);
 
+  const displayValue = decimals > 0 ? count.toFixed(decimals) : Math.floor(count).toLocaleString();
+
   return (
     <span ref={ref} className="font-mono">
       {prefix}
-      {count.toLocaleString()}
+      {displayValue}
       {suffix}
     </span>
   );
 };
+
+// Bento Item with Hover Text Morphing
+const BentoProofItem = ({
+  icon: Icon,
+  metric,
+  metricSuffix,
+  metricPrefix,
+  label,
+  desc,
+  hoverText,
+  className,
+  decimals,
+}: {
+  icon: React.ElementType;
+  metric: number;
+  metricSuffix?: string;
+  metricPrefix?: string;
+  label: string;
+  desc?: string;
+  hoverText?: string;
+  className?: string;
+  decimals?: number;
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      {...fadeInUp}
+      className={`bento-item ${className || ""}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="bento-content">
+        <Icon size={className?.includes("large") ? 32 : 24} strokeWidth={1.5} className="text-cyan" />
+        <div className="bento-metric">
+          <CountUp end={metric} suffix={metricSuffix} prefix={metricPrefix} decimals={decimals} />
+        </div>
+        <span className="bento-label">{label}</span>
+        {desc && (
+          <p className="bento-desc">
+            <AnimatePresence mode="wait">
+              {isHovered && hoverText ? (
+                <motion.span
+                  key="hover"
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  className="text-cyan"
+                >
+                  {hoverText}
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="default"
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                >
+                  {desc}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </p>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
+// Security Card Component
+const SecurityCard = ({
+  icon: Icon,
+  title,
+  description,
+  color,
+}: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  color: string;
+}) => (
+  <motion.div {...fadeInUp} className="security-card">
+    <div className="security-icon" style={{ background: `${color}15`, color }}>
+      <Icon size={28} strokeWidth={1.5} />
+    </div>
+    <h4 className="security-title">{title}</h4>
+    <p className="security-desc">{description}</p>
+  </motion.div>
+);
 
 // Solution Card Component
 const SolutionCard = ({
@@ -225,7 +442,12 @@ const SolutionCard = ({
     </div>
     <h3 className="solution-title">{title}</h3>
     <p className="solution-description">{description}</p>
-    {highlight && <span className="solution-highlight">{highlight}</span>}
+    {highlight && (
+      <span className="solution-highlight">
+        {highlight}
+        <span className="highlight-bounce"></span>
+      </span>
+    )}
     <div className="solution-stats font-mono">{stats}</div>
   </motion.div>
 );
@@ -251,6 +473,166 @@ const FlowStep = ({
     <p className="flow-description">{description}</p>
   </motion.div>
 );
+
+// Form with Progress Bar
+const ConsultationForm = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    services: [] as string[],
+    industry: "",
+  });
+
+  const requiredFields = ["name", "email", "phone", "industry"];
+  const filledFields = requiredFields.filter(
+    (field) => formData[field as keyof typeof formData] !== ""
+  ).length;
+  const hasServices = formData.services.length > 0;
+  const totalSteps = requiredFields.length + 1;
+  const completedSteps = filledFields + (hasServices ? 1 : 0);
+  const progress = (completedSteps / totalSteps) * 100;
+  const isComplete = completedSteps === totalSteps;
+
+  const handleServiceToggle = (service: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      services: prev.services.includes(service)
+        ? prev.services.filter((s) => s !== service)
+        : [...prev.services, service],
+    }));
+  };
+
+  return (
+    <div className="cta-form-wrapper">
+      {/* Progress Bar */}
+      <div className="form-progress">
+        <div className="progress-header">
+          <span className="progress-text font-mono">
+            {completedSteps}/{totalSteps} 단계 완료
+          </span>
+          <span className="progress-percent font-mono">{Math.round(progress)}%</span>
+        </div>
+        <div className="progress-bar">
+          <motion.div
+            className="progress-fill"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.3 }}
+          />
+        </div>
+      </div>
+
+      <form className="cta-form">
+        <div className="form-group">
+          <label>담당자명 *</label>
+          <input
+            type="text"
+            placeholder="홍길동"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>이메일 *</label>
+          <input
+            type="email"
+            placeholder="example@company.com"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>연락처 *</label>
+          <input
+            type="tel"
+            placeholder="010-1234-5678"
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>관심 서비스</label>
+          <div className="checkbox-group">
+            {["RAG 시스템 구축", "AI 챗봇", "추천 시스템"].map((service) => (
+              <label
+                key={service}
+                className={`checkbox-item ${
+                  formData.services.includes(service) ? "checked" : ""
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={formData.services.includes(service)}
+                  onChange={() => handleServiceToggle(service)}
+                />
+                <span>{service}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>산업군 *</label>
+          <select
+            value={formData.industry}
+            onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+          >
+            <option value="">선택해주세요</option>
+            <option value="finance">금융</option>
+            <option value="healthcare">의료/헬스케어</option>
+            <option value="manufacturing">제조</option>
+            <option value="retail">유통/커머스</option>
+            <option value="other">기타</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          className={`submit-btn ${isComplete ? "complete" : ""}`}
+          disabled={!isComplete}
+        >
+          무료 상담 신청
+          <Send size={18} strokeWidth={1.5} />
+        </button>
+      </form>
+    </div>
+  );
+};
+
+// Mobile Sticky CTA
+const StickyCTA = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.scrollY > 500);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          className="sticky-cta"
+        >
+          <Link href="#contact" className="sticky-cta-btn">
+            무료 상담 신청
+            <ArrowRight size={18} strokeWidth={1.5} />
+          </Link>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
 
 export default function RAGLandingPage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -293,7 +675,7 @@ export default function RAGLandingPage() {
             <div className="nav-links">
               <a href="#solutions">솔루션</a>
               <a href="#proof">검증된 성과</a>
-              <a href="#process">진행 과정</a>
+              <a href="#security">보안</a>
               <a href="#contact">문의</a>
             </div>
 
@@ -305,7 +687,7 @@ export default function RAGLandingPage() {
         </div>
       </header>
 
-      {/* Section 1: Hero */}
+      {/* Section 1: Hero with Industry Demo */}
       <section className="hero-section">
         <div className="container">
           <div className="hero-grid">
@@ -341,17 +723,23 @@ export default function RAGLandingPage() {
 
               <div className="hero-stats">
                 <div className="stat-item">
-                  <span className="stat-value font-mono">92%</span>
+                  <span className="stat-value font-mono">
+                    <CountUp end={92} suffix="%" />
+                  </span>
                   <span className="stat-label">답변 정확도</span>
                 </div>
                 <div className="stat-divider"></div>
                 <div className="stat-item">
-                  <span className="stat-value font-mono">1.2s</span>
+                  <span className="stat-value font-mono">
+                    <CountUp end={1.2} suffix="s" decimals={1} />
+                  </span>
                   <span className="stat-label">평균 응답시간</span>
                 </div>
                 <div className="stat-divider"></div>
                 <div className="stat-item">
-                  <span className="stat-value font-mono">78%</span>
+                  <span className="stat-value font-mono">
+                    <CountUp end={78} suffix="%" />
+                  </span>
                   <span className="stat-label">업무 자동화율</span>
                 </div>
               </div>
@@ -362,7 +750,7 @@ export default function RAGLandingPage() {
               transition={{ delay: 0.2 }}
               className="hero-demo"
             >
-              <TypingDemo />
+              <IndustryDemo />
             </motion.div>
           </div>
         </div>
@@ -392,7 +780,7 @@ export default function RAGLandingPage() {
               icon={MessageSquare}
               title="AI 챗봇 개발"
               description="DevGym에서 78% 업무 자동화를 달성한 챗봇 로직을 귀사 환경에 맞게 이식합니다."
-              highlight="추천"
+              highlight="Most Popular"
               stats="자동화율 78%"
               isCenter
             />
@@ -423,64 +811,106 @@ export default function RAGLandingPage() {
           </motion.div>
 
           <div className="bento-grid">
-            <motion.div {...fadeInUp} className="bento-item bento-large">
-              <div className="bento-content">
-                <Users size={32} strokeWidth={1.5} className="text-cyan" />
-                <div className="bento-metric">
-                  <CountUp end={100000} suffix="+" />
-                </div>
-                <span className="bento-label">활성 회원</span>
-                <p className="bento-desc">
-                  실제 서비스에서 10만 명 이상의 사용자가 활용 중
-                </p>
-              </div>
-            </motion.div>
+            <BentoProofItem
+              icon={Users}
+              metric={100000}
+              metricSuffix="+"
+              label="활성 회원"
+              desc="피트니스 회원 이탈 예측"
+              hoverText="→ 금융 고객 이탈 예측으로 확장"
+              className="bento-large"
+            />
 
-            <motion.div {...fadeInUp} className="bento-item">
-              <div className="bento-content">
-                <Target size={24} strokeWidth={1.5} className="text-green" />
-                <div className="bento-metric font-mono">
-                  <CountUp end={92} suffix="%" />
-                </div>
-                <span className="bento-label">답변 정확도</span>
-              </div>
-            </motion.div>
+            <BentoProofItem
+              icon={Target}
+              metric={92}
+              metricSuffix="%"
+              label="답변 정확도"
+              desc="운동 상담 AI"
+              hoverText="→ 의료 상담 AI로 확장"
+              className=""
+            />
 
-            <motion.div {...fadeInUp} className="bento-item">
-              <div className="bento-content">
-                <Zap size={24} strokeWidth={1.5} className="text-cyan" />
-                <div className="bento-metric font-mono">
-                  <CountUp end={1} prefix="" suffix=".2s" />
-                </div>
-                <span className="bento-label">평균 응답시간</span>
-              </div>
-            </motion.div>
+            <BentoProofItem
+              icon={Zap}
+              metric={1.2}
+              metricSuffix="s"
+              label="평균 응답시간"
+              decimals={1}
+              className=""
+            />
 
-            <motion.div {...fadeInUp} className="bento-item bento-wide">
-              <div className="bento-content">
-                <BarChart3 size={24} strokeWidth={1.5} className="text-crimson" />
-                <div className="bento-metric font-mono">
-                  <CountUp end={42} suffix="%" />
-                </div>
-                <span className="bento-label">회원 이탈률 감소</span>
-                <p className="bento-desc">AI 개인화 추천으로 달성</p>
-              </div>
-            </motion.div>
+            <BentoProofItem
+              icon={BarChart3}
+              metric={42}
+              metricSuffix="%"
+              label="회원 이탈률 감소"
+              desc="AI 개인화 추천"
+              hoverText="→ 고객 LTV 증가 전략으로 확장"
+              className="bento-wide"
+            />
 
-            <motion.div {...fadeInUp} className="bento-item">
-              <div className="bento-content">
-                <Clock size={24} strokeWidth={1.5} className="text-cyan" />
-                <div className="bento-metric font-mono">
-                  <CountUp end={8} suffix="주" />
-                </div>
-                <span className="bento-label">구축 기간</span>
-              </div>
-            </motion.div>
+            <BentoProofItem
+              icon={Clock}
+              metric={8}
+              metricSuffix="주"
+              label="구축 기간"
+              className=""
+            />
           </div>
         </div>
       </section>
 
-      {/* Section 4: RAG Flow */}
+      {/* Section 4: Security Layer (NEW) */}
+      <section id="security" className="security-section">
+        <div className="container">
+          <motion.div {...fadeInUp} className="section-header">
+            <span className="section-label font-mono">ENTERPRISE SECURITY</span>
+            <h2 className="section-title">
+              <span className="text-green">엔터프라이즈급</span>
+              <br />
+              보안 레이어
+            </h2>
+            <p className="section-subtitle">
+              AI는 위험하지 않습니다. 기존 보안보다 더 안전합니다.
+            </p>
+          </motion.div>
+
+          <div className="security-grid">
+            <SecurityCard
+              icon={Server}
+              title="독립 공간"
+              description="고객별 벡터 DB 완전 격리. 데이터 혼재 위험 제로."
+              color="#00BFFF"
+            />
+            <SecurityCard
+              icon={Eye}
+              title="비학습 원칙"
+              description="외부 LLM 학습에 귀사 데이터 사용 완전 차단."
+              color="#E94560"
+            />
+            <SecurityCard
+              icon={KeyRound}
+              title="권한 제어"
+              description="RBAC 기반 문서 접근 필터링. 역할별 정보 노출 제한."
+              color="#48BB78"
+            />
+            <SecurityCard
+              icon={Lock}
+              title="철저 암호화"
+              description="원문 데이터 AES-256 암호화 저장. 전송 시 TLS 1.3."
+              color="#00BFFF"
+            />
+          </div>
+
+          <motion.div {...fadeInUp} className="security-badge">
+            <ShieldCheck size={20} strokeWidth={1.5} />
+            <span>SOC 2 Type II 준수 | ISO 27001 인증 예정</span>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Section 5: RAG Flow */}
       <section id="process" className="flow-section">
         <div className="container">
           <motion.div {...fadeInUp} className="section-header">
@@ -530,7 +960,7 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
-      {/* Section 5: Trust Metrics */}
+      {/* Section 6: Trust Metrics */}
       <section className="trust-section">
         <div className="container">
           <motion.div {...fadeInUp} className="section-header">
@@ -596,7 +1026,7 @@ export default function RAGLandingPage() {
         </div>
       </section>
 
-      {/* Section 6: CTA Form */}
+      {/* Section 7: CTA Form */}
       <section id="contact" className="cta-section">
         <div className="container">
           <div className="cta-grid">
@@ -627,58 +1057,8 @@ export default function RAGLandingPage() {
               </div>
             </motion.div>
 
-            <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="cta-form-wrapper">
-              <form className="cta-form">
-                <div className="form-group">
-                  <label>담당자명</label>
-                  <input type="text" placeholder="홍길동" />
-                </div>
-
-                <div className="form-group">
-                  <label>이메일</label>
-                  <input type="email" placeholder="example@company.com" />
-                </div>
-
-                <div className="form-group">
-                  <label>연락처</label>
-                  <input type="tel" placeholder="010-1234-5678" />
-                </div>
-
-                <div className="form-group">
-                  <label>관심 서비스</label>
-                  <div className="checkbox-group">
-                    <label className="checkbox-item">
-                      <input type="checkbox" />
-                      <span>RAG 시스템 구축</span>
-                    </label>
-                    <label className="checkbox-item">
-                      <input type="checkbox" />
-                      <span>AI 챗봇</span>
-                    </label>
-                    <label className="checkbox-item">
-                      <input type="checkbox" />
-                      <span>추천 시스템</span>
-                    </label>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>산업군</label>
-                  <select>
-                    <option value="">선택해주세요</option>
-                    <option value="finance">금융</option>
-                    <option value="healthcare">의료/헬스케어</option>
-                    <option value="manufacturing">제조</option>
-                    <option value="retail">유통/커머스</option>
-                    <option value="other">기타</option>
-                  </select>
-                </div>
-
-                <button type="submit" className="submit-btn">
-                  무료 상담 신청
-                  <Send size={18} strokeWidth={1.5} />
-                </button>
-              </form>
+            <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
+              <ConsultationForm />
             </motion.div>
           </div>
         </div>
@@ -699,7 +1079,7 @@ export default function RAGLandingPage() {
             <div className="footer-links">
               <a href="#solutions">솔루션</a>
               <a href="#proof">검증된 성과</a>
-              <a href="#process">진행 과정</a>
+              <a href="#security">보안</a>
               <a href="#contact">문의</a>
             </div>
 
@@ -718,6 +1098,9 @@ export default function RAGLandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile Sticky CTA */}
+      <StickyCTA />
 
       <style jsx global>{`
         @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
@@ -1016,6 +1399,42 @@ export default function RAGLandingPage() {
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
+        .demo-tabs {
+          display: flex;
+          gap: 4px;
+          padding: 12px 12px 0;
+          background: var(--bg-tertiary);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .demo-tab {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 14px;
+          background: transparent;
+          border: none;
+          border-radius: 8px 8px 0 0;
+          color: var(--text-tertiary);
+          font-size: 0.8rem;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .demo-tab:hover {
+          color: var(--text-secondary);
+          background: rgba(255, 255, 255, 0.05);
+        }
+
+        .demo-tab.active {
+          background: var(--bg-secondary);
+          color: var(--tab-color, var(--cyan));
+          border: 1px solid var(--border-color);
+          border-bottom: 1px solid var(--bg-secondary);
+          margin-bottom: -1px;
+        }
+
         .demo-header {
           display: flex;
           align-items: center;
@@ -1086,6 +1505,45 @@ export default function RAGLandingPage() {
           margin-top: 8px;
         }
 
+        /* Skeleton Loading */
+        .skeleton-container {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .skeleton-line {
+          height: 14px;
+          background: linear-gradient(
+            90deg,
+            var(--bg-tertiary) 25%,
+            rgba(255, 255, 255, 0.1) 50%,
+            var(--bg-tertiary) 75%
+          );
+          background-size: 200% 100%;
+          animation: skeleton-shimmer 1.5s infinite;
+          border-radius: 4px;
+        }
+
+        .skeleton-short {
+          width: 40%;
+        }
+        .skeleton-medium {
+          width: 70%;
+        }
+        .skeleton-long {
+          width: 100%;
+        }
+
+        @keyframes skeleton-shimmer {
+          0% {
+            background-position: 200% 0;
+          }
+          100% {
+            background-position: -200% 0;
+          }
+        }
+
         /* Section Styles */
         .section-header {
           text-align: center;
@@ -1134,9 +1592,9 @@ export default function RAGLandingPage() {
         }
 
         .solution-card:hover {
-          transform: translateY(-8px);
-          border-color: var(--cyan);
-          box-shadow: 0 20px 60px rgba(0, 191, 255, 0.1);
+          transform: scale(1.05);
+          border-color: var(--crimson);
+          box-shadow: 0 20px 60px rgba(233, 69, 96, 0.15);
         }
 
         .solution-card-highlight {
@@ -1150,8 +1608,8 @@ export default function RAGLandingPage() {
         }
 
         .solution-icon {
-          width: 56px;
-          height: 56px;
+          width: 48px;
+          height: 48px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1175,7 +1633,9 @@ export default function RAGLandingPage() {
         }
 
         .solution-highlight {
-          display: inline-block;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
           padding: 4px 12px;
           background: var(--crimson);
           color: white;
@@ -1183,6 +1643,17 @@ export default function RAGLandingPage() {
           font-weight: 600;
           border-radius: 100px;
           margin-bottom: 16px;
+          animation: highlight-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes highlight-bounce {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-4px);
+          }
         }
 
         .solution-stats {
@@ -1212,6 +1683,7 @@ export default function RAGLandingPage() {
           border-radius: 20px;
           padding: 28px;
           transition: all 0.3s;
+          cursor: pointer;
         }
 
         .bento-item:hover {
@@ -1254,11 +1726,78 @@ export default function RAGLandingPage() {
           color: var(--text-tertiary);
           margin-top: auto;
           padding-top: 16px;
+          min-height: 40px;
+        }
+
+        /* Security Section */
+        .security-section {
+          padding: 120px 0;
+          position: relative;
+          z-index: 1;
+        }
+
+        .security-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 24px;
+          margin-bottom: 40px;
+        }
+
+        .security-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 28px;
+          text-align: center;
+          transition: all 0.3s;
+        }
+
+        .security-card:hover {
+          transform: translateY(-8px);
+          border-color: var(--cyan);
+        }
+
+        .security-icon {
+          width: 64px;
+          height: 64px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 16px;
+          margin: 0 auto 16px;
+        }
+
+        .security-title {
+          font-size: 1.1rem;
+          font-weight: 700;
+          margin-bottom: 8px;
+        }
+
+        .security-desc {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+        }
+
+        .security-badge {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 16px 24px;
+          background: var(--green-dim);
+          border: 1px solid var(--green);
+          border-radius: 100px;
+          color: var(--green);
+          font-size: 0.9rem;
+          max-width: max-content;
+          margin: 0 auto;
         }
 
         /* Flow Section */
         .flow-section {
           padding: 120px 0;
+          background: var(--bg-secondary);
           position: relative;
           z-index: 1;
         }
@@ -1319,7 +1858,6 @@ export default function RAGLandingPage() {
         /* Trust Section */
         .trust-section {
           padding: 120px 0;
-          background: var(--bg-secondary);
           position: relative;
           z-index: 1;
         }
@@ -1332,7 +1870,7 @@ export default function RAGLandingPage() {
         }
 
         .trust-card {
-          background: var(--bg-tertiary);
+          background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           border-radius: 20px;
           padding: 32px;
@@ -1352,7 +1890,7 @@ export default function RAGLandingPage() {
         }
 
         .testimonial {
-          background: var(--bg-tertiary);
+          background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           border-radius: 24px;
           padding: 48px;
@@ -1399,6 +1937,7 @@ export default function RAGLandingPage() {
         /* CTA Section */
         .cta-section {
           padding: 120px 0;
+          background: var(--bg-secondary);
           position: relative;
           z-index: 1;
         }
@@ -1437,10 +1976,44 @@ export default function RAGLandingPage() {
         }
 
         .cta-form-wrapper {
-          background: var(--bg-secondary);
+          background: var(--bg-tertiary);
           border: 1px solid var(--border-color);
           border-radius: 24px;
-          padding: 40px;
+          padding: 32px;
+        }
+
+        /* Form Progress */
+        .form-progress {
+          margin-bottom: 24px;
+        }
+
+        .progress-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 8px;
+        }
+
+        .progress-text {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+        }
+
+        .progress-percent {
+          font-size: 0.85rem;
+          color: var(--cyan);
+        }
+
+        .progress-bar {
+          height: 6px;
+          background: var(--bg-primary);
+          border-radius: 3px;
+          overflow: hidden;
+        }
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, var(--cyan), var(--green));
+          border-radius: 3px;
         }
 
         .cta-form {
@@ -1461,7 +2034,7 @@ export default function RAGLandingPage() {
         .form-group select {
           width: 100%;
           padding: 14px 16px;
-          background: var(--bg-tertiary);
+          background: var(--bg-primary);
           border: 1px solid var(--border-color);
           border-radius: 10px;
           color: var(--text-primary);
@@ -1491,7 +2064,7 @@ export default function RAGLandingPage() {
           align-items: center;
           gap: 8px;
           padding: 10px 16px;
-          background: var(--bg-tertiary);
+          background: var(--bg-primary);
           border: 1px solid var(--border-color);
           border-radius: 8px;
           cursor: pointer;
@@ -1501,6 +2074,11 @@ export default function RAGLandingPage() {
 
         .checkbox-item:hover {
           border-color: var(--cyan);
+        }
+
+        .checkbox-item.checked {
+          border-color: var(--cyan);
+          background: var(--cyan-dim);
         }
 
         .checkbox-item input {
@@ -1514,21 +2092,66 @@ export default function RAGLandingPage() {
           gap: 8px;
           width: 100%;
           padding: 16px;
-          background: var(--crimson);
-          color: white;
+          background: var(--text-tertiary);
+          color: var(--bg-primary);
           border: none;
           border-radius: 12px;
           font-size: 1rem;
           font-weight: 600;
           font-family: inherit;
-          cursor: pointer;
-          transition: all 0.2s;
+          cursor: not-allowed;
+          transition: all 0.3s;
           margin-top: 8px;
         }
 
-        .submit-btn:hover {
-          background: #d63d55;
+        .submit-btn.complete {
+          background: var(--green);
+          cursor: pointer;
+          animation: pulse-green 2s infinite;
+        }
+
+        .submit-btn.complete:hover {
           transform: translateY(-2px);
+          box-shadow: 0 10px 40px rgba(72, 187, 120, 0.3);
+        }
+
+        @keyframes pulse-green {
+          0%,
+          100% {
+            box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 0 15px rgba(72, 187, 120, 0);
+          }
+        }
+
+        /* Sticky CTA (Mobile) */
+        .sticky-cta {
+          display: none;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 16px 24px;
+          background: rgba(10, 10, 15, 0.95);
+          backdrop-filter: blur(20px);
+          border-top: 1px solid var(--border-color);
+          z-index: 999;
+        }
+
+        .sticky-cta-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          width: 100%;
+          padding: 16px;
+          background: var(--crimson);
+          color: white;
+          text-decoration: none;
+          border-radius: 12px;
+          font-size: 1rem;
+          font-weight: 600;
         }
 
         /* Footer */
@@ -1657,6 +2280,10 @@ export default function RAGLandingPage() {
             grid-row: span 1;
           }
 
+          .security-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
           .flow-grid {
             flex-direction: column;
             align-items: center;
@@ -1697,6 +2324,47 @@ export default function RAGLandingPage() {
             flex-direction: column;
             gap: 16px;
             text-align: center;
+          }
+
+          .sticky-cta {
+            display: block;
+          }
+
+          .rag-footer {
+            padding-bottom: 100px;
+          }
+        }
+
+        @media (max-width: 375px) {
+          .demo-content {
+            min-height: 280px;
+            height: 280px;
+          }
+
+          .demo-tabs {
+            flex-wrap: wrap;
+            gap: 4px;
+          }
+
+          .demo-tab {
+            padding: 6px 10px;
+            font-size: 0.7rem;
+          }
+
+          .hero-title {
+            font-size: 1.75rem;
+          }
+
+          .security-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .checkbox-group {
+            flex-direction: column;
+          }
+
+          .checkbox-item {
+            width: 100%;
           }
         }
 
