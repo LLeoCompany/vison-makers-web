@@ -213,6 +213,29 @@ const ServiceDrawer = ({
                 </div>
               </div>
 
+              {/* Tech Specs Section (NEW in v12.0) */}
+              <div className="tech-specs-section">
+                <span className="section-tag font-mono">TECH SPECS</span>
+                <div className="tech-specs-card">
+                  <div className="tech-spec-item font-mono">
+                    <span className="spec-key">Engine:</span>
+                    <span className="spec-value">Hybrid RAG (BM25 + Dense)</span>
+                  </div>
+                  <div className="tech-spec-item font-mono">
+                    <span className="spec-key">Latency:</span>
+                    <span className="spec-value">&lt;1.2s P95</span>
+                  </div>
+                  <div className="tech-spec-item font-mono">
+                    <span className="spec-key">Security:</span>
+                    <span className="spec-value">AES-256, TLS 1.3</span>
+                  </div>
+                  <div className="tech-spec-item font-mono">
+                    <span className="spec-key">Deploy:</span>
+                    <span className="spec-value">8 weeks to production</span>
+                  </div>
+                </div>
+              </div>
+
               {/* Quick Contact Form */}
               <div className="quick-contact-section">
                 <span className="section-tag font-mono">QUICK CONTACT</span>
@@ -1031,13 +1054,13 @@ const ConsultationForm = () => {
   );
 };
 
-// Mobile Sticky CTA
+// Mobile Sticky CTA (v12.0 Glassmorphism)
 const StickyCTA = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsVisible(window.scrollY > 500);
+      setIsVisible(window.scrollY > 400);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -1053,7 +1076,7 @@ const StickyCTA = () => {
           className="sticky-cta"
         >
           <Link href="#contact" className="sticky-cta-btn">
-            맞춤형 진단 신청
+            ROI 3배 무료 진단 신청
             <ArrowRight size={18} strokeWidth={1.5} />
           </Link>
         </motion.div>
@@ -1150,187 +1173,174 @@ export default function RAGLandingPage() {
         </div>
       </header>
 
-      {/* Section 1: Hero - Result First */}
-      <section className="hero-section">
+      {/* NEW HERO: 검증된 RAG 기술 섹션을 최상단 메인 배너로 */}
+      <section className="hero-funnel-section">
         <div className="container">
-          {/* Hero Badges */}
-          <motion.div {...fadeInUp} className="hero-badges">
-            <div className="hero-badge-item crimson">
-              <span className="font-mono">ROI 300%↑</span>
+          {/* Grid Pattern Background */}
+          <div className="grid-pattern" />
+
+          {/* Main Hero Message */}
+          <motion.div {...fadeInUp} className="hero-funnel-message">
+            <div className="hero-funnel-badges">
+              <div className="hero-badge-item cyan">
+                <span className="font-mono">보안 99.9%</span>
+              </div>
+              <div className="hero-badge-item green">
+                <span className="font-mono">정확도 92%</span>
+              </div>
+              <div className="hero-badge-item crimson">
+                <span className="font-mono">ROI 300%↑</span>
+              </div>
             </div>
-            <div className="hero-badge-item green">
-              <span className="font-mono">10만+ 검증</span>
-            </div>
-            <div className="hero-badge-item cyan">
-              <span className="font-mono">92% 정확도</span>
-            </div>
+
+            <h1 className="hero-funnel-title">
+              검증된 <span className="text-cyan">RAG 기술</span>을{" "}
+              <span className="text-glow">귀사</span>에 맞게{" "}
+              <span className="text-glow">구축</span>합니다
+            </h1>
+
+            <p className="hero-funnel-subtitle">
+              10만 회원이 검증한 엔진을 8주 내 귀사 비즈니스에 이식합니다.
+              <br />
+              카드를 클릭하여 맞춤형 솔루션을 확인하세요.
+            </p>
           </motion.div>
 
-          <div className="hero-grid">
-            <motion.div {...fadeInUp} className="hero-content">
-              <h1 className="hero-title">
-                환각 없는 AI,
-                <br />
-                <span className="text-cyan">ROI 3배</span>로 증명합니다
-              </h1>
-
-              <p className="hero-subtitle">
-                10만 회원이 검증한 RAG 기술력을 귀사에 이식합니다.
-              </p>
-
-              <div className="hero-actions">
-                <Link href="#contact" className="btn-primary">
-                  무료 AI 진단받기
-                  <ArrowRight size={18} strokeWidth={1.5} />
-                </Link>
-                <a href="#proof" className="btn-secondary">
-                  성과 상세 보기
-                  <ExternalLink size={16} strokeWidth={1.5} />
-                </a>
-              </div>
-
-              <div className="hero-stats">
-                <div className="stat-item">
-                  <span className="stat-value font-mono">
-                    <CountUp end={92} suffix="%" />
-                  </span>
-                  <span className="stat-label">답변 정확도</span>
-                </div>
-                <div className="stat-divider"></div>
-                <div className="stat-item">
-                  <span className="stat-value font-mono">
-                    <CountUp end={1.2} suffix="s" decimals={1} />
-                  </span>
-                  <span className="stat-label">평균 응답시간</span>
-                </div>
-                <div className="stat-divider"></div>
-                <div className="stat-item">
-                  <span className="stat-value font-mono">
-                    <CountUp end={78} suffix="%" />
-                  </span>
-                  <span className="stat-label">업무 자동화율</span>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              {...fadeInUp}
-              transition={{ delay: 0.2 }}
-              className="hero-demo"
-            >
-              <IndustryDemo />
-            </motion.div>
+          {/* 3-Action Cards (Bento Grid) */}
+          <div className="hero-cards-grid desktop-only">
+            {(["rag", "chatbot", "recommend"] as ServiceKey[]).map((key, index) => {
+              const service = serviceData[key];
+              const Icon = service.icon;
+              return (
+                <motion.button
+                  key={key}
+                  className={`hero-service-card ${key === "chatbot" ? "hero-card-highlight" : ""}`}
+                  onClick={() => openServiceDrawer(key)}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  {key === "chatbot" && (
+                    <div className="most-popular-badge">
+                      <span className="font-mono">Most Popular</span>
+                    </div>
+                  )}
+                  <div className="hero-card-badge" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+                    <span className="font-mono">{service.badge}</span>
+                  </div>
+                  <div className="hero-card-icon" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
+                    <Icon size={32} strokeWidth={1.5} />
+                  </div>
+                  <h3 className="hero-card-title">{service.title}</h3>
+                  <p className="hero-card-subtitle">{service.subtitle}</p>
+                  <div className="hero-card-metrics font-mono">
+                    {key === "rag" && "데이터 보안 99.9% / 정확도 92%"}
+                    {key === "chatbot" && "인건비 50%↓ / 1.2s 응답"}
+                    {key === "recommend" && "ROI 300%↑ / 유저 유지율 강화"}
+                  </div>
+                  <div className="hero-card-cta">
+                    상세 보기
+                    <ArrowRight size={14} strokeWidth={1.5} />
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
+
+          {/* Mobile: Vertical Stack */}
+          <div className="hero-cards-stack mobile-only">
+            {(["rag", "chatbot", "recommend"] as ServiceKey[]).map((key, index) => {
+              const service = serviceData[key];
+              const Icon = service.icon;
+              return (
+                <motion.button
+                  key={key}
+                  className={`hero-service-card-mobile ${key === "chatbot" ? "hero-card-highlight" : ""}`}
+                  onClick={() => openServiceDrawer(key)}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  {key === "chatbot" && (
+                    <div className="most-popular-badge">
+                      <span className="font-mono">Most Popular</span>
+                    </div>
+                  )}
+                  <div className="mobile-card-left">
+                    <div className="hero-card-icon" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
+                      <Icon size={24} strokeWidth={1.5} />
+                    </div>
+                  </div>
+                  <div className="mobile-card-content">
+                    <div className="hero-card-badge" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
+                      <span className="font-mono">{service.badge}</span>
+                    </div>
+                    <h3>{service.title}</h3>
+                    <p>{service.subtitle}</p>
+                  </div>
+                  <ArrowRight size={20} strokeWidth={1.5} className="mobile-card-arrow" />
+                </motion.button>
+              );
+            })}
+          </div>
+
+          {/* Stats Row */}
+          <motion.div {...fadeInUp} className="hero-stats-row">
+            <div className="stat-item">
+              <span className="stat-value font-mono">
+                <CountUp end={92} suffix="%" />
+              </span>
+              <span className="stat-label">답변 정확도</span>
+            </div>
+            <div className="stat-divider"></div>
+            <div className="stat-item">
+              <span className="stat-value font-mono">
+                <CountUp end={1.2} suffix="s" decimals={1} />
+              </span>
+              <span className="stat-label">평균 응답시간</span>
+            </div>
+            <div className="stat-divider"></div>
+            <div className="stat-item">
+              <span className="stat-value font-mono">
+                <CountUp end={78} suffix="%" />
+              </span>
+              <span className="stat-label">업무 자동화율</span>
+            </div>
+            <div className="stat-divider"></div>
+            <div className="stat-item">
+              <span className="stat-value font-mono">
+                <CountUp end={100000} suffix="+" />
+              </span>
+              <span className="stat-label">검증 유저</span>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Section: Industry Demo */}
+      <section className="demo-section">
+        <div className="container">
+          <motion.div {...fadeInUp} className="section-header">
+            <span className="section-label font-mono">LIVE DEMO</span>
+            <h2 className="section-title">
+              산업별 <span className="text-cyan">RAG 데모</span>
+            </h2>
+            <p className="section-subtitle">
+              내 데이터도 될까? 실시간으로 확인해보세요.
+            </p>
+          </motion.div>
+
+          <motion.div {...fadeInUp} transition={{ delay: 0.2 }} className="demo-wrapper">
+            <IndustryDemo />
+          </motion.div>
 
           {/* Comparison UI */}
           <motion.div {...fadeInUp} transition={{ delay: 0.4 }}>
             <ComparisonSection />
           </motion.div>
-        </div>
-      </section>
-
-      {/* Main Message Section */}
-      <section className="main-message-section">
-        <div className="container">
-          <motion.div {...fadeInUp} className="main-message">
-            <h2>
-              검증된 RAG 기술을{" "}
-              <span className="text-glow">귀사</span>에 맞게 구축합니다
-            </h2>
-            <p>10만 회원이 검증한 엔진을 8주 내 귀사 비즈니스에 이식합니다.</p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Section 2: Service Cards with Drawer */}
-      <section id="solutions" className="solutions-section">
-        <div className="container">
-          <motion.div {...fadeInUp} className="section-header">
-            <span className="section-label font-mono">SERVICES</span>
-            <h2 className="section-title">
-              어떤 AI가 필요하신가요?
-            </h2>
-            <p className="section-subtitle">
-              카드를 클릭하여 상세 사례와 구축 과정을 확인하세요
-            </p>
-          </motion.div>
-
-          {/* Desktop: Grid */}
-          <div className="solutions-grid desktop-only">
-            {(["rag", "chatbot", "recommend"] as ServiceKey[]).map((key) => {
-              const service = serviceData[key];
-              const Icon = service.icon;
-              return (
-                <motion.div
-                  key={key}
-                  {...fadeInUp}
-                  className={`service-card ${key === "chatbot" ? "service-card-highlight" : ""}`}
-                  onClick={() => openServiceDrawer(key)}
-                >
-                  <div className="service-badge" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
-                    <span className="font-mono">{service.badge}</span>
-                  </div>
-                  <div className="service-icon" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
-                    <Icon size={28} strokeWidth={1.5} />
-                  </div>
-                  <h3 className="service-title">{service.title}</h3>
-                  <p className="service-subtitle">{service.subtitle}</p>
-                  <div className="service-cta">
-                    상세 보기
-                    <ArrowRight size={14} strokeWidth={1.5} />
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Mobile: Tabs */}
-          <div className="mobile-service-tabs mobile-only">
-            <div className="tab-buttons">
-              {(["rag", "chatbot", "recommend"] as ServiceKey[]).map((key) => {
-                const service = serviceData[key];
-                return (
-                  <button
-                    key={key}
-                    className={`tab-btn ${mobileServiceTab === key ? "active" : ""}`}
-                    onClick={() => setMobileServiceTab(key)}
-                    style={{ "--tab-color": service.badgeColor } as React.CSSProperties}
-                  >
-                    {service.title.split(" ")[0]}
-                  </button>
-                );
-              })}
-            </div>
-            <motion.div
-              key={mobileServiceTab}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="tab-content"
-              onClick={() => openServiceDrawer(mobileServiceTab)}
-            >
-              {(() => {
-                const service = serviceData[mobileServiceTab];
-                const Icon = service.icon;
-                return (
-                  <>
-                    <div className="service-badge" style={{ background: `${service.badgeColor}20`, color: service.badgeColor }}>
-                      <span className="font-mono">{service.badge}</span>
-                    </div>
-                    <div className="service-icon" style={{ background: `${service.badgeColor}15`, color: service.badgeColor }}>
-                      <Icon size={32} strokeWidth={1.5} />
-                    </div>
-                    <h3>{service.title}</h3>
-                    <p>{service.subtitle}</p>
-                    <p className="tab-case">{service.caseStudy.description}</p>
-                    <div className="service-cta">
-                      상세 보기
-                      <ArrowRight size={14} strokeWidth={1.5} />
-                    </div>
-                  </>
-                );
-              })()}
-            </motion.div>
-          </div>
         </div>
       </section>
 
@@ -3503,15 +3513,15 @@ export default function RAGLandingPage() {
           bottom: 0;
           left: 0;
           right: 0;
-          padding: 16px 24px 24px;
+          padding: 16px 24px 28px;
           background: linear-gradient(
             to top,
-            rgba(10, 10, 15, 0.98) 0%,
-            rgba(10, 10, 15, 0.85) 50%,
-            rgba(10, 10, 15, 0) 100%
+            rgba(10, 10, 15, 0.95) 0%,
+            rgba(10, 10, 15, 0.8) 60%,
+            transparent 100%
           );
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
           z-index: 999;
         }
 
@@ -3819,6 +3829,434 @@ export default function RAGLandingPage() {
 
         .rag-landing {
           position: relative;
+        }
+
+        /* ===== v12.0 Hero Funnel Styles ===== */
+
+        /* Grid Pattern Background */
+        .grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            linear-gradient(rgba(0, 191, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 191, 255, 0.03) 1px, transparent 1px);
+          background-size: 60px 60px;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .hero-funnel-section {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          padding: 140px 0 100px;
+          position: relative;
+          z-index: 1;
+          background: linear-gradient(
+            180deg,
+            var(--bg-primary) 0%,
+            rgba(10, 10, 15, 0.95) 100%
+          );
+        }
+
+        .hero-funnel-message {
+          text-align: center;
+          margin-bottom: 60px;
+        }
+
+        .hero-funnel-badges {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          margin-bottom: 32px;
+          flex-wrap: wrap;
+        }
+
+        .hero-funnel-title {
+          font-size: 3.5rem;
+          font-weight: 700;
+          line-height: 1.3;
+          margin-bottom: 24px;
+          letter-spacing: -0.02em;
+        }
+
+        .hero-funnel-subtitle {
+          font-size: 1.2rem;
+          color: var(--text-secondary);
+          line-height: 1.8;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+
+        /* Hero Cards Grid (Desktop) */
+        .hero-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+          margin-bottom: 60px;
+        }
+
+        .hero-service-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 24px;
+          padding: 32px;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          text-align: left;
+          width: 100%;
+          font-family: inherit;
+          overflow: hidden;
+        }
+
+        .hero-service-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border-radius: 24px;
+          padding: 2px;
+          background: linear-gradient(
+            135deg,
+            transparent 0%,
+            transparent 100%
+          );
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.3s;
+        }
+
+        .hero-service-card:hover::before {
+          background: linear-gradient(
+            135deg,
+            var(--cyan) 0%,
+            rgba(0, 191, 255, 0.3) 100%
+          );
+          opacity: 1;
+        }
+
+        .hero-service-card:hover {
+          border-color: var(--cyan);
+          box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.4),
+            0 0 40px rgba(0, 191, 255, 0.15);
+        }
+
+        .hero-card-highlight {
+          border-color: var(--cyan);
+          background: linear-gradient(
+            135deg,
+            var(--bg-secondary) 0%,
+            rgba(0, 191, 255, 0.08) 100%
+          );
+        }
+
+        .most-popular-badge {
+          position: absolute;
+          top: -1px;
+          left: 50%;
+          transform: translateX(-50%);
+          padding: 6px 16px;
+          background: linear-gradient(135deg, var(--cyan) 0%, #00d4ff 100%);
+          color: #0a0a0f;
+          font-size: 0.7rem;
+          font-weight: 700;
+          border-radius: 0 0 12px 12px;
+          animation: badge-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes badge-bounce {
+          0%, 100% { transform: translateX(-50%) translateY(0); }
+          50% { transform: translateX(-50%) translateY(3px); }
+        }
+
+        .hero-card-badge {
+          display: inline-block;
+          padding: 6px 12px;
+          border-radius: 100px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          margin-bottom: 16px;
+        }
+
+        .hero-card-icon {
+          width: 64px;
+          height: 64px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 18px;
+          margin-bottom: 20px;
+        }
+
+        .hero-card-title {
+          font-size: 1.4rem;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: var(--text-primary);
+        }
+
+        .hero-card-subtitle {
+          font-size: 0.95rem;
+          color: var(--text-secondary);
+          margin-bottom: 16px;
+        }
+
+        .hero-card-metrics {
+          font-size: 0.8rem;
+          color: var(--text-tertiary);
+          margin-bottom: 20px;
+          padding: 12px;
+          background: var(--bg-tertiary);
+          border-radius: 10px;
+        }
+
+        .hero-card-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.9rem;
+          color: var(--cyan);
+          font-weight: 600;
+        }
+
+        /* Hero Stats Row */
+        .hero-stats-row {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 48px;
+          padding: 32px 48px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          max-width: 900px;
+          margin: 0 auto;
+        }
+
+        /* Mobile Cards Stack */
+        .hero-cards-stack {
+          display: none;
+          flex-direction: column;
+          gap: 16px;
+          margin-bottom: 40px;
+        }
+
+        .hero-service-card-mobile {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          padding: 20px;
+          cursor: pointer;
+          transition: all 0.3s;
+          position: relative;
+          width: 100%;
+          text-align: left;
+          font-family: inherit;
+        }
+
+        .hero-service-card-mobile:hover {
+          border-color: var(--cyan);
+        }
+
+        .hero-service-card-mobile .most-popular-badge {
+          top: -1px;
+          left: 20px;
+          transform: none;
+          border-radius: 0 0 8px 8px;
+          padding: 4px 10px;
+          font-size: 0.65rem;
+        }
+
+        .mobile-card-left {
+          flex-shrink: 0;
+        }
+
+        .mobile-card-left .hero-card-icon {
+          width: 56px;
+          height: 56px;
+          margin-bottom: 0;
+        }
+
+        .mobile-card-content {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .mobile-card-content .hero-card-badge {
+          margin-bottom: 8px;
+          padding: 4px 10px;
+          font-size: 0.7rem;
+        }
+
+        .mobile-card-content h3 {
+          font-size: 1.1rem;
+          font-weight: 700;
+          margin-bottom: 4px;
+          color: var(--text-primary);
+        }
+
+        .mobile-card-content p {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+        }
+
+        .mobile-card-arrow {
+          color: var(--text-tertiary);
+          flex-shrink: 0;
+        }
+
+        /* Demo Section */
+        .demo-section {
+          padding: 120px 0;
+          position: relative;
+          z-index: 1;
+          background: var(--bg-secondary);
+        }
+
+        .demo-wrapper {
+          max-width: 700px;
+          margin: 0 auto 60px;
+        }
+
+        /* Tech Specs in Drawer */
+        .tech-specs-section {
+          margin-bottom: 32px;
+        }
+
+        .tech-specs-card {
+          padding: 20px;
+          background: var(--bg-tertiary);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+        }
+
+        .tech-spec-item {
+          display: flex;
+          justify-content: space-between;
+          padding: 10px 0;
+          border-bottom: 1px solid var(--border-color);
+          font-size: 0.8rem;
+        }
+
+        .tech-spec-item:last-child {
+          border-bottom: none;
+        }
+
+        .spec-key {
+          color: var(--text-tertiary);
+        }
+
+        .spec-value {
+          color: var(--cyan);
+        }
+
+        /* v12.0 Responsive */
+        @media (max-width: 1024px) {
+          .hero-cards-grid {
+            grid-template-columns: 1fr;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .hero-funnel-title {
+            font-size: 2.5rem;
+          }
+
+          .hero-stats-row {
+            flex-wrap: wrap;
+            gap: 24px;
+            padding: 24px;
+          }
+
+          .hero-stats-row .stat-divider {
+            display: none;
+          }
+
+          .hero-stats-row .stat-item {
+            width: calc(50% - 12px);
+            text-align: center;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .hero-funnel-section {
+            padding: 120px 0 80px;
+          }
+
+          .hero-funnel-title {
+            font-size: 2rem;
+          }
+
+          .hero-funnel-subtitle {
+            font-size: 1rem;
+          }
+
+          .hero-cards-grid {
+            display: none;
+          }
+
+          .hero-cards-stack {
+            display: flex;
+          }
+
+          .hero-stats-row {
+            gap: 16px;
+            padding: 20px;
+          }
+
+          .hero-stats-row .stat-item {
+            width: calc(50% - 8px);
+          }
+
+          .hero-stats-row .stat-value {
+            font-size: 1.25rem;
+          }
+
+          .hero-stats-row .stat-label {
+            font-size: 0.75rem;
+          }
+
+          .demo-section {
+            padding: 80px 0;
+          }
+
+          .build-steps {
+            flex-direction: column;
+          }
+        }
+
+        @media (max-width: 375px) {
+          .hero-funnel-title {
+            font-size: 1.75rem;
+          }
+
+          .hero-funnel-badges {
+            gap: 8px;
+          }
+
+          .hero-badge-item {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+          }
+
+          .hero-stats-row .stat-item {
+            width: 100%;
+          }
         }
       `}</style>
       </div>
