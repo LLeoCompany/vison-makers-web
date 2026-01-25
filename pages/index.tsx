@@ -1780,6 +1780,7 @@ export default function RAGLandingPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeService, setActiveService] = useState<ServiceKey | null>(null);
   const [mobileServiceTab, setMobileServiceTab] = useState<ServiceKey>("rag");
+  const [showSourceOverlay, setShowSourceOverlay] = useState(false);
 
   const openServicePopup = (service: ServiceKey) => {
     setActiveService(service);
@@ -1862,7 +1863,525 @@ export default function RAGLandingPage() {
         </div>
       </header>
 
-      {/* NEW HERO: 검증된 RAG 기술 섹션을 최상단 메인 배너로 */}
+      {/* ========== v29.0 HERO: The High-Speed Contrast ========== */}
+      <section className="contrast-hero-section">
+        <div className="contrast-hero-bg">
+          <div className="contrast-grid-pattern" />
+        </div>
+
+        <div className="container">
+          {/* Main Headline */}
+          <motion.div
+            className="contrast-hero-headline"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1>
+              당신의 <span className="time-highlight-old">5시간</span>,
+              <br />
+              비전메이커에선 <span className="time-highlight-new">5초</span>면 충분합니다.
+            </h1>
+            <p className="contrast-hero-sub">
+              RAG 기반 맞춤형 AI가 사내 지식 검색부터 ERP 연동까지 스스로 판단하고 처리합니다.
+            </p>
+          </motion.div>
+
+          {/* The Contrast Panels */}
+          <div className="contrast-panels">
+            {/* LEFT: Problem (Manual Work - Frustrating) */}
+            <motion.div
+              className="contrast-panel problem-panel"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <div className="panel-label problem-label">
+                <Clock size={14} />
+                <span>BEFORE</span>
+              </div>
+
+              <div className="manual-work-visual">
+                {/* Excel-like spreadsheet mockup */}
+                <div className="excel-mockup">
+                  <div className="excel-header">
+                    <div className="excel-dots">
+                      <span></span><span></span><span></span>
+                    </div>
+                    <span className="excel-title">주문_처리_0125.xlsx</span>
+                  </div>
+                  <div className="excel-grid">
+                    {[...Array(6)].map((_, i) => (
+                      <div key={i} className="excel-row">
+                        <span className="excel-cell cell-gray">{`A${i+1}`}</span>
+                        <span className="excel-cell cell-data">주문#{1024+i}</span>
+                        <span className="excel-cell cell-data">수량: {Math.floor(Math.random()*100)}</span>
+                        <span className="excel-cell cell-pending">대기중...</span>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Typing cursor animation */}
+                  <div className="manual-typing">
+                    <span className="typing-cursor">|</span>
+                    <span className="typing-text">수동 입력 중...</span>
+                  </div>
+                </div>
+
+                {/* Time counter - frustratingly slow */}
+                <div className="time-counter problem-time">
+                  <div className="time-icon-wrapper problem">
+                    <Clock size={24} className="spinning-slow" />
+                  </div>
+                  <div className="time-display">
+                    <span className="time-value problem-value">
+                      <CountUp end={120} suffix="분" />
+                    </span>
+                    <span className="time-label">수작업 소요</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="problem-symptoms">
+                <div className="symptom-item">
+                  <X size={14} className="symptom-x" />
+                  <span>반복적인 복사-붙여넣기</span>
+                </div>
+                <div className="symptom-item">
+                  <X size={14} className="symptom-x" />
+                  <span>휴먼 에러 발생 위험</span>
+                </div>
+                <div className="symptom-item">
+                  <X size={14} className="symptom-x" />
+                  <span>야근의 주범</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Center Divider with Arrow */}
+            <motion.div
+              className="contrast-divider"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <div className="divider-arrow">
+                <ArrowRight size={28} />
+              </div>
+              <span className="divider-text">AI 전환</span>
+            </motion.div>
+
+            {/* RIGHT: Solution (AI - Satisfying) */}
+            <motion.div
+              className="contrast-panel solution-panel"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <div className="panel-label solution-label">
+                <Zap size={14} />
+                <span>AFTER</span>
+              </div>
+
+              <div className="ai-work-visual">
+                {/* Chatbot interface mockup */}
+                <div className="chatbot-mockup-v29">
+                  <div className="chat-header-v29">
+                    <div className="chat-dots">
+                      <span></span><span></span><span></span>
+                    </div>
+                    <span className="chat-title">Vision AI Assistant</span>
+                    <span className="chat-status live">
+                      <span className="live-dot"></span>
+                      LIVE
+                    </span>
+                  </div>
+                  <div className="chat-messages-v29">
+                    <motion.div
+                      className="chat-msg user-msg"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.2 }}
+                    >
+                      오늘 들어온 주문 전부 ERP에 등록해줘
+                    </motion.div>
+                    <motion.div
+                      className="chat-msg bot-msg"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.8 }}
+                    >
+                      <div className="bot-avatar">
+                        <Bot size={14} />
+                      </div>
+                      <div className="bot-content">
+                        <div className="bot-text">
+                          47건의 신규 주문을 확인했습니다.
+                          <br />
+                          ERP 시스템에 일괄 등록 완료했습니다. ✅
+                        </div>
+                        <div className="bot-meta">
+                          <span className="response-time">
+                            <Zap size={10} />
+                            3.2초 만에 완료
+                          </span>
+                        </div>
+                        {/* v29.0 Section 3: 출처 확인 배지 - 매우 눈에 띄게 */}
+                        <motion.button
+                          className="source-verify-badge"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowSourceOverlay(true);
+                          }}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 2.4, type: "spring" }}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <FileText size={12} />
+                          <span>출처 확인</span>
+                          <span className="source-verified-icon">
+                            <CheckCircle size={10} />
+                          </span>
+                          <span className="source-pulse"></span>
+                        </motion.button>
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+
+                {/* Time counter - blazing fast */}
+                <motion.div
+                  className="time-counter solution-time"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 2.2, type: "spring", stiffness: 200 }}
+                >
+                  <div className="time-icon-wrapper solution">
+                    <Zap size={24} className="zap-pulse" />
+                  </div>
+                  <div className="time-display">
+                    <span className="time-value solution-value font-mono">3초</span>
+                    <span className="time-label">AI 자동 처리</span>
+                  </div>
+                  <div className="efficiency-badge">
+                    <TrendingUp size={12} />
+                    <span>2,400% 효율</span>
+                  </div>
+                </motion.div>
+              </div>
+
+              <div className="solution-benefits">
+                <div className="benefit-item">
+                  <CheckCircle size={14} className="benefit-check" />
+                  <span>자연어 한 줄로 끝</span>
+                </div>
+                <div className="benefit-item">
+                  <CheckCircle size={14} className="benefit-check" />
+                  <span>실수 제로, 일관된 품질</span>
+                </div>
+                <div className="benefit-item">
+                  <CheckCircle size={14} className="benefit-check" />
+                  <span>24시간 무중단 처리</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* CTA Button */}
+          <motion.div
+            className="contrast-hero-cta"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+          >
+            <motion.button
+              className="primary-cta-btn"
+              onClick={() => openServicePopup("rag")}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(233, 69, 96, 0.4)" }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span>우리 회사 업무 진단받기</span>
+              <ArrowRight size={18} />
+            </motion.button>
+            <p className="cta-note">무료 · 24시간 내 리포트 제공</p>
+          </motion.div>
+        </div>
+
+        {/* v29.0 Section 3: Source Verification Overlay (출처 확인 오버레이) */}
+        <AnimatePresence>
+          {showSourceOverlay && (
+            <>
+              <motion.div
+                className="source-overlay-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowSourceOverlay(false)}
+              />
+              <motion.div
+                className="source-overlay-modal"
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                {/* Document Header */}
+                <div className="source-doc-header">
+                  <div className="source-doc-tabs">
+                    <span className="source-tab active">
+                      <FileText size={14} />
+                      원본 데이터
+                    </span>
+                    <span className="source-tab">
+                      <Database size={14} />
+                      ERP 로그
+                    </span>
+                  </div>
+                  <button
+                    className="source-close-btn"
+                    onClick={() => setShowSourceOverlay(false)}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* Document Content - PDF Style */}
+                <div className="source-doc-content">
+                  {/* Trust Stamp */}
+                  <div className="source-trust-stamp">
+                    <Shield size={16} />
+                    <span>Vision-Makers 검증 완료</span>
+                    <CheckCircle size={14} className="stamp-check" />
+                  </div>
+
+                  {/* Simulated Document */}
+                  <div className="source-document">
+                    <div className="doc-watermark">VERIFIED SOURCE</div>
+
+                    <div className="doc-title-bar">
+                      <span className="doc-type font-mono">ERP_ORDER_LOG</span>
+                      <span className="doc-date font-mono">2025-01-25 14:32:07 KST</span>
+                    </div>
+
+                    <div className="doc-section">
+                      <div className="doc-section-title">
+                        <Database size={14} />
+                        주문 처리 결과 (47건)
+                      </div>
+                      <div className="doc-table">
+                        <div className="doc-row header">
+                          <span>주문번호</span>
+                          <span>품목</span>
+                          <span>수량</span>
+                          <span>상태</span>
+                        </div>
+                        {[
+                          { id: "ORD-2025-1024", item: "부품A-200", qty: 67, status: "완료" },
+                          { id: "ORD-2025-1025", item: "부품B-150", qty: 22, status: "완료" },
+                          { id: "ORD-2025-1026", item: "자재C-100", qty: 57, status: "완료" },
+                          { id: "ORD-2025-1027", item: "부품D-300", qty: 81, status: "완료" },
+                          { id: "ORD-2025-1028", item: "자재E-050", qty: 43, status: "완료" },
+                        ].map((row, i) => (
+                          <motion.div
+                            key={i}
+                            className="doc-row"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 + i * 0.05 }}
+                          >
+                            <span className="font-mono">{row.id}</span>
+                            <span>{row.item}</span>
+                            <span className="font-mono">{row.qty}개</span>
+                            <span className="status-complete">
+                              <CheckCircle size={12} />
+                              {row.status}
+                            </span>
+                          </motion.div>
+                        ))}
+                        <div className="doc-row more">
+                          <span>... 외 42건 더보기</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="doc-section">
+                      <div className="doc-section-title">
+                        <Clock size={14} />
+                        처리 타임라인
+                      </div>
+                      <div className="doc-timeline">
+                        <div className="timeline-item">
+                          <span className="timeline-time font-mono">14:32:04.123</span>
+                          <span className="timeline-event">주문 데이터 수신 (47건)</span>
+                        </div>
+                        <div className="timeline-item">
+                          <span className="timeline-time font-mono">14:32:05.456</span>
+                          <span className="timeline-event">데이터 검증 완료</span>
+                        </div>
+                        <div className="timeline-item">
+                          <span className="timeline-time font-mono">14:32:06.789</span>
+                          <span className="timeline-event">ERP 시스템 연동</span>
+                        </div>
+                        <div className="timeline-item highlight">
+                          <span className="timeline-time font-mono">14:32:07.234</span>
+                          <span className="timeline-event">
+                            <CheckCircle size={12} />
+                            일괄 등록 완료 (총 3.11초)
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Digital Signature */}
+                    <div className="doc-signature">
+                      <div className="signature-icon">
+                        <Lock size={16} />
+                      </div>
+                      <div className="signature-info">
+                        <span className="signature-label">디지털 서명 검증됨</span>
+                        <span className="signature-hash font-mono">SHA-256: 7f3a...b2c1</span>
+                      </div>
+                      <div className="signature-badge">
+                        <ShieldCheck size={14} />
+                        Verified
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="source-doc-footer">
+                  <div className="footer-info">
+                    <Eye size={14} />
+                    <span>이 데이터는 실제 처리 로그에서 추출되었습니다</span>
+                  </div>
+                  <button
+                    className="footer-cta"
+                    onClick={() => {
+                      setShowSourceOverlay(false);
+                      openServicePopup("rag");
+                    }}
+                  >
+                    우리 회사도 적용하기
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </section>
+
+      {/* ========== v29.0 SECTION 2: Solution Matrix ========== */}
+      <section className="solution-matrix-section">
+        <div className="container">
+          <motion.div {...fadeInUp} className="section-header">
+            <div className="section-badge font-mono">
+              <Target size={14} />
+              <span>SOLUTIONS</span>
+            </div>
+            <h2 className="section-title">
+              어떤 <span className="text-cyan">문제</span>를 해결하고 싶으신가요?
+            </h2>
+            <p className="section-subtitle">
+              기술이 아닌 문제 중심으로 선택하세요. 비전메이커가 최적의 솔루션을 제안합니다.
+            </p>
+          </motion.div>
+
+          <div className="solution-matrix-grid">
+            {/* Card 1: 주문/ERP 자동화 */}
+            <motion.div
+              className="solution-matrix-card"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              whileHover={{ y: -8, boxShadow: "0 20px 60px rgba(0, 191, 255, 0.15)" }}
+              onClick={() => openServicePopup("chatbot")}
+            >
+              <div className="matrix-card-icon" style={{ background: "rgba(0, 191, 255, 0.1)", color: "#00BFFF" }}>
+                <MessageSquare size={32} />
+              </div>
+              <div className="matrix-card-badge">인건비 50% 절감</div>
+              <h3 className="matrix-card-title">주문/ERP 자동화</h3>
+              <p className="matrix-card-desc">
+                영업사원의 한 줄 채팅이<br />
+                즉시 ERP 주문으로 전송됩니다.
+              </p>
+              <div className="matrix-card-example">
+                <span className="example-label">예시</span>
+                <span className="example-text">&ldquo;거래처A에 품목B 100개 주문해줘&rdquo;</span>
+              </div>
+              <div className="matrix-card-cta">
+                <span>자세히 보기</span>
+                <ArrowRight size={16} />
+              </div>
+            </motion.div>
+
+            {/* Card 2: 도면/문서 검토 */}
+            <motion.div
+              className="solution-matrix-card featured"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              whileHover={{ y: -8, boxShadow: "0 20px 60px rgba(233, 69, 96, 0.2)" }}
+              onClick={() => openServicePopup("rag")}
+            >
+              <div className="featured-badge">MOST SELECTED</div>
+              <div className="matrix-card-icon" style={{ background: "rgba(233, 69, 96, 0.1)", color: "#E94560" }}>
+                <FileText size={32} />
+              </div>
+              <div className="matrix-card-badge">정확도 92%</div>
+              <h3 className="matrix-card-title">도면/문서 검토</h3>
+              <p className="matrix-card-desc">
+                수만 장의 규정집과 도면 대조,<br />
+                AI가 20분 만에 위반 사항을 마킹합니다.
+              </p>
+              <div className="matrix-card-example">
+                <span className="example-label">예시</span>
+                <span className="example-text">&ldquo;이 설계도면이 안전규정에 맞는지 검토해줘&rdquo;</span>
+              </div>
+              <div className="matrix-card-cta">
+                <span>자세히 보기</span>
+                <ArrowRight size={16} />
+              </div>
+            </motion.div>
+
+            {/* Card 3: 지능형 추천/관리 */}
+            <motion.div
+              className="solution-matrix-card"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              whileHover={{ y: -8, boxShadow: "0 20px 60px rgba(72, 187, 120, 0.15)" }}
+              onClick={() => openServicePopup("recommend")}
+            >
+              <div className="matrix-card-icon" style={{ background: "rgba(72, 187, 120, 0.1)", color: "#48BB78" }}>
+                <TrendingUp size={32} />
+              </div>
+              <div className="matrix-card-badge">ROI 300%↑</div>
+              <h3 className="matrix-card-title">지능형 추천/관리</h3>
+              <p className="matrix-card-desc">
+                유저의 취향과 데이터를 분석해<br />
+                매출이 발생하는 경로를 제안합니다.
+              </p>
+              <div className="matrix-card-example">
+                <span className="example-label">예시</span>
+                <span className="example-text">&ldquo;이 고객에게 어떤 상품을 추천하면 좋을까?&rdquo;</span>
+              </div>
+              <div className="matrix-card-cta">
+                <span>자세히 보기</span>
+                <ArrowRight size={16} />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Previous HERO (now as Social Proof Section) */}
       <section id="solutions" className="hero-funnel-section">
         <div className="container">
           {/* Grid Pattern Background */}
@@ -3282,6 +3801,1258 @@ export default function RAGLandingPage() {
         .nav-cta:hover {
           background: #d63d55;
           transform: translateY(-2px);
+        }
+
+        /* ========== v29.0 Contrast Hero Section ========== */
+        .contrast-hero-section {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          padding: 140px 0 80px;
+          position: relative;
+          overflow: hidden;
+          background: var(--bg-primary);
+        }
+
+        .contrast-hero-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background:
+            radial-gradient(ellipse 60% 50% at 25% 30%, rgba(100, 100, 120, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 50% at 75% 70%, rgba(233, 69, 96, 0.08) 0%, transparent 50%);
+          pointer-events: none;
+        }
+
+        .contrast-grid-pattern {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+          background-size: 60px 60px;
+          opacity: 0.5;
+        }
+
+        .contrast-hero-headline {
+          text-align: center;
+          margin-bottom: 60px;
+          position: relative;
+          z-index: 2;
+        }
+
+        .contrast-hero-headline h1 {
+          font-size: 3.5rem;
+          font-weight: 800;
+          line-height: 1.3;
+          margin-bottom: 24px;
+          color: white;
+        }
+
+        .time-highlight-old {
+          color: #888;
+          text-decoration: line-through;
+          text-decoration-color: rgba(233, 69, 96, 0.6);
+          text-decoration-thickness: 3px;
+          position: relative;
+        }
+
+        .time-highlight-new {
+          background: linear-gradient(135deg, #E94560 0%, #ff6b6b 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          position: relative;
+          animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+          0%, 100% { filter: drop-shadow(0 0 10px rgba(233, 69, 96, 0.5)); }
+          50% { filter: drop-shadow(0 0 25px rgba(233, 69, 96, 0.8)); }
+        }
+
+        .contrast-hero-sub {
+          font-size: 1.2rem;
+          color: var(--text-secondary);
+          max-width: 600px;
+          margin: 0 auto;
+          line-height: 1.6;
+        }
+
+        /* Contrast Panels */
+        .contrast-panels {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          gap: 24px;
+          align-items: stretch;
+          margin-bottom: 48px;
+          position: relative;
+          z-index: 2;
+        }
+
+        .contrast-panel {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 28px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        /* Problem Panel - Grayscale & Frustrating */
+        .problem-panel {
+          filter: saturate(0.3);
+          background: linear-gradient(135deg, #1a1a1f 0%, #12121a 100%);
+          border-color: rgba(100, 100, 100, 0.3);
+        }
+
+        .problem-panel::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.03) 2px,
+            rgba(0, 0, 0, 0.03) 4px
+          );
+          pointer-events: none;
+          animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(20px); }
+        }
+
+        .panel-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 12px;
+          border-radius: 6px;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          margin-bottom: 20px;
+        }
+
+        .problem-label {
+          background: rgba(100, 100, 100, 0.2);
+          color: #888;
+          border: 1px solid rgba(100, 100, 100, 0.3);
+        }
+
+        .solution-label {
+          background: rgba(233, 69, 96, 0.15);
+          color: #E94560;
+          border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+
+        /* Excel Mockup */
+        .excel-mockup {
+          background: #1e1e24;
+          border: 1px solid rgba(100, 100, 100, 0.3);
+          border-radius: 12px;
+          overflow: hidden;
+          margin-bottom: 20px;
+        }
+
+        .excel-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 14px;
+          background: #2a2a32;
+          border-bottom: 1px solid rgba(100, 100, 100, 0.2);
+        }
+
+        .excel-dots {
+          display: flex;
+          gap: 6px;
+        }
+
+        .excel-dots span {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: rgba(100, 100, 100, 0.4);
+        }
+
+        .excel-title {
+          font-size: 0.75rem;
+          color: #666;
+          font-family: monospace;
+        }
+
+        .excel-grid {
+          padding: 8px;
+        }
+
+        .excel-row {
+          display: flex;
+          gap: 4px;
+          margin-bottom: 4px;
+        }
+
+        .excel-cell {
+          padding: 6px 10px;
+          font-size: 0.7rem;
+          font-family: monospace;
+          border-radius: 4px;
+        }
+
+        .cell-gray {
+          background: rgba(100, 100, 100, 0.2);
+          color: #555;
+          width: 36px;
+          text-align: center;
+        }
+
+        .cell-data {
+          background: rgba(100, 100, 100, 0.1);
+          color: #777;
+          flex: 1;
+        }
+
+        .cell-pending {
+          background: rgba(200, 150, 50, 0.15);
+          color: #a08040;
+          animation: blink-slow 2s ease-in-out infinite;
+        }
+
+        @keyframes blink-slow {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
+
+        .manual-typing {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 10px 14px;
+          border-top: 1px solid rgba(100, 100, 100, 0.2);
+          font-size: 0.75rem;
+          color: #555;
+        }
+
+        .typing-cursor {
+          animation: cursor-blink 1s step-end infinite;
+          color: #666;
+        }
+
+        @keyframes cursor-blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+
+        .typing-text {
+          animation: typing-fade 3s ease-in-out infinite;
+        }
+
+        @keyframes typing-fade {
+          0%, 100% { opacity: 0.5; }
+          50% { opacity: 1; }
+        }
+
+        /* Time Counter */
+        .time-counter {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 16px 20px;
+          border-radius: 14px;
+          margin-bottom: 20px;
+        }
+
+        .problem-time {
+          background: rgba(80, 80, 80, 0.15);
+          border: 1px solid rgba(100, 100, 100, 0.2);
+        }
+
+        .solution-time {
+          background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, rgba(233, 69, 96, 0.05) 100%);
+          border: 1px solid rgba(233, 69, 96, 0.3);
+          position: relative;
+        }
+
+        .time-icon-wrapper {
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 12px;
+        }
+
+        .time-icon-wrapper.problem {
+          background: rgba(100, 100, 100, 0.2);
+          color: #666;
+        }
+
+        .time-icon-wrapper.solution {
+          background: rgba(233, 69, 96, 0.2);
+          color: #E94560;
+        }
+
+        .spinning-slow {
+          animation: spin-slow 8s linear infinite;
+        }
+
+        @keyframes spin-slow {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .zap-pulse {
+          animation: zap-flash 1.5s ease-in-out infinite;
+        }
+
+        @keyframes zap-flash {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .time-display {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .time-value {
+          font-size: 1.8rem;
+          font-weight: 800;
+          line-height: 1;
+        }
+
+        .problem-value {
+          color: #666;
+        }
+
+        .solution-value {
+          color: #E94560;
+          text-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+        }
+
+        .time-label {
+          font-size: 0.75rem;
+          color: var(--text-tertiary);
+        }
+
+        .efficiency-badge {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          margin-left: auto;
+          padding: 6px 12px;
+          background: rgba(72, 187, 120, 0.15);
+          border-radius: 20px;
+          font-size: 0.7rem;
+          font-weight: 700;
+          color: #48BB78;
+        }
+
+        /* Problem Symptoms & Solution Benefits */
+        .problem-symptoms,
+        .solution-benefits {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .symptom-item,
+        .benefit-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 0.85rem;
+          padding: 8px 12px;
+          border-radius: 8px;
+        }
+
+        .symptom-item {
+          background: rgba(80, 80, 80, 0.1);
+          color: #777;
+        }
+
+        .symptom-x {
+          color: #a05050;
+        }
+
+        .benefit-item {
+          background: rgba(72, 187, 120, 0.1);
+          color: var(--text-secondary);
+        }
+
+        .benefit-check {
+          color: #48BB78;
+        }
+
+        /* Solution Panel - Vivid & Satisfying */
+        .solution-panel {
+          background: linear-gradient(135deg, rgba(233, 69, 96, 0.05) 0%, var(--bg-secondary) 100%);
+          border-color: rgba(233, 69, 96, 0.2);
+          position: relative;
+        }
+
+        .solution-panel::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          right: -50%;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle, rgba(233, 69, 96, 0.1) 0%, transparent 60%);
+          pointer-events: none;
+        }
+
+        /* Chatbot Mockup v29 */
+        .chatbot-mockup-v29 {
+          background: var(--bg-tertiary);
+          border: 1px solid rgba(233, 69, 96, 0.2);
+          border-radius: 16px;
+          overflow: hidden;
+          margin-bottom: 20px;
+          box-shadow: 0 10px 40px rgba(233, 69, 96, 0.1);
+        }
+
+        .chat-header-v29 {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          background: rgba(233, 69, 96, 0.08);
+          border-bottom: 1px solid rgba(233, 69, 96, 0.15);
+        }
+
+        .chat-dots {
+          display: flex;
+          gap: 6px;
+        }
+
+        .chat-dots span {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+        }
+
+        .chat-dots span:nth-child(1) { background: #E94560; }
+        .chat-dots span:nth-child(2) { background: #f0a030; }
+        .chat-dots span:nth-child(3) { background: #48BB78; }
+
+        .chat-title {
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: white;
+        }
+
+        .chat-status {
+          margin-left: auto;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.65rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+        }
+
+        .chat-status.live {
+          color: #48BB78;
+        }
+
+        .live-dot {
+          width: 6px;
+          height: 6px;
+          background: #48BB78;
+          border-radius: 50%;
+          animation: live-blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes live-blink {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .chat-messages-v29 {
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          min-height: 180px;
+        }
+
+        .chat-msg {
+          max-width: 85%;
+          padding: 12px 16px;
+          border-radius: 16px;
+          font-size: 0.85rem;
+          line-height: 1.5;
+        }
+
+        .user-msg {
+          align-self: flex-end;
+          background: linear-gradient(135deg, #E94560 0%, #d63d55 100%);
+          color: white;
+          border-bottom-right-radius: 4px;
+        }
+
+        .bot-msg {
+          align-self: flex-start;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-bottom-left-radius: 4px;
+          display: flex;
+          gap: 10px;
+        }
+
+        .bot-avatar {
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(233, 69, 96, 0.15);
+          border-radius: 8px;
+          color: #E94560;
+          flex-shrink: 0;
+        }
+
+        .bot-content {
+          flex: 1;
+        }
+
+        .bot-text {
+          color: var(--text-primary);
+          margin-bottom: 8px;
+        }
+
+        .bot-meta {
+          display: flex;
+          gap: 12px;
+        }
+
+        .response-time {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 0.7rem;
+          color: #48BB78;
+          font-family: monospace;
+        }
+
+        /* ========== v29.0 Section 3: Source Verification Badge & Overlay ========== */
+
+        /* 출처 확인 배지 - 눈에 확 띄게 */
+        .source-verify-badge {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin-top: 12px;
+          padding: 10px 16px;
+          background: linear-gradient(135deg, rgba(0, 191, 255, 0.15) 0%, rgba(72, 187, 120, 0.15) 100%);
+          border: 1px solid rgba(0, 191, 255, 0.4);
+          border-radius: 10px;
+          color: var(--cyan);
+          font-size: 0.8rem;
+          font-weight: 700;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.3s;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .source-verify-badge:hover {
+          background: linear-gradient(135deg, rgba(0, 191, 255, 0.25) 0%, rgba(72, 187, 120, 0.25) 100%);
+          border-color: var(--cyan);
+          box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+          transform: translateY(-2px);
+        }
+
+        .source-verified-icon {
+          display: flex;
+          align-items: center;
+          color: #48BB78;
+        }
+
+        .source-pulse {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle, rgba(0, 191, 255, 0.3) 0%, transparent 70%);
+          transform: translate(-50%, -50%) scale(0);
+          animation: source-pulse-anim 2s ease-out infinite;
+          pointer-events: none;
+        }
+
+        @keyframes source-pulse-anim {
+          0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+          100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+        }
+
+        /* 출처 확인 오버레이 */
+        .source-overlay-backdrop {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.8);
+          backdrop-filter: blur(8px);
+          z-index: 1000;
+        }
+
+        .source-overlay-modal {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 90%;
+          max-width: 700px;
+          max-height: 85vh;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          overflow: hidden;
+          z-index: 1001;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(0, 191, 255, 0.1);
+        }
+
+        .source-doc-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 16px 20px;
+          background: var(--bg-tertiary);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .source-doc-tabs {
+          display: flex;
+          gap: 8px;
+        }
+
+        .source-tab {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 14px;
+          border-radius: 8px;
+          font-size: 0.8rem;
+          color: var(--text-tertiary);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .source-tab.active {
+          background: rgba(0, 191, 255, 0.15);
+          color: var(--cyan);
+          border: 1px solid rgba(0, 191, 255, 0.3);
+        }
+
+        .source-close-btn {
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .source-close-btn:hover {
+          background: rgba(233, 69, 96, 0.15);
+          border-color: rgba(233, 69, 96, 0.3);
+          color: #E94560;
+        }
+
+        .source-doc-content {
+          flex: 1;
+          overflow-y: auto;
+          padding: 24px;
+        }
+
+        .source-trust-stamp {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 12px 20px;
+          background: linear-gradient(135deg, rgba(72, 187, 120, 0.15) 0%, rgba(72, 187, 120, 0.05) 100%);
+          border: 1px solid rgba(72, 187, 120, 0.3);
+          border-radius: 12px;
+          color: #48BB78;
+          font-size: 0.9rem;
+          font-weight: 700;
+          margin-bottom: 20px;
+        }
+
+        .stamp-check {
+          animation: check-bounce 0.5s ease-out;
+        }
+
+        @keyframes check-bounce {
+          0% { transform: scale(0); }
+          50% { transform: scale(1.3); }
+          100% { transform: scale(1); }
+        }
+
+        .source-document {
+          background: linear-gradient(135deg, #1a1a24 0%, #15151f 100%);
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .doc-watermark {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(-30deg);
+          font-size: 4rem;
+          font-weight: 900;
+          color: rgba(72, 187, 120, 0.03);
+          pointer-events: none;
+          white-space: nowrap;
+          letter-spacing: 0.1em;
+        }
+
+        .doc-title-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 14px 20px;
+          background: rgba(0, 191, 255, 0.08);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .doc-type {
+          font-size: 0.75rem;
+          color: var(--cyan);
+          letter-spacing: 0.05em;
+        }
+
+        .doc-date {
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+        }
+
+        .doc-section {
+          padding: 20px;
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .doc-section:last-of-type {
+          border-bottom: none;
+        }
+
+        .doc-section-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: white;
+          margin-bottom: 16px;
+        }
+
+        .doc-section-title svg {
+          color: var(--cyan);
+        }
+
+        .doc-table {
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          overflow: hidden;
+        }
+
+        .doc-row {
+          display: grid;
+          grid-template-columns: 1.2fr 1fr 0.6fr 0.8fr;
+          gap: 12px;
+          padding: 12px 16px;
+          font-size: 0.8rem;
+          color: var(--text-secondary);
+          border-bottom: 1px solid var(--border-color);
+        }
+
+        .doc-row:last-child {
+          border-bottom: none;
+        }
+
+        .doc-row.header {
+          background: rgba(0, 0, 0, 0.3);
+          font-weight: 600;
+          color: var(--text-tertiary);
+          font-size: 0.7rem;
+          letter-spacing: 0.05em;
+        }
+
+        .doc-row.more {
+          background: rgba(0, 191, 255, 0.05);
+          color: var(--cyan);
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+        }
+
+        .status-complete {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          color: #48BB78;
+        }
+
+        .doc-timeline {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .timeline-item {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 10px 14px;
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 8px;
+          font-size: 0.8rem;
+        }
+
+        .timeline-item.highlight {
+          background: rgba(72, 187, 120, 0.1);
+          border: 1px solid rgba(72, 187, 120, 0.3);
+        }
+
+        .timeline-time {
+          color: var(--text-tertiary);
+          font-size: 0.7rem;
+          min-width: 100px;
+        }
+
+        .timeline-event {
+          color: var(--text-secondary);
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .timeline-item.highlight .timeline-event {
+          color: #48BB78;
+          font-weight: 600;
+        }
+
+        .doc-signature {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 16px 20px;
+          background: rgba(72, 187, 120, 0.08);
+          border-top: 1px solid rgba(72, 187, 120, 0.2);
+        }
+
+        .signature-icon {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(72, 187, 120, 0.15);
+          border-radius: 10px;
+          color: #48BB78;
+        }
+
+        .signature-info {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .signature-label {
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: #48BB78;
+        }
+
+        .signature-hash {
+          font-size: 0.7rem;
+          color: var(--text-tertiary);
+        }
+
+        .signature-badge {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 14px;
+          background: rgba(72, 187, 120, 0.2);
+          border-radius: 8px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: #48BB78;
+        }
+
+        .source-doc-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 16px 24px;
+          background: var(--bg-tertiary);
+          border-top: 1px solid var(--border-color);
+        }
+
+        .footer-info {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.8rem;
+          color: var(--text-tertiary);
+        }
+
+        .footer-cta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 20px;
+          background: linear-gradient(135deg, #E94560 0%, #d63d55 100%);
+          border: none;
+          border-radius: 10px;
+          color: white;
+          font-size: 0.9rem;
+          font-weight: 700;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .footer-cta:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(233, 69, 96, 0.4);
+        }
+
+        /* Mobile Responsive for Source Overlay */
+        @media (max-width: 768px) {
+          .source-overlay-modal {
+            width: 95%;
+            max-height: 90vh;
+          }
+
+          .source-doc-tabs {
+            flex-wrap: wrap;
+          }
+
+          .doc-row {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+          }
+
+          .doc-row.header {
+            display: none;
+          }
+
+          .timeline-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+          }
+
+          .timeline-time {
+            min-width: auto;
+          }
+
+          .source-doc-footer {
+            flex-direction: column;
+            gap: 12px;
+          }
+
+          .footer-cta {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        /* Contrast Divider */
+        .contrast-divider {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 0 16px;
+        }
+
+        .divider-arrow {
+          width: 56px;
+          height: 56px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #E94560 0%, #d63d55 100%);
+          border-radius: 50%;
+          color: white;
+          box-shadow: 0 0 30px rgba(233, 69, 96, 0.4);
+          animation: arrow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes arrow-pulse {
+          0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(233, 69, 96, 0.4); }
+          50% { transform: scale(1.1); box-shadow: 0 0 50px rgba(233, 69, 96, 0.6); }
+        }
+
+        .divider-text {
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: #E94560;
+          letter-spacing: 0.05em;
+        }
+
+        /* Hero CTA */
+        .contrast-hero-cta {
+          text-align: center;
+          position: relative;
+          z-index: 2;
+        }
+
+        .primary-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          padding: 18px 36px;
+          background: linear-gradient(135deg, #E94560 0%, #d63d55 100%);
+          border: none;
+          border-radius: 14px;
+          color: white;
+          font-size: 1.1rem;
+          font-weight: 700;
+          font-family: inherit;
+          cursor: pointer;
+          transition: all 0.3s;
+          box-shadow: 0 8px 32px rgba(233, 69, 96, 0.3);
+        }
+
+        .cta-note {
+          margin-top: 12px;
+          font-size: 0.8rem;
+          color: var(--text-tertiary);
+        }
+
+        /* ========== v29.0 Solution Matrix Section ========== */
+        .solution-matrix-section {
+          padding: 120px 0;
+          background: var(--bg-primary);
+          position: relative;
+        }
+
+        .section-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          background: rgba(0, 191, 255, 0.1);
+          border: 1px solid rgba(0, 191, 255, 0.3);
+          border-radius: 30px;
+          color: var(--cyan);
+          font-size: 0.7rem;
+          letter-spacing: 0.15em;
+          margin-bottom: 16px;
+        }
+
+        .solution-matrix-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 24px;
+          margin-top: 48px;
+        }
+
+        .solution-matrix-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          padding: 32px 28px;
+          cursor: pointer;
+          transition: all 0.3s;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .solution-matrix-card.featured {
+          border-color: rgba(233, 69, 96, 0.4);
+          background: linear-gradient(135deg, rgba(233, 69, 96, 0.08) 0%, var(--bg-secondary) 100%);
+        }
+
+        .featured-badge {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          padding: 6px 12px;
+          background: linear-gradient(135deg, #E94560 0%, #d63d55 100%);
+          border-radius: 6px;
+          font-size: 0.65rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          color: white;
+        }
+
+        .matrix-card-icon {
+          width: 64px;
+          height: 64px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 16px;
+          margin-bottom: 20px;
+        }
+
+        .matrix-card-badge {
+          display: inline-block;
+          padding: 6px 12px;
+          background: rgba(72, 187, 120, 0.15);
+          border-radius: 6px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: #48BB78;
+          font-family: monospace;
+          margin-bottom: 16px;
+        }
+
+        .matrix-card-title {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: white;
+          margin-bottom: 12px;
+        }
+
+        .matrix-card-desc {
+          font-size: 0.95rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+          margin-bottom: 20px;
+        }
+
+        .matrix-card-example {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          padding: 14px 16px;
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 10px;
+          margin-bottom: 20px;
+        }
+
+        .example-label {
+          flex-shrink: 0;
+          padding: 4px 8px;
+          background: rgba(0, 191, 255, 0.2);
+          border-radius: 4px;
+          font-size: 0.65rem;
+          font-weight: 700;
+          color: var(--cyan);
+        }
+
+        .example-text {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          font-style: italic;
+          line-height: 1.4;
+        }
+
+        .matrix-card-cta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--cyan);
+          transition: all 0.2s;
+        }
+
+        .solution-matrix-card:hover .matrix-card-cta {
+          gap: 12px;
+        }
+
+        /* Mobile Responsive for v29.0 */
+        @media (max-width: 1024px) {
+          .contrast-panels {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+
+          .contrast-divider {
+            flex-direction: row;
+            padding: 16px 0;
+          }
+
+          .divider-arrow {
+            width: 48px;
+            height: 48px;
+            transform: rotate(90deg);
+          }
+
+          .solution-matrix-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .contrast-hero-headline h1 {
+            font-size: 2rem;
+          }
+
+          .contrast-hero-sub {
+            font-size: 1rem;
+          }
+
+          .contrast-panel {
+            padding: 20px;
+          }
+
+          .excel-row {
+            flex-wrap: wrap;
+          }
+
+          .time-counter {
+            flex-wrap: wrap;
+            gap: 12px;
+          }
+
+          .efficiency-badge {
+            margin-left: 0;
+            width: 100%;
+            justify-content: center;
+          }
+
+          .primary-cta-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 16px 24px;
+          }
+
+          .solution-matrix-card {
+            padding: 24px 20px;
+          }
+
+          .matrix-card-title {
+            font-size: 1.2rem;
+          }
         }
 
         /* Hero Section */
