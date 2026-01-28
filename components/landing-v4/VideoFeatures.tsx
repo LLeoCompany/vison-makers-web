@@ -20,33 +20,81 @@ const features = [
   },
 ];
 
+// Animated Background Fallback
+const AnimatedFeatureBackground = () => {
+  return (
+    <div className="absolute inset-0 bg-black overflow-hidden">
+      {/* Moving gradient */}
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(ellipse at center, rgba(0,240,255,0.08) 0%, transparent 60%)",
+        }}
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.5, 0.8, 0.5],
+        }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Grid */}
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(0, 240, 255, 0.15) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 240, 255, 0.15) 1px, transparent 1px)
+          `,
+          backgroundSize: "80px 80px",
+        }}
+      />
+    </div>
+  );
+};
+
 // Separate component for FeatureCard to use hooks properly
 const FeatureCard = ({
   feature,
   index,
   progress,
+  totalFeatures,
 }: {
   feature: (typeof features)[0];
   index: number;
   progress: MotionValue<number>;
+  totalFeatures: number;
 }) => {
-  const start = index * 0.25;
-  const end = start + 0.3;
+  // Each feature takes up 1/totalFeatures of the scroll, with overlap for transitions
+  const segmentSize = 1 / totalFeatures;
+  const start = index * segmentSize;
+  const peak = start + segmentSize * 0.5;
+  const end = start + segmentSize;
 
-  const opacity = useTransform(progress, [start, start + 0.1, end - 0.1, end], [0, 1, 1, 0]);
-  const y = useTransform(progress, [start, start + 0.1, end - 0.1, end], [100, 0, 0, -100]);
-  const scale = useTransform(progress, [start, start + 0.1, end - 0.1, end], [0.8, 1, 1, 0.8]);
+  const opacity = useTransform(
+    progress,
+    [start, start + 0.05, peak, end - 0.05, end],
+    [0, 1, 1, 1, 0]
+  );
+  const y = useTransform(
+    progress,
+    [start, start + 0.05, peak, end - 0.05, end],
+    [80, 0, 0, 0, -80]
+  );
+  const scale = useTransform(
+    progress,
+    [start, start + 0.05, peak, end - 0.05, end],
+    [0.9, 1, 1, 1, 0.9]
+  );
 
   return (
     <motion.div
-      className="absolute inset-0 flex items-center justify-center"
+      className="absolute inset-0 flex items-center justify-center px-6"
       style={{ opacity, y, scale }}
     >
       <div className="text-center">
         <motion.p className="text-[#00F0FF] text-lg md:text-xl font-medium mb-4 tracking-widest">
           {feature.subtitle}
         </motion.p>
-        <motion.h2 className="text-6xl md:text-8xl lg:text-[150px] font-black text-white leading-none tracking-tighter mb-6">
+        <motion.h2 className="text-6xl md:text-8xl lg:text-[140px] font-black text-white leading-none tracking-tighter mb-6">
           {feature.title}
         </motion.h2>
         <motion.p className="text-white/50 text-xl md:text-2xl font-light">
@@ -61,18 +109,23 @@ const FeatureCard = ({
 const ProgressIndicatorItem = ({
   index,
   progress,
+  totalFeatures,
 }: {
   index: number;
   progress: MotionValue<number>;
+  totalFeatures: number;
 }) => {
-  const start = index * 0.25;
-  const fillProgress = useTransform(progress, [start, start + 0.25], [0, 100]);
+  const segmentSize = 1 / totalFeatures;
+  const start = index * segmentSize;
+  const end = start + segmentSize;
+  const fillProgress = useTransform(progress, [start, end], [0, 100]);
+  const fillHeight = useTransform(fillProgress, (v) => `${Math.min(v, 100)}%`);
 
   return (
     <motion.div className="w-1 h-12 bg-white/20 overflow-hidden">
       <motion.div
         className="w-full bg-[#00F0FF]"
-        style={{ height: useTransform(fillProgress, (v) => `${v}%`) }}
+        style={{ height: fillHeight }}
       />
     </motion.div>
   );
@@ -85,32 +138,27 @@ const VideoFeatures = () => {
     offset: ["start start", "end end"],
   });
 
-  // Video brightness based on scroll
-  const videoBrightness = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 0.15, 0.3]);
-  const videoFilter = useTransform(videoBrightness, (v) => `brightness(${v})`);
-
   return (
-    <section ref={containerRef} className="relative h-[400vh] bg-black">
-      {/* Sticky Video Container */}
+    <section ref={containerRef} className="relative h-[300vh] bg-black">
+      {/* Sticky Container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Video Background */}
-        <motion.div
-          className="absolute inset-0"
-          style={{ filter: videoFilter }}
+        {/* Animated Background (always visible) */}
+        <AnimatedFeatureBackground />
+
+        {/* Video Background (optional, overlays animated bg if present) */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          poster="/images/features-poster.jpg"
         >
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src="/video/features-bg.mp4" type="video/mp4" />
-          </video>
-        </motion.div>
+          <source src="/video/features-bg.mp4" type="video/mp4" />
+        </video>
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/50" />
 
         {/* Features */}
         <div className="relative z-10 h-full">
@@ -120,6 +168,7 @@ const VideoFeatures = () => {
               feature={feature}
               index={idx}
               progress={scrollYProgress}
+              totalFeatures={features.length}
             />
           ))}
         </div>
@@ -132,6 +181,7 @@ const VideoFeatures = () => {
                 key={idx}
                 index={idx}
                 progress={scrollYProgress}
+                totalFeatures={features.length}
               />
             ))}
           </div>

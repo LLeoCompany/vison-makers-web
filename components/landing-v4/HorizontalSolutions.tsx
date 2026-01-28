@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import Link from "next/link";
 
 const industries = [
@@ -130,6 +130,25 @@ const SolutionCard = ({
   );
 };
 
+// Progress bar component to avoid hook in JSX
+const ScrollProgressBar = ({
+  progress,
+}: {
+  progress: MotionValue<number>;
+}) => {
+  const width = useTransform(progress, [0, 1], ["0%", "100%"]);
+  return (
+    <div className="absolute bottom-12 left-8 md:left-16 right-8 md:right-16">
+      <div className="h-[2px] bg-white/10">
+        <motion.div
+          className="h-full bg-[#00F0FF]"
+          style={{ width }}
+        />
+      </div>
+    </div>
+  );
+};
+
 const HorizontalSolutions = () => {
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -137,10 +156,10 @@ const HorizontalSolutions = () => {
     offset: ["start start", "end end"],
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["5%", "-75%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["2%", "-80%"]);
 
   return (
-    <section ref={containerRef} className="relative h-[400vh] bg-black">
+    <section ref={containerRef} className="relative h-[350vh] bg-black">
       {/* Sticky Container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center">
         {/* Section Title */}
@@ -199,14 +218,7 @@ const HorizontalSolutions = () => {
         </motion.div>
 
         {/* Scroll Progress */}
-        <div className="absolute bottom-12 left-8 md:left-16 right-8 md:right-16">
-          <div className="h-[2px] bg-white/10">
-            <motion.div
-              className="h-full bg-[#00F0FF]"
-              style={{ width: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]) }}
-            />
-          </div>
-        </div>
+        <ScrollProgressBar progress={scrollYProgress} />
       </div>
     </section>
   );
