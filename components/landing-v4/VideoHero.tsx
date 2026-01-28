@@ -677,31 +677,18 @@ const VideoHero = () => {
     >
       {/* Sticky Container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Space Stars Background - 전체 배너 뒤 배경 */}
-        <div className="absolute inset-0 z-0">
+        {/* Space Stars Background - 전체 배너 배경 (은하수) */}
+        <motion.div className="absolute inset-0 z-0" style={{ opacity: bgOpacity }}>
           <SpaceStars />
+        </motion.div>
+
+        {/* HologramCube Layer - 중앙 큐브만 */}
+        <div className="absolute inset-0 z-[1] pointer-events-none">
+          <HologramCube />
         </div>
 
-        {/* Video/Animated Background */}
-        <motion.div className="absolute inset-0 z-[1]" style={{ opacity: bgOpacity }}>
-          {/* Video (if exists) */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
-            poster="/images/hero-poster.jpg"
-          >
-            <source src="/video/hero-bg.mp4" type="video/mp4" />
-          </video>
-
-          {/* Animated Fallback */}
-          <AnimatedBackground />
-
-          {/* Overlay - 더 투명하게 */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/80" />
-        </motion.div>
+        {/* 하단 그라데이션 (콘텐츠 가독성) */}
+        <div className="absolute inset-0 z-[2] pointer-events-none bg-gradient-to-b from-transparent via-transparent to-black/60" />
 
         {/* Hero Content */}
         <motion.div
