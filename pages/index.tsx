@@ -3,12 +3,11 @@ import React from "react";
 import Head from "next/head";
 import {
   Header,
-  Hero,
-  CoreValue,
-  Architecture,
+  VideoHero,
+  VideoFeatures,
   HorizontalSolutions,
   Footer,
-} from "@/components/landing-v3";
+} from "@/components/landing-v4";
 
 export default function Home() {
   return (
@@ -17,13 +16,13 @@ export default function Home() {
         <title>Vision-Makers | 우리 서버 안에 AI를 심다</title>
         <meta
           name="description"
-          content="우리 서버 안에 직접 심는 AI 사내 비서. 데이터는 밖으로 나가지 않습니다."
+          content="데이터 유출 없는 완벽한 폐쇄형 AI. 귀사의 서버 안에 직접 심는 AI 사내 비서."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:title" content="Vision-Makers | 우리 서버 안에 AI를 심다" />
         <meta
           property="og:description"
-          content="우리 서버 안에 직접 심는 AI 사내 비서. 데이터는 밖으로 나가지 않습니다."
+          content="데이터 유출 없는 완벽한 폐쇄형 AI. 귀사의 서버 안에 직접 심는 AI 사내 비서."
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -44,25 +43,20 @@ export default function Home() {
 
         {/* Main Content */}
         <main>
-          {/* Section 1: Hero */}
-          <Hero />
+          {/* Hero with Video Background */}
+          <VideoHero />
 
-          {/* Section 2: Core Value */}
-          <div id="value">
-            <CoreValue />
-          </div>
+          {/* Features with Video Transitions */}
+          <section id="features">
+            <VideoFeatures />
+          </section>
 
-          {/* Section 3: Horizontal Solutions */}
-          <div id="solutions">
+          {/* Horizontal Scroll Solutions */}
+          <section id="solutions">
             <HorizontalSolutions />
-          </div>
+          </section>
 
-          {/* Section 4: Architecture */}
-          <div id="architecture">
-            <Architecture />
-          </div>
-
-          {/* Footer */}
+          {/* Giantstep-style Footer */}
           <Footer />
         </main>
       </div>
@@ -89,7 +83,6 @@ export default function Home() {
 
         html {
           scroll-behavior: smooth;
-          scroll-snap-type: y proximity;
         }
 
         .page-wrapper {
@@ -97,12 +90,7 @@ export default function Home() {
           min-height: 100vh;
         }
 
-        /* Scroll Snap for sections */
-        .snap-start {
-          scroll-snap-align: start;
-        }
-
-        /* Custom Scrollbar - Minimal */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
           width: 4px;
         }
@@ -112,19 +100,20 @@ export default function Home() {
         }
 
         ::-webkit-scrollbar-thumb {
-          background: #007aff;
-          border-radius: 2px;
+          background: #00F0FF;
+          border-radius: 0;
         }
 
         /* Selection */
         ::selection {
-          background: rgba(0, 122, 255, 0.4);
+          background: rgba(0, 240, 255, 0.3);
           color: white;
         }
 
-        /* Smooth scroll offset for header */
-        html {
-          scroll-padding-top: 80px;
+        /* Video placeholder when no video is available */
+        video:not([src]),
+        video[src=""] {
+          background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
         }
       `}</style>
     </>
