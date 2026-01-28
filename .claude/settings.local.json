@@ -23,7 +23,11 @@
       "Bash(ls:*)",
       "Bash(lsof:*)",
       "Bash(pkill:*)",
-      "Bash(tr:*)"
+      "Bash(tr:*)",
+      "Bash(git -C /Users/marko/Documents/GitHub/vison-makers-web log --oneline -20)",
+      "Bash(git -C /Users/marko/Documents/GitHub/vison-makers-web status)",
+      "Bash(wc:*)",
+      "WebFetch(domain:kr.pinterest.com)"
     ],
     "deny": [],
     "ask": []

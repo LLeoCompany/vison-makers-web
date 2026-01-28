@@ -1,13 +1,18 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import Link from "next/link";
 
 // Data Stream Component - flowing binary/hex data
 const DataStream = ({ position, delay }: { position: string; delay: number }) => {
-  const chars = "01";
   const streamLength = 12;
+  const [chars, setChars] = useState<string[]>(Array(streamLength).fill("0"));
+
+  useEffect(() => {
+    // 클라이언트에서만 랜덤 값 생성 (hydration 에러 방지)
+    setChars(Array(streamLength).fill(0).map(() => Math.random() > 0.5 ? "1" : "0"));
+  }, []);
 
   return (
     <motion.div
@@ -16,9 +21,9 @@ const DataStream = ({ position, delay }: { position: string; delay: number }) =>
       animate={{ opacity: [0, 0.8, 0], y: [-50, 150] }}
       transition={{ duration: 4, repeat: Infinity, delay, ease: "linear" }}
     >
-      {[...Array(streamLength)].map((_, i) => (
+      {chars.map((char, i) => (
         <span key={i} style={{ opacity: 1 - i * 0.08 }}>
-          {chars[Math.floor(Math.random() * chars.length)]}
+          {char}
         </span>
       ))}
     </motion.div>
@@ -325,10 +330,186 @@ const HologramCube = () => {
   );
 };
 
+// Space Stars Background - 우주 별 애니메이션
+const SpaceStars = () => {
+  const [isClient, setIsClient] = useState(false);
+
+  // 별 데이터 - 시드 기반으로 일관된 값 생성
+  const [stars] = useState(() => {
+    return [...Array(150)].map((_, i) => ({
+      id: i,
+      // 시드 기반 pseudo-random (i를 사용하여 일관된 값)
+      x: ((i * 17 + 23) % 100),
+      y: ((i * 31 + 47) % 100),
+      size: ((i * 13) % 20) / 10 + 0.5,
+      opacity: ((i * 7) % 70) / 100 + 0.3,
+      duration: ((i * 11) % 30) / 10 + 2,
+      delay: ((i * 19) % 50) / 10,
+    }));
+  });
+
+  // 유성 데이터 - 시드 기반
+  const [shootingStars] = useState(() => {
+    return [...Array(5)].map((_, i) => ({
+      id: i,
+      startX: ((i * 37 + 13) % 100),
+      startY: ((i * 23 + 7) % 30),
+      delay: i * 4 + ((i * 17) % 30) / 10,
+    }));
+  });
+
+  // 큰 별 데이터 - 시드 기반
+  const [bigStars] = useState(() => {
+    return [...Array(20)].map((_, i) => ({
+      id: i,
+      x: ((i * 41 + 29) % 100),
+      y: ((i * 53 + 17) % 100),
+      duration: ((i * 19) % 20) / 10 + 3,
+      delay: ((i * 13) % 40) / 10,
+    }));
+  });
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {/* 정적 별 배경 (깊은 우주) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(ellipse at center, #0a0a1a 0%, #000000 100%)`,
+        }}
+      />
+
+      {/* 반짝이는 별들 */}
+      {isClient && stars.map((star) => (
+        <motion.div
+          key={star.id}
+          className="absolute rounded-full bg-white"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: star.size,
+            height: star.size,
+            boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, ${star.opacity})`,
+          }}
+          animate={{
+            opacity: [star.opacity * 0.3, star.opacity, star.opacity * 0.3],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: star.duration,
+            repeat: Infinity,
+            delay: star.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* 큰 별들 (더 밝게 반짝임) */}
+      {isClient && bigStars.map((star) => (
+        <motion.div
+          key={`big-star-${star.id}`}
+          className="absolute"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+          }}
+          animate={{
+            opacity: [0.2, 1, 0.2],
+            scale: [0.8, 1.3, 0.8],
+          }}
+          transition={{
+            duration: star.duration,
+            repeat: Infinity,
+            delay: star.delay,
+            ease: "easeInOut",
+          }}
+        >
+          {/* 십자 모양 별빛 */}
+          <div
+            className="absolute w-[1px] h-4 bg-gradient-to-b from-transparent via-white to-transparent"
+            style={{ left: '50%', transform: 'translateX(-50%)' }}
+          />
+          <div
+            className="absolute h-[1px] w-4 bg-gradient-to-r from-transparent via-white to-transparent"
+            style={{ top: '50%', transform: 'translateY(-50%)' }}
+          />
+        </motion.div>
+      ))}
+
+      {/* 유성 (Shooting Stars) */}
+      {isClient && shootingStars.map((meteor) => (
+        <motion.div
+          key={`meteor-${meteor.id}`}
+          className="absolute w-[100px] h-[1px]"
+          style={{
+            left: `${meteor.startX}%`,
+            top: `${meteor.startY}%`,
+            background: `linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(0,240,255,1) 100%)`,
+            boxShadow: '0 0 10px rgba(0, 240, 255, 0.5)',
+            transform: 'rotate(45deg)',
+          }}
+          animate={{
+            x: [0, 300],
+            y: [0, 300],
+            opacity: [0, 1, 1, 0],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            delay: meteor.delay,
+            repeatDelay: 8,
+            ease: "easeIn",
+          }}
+        />
+      ))}
+
+      {/* 느리게 움직이는 별 필드 (깊이감) */}
+      <motion.div
+        className="absolute inset-0"
+        animate={{
+          backgroundPosition: ['0% 0%', '100% 100%'],
+        }}
+        transition={{
+          duration: 200,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+        style={{
+          backgroundImage: `
+            radial-gradient(1px 1px at 20px 30px, white, transparent),
+            radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
+            radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.6), transparent),
+            radial-gradient(1px 1px at 90px 40px, white, transparent),
+            radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.7), transparent),
+            radial-gradient(1.5px 1.5px at 160px 120px, white, transparent)
+          `,
+          backgroundSize: '200px 200px',
+        }}
+      />
+
+      {/* 성운 효과 (Nebula) - 미세한 색상 */}
+      <div
+        className="absolute inset-0 opacity-30"
+        style={{
+          background: `
+            radial-gradient(ellipse at 20% 80%, rgba(0, 100, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, rgba(100, 0, 150, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(0, 240, 255, 0.05) 0%, transparent 60%)
+          `,
+        }}
+      />
+    </div>
+  );
+};
+
 // Animated Background (Fallback when no video)
 const AnimatedBackground = () => {
   return (
-    <div className="absolute inset-0 bg-black overflow-hidden">
+    <div className="absolute inset-0 bg-transparent overflow-hidden">
       {/* Grid Pattern */}
       <div
         className="absolute inset-0 opacity-15"
@@ -373,15 +554,20 @@ const VideoHero = () => {
     >
       {/* Sticky Container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
+        {/* Space Stars Background - 전체 배너 뒤 배경 */}
+        <div className="absolute inset-0 z-0">
+          <SpaceStars />
+        </div>
+
         {/* Video/Animated Background */}
-        <motion.div className="absolute inset-0" style={{ opacity: bgOpacity }}>
+        <motion.div className="absolute inset-0 z-[1]" style={{ opacity: bgOpacity }}>
           {/* Video (if exists) */}
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-60"
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
             poster="/images/hero-poster.jpg"
           >
             <source src="/video/hero-bg.mp4" type="video/mp4" />
@@ -390,13 +576,13 @@ const VideoHero = () => {
           {/* Animated Fallback */}
           <AnimatedBackground />
 
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black" />
+          {/* Overlay - 더 투명하게 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/80" />
         </motion.div>
 
         {/* Hero Content */}
         <motion.div
-          className="relative z-10 h-full flex flex-col items-center justify-center px-6"
+          className="relative z-20 h-full flex flex-col items-center justify-center px-6"
           style={{ opacity: contentOpacity, y: contentY }}
         >
           {/* Main Title */}
@@ -447,7 +633,7 @@ const VideoHero = () => {
 
         {/* Scroll Indicator */}
         <motion.div
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10"
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20"
           style={{ opacity: contentOpacity }}
         >
           <motion.div
