@@ -330,42 +330,45 @@ const HologramCube = () => {
   );
 };
 
-// Space Stars Background - 우주 별 애니메이션
+// Space Stars Background - 은하수 스타일 우주 배경
 const SpaceStars = () => {
   const [isClient, setIsClient] = useState(false);
 
-  // 별 데이터 - 시드 기반으로 일관된 값 생성
-  const [stars] = useState(() => {
-    return [...Array(150)].map((_, i) => ({
+  // 작은 별 데이터 (많은 수) - 시드 기반
+  const [tinyStars] = useState(() => {
+    return [...Array(300)].map((_, i) => ({
       id: i,
-      // 시드 기반 pseudo-random (i를 사용하여 일관된 값)
       x: ((i * 17 + 23) % 100),
       y: ((i * 31 + 47) % 100),
-      size: ((i * 13) % 20) / 10 + 0.5,
-      opacity: ((i * 7) % 70) / 100 + 0.3,
-      duration: ((i * 11) % 30) / 10 + 2,
-      delay: ((i * 19) % 50) / 10,
+      size: ((i * 7) % 10) / 10 + 0.3,
+      opacity: ((i * 11) % 50) / 100 + 0.2,
+      duration: ((i * 13) % 40) / 10 + 3,
+      delay: ((i * 19) % 80) / 10,
     }));
   });
 
-  // 유성 데이터 - 시드 기반
-  const [shootingStars] = useState(() => {
-    return [...Array(5)].map((_, i) => ({
+  // 중간 크기 별 데이터
+  const [mediumStars] = useState(() => {
+    return [...Array(80)].map((_, i) => ({
       id: i,
-      startX: ((i * 37 + 13) % 100),
-      startY: ((i * 23 + 7) % 30),
-      delay: i * 4 + ((i * 17) % 30) / 10,
+      x: ((i * 23 + 17) % 100),
+      y: ((i * 41 + 31) % 100),
+      size: ((i * 11) % 15) / 10 + 0.8,
+      opacity: ((i * 7) % 40) / 100 + 0.4,
+      duration: ((i * 17) % 30) / 10 + 2,
+      delay: ((i * 13) % 60) / 10,
     }));
   });
 
-  // 큰 별 데이터 - 시드 기반
-  const [bigStars] = useState(() => {
-    return [...Array(20)].map((_, i) => ({
+  // 밝은 별 데이터 (적은 수, 더 크고 밝음)
+  const [brightStars] = useState(() => {
+    return [...Array(12)].map((_, i) => ({
       id: i,
-      x: ((i * 41 + 29) % 100),
-      y: ((i * 53 + 17) % 100),
-      duration: ((i * 19) % 20) / 10 + 3,
-      delay: ((i * 13) % 40) / 10,
+      x: ((i * 47 + 13) % 90) + 5,
+      y: ((i * 59 + 23) % 90) + 5,
+      size: ((i * 13) % 20) / 10 + 2,
+      duration: ((i * 19) % 25) / 10 + 4,
+      delay: ((i * 11) % 50) / 10,
     }));
   });
 
@@ -375,29 +378,152 @@ const SpaceStars = () => {
 
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* 정적 별 배경 (깊은 우주) */}
+      {/* 깊은 우주 배경 - 중앙 어두움 */}
       <div
         className="absolute inset-0"
         style={{
-          background: `radial-gradient(ellipse at center, #0a0a1a 0%, #000000 100%)`,
+          background: `
+            radial-gradient(ellipse at center, #000000 0%, #020408 40%, #0a1628 100%)
+          `,
         }}
       />
 
-      {/* 반짝이는 별들 */}
-      {isClient && stars.map((star) => (
+      {/* 외곽 은하수 성운 효과 - 상단 */}
+      <motion.div
+        className="absolute inset-0"
+        animate={{
+          opacity: [0.6, 0.8, 0.6],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        style={{
+          background: `
+            radial-gradient(ellipse 120% 50% at 50% -10%, rgba(59, 130, 180, 0.4) 0%, rgba(30, 80, 120, 0.2) 30%, transparent 60%),
+            radial-gradient(ellipse 80% 40% at 30% 0%, rgba(100, 180, 220, 0.25) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 30% at 70% 5%, rgba(80, 160, 200, 0.2) 0%, transparent 40%)
+          `,
+        }}
+      />
+
+      {/* 외곽 은하수 성운 효과 - 하단 */}
+      <motion.div
+        className="absolute inset-0"
+        animate={{
+          opacity: [0.5, 0.7, 0.5],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+        style={{
+          background: `
+            radial-gradient(ellipse 120% 50% at 50% 110%, rgba(59, 130, 180, 0.35) 0%, rgba(30, 80, 120, 0.15) 30%, transparent 60%),
+            radial-gradient(ellipse 70% 35% at 20% 100%, rgba(80, 150, 190, 0.25) 0%, transparent 50%),
+            radial-gradient(ellipse 50% 25% at 80% 95%, rgba(70, 140, 180, 0.2) 0%, transparent 40%)
+          `,
+        }}
+      />
+
+      {/* 좌우 성운 효과 */}
+      <motion.div
+        className="absolute inset-0"
+        animate={{
+          opacity: [0.4, 0.6, 0.4],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 4,
+        }}
+        style={{
+          background: `
+            radial-gradient(ellipse 40% 80% at -5% 50%, rgba(50, 120, 160, 0.25) 0%, transparent 50%),
+            radial-gradient(ellipse 40% 80% at 105% 50%, rgba(50, 120, 160, 0.25) 0%, transparent 50%),
+            radial-gradient(ellipse 30% 50% at 10% 30%, rgba(70, 150, 190, 0.15) 0%, transparent 40%),
+            radial-gradient(ellipse 30% 50% at 90% 70%, rgba(70, 150, 190, 0.15) 0%, transparent 40%)
+          `,
+        }}
+      />
+
+      {/* 코너 하이라이트 */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse 50% 40% at 0% 0%, rgba(100, 180, 220, 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse 50% 40% at 100% 100%, rgba(80, 160, 200, 0.12) 0%, transparent 50%),
+            radial-gradient(ellipse 40% 30% at 100% 0%, rgba(90, 170, 210, 0.1) 0%, transparent 40%),
+            radial-gradient(ellipse 40% 30% at 0% 100%, rgba(90, 170, 210, 0.1) 0%, transparent 40%)
+          `,
+        }}
+      />
+
+      {/* 미세한 성운 구름 텍스처 */}
+      <div
+        className="absolute inset-0 opacity-40"
+        style={{
+          backgroundImage: `
+            radial-gradient(ellipse at 25% 15%, rgba(60, 140, 180, 0.15) 0%, transparent 25%),
+            radial-gradient(ellipse at 75% 85%, rgba(50, 130, 170, 0.12) 0%, transparent 25%),
+            radial-gradient(ellipse at 15% 75%, rgba(70, 150, 190, 0.1) 0%, transparent 20%),
+            radial-gradient(ellipse at 85% 25%, rgba(60, 140, 180, 0.1) 0%, transparent 20%)
+          `,
+        }}
+      />
+
+      {/* 작은 별들 (정적 배경 패턴) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `
+            radial-gradient(0.5px 0.5px at 10px 20px, rgba(255,255,255,0.6), transparent),
+            radial-gradient(0.5px 0.5px at 30px 50px, rgba(255,255,255,0.5), transparent),
+            radial-gradient(0.5px 0.5px at 60px 30px, rgba(255,255,255,0.4), transparent),
+            radial-gradient(0.5px 0.5px at 80px 70px, rgba(255,255,255,0.6), transparent),
+            radial-gradient(0.5px 0.5px at 45px 90px, rgba(255,255,255,0.5), transparent),
+            radial-gradient(0.5px 0.5px at 95px 15px, rgba(255,255,255,0.4), transparent),
+            radial-gradient(0.8px 0.8px at 25px 75px, rgba(255,255,255,0.7), transparent),
+            radial-gradient(0.8px 0.8px at 70px 45px, rgba(255,255,255,0.5), transparent)
+          `,
+          backgroundSize: '100px 100px',
+        }}
+      />
+
+      {/* 추가 별 레이어 */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `
+            radial-gradient(0.4px 0.4px at 15px 35px, rgba(255,255,255,0.5), transparent),
+            radial-gradient(0.4px 0.4px at 55px 15px, rgba(255,255,255,0.4), transparent),
+            radial-gradient(0.4px 0.4px at 85px 55px, rgba(255,255,255,0.5), transparent),
+            radial-gradient(0.6px 0.6px at 35px 85px, rgba(255,255,255,0.6), transparent),
+            radial-gradient(0.4px 0.4px at 75px 25px, rgba(255,255,255,0.4), transparent),
+            radial-gradient(0.5px 0.5px at 5px 65px, rgba(255,255,255,0.5), transparent)
+          `,
+          backgroundSize: '120px 120px',
+        }}
+      />
+
+      {/* 반짝이는 작은 별들 */}
+      {isClient && tinyStars.map((star) => (
         <motion.div
-          key={star.id}
+          key={`tiny-${star.id}`}
           className="absolute rounded-full bg-white"
           style={{
             left: `${star.x}%`,
             top: `${star.y}%`,
             width: star.size,
             height: star.size,
-            boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, ${star.opacity})`,
           }}
           animate={{
             opacity: [star.opacity * 0.3, star.opacity, star.opacity * 0.3],
-            scale: [1, 1.2, 1],
           }}
           transition={{
             duration: star.duration,
@@ -408,18 +534,43 @@ const SpaceStars = () => {
         />
       ))}
 
-      {/* 큰 별들 (더 밝게 반짝임) */}
-      {isClient && bigStars.map((star) => (
+      {/* 중간 크기 별들 */}
+      {isClient && mediumStars.map((star) => (
         <motion.div
-          key={`big-star-${star.id}`}
+          key={`medium-${star.id}`}
+          className="absolute rounded-full bg-white"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: star.size,
+            height: star.size,
+            boxShadow: `0 0 ${star.size}px rgba(255, 255, 255, 0.5)`,
+          }}
+          animate={{
+            opacity: [star.opacity * 0.4, star.opacity, star.opacity * 0.4],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: star.duration,
+            repeat: Infinity,
+            delay: star.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* 밝은 별들 (글로우 효과) */}
+      {isClient && brightStars.map((star) => (
+        <motion.div
+          key={`bright-${star.id}`}
           className="absolute"
           style={{
             left: `${star.x}%`,
             top: `${star.y}%`,
           }}
           animate={{
-            opacity: [0.2, 1, 0.2],
-            scale: [0.8, 1.3, 0.8],
+            opacity: [0.4, 1, 0.4],
+            scale: [0.9, 1.1, 0.9],
           }}
           transition={{
             duration: star.duration,
@@ -428,78 +579,50 @@ const SpaceStars = () => {
             ease: "easeInOut",
           }}
         >
-          {/* 십자 모양 별빛 */}
+          {/* 별 코어 */}
           <div
-            className="absolute w-[1px] h-4 bg-gradient-to-b from-transparent via-white to-transparent"
-            style={{ left: '50%', transform: 'translateX(-50%)' }}
+            className="absolute rounded-full bg-white"
+            style={{
+              width: star.size,
+              height: star.size,
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              boxShadow: `
+                0 0 ${star.size * 2}px rgba(255, 255, 255, 0.8),
+                0 0 ${star.size * 4}px rgba(200, 220, 255, 0.4)
+              `,
+            }}
+          />
+          {/* 별빛 광선 */}
+          <div
+            className="absolute bg-gradient-to-b from-transparent via-white/60 to-transparent"
+            style={{
+              width: 1,
+              height: star.size * 4,
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
           />
           <div
-            className="absolute h-[1px] w-4 bg-gradient-to-r from-transparent via-white to-transparent"
-            style={{ top: '50%', transform: 'translateY(-50%)' }}
+            className="absolute bg-gradient-to-r from-transparent via-white/60 to-transparent"
+            style={{
+              width: star.size * 4,
+              height: 1,
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
           />
         </motion.div>
       ))}
 
-      {/* 유성 (Shooting Stars) */}
-      {isClient && shootingStars.map((meteor) => (
-        <motion.div
-          key={`meteor-${meteor.id}`}
-          className="absolute w-[100px] h-[1px]"
-          style={{
-            left: `${meteor.startX}%`,
-            top: `${meteor.startY}%`,
-            background: `linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(0,240,255,1) 100%)`,
-            boxShadow: '0 0 10px rgba(0, 240, 255, 0.5)',
-            transform: 'rotate(45deg)',
-          }}
-          animate={{
-            x: [0, 300],
-            y: [0, 300],
-            opacity: [0, 1, 1, 0],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            delay: meteor.delay,
-            repeatDelay: 8,
-            ease: "easeIn",
-          }}
-        />
-      ))}
-
-      {/* 느리게 움직이는 별 필드 (깊이감) */}
-      <motion.div
-        className="absolute inset-0"
-        animate={{
-          backgroundPosition: ['0% 0%', '100% 100%'],
-        }}
-        transition={{
-          duration: 200,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        style={{
-          backgroundImage: `
-            radial-gradient(1px 1px at 20px 30px, white, transparent),
-            radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
-            radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.6), transparent),
-            radial-gradient(1px 1px at 90px 40px, white, transparent),
-            radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.7), transparent),
-            radial-gradient(1.5px 1.5px at 160px 120px, white, transparent)
-          `,
-          backgroundSize: '200px 200px',
-        }}
-      />
-
-      {/* 성운 효과 (Nebula) - 미세한 색상 */}
+      {/* 중앙 비네트 (어두운 중심) */}
       <div
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: `
-            radial-gradient(ellipse at 20% 80%, rgba(0, 100, 255, 0.1) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(100, 0, 150, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 50%, rgba(0, 240, 255, 0.05) 0%, transparent 60%)
-          `,
+          background: `radial-gradient(ellipse at center, transparent 20%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.5) 100%)`,
         }}
       />
     </div>
