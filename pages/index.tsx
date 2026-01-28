@@ -38,32 +38,34 @@ export default function Home() {
         />
       </Head>
 
-      {/* Fixed Header */}
-      <Header />
+      <div className="page-wrapper">
+        {/* Fixed Header */}
+        <Header />
 
-      {/* Scroll Snap Container */}
-      <main className="snap-container">
-        {/* Section 1: Hero */}
-        <Hero />
+        {/* Main Content */}
+        <main>
+          {/* Section 1: Hero */}
+          <Hero />
 
-        {/* Section 2: Core Value */}
-        <div id="value">
-          <CoreValue />
-        </div>
+          {/* Section 2: Core Value */}
+          <div id="value">
+            <CoreValue />
+          </div>
 
-        {/* Section 3: Horizontal Solutions */}
-        <div id="solutions">
-          <HorizontalSolutions />
-        </div>
+          {/* Section 3: Horizontal Solutions */}
+          <div id="solutions">
+            <HorizontalSolutions />
+          </div>
 
-        {/* Section 4: Architecture */}
-        <div id="architecture">
-          <Architecture />
-        </div>
+          {/* Section 4: Architecture */}
+          <div id="architecture">
+            <Architecture />
+          </div>
 
-        {/* Footer */}
-        <Footer />
-      </main>
+          {/* Footer */}
+          <Footer />
+        </main>
+      </div>
 
       <style jsx global>{`
         * {
@@ -72,11 +74,10 @@ export default function Home() {
           padding: 0;
         }
 
-        html {
-          scroll-behavior: smooth;
-        }
-
+        html,
         body {
+          width: 100%;
+          min-height: 100%;
           background-color: #000000;
           font-family: "Pretendard Variable", Pretendard, -apple-system,
             BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
@@ -86,27 +87,31 @@ export default function Home() {
           overflow-x: hidden;
         }
 
-        /* Scroll Snap */
-        .snap-container {
-          height: 100vh;
-          overflow-y: auto;
-          scroll-snap-type: y mandatory;
+        html {
+          scroll-behavior: smooth;
+          scroll-snap-type: y proximity;
         }
 
+        .page-wrapper {
+          width: 100%;
+          min-height: 100vh;
+        }
+
+        /* Scroll Snap for sections */
         .snap-start {
           scroll-snap-align: start;
         }
 
         /* Custom Scrollbar - Minimal */
-        .snap-container::-webkit-scrollbar {
+        ::-webkit-scrollbar {
           width: 4px;
         }
 
-        .snap-container::-webkit-scrollbar-track {
-          background: transparent;
+        ::-webkit-scrollbar-track {
+          background: #000000;
         }
 
-        .snap-container::-webkit-scrollbar-thumb {
+        ::-webkit-scrollbar-thumb {
           background: #007aff;
           border-radius: 2px;
         }

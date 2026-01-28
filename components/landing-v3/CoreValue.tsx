@@ -1,6 +1,6 @@
 "use client";
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 
 const values = [
   { keyword: "보안", desc: "성벽 안의 지능" },
@@ -9,31 +9,16 @@ const values = [
 ];
 
 const CoreValue = () => {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [100, 0, 0, -100]);
-
   return (
-    <section
-      ref={ref}
-      className="relative h-screen w-full flex items-center justify-center bg-black overflow-hidden snap-start"
-    >
-      <motion.div
-        style={{ opacity, y }}
-        className="max-w-6xl mx-auto px-6 w-full"
-      >
+    <section className="relative min-h-screen w-full flex items-center justify-center bg-black overflow-hidden py-20">
+      <div className="max-w-6xl mx-auto px-6 w-full">
         {/* Section Title */}
         <motion.h2
           className="text-4xl md:text-6xl lg:text-7xl font-black text-white text-center mb-20 tracking-tight"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
         >
           왜 <span className="text-[#007AFF]">로컬</span>인가
         </motion.h2>
@@ -46,12 +31,12 @@ const CoreValue = () => {
               className="text-center"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: idx * 0.15 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
               {/* Large Keyword */}
               <motion.p
-                className="text-6xl md:text-7xl lg:text-8xl font-black text-white mb-4 tracking-tighter"
+                className="text-6xl md:text-7xl lg:text-8xl font-black text-white mb-4 tracking-tighter cursor-default"
                 whileHover={{ color: "#007AFF" }}
                 transition={{ duration: 0.3 }}
               >
@@ -63,7 +48,7 @@ const CoreValue = () => {
             </motion.div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

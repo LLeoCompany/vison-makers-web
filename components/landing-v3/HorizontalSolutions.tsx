@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 const industries = [
   { emoji: "⚖️", name: "법률", desc: "판례 검색" },
@@ -12,92 +13,109 @@ const industries = [
 ];
 
 const HorizontalSolutions = () => {
-  const containerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  // Transform vertical scroll to horizontal movement
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-60%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section
-      ref={containerRef}
-      className="relative h-[300vh] bg-black snap-start"
-    >
-      {/* Sticky Container */}
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <motion.div style={{ opacity }} className="w-full">
-          {/* Section Title - Fixed */}
-          <motion.h2
-            className="absolute top-20 left-6 md:left-12 text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight z-10"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            업종별 <span className="text-[#007AFF]">AI 비서</span>
-          </motion.h2>
+    <section className="relative min-h-screen w-full bg-black overflow-hidden py-20">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Section Title */}
+        <motion.h2
+          className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-16 tracking-tight"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          업종별 <span className="text-[#007AFF]">AI 비서</span>
+        </motion.h2>
 
-          {/* Horizontal Scroll Container */}
-          <motion.div
-            style={{ x }}
-            className="flex items-center gap-8 md:gap-12 pl-6 md:pl-12 pt-20"
-          >
-            {industries.map((industry, idx) => (
-              <motion.div
-                key={idx}
-                className="flex-shrink-0 w-[280px] md:w-[350px] h-[400px] md:h-[450px] bg-white/5 rounded-3xl p-8 md:p-10 flex flex-col justify-between border border-white/10 hover:border-[#007AFF]/50 transition-colors group"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                whileHover={{ y: -10 }}
-              >
-                {/* Emoji */}
-                <motion.div
-                  className="text-6xl md:text-7xl"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  {industry.emoji}
-                </motion.div>
-
-                {/* Content */}
-                <div>
-                  <h3 className="text-3xl md:text-4xl font-black text-white mb-3 group-hover:text-[#007AFF] transition-colors">
-                    {industry.name}
-                  </h3>
-                  <p className="text-white/50 text-lg font-light">
-                    {industry.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-
-            {/* CTA Card */}
+        {/* Horizontal Scroll Container */}
+        <div
+          ref={scrollRef}
+          className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide"
+          style={{
+            scrollSnapType: "x mandatory",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          {industries.map((industry, idx) => (
             <motion.div
-              className="flex-shrink-0 w-[280px] md:w-[350px] h-[400px] md:h-[450px] bg-[#007AFF] rounded-3xl p-8 md:p-10 flex flex-col justify-between"
-              initial={{ opacity: 0, y: 50 }}
+              key={idx}
+              className="flex-shrink-0 w-[280px] md:w-[320px] h-[380px] bg-white/5 rounded-3xl p-8 flex flex-col justify-between border border-white/10 hover:border-[#007AFF]/50 transition-all duration-300 group cursor-pointer"
+              style={{ scrollSnapAlign: "start" }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
+              transition={{ duration: 0.4, delay: idx * 0.08 }}
+              whileHover={{ y: -8, backgroundColor: "rgba(255,255,255,0.08)" }}
+            >
+              {/* Emoji */}
+              <motion.div
+                className="text-5xl md:text-6xl"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                {industry.emoji}
+              </motion.div>
+
+              {/* Content */}
+              <div>
+                <h3 className="text-2xl md:text-3xl font-black text-white mb-2 group-hover:text-[#007AFF] transition-colors">
+                  {industry.name}
+                </h3>
+                <p className="text-white/50 text-base font-light">
+                  {industry.desc}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+
+          {/* CTA Card */}
+          <Link href="/consultation/start">
+            <motion.div
+              className="flex-shrink-0 w-[280px] md:w-[320px] h-[380px] bg-[#007AFF] rounded-3xl p-8 flex flex-col justify-between cursor-pointer"
+              style={{ scrollSnapAlign: "start" }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.5 }}
               whileHover={{ scale: 1.02 }}
             >
-              <div className="text-6xl md:text-7xl">→</div>
+              <div className="text-5xl md:text-6xl">→</div>
               <div>
-                <h3 className="text-3xl md:text-4xl font-black text-white mb-3">
+                <h3 className="text-2xl md:text-3xl font-black text-white mb-2">
                   우리 업종은?
                 </h3>
-                <p className="text-white/80 text-lg font-light">
+                <p className="text-white/80 text-base font-light">
                   맞춤 상담 받기
                 </p>
               </div>
             </motion.div>
-          </motion.div>
-        </motion.div>
+          </Link>
+        </div>
+
+        {/* Scroll Hint */}
+        <motion.p
+          className="text-white/30 text-sm mt-4 text-center md:text-left"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.6 }}
+        >
+          ← 옆으로 스크롤하세요 →
+        </motion.p>
       </div>
+
+      {/* Hide scrollbar style */}
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </section>
   );
 };
