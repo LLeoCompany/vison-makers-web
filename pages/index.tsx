@@ -4,31 +4,29 @@ import Head from "next/head";
 import {
   Header,
   Hero,
-  SocialProof,
-  SecurityArchitecture,
+  CoreValue,
   IndustrySolutions,
-  ComparisonSection,
-  BottomCTA,
+  SecurityArchitecture,
   Footer,
-} from "@/components/landing";
+} from "@/components/landing-v2";
 
 export default function Home() {
   return (
     <>
       <Head>
-        <title>Vision-Makers | 기업 전용 Private RAG AI 솔루션</title>
+        <title>Vision-Makers | 우리 서버 안의 AI 사내 비서</title>
         <meta
           name="description"
-          content="외부 AI는 유출되지만, Vision-Makers는 이식합니다. 사내 문서를 성벽 안에 가두고, 오직 지능만 활용하는 기업 전용 Private RAG 솔루션."
+          content="우리 서버 안에 직접 심는, 가장 똑똑한 AI 사내 비서. 데이터 유출 걱정 없는 로컬 인프라 기반 맞춤형 AI 이식."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           property="og:title"
-          content="Vision-Makers | 기업 전용 Private RAG AI 솔루션"
+          content="Vision-Makers | 우리 서버 안의 AI 사내 비서"
         />
         <meta
           property="og:description"
-          content="외부 AI는 유출되지만, Vision-Makers는 이식합니다. 사내 문서를 성벽 안에 가두고, 오직 지능만 활용하는 기업 전용 Private RAG 솔루션."
+          content="우리 서버 안에 직접 심는, 가장 똑똑한 AI 사내 비서. 데이터 유출 걱정 없는 로컬 인프라 기반 맞춤형 AI 이식."
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -43,49 +41,46 @@ export default function Home() {
         />
       </Head>
 
-      <div className="min-h-screen bg-[#0a0a0f] font-pretendard">
-        {/* Header */}
+      <div className="scroll-container">
+        {/* Header - Fixed */}
         <Header />
 
-        {/* Main Content */}
-        <main>
-          {/* Hero Section */}
+        {/* Scroll Snap Container */}
+        <main className="snap-container">
+          {/* Section 1: Hero */}
           <Hero />
 
-          {/* Social Proof - Trust Metrics */}
-          <SocialProof />
-
-          {/* Security Architecture - The Vault */}
-          <section id="security">
-            <SecurityArchitecture />
+          {/* Section 2: Core Value */}
+          <section id="value">
+            <CoreValue />
           </section>
 
-          {/* Industry Solutions */}
+          {/* Section 3: Industry Solutions */}
           <section id="solutions">
             <IndustrySolutions />
           </section>
 
-          {/* Comparison Section */}
-          <section id="comparison">
-            <ComparisonSection />
+          {/* Section 4: Security Architecture */}
+          <section id="security">
+            <SecurityArchitecture />
           </section>
 
-          {/* Bottom CTA */}
-          <BottomCTA />
+          {/* Footer */}
+          <Footer />
         </main>
-
-        {/* Footer */}
-        <Footer />
       </div>
 
-      {/* Global Styles for this page */}
       <style jsx global>{`
         :root {
-          --color-background: #0a0a0f;
-          --color-primary: #00D1FF;
-          --color-primary-soft: #60A5FA;
-          --color-danger: #EF4444;
-          --color-success: #48BB78;
+          --color-bg: #0a1628;
+          --color-primary: #00d1ff;
+          --color-secondary: #60a5fa;
+        }
+
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
         }
 
         html {
@@ -93,42 +88,57 @@ export default function Home() {
         }
 
         body {
-          background-color: var(--color-background);
+          background-color: var(--color-bg);
           font-family: "Pretendard Variable", Pretendard, -apple-system,
             BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
             "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
             "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+          color: white;
+          overflow-x: hidden;
         }
 
-        .font-pretendard {
-          font-family: "Pretendard Variable", Pretendard, -apple-system,
-            BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
-            "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
-            "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+        /* Scroll Snap Container */
+        .snap-container {
+          height: 100vh;
+          overflow-y: auto;
+          scroll-snap-type: y mandatory;
+          scroll-behavior: smooth;
+        }
+
+        /* Scroll Snap Sections */
+        .snap-start {
+          scroll-snap-align: start;
+          scroll-snap-stop: always;
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-          width: 8px;
+        .snap-container::-webkit-scrollbar {
+          width: 6px;
         }
 
-        ::-webkit-scrollbar-track {
-          background: #0a0a0f;
+        .snap-container::-webkit-scrollbar-track {
+          background: var(--color-bg);
         }
 
-        ::-webkit-scrollbar-thumb {
-          background: #1a1a2e;
-          border-radius: 4px;
+        .snap-container::-webkit-scrollbar-thumb {
+          background: var(--color-primary);
+          opacity: 0.3;
+          border-radius: 3px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-          background: #00D1FF40;
+        .snap-container::-webkit-scrollbar-thumb:hover {
+          background: var(--color-secondary);
         }
 
-        /* Selection Color */
+        /* Selection */
         ::selection {
-          background: #00D1FF40;
+          background: rgba(0, 209, 255, 0.3);
           color: white;
+        }
+
+        /* Smooth anchor scrolling */
+        html {
+          scroll-padding-top: 64px;
         }
       `}</style>
     </>
