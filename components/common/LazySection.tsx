@@ -106,13 +106,15 @@ export const LazyMotionSection = ({
 /**
  * Dynamic Import Wrapper for heavy components
  */
-export function createLazyComponent<P extends object>(
-  importFn: () => Promise<{ default: ComponentType<P> }>,
+export function createLazyComponent(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  importFn: () => Promise<{ default: ComponentType<any> }>,
   fallback?: React.ReactNode
 ) {
   const LazyComponent = React.lazy(importFn);
 
-  return function LazyWrapper(props: P) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return function LazyWrapper(props: any) {
     return (
       <Suspense fallback={fallback || <SectionSkeleton minHeight="400px" />}>
         <LazyComponent {...props} />
