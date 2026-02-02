@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Send,
@@ -29,15 +29,20 @@ const IndustryDemo = ({ config }: IndustryDemoProps) => {
   const [showSources, setShowSources] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
-  // Auto-start demo when in view
-  useEffect(() => {
-    if (isInView && !hasStarted) {
-      setHasStarted(true);
-      startDemo();
-    }
-  }, [isInView, hasStarted]);
+  const typeResponse = useCallback(() => {
+    let responseIndex = 0;
+    const responseInterval = setInterval(() => {
+      if (responseIndex < demo.response.length) {
+        setDisplayedResponse(demo.response.slice(0, responseIndex + 1));
+        responseIndex++;
+      } else {
+        clearInterval(responseInterval);
+        setTimeout(() => setShowSources(true), 300);
+      }
+    }, 15);
+  }, [demo.response]);
 
-  const startDemo = () => {
+  const startDemo = useCallback(() => {
     setIsTyping(true);
     setDisplayedQuery("");
     setShowResponse(false);
@@ -61,22 +66,17 @@ const IndustryDemo = ({ config }: IndustryDemoProps) => {
         }, 800);
       }
     }, 40);
-  };
+  }, [demo.query, typeResponse]);
 
-  const typeResponse = () => {
-    let responseIndex = 0;
-    const responseInterval = setInterval(() => {
-      if (responseIndex < demo.response.length) {
-        setDisplayedResponse(demo.response.slice(0, responseIndex + 1));
-        responseIndex++;
-      } else {
-        clearInterval(responseInterval);
-        setTimeout(() => setShowSources(true), 300);
-      }
-    }, 15);
-  };
+  // Auto-start demo when in view
+  useEffect(() => {
+    if (isInView && !hasStarted) {
+      setHasStarted(true);
+      startDemo();
+    }
+  }, [isInView, hasStarted, startDemo]);
 
-  const resetDemo = () => {
+  const resetDemo = useCallback(() => {
     setHasStarted(false);
     setIsTyping(false);
     setDisplayedQuery("");
@@ -87,7 +87,7 @@ const IndustryDemo = ({ config }: IndustryDemoProps) => {
       setHasStarted(true);
       startDemo();
     }, 100);
-  };
+  }, [startDemo]);
 
   return (
     <section

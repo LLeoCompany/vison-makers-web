@@ -4,7 +4,8 @@ import React, { Suspense } from "react";
 import dynamic from "next/dynamic";
 
 // Critical - Load immediately (Above the fold)
-export { default as Hero } from "./Hero";
+import HeroComponent from "./Hero";
+export const Hero = HeroComponent;
 
 // Section Skeleton for loading states
 const SectionSkeleton = ({ height = "600px" }: { height?: string }) => (
@@ -45,7 +46,7 @@ export const LandingPageV5 = () => {
   return (
     <main className="bg-[#020617] min-h-screen">
       {/* Critical: Above the fold - No lazy loading */}
-      <Hero />
+      <HeroComponent />
 
       {/* Below the fold: Code split and lazy loaded */}
       <Suspense fallback={<SectionSkeleton height="800px" />}>
