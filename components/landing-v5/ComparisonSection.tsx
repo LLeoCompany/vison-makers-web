@@ -67,7 +67,7 @@ const LegacyCard = ({ inView }: { inView: boolean }) => {
       transition: {
         delay: 0.3 + i * 0.15,
         duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as const,
       },
     }),
   };
@@ -77,7 +77,7 @@ const LegacyCard = ({ inView }: { inView: boolean }) => {
       className="relative h-full"
       initial={{ opacity: 0, x: -50 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
     >
       {/* Card */}
       <div className="relative h-full rounded-2xl overflow-hidden">
@@ -172,7 +172,7 @@ const VisionCard = ({ inView }: { inView: boolean }) => {
       transition: {
         delay: 0.3 + i * 0.15,
         duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.16, 1, 0.3, 1] as const,
       },
     }),
   };
@@ -182,7 +182,7 @@ const VisionCard = ({ inView }: { inView: boolean }) => {
       className="relative h-full"
       initial={{ opacity: 0, x: 50 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
     >
       {/* Card */}
       <div className="relative h-full rounded-2xl overflow-hidden">

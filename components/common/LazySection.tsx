@@ -103,25 +103,6 @@ export const LazyMotionSection = ({
   );
 };
 
-/**
- * Dynamic Import Wrapper for heavy components
- */
-export function createLazyComponent(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  importFn: () => Promise<{ default: ComponentType<any> }>,
-  fallback?: React.ReactNode
-) {
-  const LazyComponent = React.lazy(importFn);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return function LazyWrapper(props: any) {
-    return (
-      <Suspense fallback={fallback || <SectionSkeleton minHeight="400px" />}>
-        <LazyComponent {...props} />
-      </Suspense>
-    );
-  };
-}
 
 /**
  * Preload component on hover/focus

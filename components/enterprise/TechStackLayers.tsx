@@ -114,8 +114,8 @@ const LayerCard = ({
         }`}
         style={{
           borderColor: isExpanded ? layer.color : "transparent",
-          ringColor: layer.color,
-        }}
+          "--tw-ring-color": layer.color,
+        } as React.CSSProperties}
         onClick={onToggle}
         whileHover={{ scale: 1.01 }}
       >
