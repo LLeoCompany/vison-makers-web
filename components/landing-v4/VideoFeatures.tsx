@@ -145,17 +145,7 @@ const VideoFeatures = () => {
         {/* Animated Background (always visible) */}
         <AnimatedFeatureBackground />
 
-        {/* Video Background (optional, overlays animated bg if present) */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
-          poster="/images/features-poster.jpg"
-        >
-          <source src="/video/features-bg.mp4" type="video/mp4" />
-        </video>
+        {/* Video Background removed - using animated background instead */}
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/50" />
