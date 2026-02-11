@@ -118,7 +118,7 @@ const NetworkBackground = () => {
               );
             }
             return null;
-          })
+          }),
         )}
 
         {/* Nodes */}
@@ -284,10 +284,10 @@ const EnterpriseHero = () => {
               variants={itemVariants}
               className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6"
             >
-              대기업은 이미 가졌습니다.
+              도메인 특화 RAG 비서,
               <br />
               <span className="bg-gradient-to-r from-[#1E3A8A] via-[#10B981] to-[#1E3A8A] bg-clip-text text-transparent">
-                이제 당신 차례입니다.
+                당신 사업에 그대로 이식합니다.
               </span>
             </motion.h1>
 
@@ -296,9 +296,12 @@ const EnterpriseHero = () => {
               variants={itemVariants}
               className="text-xl md:text-2xl text-gray-400 mb-10 max-w-2xl mx-auto"
             >
-              Fortune 500이 사용하는 Enterprise RAG 인프라를
+              헬스장 회원관리, 법률 문서, 제조 공정 매뉴얼까지.
               <br />
-              <span className="text-white">중소기업도 도입할 수 있습니다.</span>
+              <span className="text-white">
+                각 업종의 언어와 데이터를 이해하는 전용 RAG LLM 비서를 구축해
+                드립니다.
+              </span>
             </motion.p>
 
             {/* Feature Pills */}
@@ -337,14 +340,14 @@ const EnterpriseHero = () => {
                 </motion.button>
               </Link>
 
-              <motion.button
+              {/* <motion.button
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 text-white font-semibold rounded-xl text-lg border-2 border-white/20 hover:border-white/40 hover:bg-white/5 transition-all"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <Play className="w-5 h-5" />
                 데모 영상 보기
-              </motion.button>
+              </motion.button> */}
             </motion.div>
 
             {/* Real-time Metrics */}
