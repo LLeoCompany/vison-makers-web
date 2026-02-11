@@ -6,6 +6,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import Link from "next/link";
 
 interface FormData {
   companyName: string;
@@ -264,9 +265,9 @@ const ConsultationStartPage: React.FC = () => {
             {/* Privacy Notice */}
             <p className="mt-6 text-center text-xs text-gray-500">
               신청하시면{" "}
-              <a href="/privacy-policy" className="text-[#10B981] hover:underline">
+              <Link href="/privacy-policy" className="text-[#10B981] hover:underline">
                 개인정보처리방침
-              </a>
+              </Link>
               에 동의하는 것으로 간주됩니다.
             </p>
           </div>
