@@ -1,189 +1,304 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, FileSearch, Shield, Zap } from "lucide-react";
+import { ArrowRight, Volume2, VolumeX } from "lucide-react";
 
-const DataNetwork = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+interface HeroSectionProps {
+  onConsultationOpen: () => void;
+}
+
+export default function HeroSection({ onConsultationOpen }: HeroSectionProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoReady, setVideoReady] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const video = videoRef.current;
+    if (!video) return;
 
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    // Critical: set muted directly on DOM element (React muted prop has SSR issues)
+    video.muted = true;
+    video.volume = 0;
 
-    const nodes: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
-    const count = 28;
-
-    for (let i = 0; i < count; i++) {
-      nodes.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 3 + 2,
+    const attemptPlay = () => {
+      video.muted = true;
+      video.play().then(() => {
+        setVideoReady(true);
+      }).catch((err) => {
+        console.warn("Video autoplay failed:", err);
+        // Still mark as ready to remove loading state
+        setVideoReady(true);
       });
-    }
-
-    let animId: number;
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw connections
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 140) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(30, 64, 175, ${0.12 * (1 - dist / 140)})`;
-            ctx.lineWidth = 1;
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      // Draw nodes
-      nodes.forEach((n) => {
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(30, 64, 175, 0.35)";
-        ctx.fill();
-
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
-        if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
-      });
-
-      animId = requestAnimationFrame(draw);
     };
 
-    draw();
-    return () => cancelAnimationFrame(animId);
+    const onLoadedData = () => attemptPlay();
+    const onCanPlayThrough = () => {
+      if (!videoReady) attemptPlay();
+    };
+    const onError = () => {
+      console.warn("Video load error");
+      setVideoError(true);
+      setVideoReady(true);
+    };
+
+    video.addEventListener("loadeddata", onLoadedData);
+    video.addEventListener("canplaythrough", onCanPlayThrough);
+    video.addEventListener("error", onError);
+
+    // Force load if already in a ready state
+    if (video.readyState >= 2) {
+      attemptPlay();
+    } else {
+      video.load();
+    }
+
+    return () => {
+      video.removeEventListener("loadeddata", onLoadedData);
+      video.removeEventListener("canplaythrough", onCanPlayThrough);
+      video.removeEventListener("error", onError);
+    };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-    />
-  );
-};
+  const toggleMute = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    const newMuted = !muted;
+    video.muted = newMuted;
+    video.volume = newMuted ? 0 : 0.5;
+    setMuted(newMuted);
+  };
 
-const stats = [
-  { icon: <Zap className="w-4 h-4" />, value: "3초", label: "평균 응답 속도" },
-  { icon: <Shield className="w-4 h-4" />, value: "99.9%", label: "정보 보안 준수율" },
-  { icon: <FileSearch className="w-4 h-4" />, value: "85%", label: "업무 효율 향상" },
-];
-
-export default function HeroSection() {
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const scrollToServices = () => {
+    document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <section className="relative min-h-screen flex items-center bg-white overflow-hidden pt-16">
-      {/* Subtle gradient bg */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/60 via-white to-slate-50/80" />
+    <section
+      style={{
+        position: "relative",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      {/* ── Background Layer ──────────────────────────────────────── */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+        {/* Dark fallback (neutral, no blue) */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "#111111",
+          }}
+        />
 
-      {/* Data network canvas */}
-      <div className="absolute inset-0 opacity-70">
-        <DataNetwork />
+        {/* Video element – full opacity, no color tint */}
+        {!videoError && (
+          <video
+            ref={videoRef}
+            loop
+            playsInline
+            preload="auto"
+            muted
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              opacity: videoReady ? 1 : 0,
+              transition: "opacity 1s ease",
+            }}
+          >
+            <source src="/video/main-visual.mp4" type="video/mp4" />
+          </video>
+        )}
+
+        {/* Minimal neutral dark overlay – no blue, just dim for readability */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.6) 100%)",
+          }}
+        />
+
       </div>
 
-      {/* Blue accent circle top-right */}
-      <div className="absolute -top-32 -right-32 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl" />
-      <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-sky-100/40 rounded-full blur-3xl" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="max-w-3xl">
+      {/* ── Content ──────────────────────────────────────────────── */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 10,
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "140px 24px 80px",
+          width: "100%",
+        }}
+      >
+        <div style={{ maxWidth: 700 }}>
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-xs font-semibold text-blue-700 mb-6"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "6px 14px",
+              background: "rgba(59,130,246,0.15)",
+              border: "1px solid rgba(147,197,253,0.25)",
+              borderRadius: 999,
+              marginBottom: 24,
+            }}
           >
-            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-            Enterprise RAG 솔루션
+            <span
+              style={{
+                width: 7,
+                height: 7,
+                background: "#60A5FA",
+                borderRadius: "50%",
+                animation: "pulse 2s infinite",
+              }}
+            />
+            <span style={{ color: "#BFDBFE", fontSize: 12, fontWeight: 600, letterSpacing: "0.03em" }}>
+              Enterprise RAG Solution
+            </span>
           </motion.div>
 
           {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-4"
+            transition={{ duration: 0.65, delay: 0.1 }}
+            style={{
+              fontSize: "clamp(2rem, 5vw, 3.75rem)",
+              fontWeight: 800,
+              color: "white",
+              lineHeight: 1.15,
+              marginBottom: 20,
+              letterSpacing: "-0.02em",
+            }}
           >
-            귀사의 데이터를
+            데이터의 가치를
             <br />
-            <span className="text-blue-700">강력한 지능</span>으로.
+            <span style={{ color: "#93C5FD" }}>지능으로</span>,
+            <br />
+            Vision AI RAG 솔루션
           </motion.h1>
 
           {/* Subheadline */}
           <motion.p
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg sm:text-xl text-gray-500 mb-3 font-medium"
+            transition={{ duration: 0.65, delay: 0.2 }}
+            style={{
+              fontSize: "clamp(0.95rem, 2vw, 1.125rem)",
+              color: "rgba(147,197,253,0.85)",
+              marginBottom: 40,
+              lineHeight: 1.75,
+            }}
           >
-            보안 기반 도메인 특화 RAG 솔루션
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="text-base text-gray-400 mb-10 max-w-xl leading-relaxed"
-          >
-            흩어진 사내 문서와 전문 지식을 AI가 즉시 검색·분석합니다.
-            데이터 주권을 지키면서, Fortune 500 수준의 지식 인프라를 구축하세요.
+            귀사의 문서·데이터를 AI 지식 인프라로 전환합니다.
+            <br />
+            보안을 지키면서, Fortune 500 수준의 AI를 즉시 도입하세요.
           </motion.p>
 
           {/* CTA Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="flex flex-col sm:flex-row gap-3 mb-16"
+            transition={{ duration: 0.65, delay: 0.3 }}
+            style={{ display: "flex", flexWrap: "wrap", gap: 16, marginBottom: 64 }}
           >
             <button
-              onClick={() => scrollTo("consultation")}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-blue-700 text-white font-semibold rounded-xl hover:bg-blue-800 transition-all shadow-lg shadow-blue-700/20 hover:shadow-blue-700/30 hover:-translate-y-0.5"
+              onClick={scrollToServices}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "14px 28px",
+                background: "#2563EB",
+                color: "white",
+                fontWeight: 700,
+                fontSize: 15,
+                borderRadius: 12,
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 8px 24px rgba(37,99,235,0.35)",
+                transition: "all 0.2s",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = "#1D4ED8";
+                e.currentTarget.style.transform = "translateY(-1px)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = "#2563EB";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
             >
-              무료 도입 진단 시작하기
-              <ArrowRight className="w-4 h-4" />
+              솔루션 바로가기
+              <ArrowRight style={{ width: 16, height: 16 }} />
             </button>
+
             <button
-              onClick={() => scrollTo("security")}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 border-2 border-blue-200 text-blue-700 font-semibold rounded-xl hover:border-blue-700 hover:bg-blue-50 transition-all"
+              onClick={onConsultationOpen}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "14px 28px",
+                background: "rgba(255,255,255,0.1)",
+                color: "white",
+                fontWeight: 700,
+                fontSize: 15,
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.25)",
+                cursor: "pointer",
+                backdropFilter: "blur(8px)",
+                transition: "all 0.2s",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.18)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)";
+              }}
             >
-              기술 스펙 보기
+              무료 상담 신청
             </button>
           </motion.div>
 
           {/* Stats row */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.45 }}
-            className="flex flex-wrap gap-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 32,
+              paddingTop: 24,
+              borderTop: "1px solid rgba(255,255,255,0.1)",
+            }}
           >
-            {stats.map((s, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600">
-                  {s.icon}
+            {[
+              { value: "85%", label: "업무 효율 향상" },
+              { value: "3초", label: "문서 검색 속도" },
+              { value: "100%", label: "데이터 보안 유지" },
+              { value: "6개", label: "지원 산업 분야" },
+            ].map((s, i) => (
+              <div key={i}>
+                <div style={{ fontSize: "clamp(1.25rem, 3vw, 1.75rem)", fontWeight: 800, color: "#93C5FD" }}>
+                  {s.value}
                 </div>
-                <div>
-                  <div className="text-lg font-bold text-gray-900">{s.value}</div>
-                  <div className="text-xs text-gray-400">{s.label}</div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", marginTop: 2 }}>
+                  {s.label}
                 </div>
               </div>
             ))}
@@ -191,14 +306,60 @@ export default function HeroSection() {
         </div>
       </div>
 
+      {/* ── Mute Toggle (shown when video is playing) ─────────────── */}
+      {videoReady && !videoError && (
+        <button
+          onClick={toggleMute}
+          style={{
+            position: "absolute",
+            bottom: 32,
+            right: 24,
+            zIndex: 20,
+            width: 40,
+            height: 40,
+            background: "rgba(255,255,255,0.15)",
+            border: "1px solid rgba(255,255,255,0.25)",
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            color: "white",
+            backdropFilter: "blur(8px)",
+            transition: "background 0.2s",
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.25)")}
+          onMouseOut={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.15)")}
+          title={muted ? "음소거 해제" : "음소거"}
+        >
+          {muted ? <VolumeX style={{ width: 16, height: 16 }} /> : <Volume2 style={{ width: 16, height: 16 }} />}
+        </button>
+      )}
+
       {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+        transition={{ delay: 1.5 }}
+        style={{
+          position: "absolute",
+          bottom: 32,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 10,
+        }}
       >
-        <div className="w-0.5 h-8 bg-gradient-to-b from-blue-300 to-transparent rounded-full animate-pulse" />
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8 }}
+          style={{
+            width: 2,
+            height: 32,
+            background: "linear-gradient(to bottom, rgba(255,255,255,0.5), transparent)",
+            borderRadius: 999,
+            margin: "0 auto",
+          }}
+        />
       </motion.div>
     </section>
   );

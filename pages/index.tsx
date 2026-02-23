@@ -1,44 +1,82 @@
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
 import Navbar from "@/components/home/Navbar";
 import HeroSection from "@/components/home/HeroSection";
 import HomeFooter from "@/components/home/HomeFooter";
+import ConsultationSidebar from "@/components/home/ConsultationSidebar";
 
-const ServiceCards = dynamic(() => import("@/components/home/ServiceCards"), { ssr: true });
-const SecuritySection = dynamic(() => import("@/components/home/SecuritySection"), { ssr: true });
-const CaseStudySection = dynamic(() => import("@/components/home/CaseStudySection"), { ssr: true });
-const ConsultationForm = dynamic(() => import("@/components/home/ConsultationForm"), { ssr: true });
+const SystemIntroSection = dynamic(
+  () => import("@/components/home/SystemIntroSection"),
+  { ssr: true }
+);
+const ServiceCards = dynamic(
+  () => import("@/components/home/ServiceCards"),
+  { ssr: true }
+);
+const SecuritySection = dynamic(
+  () => import("@/components/home/SecuritySection"),
+  { ssr: true }
+);
+const CaseStudySection = dynamic(
+  () => import("@/components/home/CaseStudySection"),
+  { ssr: true }
+);
+const ConsultationForm = dynamic(
+  () => import("@/components/home/ConsultationForm"),
+  { ssr: true }
+);
 
 export default function Home() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <>
       <Head>
         <title>Vision AI | 보안 기반 Enterprise RAG 솔루션</title>
         <meta
           name="description"
-          content="귀사의 데이터를 강력한 지능으로. 보안 기반 도메인 특화 RAG 솔루션 - Vision AI"
+          content="데이터의 가치를 지능으로. 보안 기반 도메인 특화 RAG 솔루션 – Vision AI"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:title" content="Vision AI | 보안 기반 Enterprise RAG 솔루션" />
         <meta
           property="og:description"
-          content="귀사의 데이터를 강력한 지능으로. 보안 기반 도메인 특화 RAG 솔루션."
+          content="데이터의 가치를 지능으로. 보안 기반 도메인 특화 RAG 솔루션 – Vision AI"
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      {/* Consultation Sidebar – global, above everything */}
+      <ConsultationSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
       <div className="min-h-screen bg-white">
-        <Navbar />
+        {/* Fixed Navigation */}
+        <Navbar onConsultationOpen={() => setSidebarOpen(true)} />
 
         <main>
-          <HeroSection />
+          {/* 1. Video Hero */}
+          <HeroSection onConsultationOpen={() => setSidebarOpen(true)} />
+
+          {/* 2. System Intro (LLM이란?) */}
+          <SystemIntroSection />
+
+          {/* 3. RAG Service Cards – Bento Grid */}
           <ServiceCards />
+
+          {/* 4. 5-Layer Security */}
           <SecuritySection />
+
+          {/* 5. Case Studies */}
           <CaseStudySection />
+
+          {/* 6. Consultation Form */}
           <ConsultationForm />
         </main>
 

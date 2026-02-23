@@ -1,41 +1,14 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Shield, Mail, Phone } from "lucide-react";
-
-const footerLinks = [
-  {
-    title: "서비스",
-    links: [
-      { label: "사내 지식 기반 RAG", href: "#services" },
-      { label: "전문 도메인 특화 RAG", href: "#services" },
-      { label: "고객 접점 상담 RAG", href: "#services" },
-    ],
-  },
-  {
-    title: "보안",
-    links: [
-      { label: "5-Layer 보안 체계", href: "#security" },
-      { label: "ISO 27001 인증", href: "#security" },
-      { label: "On-Premise 구축", href: "#security" },
-    ],
-  },
-  {
-    title: "회사",
-    links: [
-      { label: "도입 사례", href: "#cases" },
-      { label: "무료 상담", href: "#consultation" },
-      { label: "개인정보처리방침", href: "/privacy-policy" },
-    ],
-  },
-];
+import { Shield, Mail, Phone, MapPin } from "lucide-react";
+import Link from "next/link";
+import { dropdownMenuItems } from "@/config/solutionsConfig";
 
 export default function HomeFooter() {
   const scrollTo = (href: string) => {
     if (href.startsWith("#")) {
       document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-    } else {
-      window.location.href = href;
     }
   };
 
@@ -58,42 +31,97 @@ export default function HomeFooter() {
               <br />
               귀사의 데이터를 강력한 지능으로 만듭니다.
             </p>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Mail className="w-4 h-4 text-blue-400" />
-                contact@vision-makers.ai
+                <Phone className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                010-9915-4724
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Phone className="w-4 h-4 text-blue-400" />
-                02-0000-0000
+                <Mail className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                contact@vision-makers.io
+              </div>
+              <div className="flex items-start gap-2 text-sm text-gray-400">
+                <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                Vision-Makers
               </div>
             </div>
           </div>
 
-          {/* Links */}
-          {footerLinks.map((section) => (
-            <div key={section.title}>
-              <h4 className="text-sm font-bold text-white mb-4">{section.title}</h4>
-              <ul className="space-y-2.5">
-                {section.links.map((link) => (
-                  <li key={link.label}>
+          {/* 분야별 AI */}
+          <div>
+            <h4 className="text-sm font-bold text-white mb-4">분야별 AI</h4>
+            <ul className="space-y-2.5">
+              {dropdownMenuItems.map((item) => (
+                <li key={item.field}>
+                  <Link
+                    href={`/solutions/${item.field}`}
+                    className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1.5"
+                  >
+                    <span className="text-xs">{item.emoji}</span>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 서비스 */}
+          <div>
+            <h4 className="text-sm font-bold text-white mb-4">서비스</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: "RAG 솔루션 소개", href: "#services" },
+                { label: "보안 체계", href: "#security" },
+                { label: "도입 사례", href: "#cases" },
+                { label: "무료 상담", href: "#consultation" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <button
+                    onClick={() => scrollTo(link.href)}
+                    className="text-sm text-gray-400 hover:text-white transition-colors"
+                  >
+                    {link.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 회사 */}
+          <div>
+            <h4 className="text-sm font-bold text-white mb-4">회사</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: "회사소개", href: "#about" },
+                { label: "LLM이란?", href: "#system-intro" },
+                { label: "개인정보처리방침", href: "/privacy-policy" },
+              ].map((link) => (
+                <li key={link.label}>
+                  {link.href.startsWith("#") ? (
                     <button
                       onClick={() => scrollTo(link.href)}
                       className="text-sm text-gray-400 hover:text-white transition-colors"
                     >
                       {link.label}
                     </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-sm text-gray-400 hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-500">
-            © 2024 Vision Makers. All rights reserved.
+            © 2024 Vision-Makers. All rights reserved.
           </p>
           <div className="flex items-center gap-1.5 text-xs text-gray-500">
             <Shield className="w-3.5 h-3.5 text-blue-400" />
