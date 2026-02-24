@@ -12,9 +12,12 @@ const navLinks = [
 
 interface NavbarProps {
   onConsultationOpen: () => void;
+  /** "dark" = hero is dark (default, white text before scroll)
+   *  "light" = hero is light (dark text even before scroll) */
+  heroTheme?: "dark" | "light";
 }
 
-export default function Navbar({ onConsultationOpen }: NavbarProps) {
+export default function Navbar({ onConsultationOpen, heroTheme = "dark" }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -53,14 +56,17 @@ export default function Navbar({ onConsultationOpen }: NavbarProps) {
     hoverTimer.current = setTimeout(() => setDropdownOpen(false), 160);
   };
 
-  // Header background based on scroll state
+  // Header background based on scroll state + hero theme
+  const isLight = heroTheme === "light";
   const headerBg = scrolled
     ? "bg-white shadow-sm border-b border-gray-100"
+    : isLight
+    ? "bg-white/90 border-b border-gray-100 backdrop-blur-sm"
     : "bg-transparent";
 
-  // Text color based on scroll state
-  const textColor = scrolled ? "text-gray-700" : "text-white";
-  const hoverText = scrolled ? "hover:text-blue-700" : "hover:text-blue-200";
+  // Text color based on scroll state + hero theme
+  const textColor = scrolled || isLight ? "text-gray-700" : "text-white";
+  const hoverText = scrolled || isLight ? "hover:text-blue-700" : "hover:text-blue-200";
 
   return (
     <>
@@ -99,7 +105,7 @@ export default function Navbar({ onConsultationOpen }: NavbarProps) {
                 style={{
                   fontWeight: 800,
                   fontSize: 22,
-                  color: scrolled ? "#111827" : "#ffffff",
+                  color: scrolled || isLight ? "#111827" : "#ffffff",
                   transition: "color 0.3s",
                   letterSpacing: "-0.02em",
                 }}
@@ -263,7 +269,7 @@ export default function Navbar({ onConsultationOpen }: NavbarProps) {
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  color: scrolled ? "#374151" : "white",
+                  color: scrolled || isLight ? "#374151" : "white",
                 }}
               >
                 {mobileOpen ? <X style={{ width: 22, height: 22 }} /> : <Menu style={{ width: 22, height: 22 }} />}

@@ -39,7 +39,7 @@ export default function LegalPage() {
       <LegalConsultWidget />
 
       <div style={{ minHeight: "100vh", background: "white" }}>
-        <Navbar onConsultationOpen={openConsult} />
+        <Navbar onConsultationOpen={openConsult} heroTheme="light" />
 
         <main>
           {/* Section 1: Hero */}
