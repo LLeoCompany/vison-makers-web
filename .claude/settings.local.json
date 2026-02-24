@@ -29,7 +29,8 @@
       "Bash(wc:*)",
       "WebFetch(domain:kr.pinterest.com)",
       "Bash(git add:*)",
-      "Bash(head:*)"
+      "Bash(head:*)",
+      "Bash(npx next build:*)"
     ],
     "deny": [],
     "ask": []

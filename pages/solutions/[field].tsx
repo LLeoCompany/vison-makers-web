@@ -333,7 +333,7 @@ export default function SolutionPage({ config }: SolutionPageProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const fields = getAllSolutionFields();
+  const fields = getAllSolutionFields().filter((f) => f !== "legal");
   return {
     paths: fields.map((field) => ({ params: { field } })),
     fallback: false,
