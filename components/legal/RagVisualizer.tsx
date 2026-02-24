@@ -66,8 +66,8 @@ export default function RagVisualizer() {
   return (
     <section style={{ background: "#0A0F1E", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
       {/* Decorative glow */}
-      <div style={{ position: "absolute", top: "20%", left: "10%", width: 400, height: 400, background: "radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "10%", right: "5%", width: 300, height: 300, background: "radial-gradient(circle, rgba(30,58,138,0.1) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: "20%", left: "10%", width: 400, height: 400, background: "radial-gradient(circle, rgba(184,145,80,0.15) 0%, transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: "10%", right: "5%", width: 300, height: 300, background: "radial-gradient(circle, rgba(26,34,56,0.1) 0%, transparent 70%)", pointerEvents: "none" }} />
 
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
         {/* Section header */}
@@ -78,8 +78,8 @@ export default function RagVisualizer() {
           transition={{ duration: 0.6 }}
           style={{ textAlign: "center", marginBottom: 64 }}
         >
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", background: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.25)", borderRadius: 999, marginBottom: 20 }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#93C5FD", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", background: "rgba(184,145,80,0.15)", border: "1px solid rgba(184,145,80,0.15)", borderRadius: 999, marginBottom: 20 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#D4A853", letterSpacing: "0.06em", textTransform: "uppercase" }}>
               Core Technology
             </span>
           </div>
@@ -114,18 +114,18 @@ export default function RagVisualizer() {
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
                     <div style={{
                       width: 48, height: 48, borderRadius: "50%",
-                      background: active ? "linear-gradient(135deg, #1E3A8A, #3B82F6)" : "rgba(255,255,255,0.06)",
+                      background: active ? "linear-gradient(135deg, #1A2238, #B89150)" : "rgba(255,255,255,0.06)",
                       border: active ? "none" : "1px solid rgba(255,255,255,0.1)",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       transition: "all 0.4s",
-                      boxShadow: active ? "0 0 24px rgba(59,130,246,0.35)" : "none",
+                      boxShadow: active ? "0 0 24px rgba(184,145,80,0.15)" : "none",
                     }}>
                       <item.icon style={{ width: 20, height: 20, color: active ? "white" : "rgba(255,255,255,0.3)" }} />
                     </div>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: active ? "#93C5FD" : "rgba(255,255,255,0.25)", letterSpacing: "0.04em" }}>{item.label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: active ? "#D4A853" : "rgba(255,255,255,0.25)", letterSpacing: "0.04em" }}>{item.label}</span>
                   </div>
                   {i < 2 && (
-                    <div style={{ flex: 1, height: 2, background: active && steps.indexOf(step) > i ? "linear-gradient(90deg, #3B82F6, #1E3A8A)" : "rgba(255,255,255,0.08)", margin: "0 8px", marginBottom: 28, transition: "all 0.4s" }} />
+                    <div style={{ flex: 1, height: 2, background: active && steps.indexOf(step) > i ? "linear-gradient(90deg, #B89150, #1A2238)" : "rgba(255,255,255,0.08)", margin: "0 8px", marginBottom: 28, transition: "all 0.4s" }} />
                   )}
                 </React.Fragment>
               );
@@ -144,14 +144,14 @@ export default function RagVisualizer() {
                 <div style={{
                   background: "rgba(255,255,255,0.05)",
                   border: step === "query" || step === "retrieval" || step === "generation" || step === "done"
-                    ? "1px solid rgba(59,130,246,0.4)" : "1px solid rgba(255,255,255,0.08)",
+                    ? "1px solid rgba(184,145,80,0.15)" : "1px solid rgba(255,255,255,0.08)",
                   borderRadius: 14,
                   padding: "16px 20px",
                   transition: "border-color 0.4s",
-                  boxShadow: step !== "idle" ? "0 0 20px rgba(59,130,246,0.1)" : "none",
+                  boxShadow: step !== "idle" ? "0 0 20px rgba(184,145,80,0.15)" : "none",
                 }}>
                   <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                    <Search style={{ width: 16, height: 16, color: "#3B82F6", flexShrink: 0, marginTop: 2 }} />
+                    <Search style={{ width: 16, height: 16, color: "#B89150", flexShrink: 0, marginTop: 2 }} />
                     <p style={{ fontSize: 14, color: "rgba(255,255,255,0.85)", lineHeight: 1.65, margin: 0 }}>{DEMO_QUERY}</p>
                   </div>
                 </div>
@@ -173,20 +173,20 @@ export default function RagVisualizer() {
                         transition={{ delay: i * 0.18, duration: 0.4 }}
                         onClick={() => setActiveChunk(activeChunk === chunk.id ? null : chunk.id)}
                         style={{
-                          background: activeChunk === chunk.id ? "rgba(59,130,246,0.12)" : "rgba(255,255,255,0.04)",
-                          border: activeChunk === chunk.id ? "1px solid rgba(59,130,246,0.4)" : "1px solid rgba(255,255,255,0.07)",
+                          background: activeChunk === chunk.id ? "rgba(184,145,80,0.15)" : "rgba(255,255,255,0.04)",
+                          border: activeChunk === chunk.id ? "1px solid rgba(184,145,80,0.15)" : "1px solid rgba(255,255,255,0.07)",
                           borderRadius: 12, padding: "14px 16px", cursor: "pointer",
                           transition: "all 0.2s",
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            <span style={{ width: 20, height: 20, background: "rgba(59,130,246,0.2)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "#93C5FD", flexShrink: 0 }}>
+                            <span style={{ width: 20, height: 20, background: "rgba(184,145,80,0.15)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, color: "#D4A853", flexShrink: 0 }}>
                               {chunk.id}
                             </span>
                             <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.85)" }}>{chunk.title}</span>
                           </div>
-                          <span style={{ fontSize: 11, fontWeight: 700, color: "#3B82F6" }}>{chunk.relevance}%</span>
+                          <span style={{ fontSize: 11, fontWeight: 700, color: "#B89150" }}>{chunk.relevance}%</span>
                         </div>
                         <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", margin: 0, lineHeight: 1.55 }}>
                           {chunk.preview}
@@ -212,9 +212,9 @@ export default function RagVisualizer() {
                     transition={{ duration: 0.5 }}
                     style={{
                       background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(59,130,246,0.3)",
+                      border: "1px solid rgba(184,145,80,0.15)",
                       borderRadius: 14, padding: "24px",
-                      boxShadow: "0 0 32px rgba(59,130,246,0.08)",
+                      boxShadow: "0 0 32px rgba(184,145,80,0.15)",
                     }}
                   >
                     <p style={{ fontSize: 14, color: "rgba(255,255,255,0.85)", lineHeight: 1.9, margin: 0 }}>
@@ -225,10 +225,10 @@ export default function RagVisualizer() {
                             onClick={() => setCitationOpen(citationOpen === seg.cite ? null : seg.cite!)}
                             style={{
                               display: "inline",
-                              background: "rgba(59,130,246,0.15)",
-                              border: "1px solid rgba(59,130,246,0.4)",
+                              background: "rgba(184,145,80,0.15)",
+                              border: "1px solid rgba(184,145,80,0.15)",
                               borderRadius: 6, padding: "1px 7px",
-                              fontSize: 13, fontWeight: 700, color: "#93C5FD",
+                              fontSize: 13, fontWeight: 700, color: "#D4A853",
                               cursor: "pointer", margin: "0 2px",
                               transition: "all 0.15s",
                             }}
@@ -251,8 +251,8 @@ export default function RagVisualizer() {
                           exit={{ opacity: 0, y: -8, scale: 0.97 }}
                           transition={{ duration: 0.2 }}
                           style={{
-                            marginTop: 20, background: "rgba(30,58,138,0.15)",
-                            border: "1px solid rgba(59,130,246,0.35)",
+                            marginTop: 20, background: "rgba(26,34,56,0.15)",
+                            border: "1px solid rgba(184,145,80,0.15)",
                             borderRadius: 12, padding: "16px 18px",
                           }}
                         >
@@ -263,8 +263,8 @@ export default function RagVisualizer() {
                               <>
                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
                                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                    <FileText style={{ width: 14, height: 14, color: "#93C5FD" }} />
-                                    <span style={{ fontSize: 12, fontWeight: 800, color: "#93C5FD" }}>[{c.id}] {c.title}</span>
+                                    <FileText style={{ width: 14, height: 14, color: "#D4A853" }} />
+                                    <span style={{ fontSize: 12, fontWeight: 800, color: "#D4A853" }}>[{c.id}] {c.title}</span>
                                   </div>
                                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                     <span style={{ fontSize: 11, color: "#64748B" }}>{c.year}</span>
@@ -305,7 +305,7 @@ export default function RagVisualizer() {
                       <motion.div
                         animate={{ opacity: [0.3, 1, 0.3] }}
                         transition={{ repeat: Infinity, duration: 1.2 }}
-                        style={{ width: 48, height: 3, background: "linear-gradient(90deg, #1E3A8A, #3B82F6)", borderRadius: 999 }}
+                        style={{ width: 48, height: 3, background: "linear-gradient(90deg, #1A2238, #B89150)", borderRadius: 999 }}
                       />
                     )}
                   </motion.div>
@@ -321,10 +321,10 @@ export default function RagVisualizer() {
                 onClick={run}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 8,
-                  padding: "14px 36px", background: "linear-gradient(135deg, #1E3A8A, #3B82F6)",
+                  padding: "14px 36px", background: "linear-gradient(135deg, #1A2238, #B89150)",
                   color: "white", fontSize: 15, fontWeight: 700, borderRadius: 12,
                   border: "none", cursor: "pointer",
-                  boxShadow: "0 8px 28px rgba(30,58,138,0.4)",
+                  boxShadow: "0 8px 28px rgba(26,34,56,0.4)",
                 }}
               >
                 <Search style={{ width: 16, height: 16 }} />
@@ -346,15 +346,15 @@ export default function RagVisualizer() {
             ) : (
               <div style={{
                 display: "inline-flex", alignItems: "center", gap: 10,
-                padding: "14px 36px", background: "rgba(59,130,246,0.1)",
-                borderRadius: 12, border: "1px solid rgba(59,130,246,0.2)",
+                padding: "14px 36px", background: "rgba(184,145,80,0.15)",
+                borderRadius: 12, border: "1px solid rgba(184,145,80,0.15)",
               }}>
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                  style={{ width: 16, height: 16, border: "2px solid rgba(59,130,246,0.3)", borderTopColor: "#3B82F6", borderRadius: "50%" }}
+                  style={{ width: 16, height: 16, border: "2px solid rgba(184,145,80,0.15)", borderTopColor: "#B89150", borderRadius: "50%" }}
                 />
-                <span style={{ fontSize: 14, color: "#93C5FD", fontWeight: 600 }}>
+                <span style={{ fontSize: 14, color: "#D4A853", fontWeight: 600 }}>
                   {step === "query" ? "질문 분석 중..." : step === "retrieval" ? "판례 검색 중..." : "답변 생성 중..."}
                 </span>
               </div>

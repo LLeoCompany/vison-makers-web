@@ -9,42 +9,42 @@ const pillars = [
     title: "폐쇄망 On-Premise",
     desc: "Air-gapped 서버에 구축. 귀사의 사건 기록은 외부 인터넷과 물리적으로 차단됩니다.",
     tag: "Air-gapped",
-    glow: "rgba(30,58,138,0.25)",
+    glow: "rgba(26,34,56,0.25)",
   },
   {
     icon: Users,
     title: "역할 기반 접근 제어",
     desc: "RBAC(Role-Based Access Control)로 담당자별 열람 권한을 세밀하게 설정합니다.",
     tag: "RBAC",
-    glow: "rgba(30,58,138,0.2)",
+    glow: "rgba(26,34,56,0.2)",
   },
   {
     icon: ClipboardList,
     title: "실시간 감사 로그",
     desc: "모든 질의·열람·수정 이력이 타임스탬프와 함께 저장됩니다. 언제든 감사 대응이 가능합니다.",
     tag: "Audit Log",
-    glow: "rgba(30,58,138,0.2)",
+    glow: "rgba(26,34,56,0.2)",
   },
   {
     icon: Lock,
     title: "종단간 암호화",
     desc: "AES-256 저장 암호화 및 TLS 1.3 전송 암호화로 데이터를 이중 보호합니다.",
     tag: "AES-256",
-    glow: "rgba(30,58,138,0.18)",
+    glow: "rgba(26,34,56,0.18)",
   },
   {
     icon: Shield,
     title: "ISO 27001 준수",
     desc: "국제 정보보안 표준을 준수하며 법률 데이터의 기밀성·무결성·가용성을 보장합니다.",
     tag: "ISO 27001",
-    glow: "rgba(30,58,138,0.18)",
+    glow: "rgba(26,34,56,0.18)",
   },
   {
     icon: Zap,
     title: "Zero Trust 아키텍처",
     desc: "내부 네트워크라도 지속적 인증을 요구. 내부자 위협까지 차단하는 제로 트러스트 설계입니다.",
     tag: "Zero Trust",
-    glow: "rgba(30,58,138,0.18)",
+    glow: "rgba(26,34,56,0.18)",
   },
 ];
 
@@ -52,7 +52,7 @@ export default function LegalSecurity() {
   return (
     <section style={{ background: "#F8FAFC", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
       {/* Decorative */}
-      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 800, height: 800, background: "radial-gradient(circle, rgba(30,58,138,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 800, height: 800, background: "radial-gradient(circle, rgba(26,34,56,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
 
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
         {/* Header */}
@@ -63,9 +63,9 @@ export default function LegalSecurity() {
           transition={{ duration: 0.6 }}
           style={{ textAlign: "center", marginBottom: 72 }}
         >
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", background: "rgba(30,58,138,0.07)", border: "1px solid rgba(30,58,138,0.15)", borderRadius: 999, marginBottom: 20 }}>
-            <Shield style={{ width: 12, height: 12, color: "#1E3A8A" }} />
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#1E3A8A", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", background: "rgba(26,34,56,0.07)", border: "1px solid rgba(26,34,56,0.15)", borderRadius: 999, marginBottom: 20 }}>
+            <Shield style={{ width: 12, height: 12, color: "#1A2238" }} />
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#1A2238", letterSpacing: "0.06em", textTransform: "uppercase" }}>
               Security First
             </span>
           </div>
@@ -85,11 +85,11 @@ export default function LegalSecurity() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           style={{
-            background: "linear-gradient(135deg, #1E3A8A 0%, #1E40AF 50%, #2563EB 100%)",
+            background: "linear-gradient(135deg, #0D1117 0%, #1A2238 60%, #2A3A5C 100%)",
             borderRadius: 24, padding: "48px 56px",
             marginBottom: 64,
             position: "relative", overflow: "hidden",
-            boxShadow: "0 24px 64px rgba(30,58,138,0.25)",
+            boxShadow: "0 24px 64px rgba(26,34,56,0.25)",
           }}
         >
           {/* Decorative rings */}
@@ -100,7 +100,7 @@ export default function LegalSecurity() {
             <div style={{ fontSize: 64, color: "rgba(255,255,255,0.15)", fontFamily: "serif", lineHeight: 0.6, marginBottom: 20 }}>&ldquo;</div>
             <p style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)", fontWeight: 700, color: "white", lineHeight: 1.6, maxWidth: 700, marginBottom: 24 }}>
               귀사의 사건 기록은 외부로<br />
-              <span style={{ color: "#93C5FD" }}>한 글자도 나가지 않습니다.</span>
+              <span style={{ color: "#D4A853" }}>한 글자도 나가지 않습니다.</span>
             </p>
             <div style={{ display: "flex", gap: 32, flexWrap: "wrap" }}>
               {[
@@ -109,7 +109,7 @@ export default function LegalSecurity() {
                 { val: "24/7", desc: "보안 모니터링" },
               ].map((s, i) => (
                 <div key={i}>
-                  <div style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 900, color: "#93C5FD" }}>{s.val}</div>
+                  <div style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 900, color: "#D4A853" }}>{s.val}</div>
                   <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginTop: 2 }}>{s.desc}</div>
                 </div>
               ))}
@@ -135,10 +135,10 @@ export default function LegalSecurity() {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <div style={{ width: 44, height: 44, background: "linear-gradient(135deg, #EFF6FF, #DBEAFE)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <p.icon style={{ width: 20, height: 20, color: "#1E3A8A" }} />
+                <div style={{ width: 44, height: 44, background: "linear-gradient(135deg, #F5F6FA, #E8ECF2)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <p.icon style={{ width: 20, height: 20, color: "#1A2238" }} />
                 </div>
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#1E3A8A", background: "#EFF6FF", padding: "3px 10px", borderRadius: 999, border: "1px solid #BFDBFE" }}>{p.tag}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#1A2238", background: "#F5F6FA", padding: "3px 10px", borderRadius: 999, border: "1px solid #C8D0DE" }}>{p.tag}</span>
               </div>
               <h3 style={{ fontSize: 16, fontWeight: 800, color: "#0F172A", marginBottom: 10 }}>{p.title}</h3>
               <p style={{ fontSize: 13.5, color: "#64748B", lineHeight: 1.7, margin: 0 }}>{p.desc}</p>

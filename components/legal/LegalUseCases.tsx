@@ -16,9 +16,9 @@ const cases = [
       "인용 가능한 원문 조항 자동 추출",
       "법원·연도별 필터링 지원",
     ],
-    color: "#1E3A8A",
-    gradient: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
-    accent: "#DBEAFE",
+    color: "#1A2238",
+    gradient: "linear-gradient(135deg, #F5F6FA 0%, #E8ECF2 100%)",
+    accent: "#E8ECF2",
   },
   {
     icon: FileSearch,
@@ -68,8 +68,8 @@ export default function LegalUseCases() {
           transition={{ duration: 0.6 }}
           style={{ textAlign: "center", marginBottom: 64 }}
         >
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", background: "rgba(30,58,138,0.07)", border: "1px solid rgba(30,58,138,0.15)", borderRadius: 999, marginBottom: 20 }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#1E3A8A", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", background: "rgba(26,34,56,0.07)", border: "1px solid rgba(26,34,56,0.15)", borderRadius: 999, marginBottom: 20 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#1A2238", letterSpacing: "0.06em", textTransform: "uppercase" }}>
               Use Cases
             </span>
           </div>

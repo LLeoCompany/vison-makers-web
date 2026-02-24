@@ -31,8 +31,8 @@ export default function LegalComparison() {
           transition={{ duration: 0.6 }}
           style={{ textAlign: "center", marginBottom: 64 }}
         >
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", background: "rgba(30,58,138,0.07)", border: "1px solid rgba(30,58,138,0.15)", borderRadius: 999, marginBottom: 20 }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#1E3A8A", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 14px", background: "rgba(26,34,56,0.07)", border: "1px solid rgba(26,34,56,0.15)", borderRadius: 999, marginBottom: 20 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#1A2238", letterSpacing: "0.06em", textTransform: "uppercase" }}>
               Why Vision AI
             </span>
           </div>
@@ -94,7 +94,7 @@ export default function LegalComparison() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              style={{ width: 56, height: 56, background: "linear-gradient(135deg, #1E3A8A, #3B82F6)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px rgba(30,58,138,0.3)", color: "white", fontSize: 14, fontWeight: 900, letterSpacing: "0.02em" }}
+              style={{ width: 56, height: 56, background: "linear-gradient(135deg, #1A2238, #3B82F6)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 24px rgba(26,34,56,0.3)", color: "white", fontSize: 14, fontWeight: 900, letterSpacing: "0.02em" }}
             >
               VS
             </motion.div>
@@ -106,16 +106,16 @@ export default function LegalComparison() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            style={{ background: "white", borderRadius: 20, overflow: "hidden", border: "2px solid #1E3A8A", boxShadow: "0 8px 40px rgba(30,58,138,0.15)" }}
+            style={{ background: "white", borderRadius: 20, overflow: "hidden", border: "2px solid #1A2238", boxShadow: "0 8px 40px rgba(26,34,56,0.15)" }}
           >
             {/* Card header */}
-            <div style={{ padding: "24px 28px", background: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)", borderBottom: "1px solid #BFDBFE" }}>
+            <div style={{ padding: "24px 28px", background: "linear-gradient(135deg, #F5F6FA 0%, #E8ECF2 100%)", borderBottom: "1px solid #C8D0DE" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 40, height: 40, background: "#1E3A8A", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ width: 40, height: 40, background: "#1A2238", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <Check style={{ width: 20, height: 20, color: "white" }} />
                 </div>
                 <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: "#1E3A8A", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 2 }}>Vision AI</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#1A2238", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 2 }}>Vision AI</div>
                   <div style={{ fontSize: 16, fontWeight: 800, color: "#1E293B" }}>법률 특화 RAG 솔루션</div>
                 </div>
               </div>
@@ -131,8 +131,8 @@ export default function LegalComparison() {
                   transition={{ delay: i * 0.08 }}
                   style={{ display: "flex", alignItems: "flex-start", gap: 12 }}
                 >
-                  <div style={{ width: 22, height: 22, background: "#DBEAFE", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
-                    <Check style={{ width: 13, height: 13, color: "#1E3A8A" }} />
+                  <div style={{ width: 22, height: 22, background: "#E8ECF2", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
+                    <Check style={{ width: 13, height: 13, color: "#1A2238" }} />
                   </div>
                   <span style={{ fontSize: 14, color: "#1E293B", lineHeight: 1.6, fontWeight: 500 }}>{item}</span>
                 </motion.div>
