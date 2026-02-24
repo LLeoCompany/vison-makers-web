@@ -34,10 +34,16 @@ interface Citation {
   preview: string;
 }
 
-export default function LegalChatUI() {
+export default function LegalChatUI({ onConsult }: { onConsult: () => void }) {
   const [activeConv, setActiveConv] = useState(0);
   const [openCite, setOpenCite] = useState<Citation | null>(null);
   const [inputVal, setInputVal] = useState("");
+
+  const handleSend = () => {
+    if (!inputVal.trim()) return;
+    onConsult();
+    setInputVal("");
+  };
 
   return (
     <section style={{ background: "#0D1117", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
@@ -244,11 +250,12 @@ export default function LegalChatUI() {
                 <input
                   value={inputVal}
                   onChange={e => setInputVal(e.target.value)}
-                  placeholder="법률 질문을 입력하세요..."
+                  onKeyDown={e => { if (e.key === "Enter") handleSend(); }}
+                  placeholder="법률 질문을 입력하고 Enter → 상담 연결..."
                   style={{ flex: 1, background: "none", border: "none", outline: "none", fontSize: 14, color: "rgba(255,255,255,0.7)", fontFamily: "inherit" }}
                 />
               </div>
-              <button style={{
+              <button onClick={handleSend} style={{
                 width: 42, height: 42, background: "linear-gradient(135deg, #B89150, #D4A853)",
                 border: "none", borderRadius: 12, cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
