@@ -11,18 +11,6 @@ const SystemIntroSection = dynamic(
   () => import("@/components/home/SystemIntroSection"),
   { ssr: true }
 );
-const ServiceCards = dynamic(
-  () => import("@/components/home/ServiceCards"),
-  { ssr: true }
-);
-const SecuritySection = dynamic(
-  () => import("@/components/home/SecuritySection"),
-  { ssr: true }
-);
-const CaseStudySection = dynamic(
-  () => import("@/components/home/CaseStudySection"),
-  { ssr: true }
-);
 const ConsultationForm = dynamic(
   () => import("@/components/home/ConsultationForm"),
   { ssr: true }
@@ -67,16 +55,7 @@ export default function Home() {
           {/* 2. System Intro (LLM이란?) */}
           <SystemIntroSection />
 
-          {/* 3. RAG Service Cards – Bento Grid */}
-          <ServiceCards />
-
-          {/* 4. 5-Layer Security */}
-          <SecuritySection />
-
-          {/* 5. Case Studies */}
-          <CaseStudySection />
-
-          {/* 6. Consultation Form */}
+          {/* 3. Consultation Form */}
           <ConsultationForm />
         </main>
 
