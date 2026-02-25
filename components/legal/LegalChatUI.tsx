@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, FileText, X, ChevronRight, Scale } from "lucide-react";
+import { Send, FileText, X, ChevronRight, Scale, Loader2 } from "lucide-react";
 
 const CONVERSATIONS = [
   {
@@ -34,15 +34,20 @@ interface Citation {
   preview: string;
 }
 
-export default function LegalChatUI({ onConsult }: { onConsult: () => void }) {
+export default function LegalChatUI({ onConsult }: { onConsult: (message?: string) => void }) {
   const [activeConv, setActiveConv] = useState(0);
   const [openCite, setOpenCite] = useState<Citation | null>(null);
   const [inputVal, setInputVal] = useState("");
+  const [analyzing, setAnalyzing] = useState(false);
 
-  const handleSend = () => {
-    if (!inputVal.trim()) return;
-    onConsult();
+  const handleSend = async () => {
+    const trimmed = inputVal.trim();
+    if (!trimmed || analyzing) return;
+    setAnalyzing(true);
+    await new Promise(r => setTimeout(r, 750));
+    setAnalyzing(false);
     setInputVal("");
+    onConsult(`질문: ${trimmed}`);
   };
 
   return (
@@ -246,28 +251,51 @@ export default function LegalChatUI({ onConsult }: { onConsult: () => void }) {
           {/* Input bar */}
           <div style={{ padding: "16px 24px", borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
             <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-              <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "10px 16px" }}>
+              <div style={{
+                flex: 1, display: "flex", alignItems: "center", gap: 10,
+                background: analyzing ? "rgba(184,145,80,0.08)" : "rgba(255,255,255,0.05)",
+                border: analyzing ? "1px solid rgba(184,145,80,0.4)" : "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 12, padding: "10px 16px", transition: "all 0.3s",
+              }}>
+                {analyzing && (
+                  <div style={{ display: "flex", gap: 3, flexShrink: 0 }}>
+                    {[0, 1, 2].map(i => (
+                      <motion.div key={i}
+                        animate={{ opacity: [0.3, 1, 0.3] }}
+                        transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.18 }}
+                        style={{ width: 5, height: 5, background: "#B89150", borderRadius: "50%" }}
+                      />
+                    ))}
+                  </div>
+                )}
                 <input
-                  value={inputVal}
+                  value={analyzing ? "" : inputVal}
                   onChange={e => setInputVal(e.target.value)}
                   onKeyDown={e => { if (e.key === "Enter") handleSend(); }}
-                  placeholder="법률 질문을 입력하고 Enter → 상담 연결..."
-                  style={{ flex: 1, background: "none", border: "none", outline: "none", fontSize: 14, color: "rgba(255,255,255,0.7)", fontFamily: "inherit" }}
+                  disabled={analyzing}
+                  placeholder={analyzing ? "상담 폼을 준비하는 중입니다..." : "법률 질문을 입력하고 Enter → 상담 연결..."}
+                  style={{ flex: 1, background: "none", border: "none", outline: "none", fontSize: 14, color: analyzing ? "rgba(184,145,80,0.7)" : "rgba(255,255,255,0.7)", fontFamily: "inherit", fontStyle: analyzing ? "italic" : "normal" }}
                 />
               </div>
-              <button onClick={handleSend} style={{
-                width: 42, height: 42, background: "linear-gradient(135deg, #B89150, #D4A853)",
-                border: "none", borderRadius: 12, cursor: "pointer",
+              <button onClick={handleSend} disabled={analyzing} style={{
+                width: 42, height: 42,
+                background: analyzing ? "rgba(255,255,255,0.06)" : "linear-gradient(135deg, #B89150, #D4A853)",
+                border: "none", borderRadius: 12, cursor: analyzing ? "not-allowed" : "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 4px 16px rgba(184,145,80,0.3)",
+                boxShadow: analyzing ? "none" : "0 4px 16px rgba(184,145,80,0.3)",
+                transition: "all 0.3s",
               }}>
-                <Send style={{ width: 16, height: 16, color: "white" }} />
+                {analyzing
+                  ? <Loader2 style={{ width: 16, height: 16, color: "#B89150", animation: "spin 1s linear infinite" }} />
+                  : <Send style={{ width: 16, height: 16, color: "white" }} />
+                }
               </button>
             </div>
             <div style={{ marginTop: 8, fontSize: 11, color: "rgba(255,255,255,0.2)", textAlign: "center" }}>
-              모든 답변은 내부 법령·판례 DB를 기반으로 생성됩니다 · 외부 인터넷 미연결
+              질문 입력 후 Enter → 상담 신청 폼에 내용이 자동 채워집니다
             </div>
           </div>
+          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
         </motion.div>
       </div>
     </section>

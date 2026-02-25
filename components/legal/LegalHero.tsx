@@ -37,8 +37,8 @@ export default function LegalHero({ onConsult }: LegalHeroProps) {
         </video>
       </div>
 
-      {/* Overlay — 메인 배너와 동일 */}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.6) 100%)", zIndex: 1, pointerEvents: "none" }} />
+      {/* Black overlay 40% — ensures text is always legible */}
+      <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)", zIndex: 1, pointerEvents: "none" }} />
 
 
       {/* Warm top accent line */}

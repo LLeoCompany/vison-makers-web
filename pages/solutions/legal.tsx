@@ -6,9 +6,10 @@ import Navbar from "@/components/home/Navbar";
 import HomeFooter from "@/components/home/HomeFooter";
 import LegalHero from "@/components/legal/LegalHero";
 
-const LegalWhyRag       = dynamic(() => import("@/components/legal/LegalWhyRag"),       { ssr: true });
-const LegalComparison   = dynamic(() => import("@/components/legal/LegalComparison"),   { ssr: true });
-const RagVisualizer     = dynamic(() => import("@/components/legal/RagVisualizer"),     { ssr: false });
+const LegalWhyRag          = dynamic(() => import("@/components/legal/LegalWhyRag"),          { ssr: true });
+const LegalComparison      = dynamic(() => import("@/components/legal/LegalComparison"),      { ssr: true });
+const LegalCitationExample = dynamic(() => import("@/components/legal/LegalCitationExample"), { ssr: true });
+const RagVisualizer        = dynamic(() => import("@/components/legal/RagVisualizer"),        { ssr: false });
 const LegalChatUI       = dynamic(() => import("@/components/legal/LegalChatUI"),       { ssr: false });
 const LegalUseCases     = dynamic(() => import("@/components/legal/LegalUseCases"),     { ssr: true });
 const LegalSecurity     = dynamic(() => import("@/components/legal/LegalSecurity"),     { ssr: true });
@@ -16,8 +17,10 @@ const LegalConsultWidget = dynamic(() => import("@/components/legal/LegalConsult
 
 export default function LegalPage() {
   const [widgetOpen, setWidgetOpen] = useState(false);
+  const [widgetMessage, setWidgetMessage] = useState("");
 
-  const openConsult = () => {
+  const openConsult = (message?: string) => {
+    setWidgetMessage(message ?? "");
     setWidgetOpen(true);
   };
 
@@ -35,6 +38,7 @@ export default function LegalPage() {
 
       <LegalConsultWidget
         externalOpen={widgetOpen}
+        initialMessage={widgetMessage}
         onExternalClose={() => setWidgetOpen(false)}
       />
 
@@ -55,19 +59,22 @@ export default function LegalPage() {
             <LegalComparison />
           </div>
 
-          {/* ④ Dark Navy ── RAG 작동 원리 인터랙티브 */}
+          {/* ④ White ── 실제 답변 예시 (출처 링크 UI) */}
+          <LegalCitationExample />
+
+          {/* ⑤ Dark Navy ── RAG 작동 원리 인터랙티브 */}
           <RagVisualizer />
 
-          {/* ⑤ Dark ── 법률 전용 챗 UI */}
+          {/* ⑥ Dark ── 법률 전용 챗 UI */}
           <LegalChatUI onConsult={openConsult} />
 
-          {/* ⑥ Warm Cream ── 도입 시나리오 */}
+          {/* ⑦ Light Blue ── 도입 시나리오 */}
           <LegalUseCases />
 
-          {/* ⑦ Dark Navy ── 보안 */}
+          {/* ⑧ Dark Navy ── 보안 */}
           <LegalSecurity />
 
-          {/* ⑧ Dark Navy ── CTA */}
+          {/* ⑨ Dark Navy ── CTA */}
           <CtaBanner onConsult={openConsult} />
         </main>
 

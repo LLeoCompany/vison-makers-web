@@ -58,7 +58,7 @@ export default function LegalUseCases() {
   const [active, setActive] = useState(0);
 
   return (
-    <section style={{ background: "#F8F4EE", padding: "100px 24px" }}>
+    <section style={{ background: "#EFF6FF", padding: "100px 24px" }}>
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
         {/* Header */}
         <motion.div
