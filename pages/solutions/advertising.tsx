@@ -6,10 +6,12 @@ import Navbar from "@/components/home/Navbar";
 import HomeFooter from "@/components/home/HomeFooter";
 import ProductionHero from "@/components/production/ProductionHero";
 import ProductionFeatures from "@/components/production/ProductionFeatures";
+import ProductionHeritage from "@/components/production/ProductionHeritage";
 
 const ProductionScriptDemo = dynamic(() => import("@/components/production/ProductionScriptDemo"), { ssr: false });
-const ProductionCTA = dynamic(() => import("@/components/production/ProductionCTA"), { ssr: false });
-const ConsultationSidebar = dynamic(() => import("@/components/home/ConsultationSidebar"), { ssr: false });
+const ProductionGlobalRef   = dynamic(() => import("@/components/production/ProductionGlobalRef"),   { ssr: false });
+const ProductionCTA         = dynamic(() => import("@/components/production/ProductionCTA"),         { ssr: false });
+const ConsultationSidebar   = dynamic(() => import("@/components/home/ConsultationSidebar"),         { ssr: false });
 
 export default function AdvertisingPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -45,13 +47,19 @@ export default function AdvertisingPage() {
           {/* ① Dark cinematic ── Hero */}
           <ProductionHero onConsult={openConsult} />
 
-          {/* ② White minimal ── 3 AI Capabilities */}
+          {/* ② Deep Indigo ── 브랜드 헤리티지 RAG 분석 */}
+          <ProductionHeritage />
+
+          {/* ③ White minimal ── 3 AI Capabilities */}
           <ProductionFeatures />
 
-          {/* ③ Deep dark ── CF Script Timeline Demo */}
+          {/* ④ Deep dark ── CF Script Timeline Demo */}
           <ProductionScriptDemo />
 
-          {/* ④ Dark gradient ── Campaign keyword → CTA */}
+          {/* ⑤ Dark ── 글로벌 크리에이티브 레퍼런스 DB */}
+          <ProductionGlobalRef />
+
+          {/* ⑥ Dark gradient ── Campaign keyword → CTA */}
           <ProductionCTA onConsult={openConsult} />
 
           {/* ⑤ Dark ── Final CTA banner */}

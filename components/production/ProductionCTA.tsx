@@ -6,7 +6,7 @@ import { ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 interface Props { onConsult: (message?: string) => void }
 
 const ANALYSIS_STEPS = [
-  "전 세계 광고 캠페인 데이터베이스 분석 중...",
+  "전 세계 레퍼런스 데이터 분석 중...",
   "브랜드 톤앤매너 패턴 매핑 중...",
   "경쟁사 크리에이티브 포지셔닝 비교 중...",
   "맞춤형 캠페인 기획안 초안 생성 중...",
@@ -127,7 +127,7 @@ export default function ProductionCTA({ onConsult }: Props) {
                     placeholder={
                       phase === "analyzing"
                         ? ANALYSIS_STEPS[step]
-                        : "예: 나이키 — 도전 정신, MZ세대 타겟 여름 캠페인"
+                        : "기획 중인 캠페인의 키워드를 입력하고 AI의 초안을 확인하세요."
                     }
                     style={{
                       flex: 1, background: "none", border: "none", outline: "none",
