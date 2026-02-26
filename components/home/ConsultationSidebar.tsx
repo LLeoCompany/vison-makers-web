@@ -17,6 +17,7 @@ import { dropdownMenuItems } from "@/config/solutionsConfig";
 interface ConsultationSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  initialMessage?: string;
 }
 
 const initialForm = {
@@ -28,8 +29,15 @@ const initialForm = {
   message: "",
 };
 
-export default function ConsultationSidebar({ isOpen, onClose }: ConsultationSidebarProps) {
+export default function ConsultationSidebar({ isOpen, onClose, initialMessage }: ConsultationSidebarProps) {
   const [form, setForm] = useState(initialForm);
+
+  // Pre-fill message when initialMessage changes and sidebar opens
+  useEffect(() => {
+    if (isOpen && initialMessage) {
+      setForm(prev => ({ ...prev, message: initialMessage }));
+    }
+  }, [isOpen, initialMessage]);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
