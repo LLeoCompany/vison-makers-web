@@ -30,7 +30,8 @@
       "WebFetch(domain:kr.pinterest.com)",
       "Bash(git add:*)",
       "Bash(head:*)",
-      "Bash(npx next build:*)"
+      "Bash(npx next build:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
