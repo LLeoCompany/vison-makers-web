@@ -23,6 +23,7 @@ const STATS = [
 
 export default function ProductionHero({ onConsult }: Props) {
   return (
+    <>
     <section style={{
       minHeight: "100vh",
       background: "radial-gradient(ellipse at 50% 110%, #061828 0%, #030407 65%)",
@@ -43,7 +44,7 @@ export default function ProductionHero({ onConsult }: Props) {
       <div style={{ position: "absolute", top: 0, left: 0, width: 300, height: 300, background: "radial-gradient(circle at 0% 0%, rgba(14,165,233,0.1) 0%, transparent 70%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: 0, right: 0, width: 400, height: 400, background: "radial-gradient(circle at 100% 100%, rgba(14,165,233,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
 
-      <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", position: "relative", zIndex: 1 }}>
+      <div className="prodh-inner" style={{ maxWidth: 1280, margin: "0 auto", width: "100%", position: "relative", zIndex: 1 }}>
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
@@ -147,10 +148,10 @@ export default function ProductionHero({ onConsult }: Props) {
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ delay: 1.45, duration: 0.7 }}
-          style={{ marginTop: 80, display: "flex", flexWrap: "wrap", rowGap: 28 }}
+          className="prodh-stats" style={{ marginTop: 80, display: "flex", flexWrap: "wrap", rowGap: 28 }}
         >
           {STATS.map((s, i) => (
-            <div key={i} style={{
+            <div key={i} className="prodh-stat" style={{
               paddingRight: 44, marginRight: 44,
               borderRight: i < STATS.length - 1 ? "1px solid rgba(226,232,240,0.08)" : "none",
             }}>
@@ -165,5 +166,13 @@ export default function ProductionHero({ onConsult }: Props) {
         </motion.div>
       </div>
     </section>
+    <style>{`
+      @media (max-width: 768px) {
+        .prodh-inner { padding: 0 16px !important; }
+        .prodh-stats { margin-top: 48px !important; row-gap: 20px !important; }
+        .prodh-stat { padding-right: 24px !important; margin-right: 24px !important; }
+      }
+    `}</style>
+    </>
   );
 }

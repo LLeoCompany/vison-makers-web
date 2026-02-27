@@ -58,7 +58,8 @@ export default function LegalUseCases() {
   const [active, setActive] = useState(0);
 
   return (
-    <section style={{ background: "#EFF6FF", padding: "100px 24px" }}>
+    <>
+    <section className="lu-section" style={{ background: "#EFF6FF", padding: "100px 24px" }}>
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
         {/* Header */}
         <motion.div
@@ -82,7 +83,7 @@ export default function LegalUseCases() {
           </p>
         </motion.div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 48, alignItems: "start" }}>
+        <div className="lu-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: 48, alignItems: "start" }}>
           {/* Left: Tab list */}
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {cases.map((c, i) => (
@@ -168,5 +169,12 @@ export default function LegalUseCases() {
         </div>
       </div>
     </section>
+    <style>{`
+      @media (max-width: 768px) {
+        .lu-section { padding: 60px 16px !important; }
+        .lu-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+      }
+    `}</style>
+    </>
   );
 }

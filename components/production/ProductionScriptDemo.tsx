@@ -209,7 +209,8 @@ export default function ProductionScriptDemo() {
   const campaign = CAMPAIGNS[selected];
 
   return (
-    <section style={{ background: "#050810", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
+    <>
+    <section className="psd-section" style={{ background: "#050810", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, rgba(14,165,233,0.28), transparent)" }} />
       <div style={{ position: "absolute", top: "40%", right: "5%", width: 400, height: 400, background: "radial-gradient(circle, rgba(14,165,233,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
 
@@ -283,7 +284,7 @@ export default function ProductionScriptDemo() {
           </div>
 
           {/* Content */}
-          <div style={{ padding: "28px 32px 32px" }}>
+          <div className="psd-content" style={{ padding: "28px 32px 32px" }}>
             {/* Brief */}
             <div style={{ marginBottom: 28, padding: "12px 16px", background: "rgba(14,165,233,0.05)", border: "1px solid rgba(14,165,233,0.12)", borderRadius: 6 }}>
               <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.25)", letterSpacing: "0.1em", marginBottom: 5 }}>CAMPAIGN BRIEF</div>
@@ -326,7 +327,14 @@ export default function ProductionScriptDemo() {
         </div>
       </div>
 
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @media (max-width: 768px) {
+          .psd-section { padding: 60px 16px !important; }
+          .psd-content { padding: 20px 16px 24px !important; }
+        }
+      `}</style>
     </section>
+    </>
   );
 }

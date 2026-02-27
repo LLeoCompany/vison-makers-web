@@ -71,7 +71,8 @@ const FEATURES = [
 
 export default function ProductionFeatures() {
   return (
-    <section style={{ background: "white", padding: "100px 24px" }}>
+    <>
+    <section className="pf-section" style={{ background: "white", padding: "100px 24px" }}>
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
         {/* Section label */}
         <motion.div
@@ -96,6 +97,7 @@ export default function ProductionFeatures() {
                 key={i}
                 initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.65 }}
+                className="pf-row"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "72px 1fr 120px",
@@ -106,7 +108,7 @@ export default function ProductionFeatures() {
                 }}
               >
                 {/* Large dim number */}
-                <div style={{
+                <div className="pf-num" style={{
                   fontSize: "clamp(3rem, 5vw, 4.5rem)", fontWeight: 900,
                   color: "#F1F5F9", letterSpacing: "-0.04em", lineHeight: 1,
                   userSelect: "none", alignSelf: "start", paddingTop: 4,
@@ -139,7 +141,7 @@ export default function ProductionFeatures() {
                 </div>
 
                 {/* Line art */}
-                <div style={{ display: "flex", justifyContent: "center" }}>
+                <div className="pf-icon" style={{ display: "flex", justifyContent: "center" }}>
                   <Geo />
                 </div>
               </motion.div>
@@ -149,5 +151,14 @@ export default function ProductionFeatures() {
         </div>
       </div>
     </section>
+    <style>{`
+      @media (max-width: 768px) {
+        .pf-section { padding: 60px 16px !important; }
+        .pf-row { display: block !important; padding: 40px 0 !important; }
+        .pf-num { font-size: 2.5rem !important; margin-bottom: 12px !important; display: block !important; }
+        .pf-icon { display: none !important; }
+      }
+    `}</style>
+    </>
   );
 }

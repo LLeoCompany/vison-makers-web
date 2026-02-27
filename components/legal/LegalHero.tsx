@@ -27,7 +27,8 @@ export default function LegalHero({ onConsult }: LegalHeroProps) {
   }, []);
 
   return (
-    <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", background: "#111111", overflow: "hidden", paddingTop: 80 }}>
+    <>
+    <section className="lh-section" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", background: "#111111", overflow: "hidden", paddingTop: 80 }}>
 
       {/* Video bg */}
       <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
@@ -81,7 +82,7 @@ export default function LegalHero({ onConsult }: LegalHeroProps) {
           </motion.p>
 
           <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.3 }}
-            style={{ display: "flex", flexWrap: "wrap", gap: 14, marginBottom: 56 }}
+            className="lh-btns" style={{ display: "flex", flexWrap: "wrap", gap: 14, marginBottom: 56 }}
           >
             <button onClick={onConsult}
               style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "14px 32px", background: "#B89150", color: "white", fontSize: 15, fontWeight: 700, borderRadius: 12, border: "none", cursor: "pointer", boxShadow: "0 8px 32px rgba(184,145,80,0.5)", transition: "all 0.2s", letterSpacing: "-0.01em" }}
@@ -100,7 +101,7 @@ export default function LegalHero({ onConsult }: LegalHeroProps) {
           </motion.div>
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.5 }}
-            style={{ display: "flex", flexWrap: "wrap", gap: 40, paddingTop: 28, borderTop: "1px solid rgba(255,255,255,0.12)" }}
+            className="lh-stats" style={{ display: "flex", flexWrap: "wrap", gap: 40, paddingTop: 28, borderTop: "1px solid rgba(255,255,255,0.12)" }}
           >
             {[
               { val: "3초", desc: "평균 판례 검색 속도" },
@@ -117,5 +118,15 @@ export default function LegalHero({ onConsult }: LegalHeroProps) {
         </div>
       </div>
     </section>
+    <style>{`
+      @media (max-width: 768px) {
+        .lh-section { padding-top: 100px !important; }
+        .lh-section > div { padding: 40px 16px !important; }
+        .lh-btns { flex-direction: column !important; }
+        .lh-btns button { width: 100% !important; justify-content: center !important; }
+        .lh-stats { gap: 20px 32px !important; }
+      }
+    `}</style>
+    </>
   );
 }

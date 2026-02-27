@@ -41,7 +41,8 @@ export default function ProductionCTA({ onConsult }: Props) {
   };
 
   return (
-    <section style={{
+    <>
+    <section className="pcta-section" style={{
       background: "radial-gradient(ellipse at 50% 0%, #071828 0%, #030407 70%)",
       padding: "100px 24px 120px", position: "relative", overflow: "hidden",
     }}>
@@ -109,7 +110,7 @@ export default function ProductionCTA({ onConsult }: Props) {
             ) : (
               <motion.div key="input" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 {/* Input box */}
-                <div style={{
+                <div className="pcta-input-row" style={{
                   display: "flex", alignItems: "center", gap: 12,
                   background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)",
                   border: phase === "analyzing"
@@ -140,6 +141,7 @@ export default function ProductionCTA({ onConsult }: Props) {
                   <button
                     onClick={handleSubmit}
                     disabled={!input.trim() || phase !== "idle"}
+                    className="pcta-btn"
                     style={{
                       display: "inline-flex", alignItems: "center", gap: 8,
                       padding: "13px 28px", borderRadius: 6, border: "none",
@@ -230,5 +232,13 @@ export default function ProductionCTA({ onConsult }: Props) {
         </motion.div>
       </div>
     </section>
+    <style>{`
+      @media (max-width: 768px) {
+        .pcta-section { padding: 60px 16px 80px !important; }
+        .pcta-input-row { flex-direction: column !important; align-items: stretch !important; padding: 12px !important; gap: 10px !important; }
+        .pcta-btn { width: 100% !important; justify-content: center !important; }
+      }
+    `}</style>
+    </>
   );
 }

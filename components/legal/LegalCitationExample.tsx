@@ -108,7 +108,8 @@ export default function LegalCitationExample() {
   const activeSrc = activeSource ? SOURCES[activeSource] : null;
 
   return (
-    <section style={{ background: "#FFFFFF", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
+    <>
+    <section className="lce-section" style={{ background: "#FFFFFF", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
       {/* Subtle top rule */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, #E2E8F0, transparent)" }} />
 
@@ -161,7 +162,7 @@ export default function LegalCitationExample() {
 
           {/* Chat area */}
           <div style={{ background: "#0D1117", border: "1px solid rgba(255,255,255,0.06)", borderTop: "none", borderRadius: "0 0 20px 20px", overflow: "hidden", boxShadow: "0 24px 64px rgba(0,0,0,0.15)" }}>
-            <div style={{ padding: "32px 32px 24px" }}>
+            <div className="lce-chat" style={{ padding: "32px 32px 24px" }}>
 
               {/* User question */}
               <motion.div
@@ -169,7 +170,7 @@ export default function LegalCitationExample() {
                 viewport={{ once: true }} transition={{ delay: 0.1 }}
                 style={{ display: "flex", justifyContent: "flex-end", marginBottom: 28 }}
               >
-                <div style={{
+                <div className="lce-user-msg" style={{
                   maxWidth: "72%", background: "rgba(184,145,80,0.14)",
                   border: "1px solid rgba(184,145,80,0.3)",
                   borderRadius: "18px 18px 4px 18px", padding: "14px 18px",
@@ -281,7 +282,7 @@ export default function LegalCitationExample() {
             </div>
 
             {/* Bottom bar */}
-            <div style={{ padding: "12px 32px", borderTop: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.01)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div className="lce-bottom" style={{ padding: "12px 32px", borderTop: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.01)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
                 내부 법령·판례 DB 기반 · 외부 인터넷 미연결
               </span>
@@ -294,5 +295,14 @@ export default function LegalCitationExample() {
         </motion.div>
       </div>
     </section>
+    <style>{`
+      @media (max-width: 768px) {
+        .lce-section { padding: 60px 16px !important; }
+        .lce-chat { padding: 20px 16px 16px !important; }
+        .lce-user-msg { max-width: 90% !important; }
+        .lce-bottom { padding: 10px 16px !important; flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
+      }
+    `}</style>
+    </>
   );
 }

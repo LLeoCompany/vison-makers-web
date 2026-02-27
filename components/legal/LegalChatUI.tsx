@@ -51,7 +51,7 @@ export default function LegalChatUI({ onConsult }: { onConsult: (message?: strin
   };
 
   return (
-    <section style={{ background: "#0D1117", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
+    <section className="lcu-section" style={{ background: "#0D1117", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
       {/* Decorative glows */}
       <div style={{ position: "absolute", top: "20%", right: "5%", width: 400, height: 400, background: "radial-gradient(circle, rgba(184,145,80,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: "10%", left: "5%", width: 300, height: 300, background: "radial-gradient(circle, rgba(26,34,56,0.4) 0%, transparent 70%)", pointerEvents: "none" }} />
@@ -127,7 +127,7 @@ export default function LegalChatUI({ onConsult }: { onConsult: (message?: strin
           </div>
 
           {/* Messages area */}
-          <div style={{ padding: "32px 32px 24px", minHeight: 340 }}>
+          <div className="lcu-messages" style={{ padding: "32px 32px 24px", minHeight: 340 }}>
             <AnimatePresence mode="wait">
               <motion.div key={activeConv}
                 initial={{ opacity: 0 }}
@@ -249,8 +249,8 @@ export default function LegalChatUI({ onConsult }: { onConsult: (message?: strin
           </div>
 
           {/* Input bar */}
-          <div style={{ padding: "16px 24px", borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
-            <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <div className="lcu-input-bar" style={{ padding: "16px 24px", borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+            <div className="lcu-input-row" style={{ display: "flex", gap: 10, alignItems: "center" }}>
               <div style={{
                 flex: 1, display: "flex", alignItems: "center", gap: 10,
                 background: analyzing ? "rgba(184,145,80,0.08)" : "rgba(255,255,255,0.05)",
@@ -295,7 +295,16 @@ export default function LegalChatUI({ onConsult }: { onConsult: (message?: strin
               질문 입력 후 Enter → 상담 신청 폼에 내용이 자동 채워집니다
             </div>
           </div>
-          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+          <style>{`
+            @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+            @media (max-width: 768px) {
+              .lcu-section { padding: 60px 16px !important; }
+              .lcu-messages { padding: 20px 16px 16px !important; min-height: auto !important; }
+              .lcu-input-bar { padding: 12px 16px !important; }
+              .lcu-input-row { flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
+              .lcu-input-row > button { width: 100% !important; height: 44px !important; border-radius: 12px !important; }
+            }
+          `}</style>
         </motion.div>
       </div>
     </section>

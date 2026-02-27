@@ -50,7 +50,8 @@ const pillars = [
 
 export default function LegalSecurity() {
   return (
-    <section style={{ background: "#0A0F1E", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
+    <>
+    <section className="ls-section" style={{ background: "#0A0F1E", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
       {/* Decorative */}
       <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 800, height: 800, background: "radial-gradient(circle, rgba(184,145,80,0.05) 0%, transparent 60%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, rgba(184,145,80,0.3), transparent)", pointerEvents: "none" }} />
@@ -85,6 +86,7 @@ export default function LegalSecurity() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          className="ls-quote"
           style={{
             background: "linear-gradient(135deg, #0D1117 0%, #1A2238 60%, #2A3A5C 100%)",
             borderRadius: 24, padding: "48px 56px",
@@ -148,5 +150,12 @@ export default function LegalSecurity() {
         </div>
       </div>
     </section>
+    <style>{`
+      @media (max-width: 768px) {
+        .ls-section { padding: 60px 16px !important; }
+        .ls-quote { padding: 28px 20px !important; border-radius: 16px !important; }
+      }
+    `}</style>
+    </>
   );
 }

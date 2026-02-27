@@ -171,7 +171,8 @@ export default function ProductionHeritage() {
   const py3 = useTransform(scrollYProgress, [0, 1], [40, -50]);
 
   return (
-    <section ref={sectionRef} style={{ background: "#0F172A", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
+    <>
+    <section ref={sectionRef} className="phe-section" style={{ background: "#0F172A", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
       {/* Accent lines */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, rgba(14,165,233,0.2), rgba(139,92,246,0.2), transparent)" }} />
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, rgba(139,92,246,0.15), transparent)" }} />
@@ -230,7 +231,7 @@ export default function ProductionHeritage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }} transition={{ duration: 0.7 }}
-          style={{ marginBottom: 72 }}
+          className="phe-chip-wrap" style={{ marginBottom: 72 }}
         >
           <ChipAnimation />
           {/* Caption */}
@@ -240,7 +241,7 @@ export default function ProductionHeritage() {
         </motion.div>
 
         {/* Comparison */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+        <div className="phe-comparison" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
           {/* Left — General AI */}
           <motion.div
             initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }}
@@ -307,5 +308,14 @@ export default function ProductionHeritage() {
         </div>
       </div>
     </section>
+    <style>{`
+      @media (max-width: 768px) {
+        .phe-section { padding: 60px 16px !important; }
+        .phe-chip-wrap { margin-bottom: 40px !important; }
+        .phe-chip-wrap > div { transform: scale(0.72); transform-origin: center top; margin-bottom: -64px; }
+        .phe-comparison { grid-template-columns: 1fr !important; }
+      }
+    `}</style>
+    </>
   );
 }

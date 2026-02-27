@@ -196,7 +196,7 @@ export default function ProductionGlobalRef() {
   const activeOption = selected !== null ? QUERY_OPTIONS[selected] : null;
 
   return (
-    <section style={{ background: "#080D1E", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
+    <section className="pgr-section" style={{ background: "#080D1E", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, transparent, rgba(139,92,246,0.3), rgba(14,165,233,0.2), transparent)" }} />
       <div style={{ position: "absolute", top: "30%", left: "50%", transform: "translateX(-50%)", width: 800, height: 500, background: "radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 65%)", pointerEvents: "none" }} />
 
@@ -303,7 +303,7 @@ export default function ProductionGlobalRef() {
                   </span>
                 </div>
                 {/* Cards grid */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+                <div className="pgr-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
                   {activeOption.cards.map((card, i) => (
                     <RefCardItem key={i} card={card} delay={i * 0.12} />
                   ))}
@@ -322,7 +322,16 @@ export default function ProductionGlobalRef() {
         </div>
       </div>
 
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @media (max-width: 768px) {
+          .pgr-section { padding: 60px 16px !important; }
+          .pgr-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 1024px) and (min-width: 769px) {
+          .pgr-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+      `}</style>
     </section>
   );
 }
