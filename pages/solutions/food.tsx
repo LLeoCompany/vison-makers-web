@@ -8,8 +8,9 @@ import FoodChallenge from "@/components/food/FoodChallenge";
 import FoodSolutionPillars from "@/components/food/FoodSolutionPillars";
 import FoodDashboard from "@/components/food/FoodDashboard";
 
+const FoodRecipeSlider    = dynamic(() => import("@/components/food/FoodRecipeSlider"),    { ssr: false });
 const FoodComplianceScanner = dynamic(() => import("@/components/food/FoodComplianceScanner"), { ssr: false });
-const FoodCTA = dynamic(() => import("@/components/food/FoodCTA"), { ssr: false });
+const FoodCTA             = dynamic(() => import("@/components/food/FoodCTA"),             { ssr: false });
 const ConsultationSidebar = dynamic(() => import("@/components/home/ConsultationSidebar"), { ssr: false });
 
 export default function FoodPage() {
@@ -83,10 +84,21 @@ export default function FoodPage() {
         </div>
       </header>
 
-      <main style={{ background: "#FFFFFF", wordBreak: "keep-all", overflowWrap: "break-word" }}>
+      {/*
+        Section sequence (background contrast rhythm):
+        Hero        → Video + Deep Teal overlay
+        Challenge   → Dark Slate  (#0A1628)
+        Pillars     → White       (#FFFFFF)   + magnifier animation
+        RecipeSlider→ Light Teal  (#F0FDFA → #CCFBF1)
+        Scanner     → Cool Grey   (#F8FAFC)
+        Dashboard   → Slate Light (#F1F5F9)
+        CTA         → Deep Dark   (radial dark)
+      */}
+      <main style={{ wordBreak: "keep-all", overflowWrap: "break-word" }}>
         <FoodHero onConsult={handleConsult} />
         <FoodChallenge />
         <FoodSolutionPillars />
+        <FoodRecipeSlider />
         <FoodComplianceScanner />
         <FoodDashboard onConsult={handleConsult} />
         <FoodCTA onConsult={handleConsult} />

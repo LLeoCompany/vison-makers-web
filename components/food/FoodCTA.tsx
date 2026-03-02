@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 
 const ANALYSIS_STEPS = [
-  "최신 식품위생법 및 사내 DB 분석 중...",
-  "관련 HACCP 기준 매핑 중...",
+  "최신 식품위생법 데이터베이스 대조 중...",
+  "관련 HACCP 기준 및 표시광고법 검토 중...",
   "동종 업계 레퍼런스 비교 중...",
   "최적화된 관리 전략 생성 중...",
 ];
@@ -80,11 +80,11 @@ export default function FoodCTA({ onConsult }: Props) {
             background: "linear-gradient(90deg, #fff 35%, rgba(148,163,184,0.6))",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
           }}>
-            제품 성분이나 관리 품목을<br />입력하여 AI 진단을 시작하세요.
+            관리 중인 품목이나<br />궁금한 식품 법령을 입력하세요.
           </h2>
           <p style={{ fontSize: "clamp(0.95rem, 1.7vw, 1.05rem)",
             color: "rgba(148,163,184,0.55)", lineHeight: 1.9 }}>
-            Vision AI가 해당 품목에 최적화된<br />관리 전략을 즉시 분석합니다.
+            Vision AI가 최신 식품위생법 DB와 즉시 대조하여<br />최적화된 관리 전략을 제안합니다.
           </p>
         </motion.div>
 
@@ -147,7 +147,7 @@ export default function FoodCTA({ onConsult }: Props) {
                     placeholder={
                       phase === "analyzing"
                         ? ANALYSIS_STEPS[step]
-                        : "관리 중인 품목명이나 궁금한 법규를 입력해보세요."
+                        : "관리 중인 품목이나 궁금한 식품 법령을 입력하세요."
                     }
                     style={{
                       flex: 1, background: "none", border: "none", outline: "none",

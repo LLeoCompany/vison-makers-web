@@ -149,7 +149,7 @@ export default function FoodDashboard({ onConsult }: Props) {
         {/* KPI Grid */}
         <div className="fd-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, marginBottom: 52 }}>
           {KPIS.map((kpi, i) => (
-            <KPICard key={i} kpi={kpi} delay={i * 0.1} onStart={started} />
+            <KPICard key={i} kpi={kpi} delay={i * 0.2} onStart={started} />
           ))}
         </div>
 

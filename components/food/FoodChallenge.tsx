@@ -3,6 +3,16 @@ import React from "react";
 import { motion } from "framer-motion";
 import { AlertTriangle, BookOpen, Lightbulb } from "lucide-react";
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.2 } },
+} as const;
+
+const itemVariants = {
+  hidden:  { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
+} as const;
+
 const CHALLENGES = [
   {
     icon: <AlertTriangle style={{ width: 28, height: 28, color: "#EF4444" }} />,
@@ -60,12 +70,18 @@ export default function FoodChallenge() {
         </motion.div>
 
         {/* Challenge cards */}
-        <div className="fc-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28, marginBottom: 56 }}>
+        <motion.div
+          className="fc-grid"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28, marginBottom: 56 }}
+        >
           {CHALLENGES.map((c, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.55, delay: i * 0.15 }}
+              variants={itemVariants}
               style={{
                 padding: "36px 32px", borderRadius: 12,
                 background: c.bg, border: `1px solid ${c.border}`,
@@ -99,7 +115,7 @@ export default function FoodChallenge() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Solution banner */}
         <motion.div

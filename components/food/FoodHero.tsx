@@ -1,75 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, ShieldCheck } from "lucide-react";
-
-const NODES = [
-  { id: "grain",    emoji: "🌾", label: "원재료",   angle: 0   },
-  { id: "lab",      emoji: "🧪", label: "성분분석", angle: 60  },
-  { id: "doc",      emoji: "📋", label: "법규준수", angle: 120 },
-  { id: "factory",  emoji: "🏭", label: "생산관리", angle: 180 },
-  { id: "cs",       emoji: "💬", label: "CS대응",   angle: 240 },
-  { id: "truck",    emoji: "🚚", label: "유통관리", angle: 300 },
-];
-
-const R = 130;
-const CX = 160;
-const CY = 160;
-
-function toRad(deg: number) { return (deg * Math.PI) / 180; }
-
-function FoodDataViz() {
-  return (
-    <svg width="320" height="320" viewBox="0 0 320 320" aria-hidden>
-      {/* Outer ring */}
-      <circle cx={CX} cy={CY} r={R} fill="none" stroke="rgba(13,148,136,0.15)" strokeWidth={1} strokeDasharray="4 6" />
-      <circle cx={CX} cy={CY} r={R * 0.55} fill="none" stroke="rgba(13,148,136,0.08)" strokeWidth={1} />
-
-      {/* Spokes + data-flow dots */}
-      {NODES.map((n) => {
-        const rad = toRad(n.angle - 90);
-        const nx = CX + R * Math.cos(rad);
-        const ny = CY + R * Math.sin(rad);
-        const mx = CX + (R * 0.55) * Math.cos(rad);
-        const my = CY + (R * 0.55) * Math.sin(rad);
-        const pathId = `path-${n.id}`;
-        return (
-          <g key={n.id}>
-            <line x1={mx} y1={my} x2={nx} y2={ny} stroke="rgba(13,148,136,0.2)" strokeWidth={1} />
-            <defs>
-              <path id={pathId} d={`M ${mx} ${my} L ${nx} ${ny}`} />
-            </defs>
-            <circle r={3} fill="#22C55E" opacity={0.9}>
-              <animateMotion dur={`${1.8 + NODES.indexOf(n) * 0.3}s`} repeatCount="indefinite" rotate="auto">
-                <mpath href={`#${pathId}`} />
-              </animateMotion>
-            </circle>
-          </g>
-        );
-      })}
-
-      {/* Node circles */}
-      {NODES.map((n) => {
-        const rad = toRad(n.angle - 90);
-        const nx = CX + R * Math.cos(rad);
-        const ny = CY + R * Math.sin(rad);
-        return (
-          <g key={`node-${n.id}`}>
-            <circle cx={nx} cy={ny} r={26} fill="rgba(13,148,136,0.12)" stroke="rgba(13,148,136,0.35)" strokeWidth={1} />
-            <text x={nx} y={ny + 1} textAnchor="middle" dominantBaseline="middle" fontSize={18}>{n.emoji}</text>
-            <text x={nx} y={ny + 22} textAnchor="middle" fontSize={9} fill="rgba(13,148,136,0.8)" fontWeight={600}>{n.label}</text>
-          </g>
-        );
-      })}
-
-      {/* Central AI chip */}
-      <circle cx={CX} cy={CY} r={40} fill="rgba(13,148,136,0.18)" stroke="#0D9488" strokeWidth={1.5} />
-      <circle cx={CX} cy={CY} r={32} fill="rgba(13,148,136,0.1)" stroke="rgba(13,148,136,0.4)" strokeWidth={1} strokeDasharray="3 5" />
-      <text x={CX} y={CY - 6} textAnchor="middle" dominantBaseline="middle" fontSize={20}>🤖</text>
-      <text x={CX} y={CY + 14} textAnchor="middle" fontSize={9} fill="#0D9488" fontWeight={700} letterSpacing="0.05em">Vision AI</text>
-    </svg>
-  );
-}
+import { ArrowRight, ShieldCheck, ChevronDown } from "lucide-react";
 
 const STATS = [
   { value: "10×", label: "법규 검토 속도" },
@@ -81,58 +13,155 @@ const STATS = [
 interface Props { onConsult: (msg?: string) => void }
 
 export default function FoodHero({ onConsult }: Props) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoReady, setVideoReady] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    video.volume = 0;
+    video.playbackRate = 0.6;
+    const play = () => {
+      video.muted = true;
+      video.playbackRate = 0.6;
+      video.play().catch(() => {}).finally(() => setVideoReady(true));
+    };
+    video.addEventListener("loadeddata", play);
+    video.addEventListener("error", () => setVideoReady(true));
+    if (video.readyState >= 2) play();
+    else video.load();
+    return () => video.removeEventListener("loadeddata", play);
+  }, []);
+
   return (
     <>
     <section className="fh-section" style={{
+      position: "relative",
       minHeight: "100vh",
-      background: "linear-gradient(135deg, #F0FDFA 0%, #FFFFFF 50%, #F1F5F9 100%)",
-      display: "flex", alignItems: "center",
-      padding: "120px 24px 80px",
-      position: "relative", overflow: "hidden",
+      display: "flex",
+      alignItems: "center",
+      background: "#062924",
+      overflow: "hidden",
+      paddingTop: 56,
     }}>
-      {/* Background decoration */}
-      <div style={{ position: "absolute", top: "10%", right: "5%", width: 600, height: 600,
-        background: "radial-gradient(ellipse, rgba(13,148,136,0.06) 0%, transparent 65%)",
-        pointerEvents: "none", borderRadius: "50%" }} />
 
-      <div className="fh-inner" style={{ maxWidth: 1200, margin: "0 auto", width: "100%",
-        display: "flex", alignItems: "center", gap: 64 }}>
+      {/* ── Video Background ────────────────────────────────────── */}
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+        <video
+          ref={videoRef}
+          loop
+          playsInline
+          preload="auto"
+          muted
+          style={{
+            position: "absolute", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            transform: "scale(1.08)",
+            transformOrigin: "center center",
+            opacity: videoReady ? 1 : 0,
+            transition: "opacity 1.4s ease",
+          }}
+        >
+          <source src="/video/main-visual.mp4" type="video/mp4" />
+        </video>
+      </div>
 
-        {/* Left: text */}
-        <div className="fh-text" style={{ flex: "0 0 auto", maxWidth: 560 }}>
+      {/* ── Deep Teal Overlay ────────────────────────────────────── */}
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 1,
+        background: "linear-gradient(135deg, rgba(4,30,22,0.88) 0%, rgba(13,148,136,0.52) 45%, rgba(4,30,22,0.85) 100%)",
+      }} />
+
+      {/* Bottom gradient fade to next section */}
+      <div style={{
+        position: "absolute", bottom: 0, left: 0, right: 0, height: 220,
+        background: "linear-gradient(to bottom, transparent, rgba(10,22,40,0.7))",
+        zIndex: 1, pointerEvents: "none",
+      }} />
+
+      {/* Teal accent top line */}
+      <div style={{
+        position: "absolute", top: 56, left: 0, right: 0, height: 1, zIndex: 2,
+        background: "linear-gradient(90deg, transparent, rgba(13,148,136,0.5), rgba(34,197,94,0.35), transparent)",
+      }} />
+
+      {/* Ambient glow */}
+      <div style={{
+        position: "absolute", top: "15%", right: "10%",
+        width: 700, height: 700,
+        background: "radial-gradient(circle, rgba(13,148,136,0.14) 0%, transparent 65%)",
+        borderRadius: "50%", pointerEvents: "none", zIndex: 1,
+      }} />
+      <div style={{
+        position: "absolute", bottom: "5%", left: "-5%",
+        width: 400, height: 400,
+        background: "radial-gradient(circle, rgba(34,197,94,0.07) 0%, transparent 65%)",
+        borderRadius: "50%", pointerEvents: "none", zIndex: 1,
+      }} />
+
+      {/* ── Content ────────────────────────────────────────────── */}
+      <div style={{
+        maxWidth: 1200, margin: "0 auto", padding: "80px 24px",
+        width: "100%", position: "relative", zIndex: 2,
+      }}>
+        <div style={{ maxWidth: 820 }}>
+
           {/* Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-            style={{ display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "6px 16px", borderRadius: 4,
-              background: "rgba(13,148,136,0.08)", border: "1px solid rgba(13,148,136,0.2)",
-              marginBottom: 28 }}
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              padding: "6px 16px", borderRadius: 999,
+              background: "rgba(13,148,136,0.2)", border: "1px solid rgba(45,212,191,0.4)",
+              marginBottom: 32,
+            }}
           >
-            <ShieldCheck style={{ width: 13, height: 13, color: "#0D9488" }} />
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#0D9488",
-              letterSpacing: "0.1em", textTransform: "uppercase" }}>Food & Distribution RAG</span>
+            <ShieldCheck style={{ width: 13, height: 13, color: "#2DD4BF" }} />
+            <span style={{
+              fontSize: 11, fontWeight: 700, color: "#2DD4BF",
+              letterSpacing: "0.1em", textTransform: "uppercase",
+            }}>
+              Food &amp; Distribution RAG · Vision AI
+            </span>
           </motion.div>
 
           {/* Headline */}
-          {["복잡한 식품 법규부터", "비법 레시피까지,", "AI가 완벽하게 관리합니다."].map((line, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.15 + i * 0.12 }}
-              style={{
-                fontSize: i < 2 ? "clamp(1.9rem, 3.8vw, 3rem)" : "clamp(1.9rem, 3.8vw, 3rem)",
-                fontWeight: 900, lineHeight: 1.2, letterSpacing: "-0.04em",
-                color: i === 2
-                  ? "#0D9488"
-                  : "#0F172A",
-                marginBottom: i === 2 ? 32 : 4,
-              }}
-            >{line}</motion.div>
-          ))}
+          <motion.h1
+            initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            style={{
+              fontSize: "clamp(2.4rem, 5.5vw, 4.2rem)", fontWeight: 900,
+              letterSpacing: "-0.055em", lineHeight: 1.08,
+              color: "#FFFFFF", marginBottom: 32,
+              textShadow: "0 2px 32px rgba(0,0,0,0.85)",
+            }}
+          >
+            식품 안전과 레시피 자산화,
+            <br />
+            <span style={{
+              background: "linear-gradient(90deg, #2DD4BF 0%, #22C55E 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              filter: "drop-shadow(0 0 24px rgba(13,148,136,0.7))",
+            }}>
+              AI로 완성하다
+            </span>
+          </motion.h1>
 
           {/* Sub copy */}
           <motion.p
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.55 }}
-            style={{ fontSize: "clamp(1rem, 1.8vw, 1.1rem)", color: "#64748B", lineHeight: 1.85, marginBottom: 40 }}
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.22 }}
+            style={{
+              fontSize: "clamp(1rem, 1.9vw, 1.18rem)",
+              color: "rgba(255,255,255,0.82)",
+              lineHeight: 1.95, marginBottom: 48,
+              maxWidth: 600,
+              textShadow: "0 1px 14px rgba(0,0,0,0.65)",
+            }}
           >
             수시로 바뀌는 식품위생법, 연구원 머릿속에만 있는 배합비,<br />
             쏟아지는 알레르기 문의까지 — Vision AI가 일괄 처리합니다.
@@ -141,71 +170,84 @@ export default function FoodHero({ onConsult }: Props) {
           {/* CTAs */}
           <motion.div
             className="fh-btns"
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.65 }}
-            style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 56 }}
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.34 }}
+            style={{ display: "flex", flexWrap: "wrap", gap: 14, marginBottom: 64 }}
           >
-            <button onClick={() => onConsult()} style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "14px 28px", borderRadius: 6, border: "none",
-              background: "#0D9488", color: "white",
-              fontSize: 15, fontWeight: 800, cursor: "pointer",
-              boxShadow: "0 4px 20px rgba(13,148,136,0.35)",
-              transition: "all 0.2s",
-            }}
-              onMouseOver={e => { e.currentTarget.style.background = "#0F766E"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-              onMouseOut={e => { e.currentTarget.style.background = "#0D9488"; e.currentTarget.style.transform = "none"; }}
-            >
-              <ArrowRight style={{ width: 16, height: 16 }} /> 무료 컨설팅 신청
-            </button>
-            <button onClick={() => document.getElementById("food-scanner")?.scrollIntoView({ behavior: "smooth" })}
+            <button
+              onClick={() => onConsult()}
               style={{
                 display: "inline-flex", alignItems: "center", gap: 8,
-                padding: "14px 28px", borderRadius: 6,
-                border: "1.5px solid rgba(13,148,136,0.3)", background: "white",
-                color: "#0D9488", fontSize: 15, fontWeight: 700, cursor: "pointer",
+                padding: "15px 34px", borderRadius: 10, border: "none",
+                background: "#0D9488", color: "white",
+                fontSize: 15, fontWeight: 800, cursor: "pointer",
+                boxShadow: "0 8px 36px rgba(13,148,136,0.6)",
+                transition: "all 0.2s", letterSpacing: "-0.01em",
+              }}
+              onMouseOver={e => { e.currentTarget.style.background = "#0F766E"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(13,148,136,0.7)"; }}
+              onMouseOut={e => { e.currentTarget.style.background = "#0D9488"; e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 8px 36px rgba(13,148,136,0.6)"; }}
+            >
+              무료 컨설팅 신청 <ArrowRight style={{ width: 16, height: 16 }} />
+            </button>
+            <button
+              onClick={() => document.getElementById("food-scanner")?.scrollIntoView({ behavior: "smooth" })}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                padding: "15px 30px", borderRadius: 10,
+                border: "1px solid rgba(255,255,255,0.28)",
+                background: "rgba(255,255,255,0.08)",
+                color: "rgba(255,255,255,0.92)", fontSize: 15, fontWeight: 700, cursor: "pointer",
+                backdropFilter: "blur(14px)",
                 transition: "all 0.2s",
               }}
-              onMouseOver={e => { e.currentTarget.style.borderColor = "#0D9488"; e.currentTarget.style.background = "rgba(13,148,136,0.04)"; }}
-              onMouseOut={e => { e.currentTarget.style.borderColor = "rgba(13,148,136,0.3)"; e.currentTarget.style.background = "white"; }}
+              onMouseOver={e => { e.currentTarget.style.background = "rgba(255,255,255,0.15)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.45)"; }}
+              onMouseOut={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.28)"; }}
             >
               법규 스캐너 체험하기
             </button>
           </motion.div>
 
-          {/* Stats */}
+          {/* Stats bar */}
           <motion.div
-            className="fh-stats"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.8 }}
-            style={{ display: "flex", flexWrap: "wrap", gap: "16px 40px" }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.52 }}
+            style={{ paddingTop: 28, borderTop: "1px solid rgba(255,255,255,0.1)" }}
           >
-            {STATS.map((s) => (
-              <div key={s.value}>
-                <div style={{ fontSize: "1.8rem", fontWeight: 900, color: "#0D9488", lineHeight: 1 }}>{s.value}</div>
-                <div style={{ fontSize: 12, color: "#94A3B8", marginTop: 4, fontWeight: 500 }}>{s.label}</div>
-              </div>
-            ))}
+            <div className="fh-stats" style={{ display: "flex", flexWrap: "wrap", gap: "16px 44px" }}>
+              {STATS.map((s) => (
+                <div key={s.value}>
+                  <div style={{
+                    fontSize: "clamp(1.5rem, 2.8vw, 2.2rem)", fontWeight: 900,
+                    color: "#2DD4BF", lineHeight: 1, letterSpacing: "-0.035em",
+                    textShadow: "0 0 24px rgba(13,148,136,0.6)",
+                  }}>{s.value}</div>
+                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.48)", marginTop: 5, fontWeight: 500 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
           </motion.div>
         </div>
-
-        {/* Right: animated viz */}
-        <motion.div
-          className="fh-viz"
-          initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}
-        >
-          <FoodDataViz />
-        </motion.div>
       </div>
+
+      {/* Scroll cue */}
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        style={{
+          position: "absolute", bottom: 28, left: "50%", transform: "translateX(-50%)",
+          zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+        }}
+      >
+        <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", textTransform: "uppercase" }}>Scroll</span>
+        <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}>
+          <ChevronDown style={{ width: 18, height: 18, color: "rgba(255,255,255,0.3)" }} />
+        </motion.div>
+      </motion.div>
     </section>
+
     <style>{`
-      @media (max-width: 1024px) {
-        .fh-viz { display: none !important; }
-        .fh-inner { justify-content: center !important; }
-        .fh-text { max-width: 100% !important; }
-      }
       @media (max-width: 768px) {
-        .fh-section { padding: 100px 24px 60px !important; }
+        .fh-section { padding-top: 56px !important; min-height: 100dvh !important; }
         .fh-btns { flex-direction: column !important; }
         .fh-btns button { width: 100% !important; justify-content: center !important; }
         .fh-stats { gap: 12px 28px !important; }
