@@ -152,7 +152,7 @@ export default function LegalSecurity() {
     </section>
     <style>{`
       @media (max-width: 768px) {
-        .ls-section { padding: 60px 16px !important; }
+        .ls-section { padding: 60px 24px !important; }
         .ls-quote { padding: 28px 20px !important; border-radius: 16px !important; }
       }
     `}</style>

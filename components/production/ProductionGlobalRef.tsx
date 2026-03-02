@@ -325,7 +325,7 @@ export default function ProductionGlobalRef() {
       <style>{`
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @media (max-width: 768px) {
-          .pgr-section { padding: 60px 16px !important; }
+          .pgr-section { padding: 60px 24px !important; }
           .pgr-grid { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 1024px) and (min-width: 769px) {

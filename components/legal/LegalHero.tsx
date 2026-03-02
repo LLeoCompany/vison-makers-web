@@ -121,7 +121,7 @@ export default function LegalHero({ onConsult }: LegalHeroProps) {
     <style>{`
       @media (max-width: 768px) {
         .lh-section { padding-top: 100px !important; }
-        .lh-section > div { padding: 40px 16px !important; }
+        .lh-section > div { padding: 40px 24px !important; }
         .lh-btns { flex-direction: column !important; }
         .lh-btns button { width: 100% !important; justify-content: center !important; }
         .lh-stats { gap: 20px 32px !important; }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, FileText, X, ChevronRight, Scale, Loader2 } from "lucide-react";
 
@@ -39,6 +39,7 @@ export default function LegalChatUI({ onConsult }: { onConsult: (message?: strin
   const [openCite, setOpenCite] = useState<Citation | null>(null);
   const [inputVal, setInputVal] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSend = async () => {
     const trimmed = inputVal.trim();
@@ -269,9 +270,11 @@ export default function LegalChatUI({ onConsult }: { onConsult: (message?: strin
                   </div>
                 )}
                 <input
+                  ref={inputRef}
                   value={analyzing ? "" : inputVal}
                   onChange={e => setInputVal(e.target.value)}
                   onKeyDown={e => { if (e.key === "Enter") handleSend(); }}
+                  onFocus={() => setTimeout(() => inputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 300)}
                   disabled={analyzing}
                   placeholder={analyzing ? "상담 폼을 준비하는 중입니다..." : "법률 질문을 입력하고 Enter → 상담 연결..."}
                   style={{ flex: 1, background: "none", border: "none", outline: "none", fontSize: 14, color: analyzing ? "rgba(184,145,80,0.7)" : "rgba(255,255,255,0.7)", fontFamily: "inherit", fontStyle: analyzing ? "italic" : "normal" }}
@@ -298,7 +301,7 @@ export default function LegalChatUI({ onConsult }: { onConsult: (message?: strin
           <style>{`
             @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
             @media (max-width: 768px) {
-              .lcu-section { padding: 60px 16px !important; }
+              .lcu-section { padding: 60px 24px !important; }
               .lcu-messages { padding: 20px 16px 16px !important; min-height: auto !important; }
               .lcu-input-bar { padding: 12px 16px !important; }
               .lcu-input-row { flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }

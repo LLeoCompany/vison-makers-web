@@ -330,7 +330,7 @@ export default function ProductionScriptDemo() {
       <style>{`
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @media (max-width: 768px) {
-          .psd-section { padding: 60px 16px !important; }
+          .psd-section { padding: 60px 24px !important; }
           .psd-content { padding: 20px 16px 24px !important; }
         }
       `}</style>

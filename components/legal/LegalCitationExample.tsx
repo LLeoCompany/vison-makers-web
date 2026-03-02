@@ -297,7 +297,7 @@ export default function LegalCitationExample() {
     </section>
     <style>{`
       @media (max-width: 768px) {
-        .lce-section { padding: 60px 16px !important; }
+        .lce-section { padding: 60px 24px !important; }
         .lce-chat { padding: 20px 16px 16px !important; }
         .lce-user-msg { max-width: 90% !important; }
         .lce-bottom { padding: 10px 16px !important; flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }

@@ -310,7 +310,7 @@ export default function ProductionHeritage() {
     </section>
     <style>{`
       @media (max-width: 768px) {
-        .phe-section { padding: 60px 16px !important; }
+        .phe-section { padding: 60px 24px !important; }
         .phe-chip-wrap { margin-bottom: 40px !important; }
         .phe-chip-wrap > div { transform: scale(0.72); transform-origin: center top; margin-bottom: -64px; }
         .phe-comparison { grid-template-columns: 1fr !important; }

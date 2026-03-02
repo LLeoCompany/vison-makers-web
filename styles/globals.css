@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ─── Korean word-break ─────────────────────────────────────── */
+body {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* ─── Mobile touch targets (min 48×48 dp) ───────────────────── */
+@media (max-width: 768px) {
+  button,
+  a[href] {
+    min-height: 48px;
+  }
+}

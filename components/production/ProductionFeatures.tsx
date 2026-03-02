@@ -153,7 +153,7 @@ export default function ProductionFeatures() {
     </section>
     <style>{`
       @media (max-width: 768px) {
-        .pf-section { padding: 60px 16px !important; }
+        .pf-section { padding: 60px 24px !important; }
         .pf-row { display: block !important; padding: 40px 0 !important; }
         .pf-num { font-size: 2.5rem !important; margin-bottom: 12px !important; display: block !important; }
         .pf-icon { display: none !important; }

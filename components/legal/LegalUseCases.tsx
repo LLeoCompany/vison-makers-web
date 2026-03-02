@@ -171,7 +171,7 @@ export default function LegalUseCases() {
     </section>
     <style>{`
       @media (max-width: 768px) {
-        .lu-section { padding: 60px 16px !important; }
+        .lu-section { padding: 60px 24px !important; }
         .lu-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
       }
     `}</style>
