@@ -149,7 +149,7 @@ export default function TaxCTA({ onConsult }: Props) {
                     분석 완료! 최적의 절세 전략이 준비되었습니다.
                   </div>
                   <div style={{ fontSize: 13.5, color: "rgba(148,163,184,0.7)", lineHeight: 1.6 }}>
-                    <span style={{ color: "#34D399", fontWeight: 700 }}>"{savedInput.current}"</span>에 대한 전략을 준비 중입니다.<br />
+                    <span style={{ color: "#34D399", fontWeight: 700 }}>&ldquo;{savedInput.current}&rdquo;</span>에 대한 전략을 준비 중입니다.<br />
                     <span style={{ fontSize: 12, opacity: 0.6 }}>전문 세무 컨설턴트에게 연결 중...</span>
                   </div>
                 </div>
