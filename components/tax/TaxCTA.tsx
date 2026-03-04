@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle2, Calculator } from "lucide-react";
 
 const ANALYSIS_STEPS = [
-  "최신 세법 및 예규 데이터베이스 대조 중...",
+  "최신 국세청 예규 10만 건 및 조특법 데이터 대조 중...",
   "적용 가능 공제·감면 항목 탐색 중...",
   "업종별 세무 리스크 매핑 중...",
   "최적 절세 전략 생성 중...",
@@ -177,7 +177,7 @@ export default function TaxCTA({ onConsult }: Props) {
                     placeholder={
                       phase === "analyzing"
                         ? ANALYSIS_STEPS[step]
-                        : "업종이나 궁금한 세무 이슈, 또는 분석이 필요한 엑셀 항목을 입력하세요."
+                        : "분석이 필요한 엑셀 항목이나 궁금한 세무 이슈를 입력하세요."
                     }
                     style={{
                       flex: 1, background: "none", border: "none", outline: "none",

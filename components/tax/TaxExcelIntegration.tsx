@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FileSpreadsheet, AlertCircle, Lightbulb, CheckCircle2,
-  ArrowRight, Zap,
+  ArrowRight, Zap, Brain,
 } from "lucide-react";
 
 /* ── Excel rows ─────────────────────────────────────────────────────────── */
@@ -20,53 +20,122 @@ const ROWS = [
 const AI_RESULTS = [
   {
     icon: AlertCircle,
-    color: "#EF4444",
-    bg: "rgba(239,68,68,0.08)",
-    border: "rgba(239,68,68,0.2)",
+    color: "#EF4444", bg: "rgba(239,68,68,0.08)", border: "rgba(239,68,68,0.2)",
     label: "접대비 한도 초과",
     detail: "법인세법 §25 한도 초과 ₩320K — 손금불산입 처리 필요",
   },
   {
     icon: AlertCircle,
-    color: "#F59E0B",
-    bg: "rgba(245,158,11,0.08)",
-    border: "rgba(245,158,11,0.2)",
+    color: "#F59E0B", bg: "rgba(245,158,11,0.08)", border: "rgba(245,158,11,0.2)",
     label: "적격증빙 누락",
     detail: "복리후생비 ₩780K — 세금계산서 미수취, 경정청구 불가",
   },
   {
     icon: Lightbulb,
-    color: "#10B981",
-    bg: "rgba(16,185,129,0.08)",
-    border: "rgba(16,185,129,0.2)",
+    color: "#10B981", bg: "rgba(16,185,129,0.08)", border: "rgba(16,185,129,0.2)",
     label: "R&D 세액공제 기회",
     detail: "조세특례제한법 §10 적용 가능 — 예상 공제액 ₩850,000",
   },
   {
     icon: CheckCircle2,
-    color: "#10B981",
-    bg: "rgba(16,185,129,0.06)",
-    border: "rgba(16,185,129,0.15)",
+    color: "#10B981", bg: "rgba(16,185,129,0.06)", border: "rgba(16,185,129,0.15)",
     label: "최적화 절세 효과",
     detail: "세무조정 후 예상 절세액 ₩1,840,000",
   },
 ];
 
-const COL_HEADERS = ["계정과목", "금액 (원)", "증빙자료", "AI 판정"];
+/* ── Animated data-stream connector ─────────────────────────────────────── */
+function DataStreamConnector({ active }: { active: boolean }) {
+  return (
+    <div className="tei-connector" style={{
+      width: 72, flexShrink: 0, alignSelf: "center",
+      display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+    }}>
+      {/* Top label */}
+      <span style={{
+        fontSize: 9, fontWeight: 800, color: "rgba(16,185,129,0.5)",
+        letterSpacing: "0.1em", textTransform: "uppercase",
+      }}>RAG</span>
+
+      {/* Horizontal line with particles */}
+      <div style={{ position: "relative", width: 56, height: 2 }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(90deg, rgba(16,185,129,0.1), rgba(16,185,129,0.5), rgba(16,185,129,0.1))",
+        }} />
+        {active && [0, 1, 2].map(i => (
+          <motion.div
+            key={i}
+            animate={{ x: [-8, 64], opacity: [0, 1, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 1.4, delay: i * 0.46, ease: "linear" }}
+            style={{
+              position: "absolute", top: -3, left: 0,
+              width: 8, height: 8, borderRadius: "50%",
+              background: "#10B981", boxShadow: "0 0 8px rgba(16,185,129,0.9)",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Center AI brain icon */}
+      <div style={{
+        width: 32, height: 32, borderRadius: 8,
+        background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.3)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+      }}>
+        <Brain style={{ width: 15, height: 15, color: "#10B981" }} />
+      </div>
+
+      {/* Second flowing line */}
+      <div style={{ position: "relative", width: 56, height: 2 }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(90deg, rgba(16,185,129,0.1), rgba(16,185,129,0.5), rgba(16,185,129,0.1))",
+        }} />
+        {active && [0, 1, 2].map(i => (
+          <motion.div
+            key={i}
+            animate={{ x: [-8, 64], opacity: [0, 1, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 1.4, delay: 0.7 + i * 0.46, ease: "linear" }}
+            style={{
+              position: "absolute", top: -3, left: 0,
+              width: 8, height: 8, borderRadius: "50%",
+              background: "#10B981", boxShadow: "0 0 8px rgba(16,185,129,0.9)",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Arrow tip */}
+      <div style={{
+        width: 0, height: 0,
+        borderTop: "5px solid transparent",
+        borderBottom: "5px solid transparent",
+        borderLeft: "7px solid rgba(16,185,129,0.4)",
+        marginTop: 2,
+      }} />
+
+      {/* Bottom label */}
+      <span style={{
+        fontSize: 9, fontWeight: 800, color: "rgba(16,185,129,0.5)",
+        letterSpacing: "0.1em", textTransform: "uppercase",
+      }}>AI</span>
+    </div>
+  );
+}
 
 export default function TaxExcelIntegration() {
-  const [scanRow, setScanRow]       = useState<number | null>(null);
-  const [visibleAI, setVisibleAI]   = useState<number[]>([]);
-  const [started, setStarted]       = useState(false);
-  const sectionRef                   = useRef<HTMLDivElement>(null);
-  const timerRef                     = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const cancelledRef                 = useRef(false);
+  const [scanRow, setScanRow]     = useState<number | null>(null);
+  const [visibleAI, setVisibleAI] = useState<number[]>([]);
+  const [started, setStarted]     = useState(false);
+  const sectionRef                 = useRef<HTMLDivElement>(null);
+  const timerRef                   = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelledRef               = useRef(false);
 
-  /* Start scan loop when section comes into view */
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setStarted(true); observer.disconnect(); } },
-      { threshold: 0.25 }
+      { threshold: 0.2 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
@@ -77,24 +146,23 @@ export default function TaxExcelIntegration() {
     cancelledRef.current = false;
 
     async function runScan() {
-      await delay(300);
+      await delay(400);
       while (!cancelledRef.current) {
         setVisibleAI([]);
         setScanRow(null);
-        await delay(600);
-
+        await delay(500);
         for (let r = 0; r < ROWS.length; r++) {
           if (cancelledRef.current) return;
           setScanRow(r);
-          await delay(520);
+          await delay(500);
           const aiIdx = ROWS[r].aiIdx;
           if (aiIdx >= 0) {
             setVisibleAI(prev => prev.includes(aiIdx) ? prev : [...prev, aiIdx]);
-            await delay(280);
+            await delay(260);
           }
         }
         setScanRow(null);
-        await delay(2200);
+        await delay(2000);
       }
     }
 
@@ -125,11 +193,10 @@ export default function TaxExcelIntegration() {
         ].join(","),
         backgroundSize: "48px 48px",
       }} />
-      {/* Emerald glow */}
       <div style={{
         position: "absolute", bottom: "-20%", right: "10%",
         width: 600, height: 600,
-        background: "radial-gradient(circle, rgba(16,185,129,0.07) 0%, transparent 65%)",
+        background: "radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 65%)",
         pointerEvents: "none", zIndex: 0,
       }} />
 
@@ -139,7 +206,7 @@ export default function TaxExcelIntegration() {
         <motion.div
           initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}
-          style={{ textAlign: "center", marginBottom: 60 }}
+          style={{ textAlign: "center", marginBottom: 32 }}
         >
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,
@@ -167,15 +234,53 @@ export default function TaxExcelIntegration() {
           </p>
         </motion.div>
 
-        {/* Two-panel layout */}
-        <div className="tei-panels" style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
+        {/* ── T/B Callout Banner ─────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ delay: 0.35, duration: 0.5 }}
+          style={{
+            display: "flex", alignItems: "center", gap: 14,
+            padding: "16px 24px", borderRadius: 10, marginBottom: 52,
+            background: "rgba(16,185,129,0.07)",
+            border: "1px solid rgba(16,185,129,0.25)",
+            boxShadow: "0 0 0 1px rgba(16,185,129,0.08), 0 4px 24px rgba(0,0,0,0.2)",
+          }}
+        >
+          <div style={{
+            width: 38, height: 38, borderRadius: 8, flexShrink: 0,
+            background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)",
+            display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18,
+          }}>📊</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 900, color: "white", lineHeight: 1.5 }}>
+              엑셀 업로드만으로{" "}
+              <span style={{ color: "#34D399" }}>합계잔액시산표(T/B) 분석</span>{" "}
+              및 오류 검증 완료
+            </div>
+            <div style={{ fontSize: 12, color: "rgba(148,163,184,0.55)", marginTop: 3 }}>
+              세무조정 전 필수 검토 과정 — 업로드 후 5분 내 자동 완료
+            </div>
+          </div>
+          {/* Pulsing indicator */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+            <motion.div
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ repeat: Infinity, duration: 1.4 }}
+              style={{ width: 6, height: 6, borderRadius: "50%", background: "#10B981", boxShadow: "0 0 6px #10B981" }}
+            />
+            <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(16,185,129,0.7)" }}>실시간 처리</span>
+          </div>
+        </motion.div>
 
-          {/* ── Left: Excel mockup ──────────────────────────────────────── */}
+        {/* ── Two-panel + connector layout ──────────────────────────────── */}
+        <div className="tei-panels" style={{ display: "flex", gap: 0, alignItems: "flex-start" }}>
+
+          {/* Excel mockup */}
           <motion.div
             className="tei-excel"
             initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.6 }}
-            style={{ flex: "0 0 auto", width: "55%" }}
+            style={{ flex: "0 0 auto", width: "48%" }}
           >
             {/* Window chrome */}
             <div style={{
@@ -191,10 +296,7 @@ export default function TaxExcelIntegration() {
                   <div key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c }} />
                 ))}
               </div>
-              <div style={{
-                display: "flex", alignItems: "center", gap: 6,
-                fontSize: 11, color: "rgba(148,163,184,0.6)", fontWeight: 600,
-              }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "rgba(148,163,184,0.6)", fontWeight: 600 }}>
                 <FileSpreadsheet style={{ width: 11, height: 11, color: "#10B981" }} />
                 세무결산_2024Q4.xlsx
               </div>
@@ -217,18 +319,14 @@ export default function TaxExcelIntegration() {
               border: "1px solid rgba(51,65,85,0.7)",
               overflow: "hidden",
             }}>
-              {/* Column headers (Excel-style) */}
+              {/* Column headers */}
               <div style={{
                 display: "grid",
                 gridTemplateColumns: "2fr 1.6fr 1.6fr 1.4fr",
                 background: "#162033",
                 borderBottom: "1px solid rgba(51,65,85,0.5)",
               }}>
-                {/* Row number spacer */}
-                <div style={{ padding: "7px 8px", borderRight: "1px solid rgba(51,65,85,0.3)" }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(148,163,184,0.4)" }}>계정과목</span>
-                </div>
-                {COL_HEADERS.slice(1).map(h => (
+                {["계정과목","금액 (원)","증빙자료","AI 판정"].map(h => (
                   <div key={h} style={{
                     padding: "7px 8px", borderRight: "1px solid rgba(51,65,85,0.3)",
                     fontSize: 10, fontWeight: 700, color: "rgba(148,163,184,0.4)",
@@ -245,15 +343,10 @@ export default function TaxExcelIntegration() {
                     key={i}
                     animate={{
                       background: isActive
-                        ? isIssue
-                          ? "rgba(239,68,68,0.12)"
-                          : "rgba(16,185,129,0.1)"
+                        ? isIssue ? "rgba(239,68,68,0.12)" : "rgba(16,185,129,0.1)"
                         : "transparent",
-                      borderColor: isActive
-                        ? isIssue ? "rgba(239,68,68,0.3)" : "rgba(16,185,129,0.25)"
-                        : "rgba(51,65,85,0.3)",
                     }}
-                    transition={{ duration: 0.25 }}
+                    transition={{ duration: 0.2 }}
                     style={{
                       display: "grid",
                       gridTemplateColumns: "2fr 1.6fr 1.6fr 1.4fr",
@@ -261,19 +354,15 @@ export default function TaxExcelIntegration() {
                       position: "relative",
                     }}
                   >
-                    {/* Scan beam overlay */}
+                    {/* Scan beam */}
                     <AnimatePresence>
                       {isActive && (
                         <motion.div
                           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                          transition={{ duration: 0.15 }}
                           style={{
-                            position: "absolute", left: 0, top: 0, bottom: 0,
-                            width: 2,
+                            position: "absolute", left: 0, top: 0, bottom: 0, width: 2,
                             background: isIssue ? "#EF4444" : "#10B981",
-                            boxShadow: isIssue
-                              ? "0 0 12px rgba(239,68,68,0.8)"
-                              : "0 0 12px rgba(16,185,129,0.8)",
+                            boxShadow: isIssue ? "0 0 12px rgba(239,68,68,0.8)" : "0 0 12px rgba(16,185,129,0.8)",
                           }}
                         />
                       )}
@@ -283,51 +372,36 @@ export default function TaxExcelIntegration() {
                       padding: "8px 8px 8px 12px", borderRight: "1px solid rgba(51,65,85,0.3)",
                       fontSize: 12, fontWeight: 600,
                       color: isActive ? (isIssue ? "#FCA5A5" : "#6EE7B7") : "rgba(226,232,240,0.75)",
-                    }}>
-                      {row.account}
-                    </div>
+                    }}>{row.account}</div>
                     <div style={{
                       padding: "8px", borderRight: "1px solid rgba(51,65,85,0.3)",
                       fontSize: 11, color: "rgba(148,163,184,0.7)", fontFamily: "monospace",
-                    }}>
-                      {row.amount}
-                    </div>
+                    }}>{row.amount}</div>
                     <div style={{
                       padding: "8px", borderRight: "1px solid rgba(51,65,85,0.3)",
-                      fontSize: 11, color: row.evidence === "없음" ? "#F87171" : "rgba(148,163,184,0.6)",
+                      fontSize: 11,
+                      color: row.evidence === "없음" ? "#F87171" : "rgba(148,163,184,0.6)",
                       fontWeight: row.evidence === "없음" ? 700 : 400,
-                    }}>
-                      {row.evidence}
-                    </div>
+                    }}>{row.evidence}</div>
                     <div style={{
-                      padding: "8px",
-                      fontSize: 10, fontWeight: 700,
-                      color: row.ok
-                        ? (row.status === "공제 가능" ? "#34D399" : "rgba(148,163,184,0.5)")
-                        : "#F87171",
-                    }}>
-                      {row.status}
-                    </div>
+                      padding: "8px", fontSize: 10, fontWeight: 700,
+                      color: row.ok ? (row.status === "공제 가능" ? "#34D399" : "rgba(148,163,184,0.5)") : "#F87171",
+                    }}>{row.status}</div>
                   </motion.div>
                 );
               })}
             </div>
 
-            {/* Upload hint */}
-            <motion.div
-              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-              viewport={{ once: true }} transition={{ delay: 0.8 }}
-              style={{
-                marginTop: 12, display: "flex", alignItems: "center", gap: 8,
-                fontSize: 11, color: "rgba(148,163,184,0.4)",
-              }}
-            >
-              <FileSpreadsheet style={{ width: 12, height: 12 }} />
-              .xlsx · .csv · .xls 형식 지원 · 최대 50MB
-            </motion.div>
+            <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "rgba(148,163,184,0.35)" }}>
+              <FileSpreadsheet style={{ width: 11, height: 11 }} />
+              .xlsx · .csv · .xls 지원 · 최대 50MB
+            </div>
           </motion.div>
 
-          {/* ── Right: AI analysis panel ──────────────────────────────── */}
+          {/* ── Animated data-stream connector ─────────────────────────── */}
+          <DataStreamConnector active={started} />
+
+          {/* AI panel */}
           <motion.div
             className="tei-ai"
             initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }}
@@ -343,26 +417,24 @@ export default function TaxExcelIntegration() {
               borderBottom: "none",
               display: "flex", alignItems: "center", gap: 8,
             }}>
-              <div style={{
-                width: 7, height: 7, borderRadius: "50%", background: "#10B981",
-                boxShadow: "0 0 8px #10B981",
-              }} />
+              <motion.div
+                animate={{ opacity: [1, 0.3, 1] }} transition={{ repeat: Infinity, duration: 1.4 }}
+                style={{ width: 7, height: 7, borderRadius: "50%", background: "#10B981", boxShadow: "0 0 8px #10B981" }}
+              />
               <span style={{ fontSize: 12, fontWeight: 800, color: "#10B981" }}>Vision AI 분석 결과</span>
-              <div style={{
-                marginLeft: "auto", fontSize: 10, color: "rgba(148,163,184,0.5)", fontWeight: 600,
-              }}>
+              <div style={{ marginLeft: "auto", fontSize: 10, color: "rgba(148,163,184,0.5)", fontWeight: 600 }}>
                 실시간 탐지 중
               </div>
             </div>
 
-            {/* Results list */}
+            {/* Results */}
             <div style={{
               borderRadius: "0 0 12px 12px",
               border: "1px solid rgba(16,185,129,0.2)",
               padding: "16px",
               background: "rgba(15,23,42,0.7)",
               backdropFilter: "blur(8px)",
-              minHeight: 280,
+              minHeight: 290,
             }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {AI_RESULTS.map((r, i) => {
@@ -375,17 +447,17 @@ export default function TaxExcelIntegration() {
                           initial={{ opacity: 0, x: 16, height: 0 }}
                           animate={{ opacity: 1, x: 0, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.35, ease: "easeOut" }}
+                          transition={{ duration: 0.35 }}
                           style={{
-                            padding: "12px 14px", borderRadius: 8,
+                            padding: "11px 13px", borderRadius: 8,
                             background: r.bg, border: `1px solid ${r.border}`,
                             overflow: "hidden",
                           }}
                         >
-                          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                            <Icon style={{ width: 15, height: 15, color: r.color, flexShrink: 0, marginTop: 1 }} />
+                          <div style={{ display: "flex", alignItems: "flex-start", gap: 9 }}>
+                            <Icon style={{ width: 14, height: 14, color: r.color, flexShrink: 0, marginTop: 1 }} />
                             <div>
-                              <div style={{ fontSize: 12, fontWeight: 800, color: r.color, marginBottom: 3 }}>
+                              <div style={{ fontSize: 12, fontWeight: 800, color: r.color, marginBottom: 2 }}>
                                 {r.label}
                               </div>
                               <div style={{ fontSize: 11, color: "rgba(148,163,184,0.7)", lineHeight: 1.5 }}>
@@ -395,59 +467,53 @@ export default function TaxExcelIntegration() {
                           </div>
                         </motion.div>
                       ) : (
-                        <motion.div
-                          key={`placeholder-${i}`}
+                        <div
+                          key={`ph-${i}`}
                           style={{
-                            padding: "12px 14px", borderRadius: 8,
+                            padding: "12px 13px", borderRadius: 8,
                             background: "rgba(51,65,85,0.08)",
                             border: "1px solid rgba(51,65,85,0.2)",
-                            height: 60,
+                            height: 58,
                             display: "flex", alignItems: "center", gap: 8,
                           }}
                         >
-                          <div style={{
-                            width: 14, height: 14, borderRadius: "50%",
-                            background: "rgba(51,65,85,0.3)", flexShrink: 0,
-                          }} />
-                          <div style={{
-                            height: 8, width: "60%", borderRadius: 4,
-                            background: "rgba(51,65,85,0.25)",
-                          }} />
-                        </motion.div>
+                          <div style={{ width: 14, height: 14, borderRadius: "50%", background: "rgba(51,65,85,0.3)" }} />
+                          <div style={{ height: 8, width: "55%", borderRadius: 4, background: "rgba(51,65,85,0.2)" }} />
+                        </div>
                       )}
                     </AnimatePresence>
                   );
                 })}
               </div>
 
-              {/* Summary strip — visible once all results are in */}
+              {/* Summary strip */}
               <AnimatePresence>
                 {visibleAI.length === AI_RESULTS.length && (
                   <motion.div
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                     transition={{ duration: 0.4, delay: 0.3 }}
                     style={{
-                      marginTop: 14, padding: "10px 14px", borderRadius: 8,
+                      marginTop: 12, padding: "10px 13px", borderRadius: 8,
                       background: "linear-gradient(135deg, rgba(16,185,129,0.1), rgba(5,150,105,0.06))",
                       border: "1px solid rgba(16,185,129,0.25)",
-                      display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
                     }}
                   >
-                    <div style={{ fontSize: 12, color: "rgba(52,211,153,0.85)", fontWeight: 700 }}>
+                    <span style={{ fontSize: 12, color: "rgba(52,211,153,0.85)", fontWeight: 700 }}>
                       세무조정 후 예상 절세 ₩1,840,000
-                    </div>
-                    <ArrowRight style={{ width: 13, height: 13, color: "#10B981", flexShrink: 0 }} />
+                    </span>
+                    <ArrowRight style={{ width: 12, height: 12, color: "#10B981", flexShrink: 0 }} />
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* CTA */}
+            {/* CTA button */}
             <motion.button
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-              viewport={{ once: true }} transition={{ delay: 0.6 }}
+              viewport={{ once: true }} transition={{ delay: 0.5 }}
               style={{
-                marginTop: 16, width: "100%",
+                marginTop: 14, width: "100%",
                 padding: "13px 20px", borderRadius: 8, border: "none",
                 background: "#10B981", color: "white",
                 fontSize: 13, fontWeight: 800, cursor: "pointer",
@@ -459,7 +525,7 @@ export default function TaxExcelIntegration() {
               whileTap={{ scale: 0.99 }}
             >
               <FileSpreadsheet style={{ width: 14, height: 14 }} />
-              엑셀 파일 업로드 & AI 분석 시작
+              엑셀 파일 업로드 &amp; T/B 분석 시작
             </motion.button>
           </motion.div>
         </div>
@@ -468,9 +534,10 @@ export default function TaxExcelIntegration() {
 
     <style>{`
       @media (max-width: 900px) {
-        .tei-section { padding: 70px 24px !important; }
-        .tei-panels { flex-direction: column !important; }
-        .tei-excel  { width: 100% !important; }
+        .tei-section  { padding: 70px 24px !important; }
+        .tei-panels   { flex-direction: column !important; }
+        .tei-excel    { width: 100% !important; }
+        .tei-connector { display: none !important; }
       }
     `}</style>
     </>

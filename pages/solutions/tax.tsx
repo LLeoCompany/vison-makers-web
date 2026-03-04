@@ -9,6 +9,7 @@ import TaxFeatureGrid from "@/components/tax/TaxFeatureGrid";
 import TaxDashboard from "@/components/tax/TaxDashboard";
 
 const TaxRAGDemo           = dynamic(() => import("@/components/tax/TaxRAGDemo"),           { ssr: false });
+const TaxTimeComparison    = dynamic(() => import("@/components/tax/TaxTimeComparison"),    { ssr: false });
 const TaxExcelIntegration  = dynamic(() => import("@/components/tax/TaxExcelIntegration"),  { ssr: false });
 const TaxSpecialtyGrid     = dynamic(() => import("@/components/tax/TaxSpecialtyGrid"),     { ssr: false });
 const TaxCTA               = dynamic(() => import("@/components/tax/TaxCTA"),               { ssr: false });
@@ -88,6 +89,7 @@ export default function TaxPage() {
         Hero              → Dark Navy (#0F172A) + CSS grid pattern
         Challenge         → Near-black (#0A1628)
         FeatureGrid       → White (#FFFFFF)
+        TimeComparison    → Cool White (#F8FAFC)   ← 40h vs 5min bar chart
         RAGDemo           → Dark Slate (#1E293B)   ← star section
         ExcelIntegration  → Dark Gradient (#1E293B → #0F172A)
         SpecialtyGrid     → Deep Navy (#0A0F1E)
@@ -98,6 +100,7 @@ export default function TaxPage() {
         <TaxHero onConsult={handleConsult} />
         <TaxChallenge />
         <TaxFeatureGrid />
+        <TaxTimeComparison />
         <TaxRAGDemo />
         <TaxExcelIntegration />
         <TaxSpecialtyGrid />

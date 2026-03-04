@@ -223,9 +223,15 @@ export default function TaxFeatureGrid() {
               <motion.div key={i} variants={itemVariants}
                 style={{
                   padding: "32px 28px", borderRadius: 14,
+                  backgroundColor: f.featured ? undefined : "#F8FAFC",
                   background: f.featured
                     ? "linear-gradient(145deg, #F0FDF4, #DCFCE7)"
-                    : "#F8FAFC",
+                    : undefined,
+                  backgroundImage: i === 2 ? [
+                    "linear-gradient(rgba(16,185,129,0.045) 1px, transparent 1px)",
+                    "linear-gradient(90deg, rgba(100,116,139,0.045) 1px, transparent 1px)",
+                  ].join(",") : undefined,
+                  backgroundSize: i === 2 ? "22px 22px" : undefined,
                   border: f.featured
                     ? "1px solid rgba(16,185,129,0.2)"
                     : "1px solid #E2E8F0",
