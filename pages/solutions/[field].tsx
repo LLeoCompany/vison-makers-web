@@ -333,7 +333,7 @@ export default function SolutionPage({ config }: SolutionPageProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const CUSTOM_PAGES = ["legal", "marketing", "advertising", "food"];
+  const CUSTOM_PAGES = ["legal", "marketing", "advertising", "food", "tax"];
   const fields = getAllSolutionFields().filter((f) => !CUSTOM_PAGES.includes(f));
   return {
     paths: fields.map((field) => ({ params: { field } })),
