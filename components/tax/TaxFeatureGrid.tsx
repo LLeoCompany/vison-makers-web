@@ -144,27 +144,27 @@ function TaxSimDemo() {
 const FEATURES = [
   {
     icon: RefreshCw,
-    tag: "Real-time Update",
-    title: "최신 세법 자동 반영",
-    body: "개정 세법, 국세청 예규, 판례가 실시간으로 RAG DB에 업데이트됩니다. 담당자가 바뀌어도 항상 최신 기준으로 분석합니다.",
+    tag: "조세특례제한법 반영",
+    title: "조세특례제한법 즉시 반영",
+    body: "조세특례제한법·국세청 예규·판례가 실시간으로 RAG DB에 업데이트됩니다. 담당자가 바뀌어도 항상 최신 기준으로 분석합니다.",
     accent: "#10B981",
     mini: <LawUpdateFeed />,
     featured: true,
   },
   {
     icon: FileSearch,
-    tag: "Auto Classification",
-    title: "증빙 자동 분류",
-    body: "PDF·엑셀·이미지 형태의 증빙 서류를 AI가 즉시 분류합니다. 접대비 한도 초과, 누락 증빙을 사전에 탐지합니다.",
+    tag: "적격증빙 탐지",
+    title: "적격증빙 자동 탐지",
+    body: "PDF·엑셀·이미지 형태의 증빙 서류를 AI가 즉시 분류합니다. 접대비 한도 초과, 누락 적격증빙을 사전에 탐지합니다.",
     accent: "#334155",
     mini: <DocClassifyDemo />,
     featured: false,
   },
   {
     icon: PieChart,
-    tag: "Tax Simulation",
-    title: "절세 시뮬레이션",
-    body: "적용 가능한 모든 공제·감면 항목을 조합해 최적 절세 시나리오를 자동 산출합니다. ROI까지 수치로 확인하세요.",
+    tag: "세무조정 시뮬레이션",
+    title: "세무조정 시뮬레이션",
+    body: "경정청구 가능 항목 및 공제·감면 조합을 자동 산출합니다. 세무조정 전후 절세 효과를 수치로 즉시 확인하세요.",
     accent: "#10B981",
     mini: <TaxSimDemo />,
     featured: false,
@@ -205,7 +205,7 @@ export default function TaxFeatureGrid() {
           <motion.p variants={itemVariants} style={{
             fontSize: "clamp(0.9rem, 1.6vw, 1rem)", color: "#64748B", lineHeight: 1.8,
           }}>
-            법령 업데이트 · 증빙 분류 · 절세 최적화 — 세무 업무 전 사이클을 자동화합니다.
+            조세특례제한법 반영 · 적격증빙 탐지 · 세무조정 시뮬레이션 — 세무 업무 전 사이클을 자동화합니다.
           </motion.p>
         </motion.div>
 

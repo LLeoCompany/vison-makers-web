@@ -123,9 +123,9 @@ const STATS = [
 
 /* ── Floating badges ────────────────────────────────────────────────────── */
 const BADGES = [
-  { text: "법인세법 §25",    delay: 0.8,  x: "62%", y: "18%" },
-  { text: "예규 대조 완료",  delay: 1.1,  x: "72%", y: "52%" },
-  { text: "절세 ₩439M",      delay: 1.4,  x: "55%", y: "74%" },
+  { text: "경정청구 기회 탐지", delay: 0.8,  x: "62%", y: "18%" },
+  { text: "세무조정 지원",      delay: 1.1,  x: "72%", y: "52%" },
+  { text: "적격증빙 탐지",      delay: 1.4,  x: "55%", y: "74%" },
 ];
 
 interface Props { onConsult: (msg?: string) => void }
@@ -212,9 +212,9 @@ export default function TaxHero({ onConsult }: Props) {
 
           {/* Headline */}
           {[
-            { text: "복잡한 세법 속", color: "white" },
-            { text: "숨겨진 절세 기회,", color: "white" },
-            { text: "AI가 찾아드립니다.", color: "#10B981" },
+            { text: "경정청구·세무조정,", color: "white" },
+            { text: "적격증빙 탐지까지,", color: "white" },
+            { text: "AI가 완성합니다.", color: "#10B981" },
           ].map((line, i) => (
             <motion.div key={i}
               initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }}
@@ -238,8 +238,8 @@ export default function TaxHero({ onConsult }: Props) {
               color: "rgba(148,163,184,0.8)", lineHeight: 1.9, marginBottom: 44,
             }}
           >
-            연평균 12회 이상 개정되는 세법, 쌓이는 가산세 리스크,<br />
-            놓치기 쉬운 공제 항목 — Vision AI가 실시간으로 탐지합니다.
+            <span style={{ color: "rgba(52,211,153,0.85)", fontWeight: 600 }}>조세특례제한법 및 최신 국세청 예규 실시간 RAG 연동</span>으로,<br />
+            가산세 리스크와 놓치기 쉬운 공제 항목을 Vision AI가 탐지합니다.
           </motion.p>
 
           {/* CTAs */}

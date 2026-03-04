@@ -8,9 +8,11 @@ import TaxChallenge from "@/components/tax/TaxChallenge";
 import TaxFeatureGrid from "@/components/tax/TaxFeatureGrid";
 import TaxDashboard from "@/components/tax/TaxDashboard";
 
-const TaxRAGDemo         = dynamic(() => import("@/components/tax/TaxRAGDemo"),         { ssr: false });
-const TaxCTA             = dynamic(() => import("@/components/tax/TaxCTA"),             { ssr: false });
-const ConsultationSidebar = dynamic(() => import("@/components/home/ConsultationSidebar"), { ssr: false });
+const TaxRAGDemo           = dynamic(() => import("@/components/tax/TaxRAGDemo"),           { ssr: false });
+const TaxExcelIntegration  = dynamic(() => import("@/components/tax/TaxExcelIntegration"),  { ssr: false });
+const TaxSpecialtyGrid     = dynamic(() => import("@/components/tax/TaxSpecialtyGrid"),     { ssr: false });
+const TaxCTA               = dynamic(() => import("@/components/tax/TaxCTA"),               { ssr: false });
+const ConsultationSidebar  = dynamic(() => import("@/components/home/ConsultationSidebar"), { ssr: false });
 
 export default function TaxPage() {
   const [sidebarOpen, setSidebarOpen]     = useState(false);
@@ -83,18 +85,22 @@ export default function TaxPage() {
 
       {/*
         Section sequence (background rhythm):
-        Hero         → Dark Navy (#0F172A) + CSS grid pattern
-        Challenge    → Near-black (#0A1628)
-        FeatureGrid  → White (#FFFFFF)
-        RAGDemo      → Dark Slate (#1E293B)   ← star section
-        Dashboard    → Cool White (#F8FAFC)
-        CTA          → Deep Dark (radial)
+        Hero              → Dark Navy (#0F172A) + CSS grid pattern
+        Challenge         → Near-black (#0A1628)
+        FeatureGrid       → White (#FFFFFF)
+        RAGDemo           → Dark Slate (#1E293B)   ← star section
+        ExcelIntegration  → Dark Gradient (#1E293B → #0F172A)
+        SpecialtyGrid     → Deep Navy (#0A0F1E)
+        Dashboard         → Cool White (#F8FAFC)
+        CTA               → Deep Dark (radial)
       */}
       <main style={{ wordBreak: "keep-all", overflowWrap: "break-word" }}>
         <TaxHero onConsult={handleConsult} />
         <TaxChallenge />
         <TaxFeatureGrid />
         <TaxRAGDemo />
+        <TaxExcelIntegration />
+        <TaxSpecialtyGrid />
         <TaxDashboard onConsult={handleConsult} />
         <TaxCTA onConsult={handleConsult} />
       </main>
