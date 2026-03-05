@@ -240,6 +240,7 @@ export default function TaxSpecialtyGrid() {
             return (
               <motion.div
                 variants={itemVariants}
+                className="tsg-card"
                 style={{
                   gridRow: "1 / 3",
                   padding: "36px 32px",
@@ -321,6 +322,7 @@ export default function TaxSpecialtyGrid() {
               <motion.div
                 key={i}
                 variants={itemVariants}
+                className="tsg-card"
                 style={{
                   padding: "28px 26px",
                   borderRadius: 16,
@@ -376,8 +378,14 @@ export default function TaxSpecialtyGrid() {
         .tsg-grid {
           grid-template-columns: 1fr !important;
           grid-template-rows: auto !important;
+          gap: 16px !important;
         }
         .tsg-grid > :first-child { grid-row: auto !important; }
+        .tsg-card { box-shadow: 0 4px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05) !important; border-width: 1.5px !important; }
+      }
+      @media (max-width: 480px) {
+        .tsg-section { padding: 60px 16px !important; }
+        .tsg-card { padding: 24px 20px !important; }
       }
     `}</style>
     </>

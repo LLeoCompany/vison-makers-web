@@ -221,6 +221,7 @@ export default function TaxFeatureGrid() {
             const rgb = f.accent === "#10B981" ? "16,185,129" : "51,65,85";
             return (
               <motion.div key={i} variants={itemVariants}
+                className="tfg-card"
                 style={{
                   padding: "32px 28px", borderRadius: 14,
                   backgroundColor: f.featured ? undefined : "#F8FAFC",
@@ -281,7 +282,9 @@ export default function TaxFeatureGrid() {
         .tfg-grid { grid-template-columns: 1fr 1fr !important; }
       }
       @media (max-width: 640px) {
-        .tfg-grid { grid-template-columns: 1fr !important; }
+        .tfg-section { padding: 60px 16px !important; }
+        .tfg-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+        .tfg-card { box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 0 0 1px rgba(16,185,129,0.07) !important; border-width: 1.5px !important; }
       }
     `}</style>
     </>

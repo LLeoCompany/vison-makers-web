@@ -232,6 +232,9 @@ export default function TaxTimeComparison() {
         .ttc-section { padding: 60px 24px !important; }
         .ttc-divider { display: none !important; }
       }
+      @media (max-width: 480px) {
+        .ttc-section { padding: 50px 16px !important; }
+      }
     `}</style>
     </>
   );

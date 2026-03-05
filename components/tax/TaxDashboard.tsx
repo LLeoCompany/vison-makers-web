@@ -211,11 +211,12 @@ export default function TaxDashboard({ onConsult }: Props) {
     <style>{`
       @media (max-width: 900px) {
         .td-section { padding: 70px 24px !important; }
-        .td-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        .td-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
         .td-divider { display: none !important; }
       }
       @media (max-width: 480px) {
-        .td-grid { grid-template-columns: 1fr !important; }
+        .td-section { padding: 60px 16px !important; }
+        .td-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
       }
     `}</style>
     </>

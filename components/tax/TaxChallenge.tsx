@@ -162,7 +162,10 @@ export default function TaxChallenge() {
     <style>{`
       @media (max-width: 768px) {
         .tc-section { padding: 70px 24px !important; }
-        .tc-grid { grid-template-columns: 1fr !important; }
+        .tc-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+      }
+      @media (max-width: 480px) {
+        .tc-section { padding: 60px 16px !important; }
       }
     `}</style>
     </>

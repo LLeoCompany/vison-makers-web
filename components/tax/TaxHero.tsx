@@ -399,14 +399,18 @@ export default function TaxHero({ onConsult }: Props) {
     <style>{`
       @media (max-width: 1024px) {
         .th-chart { display: none !important; }
-        .th-inner { justify-content: center !important; }
+        .th-inner { justify-content: center !important; padding: 60px 24px !important; }
         .th-text  { max-width: 100% !important; }
       }
       @media (max-width: 768px) {
-        .th-section { padding-top: 56px !important; }
+        .th-section { padding-top: 56px !important; min-height: auto !important; }
         .th-btns { flex-direction: column !important; }
         .th-btns button { width: 100% !important; justify-content: center !important; }
         .th-stats { gap: 10px 28px !important; }
+      }
+      @media (max-width: 480px) {
+        .th-inner { padding: 48px 16px 60px !important; }
+        .th-stats { gap: 8px 20px !important; }
       }
     `}</style>
     </>

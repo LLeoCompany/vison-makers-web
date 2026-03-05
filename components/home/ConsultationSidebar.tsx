@@ -31,6 +31,14 @@ const initialForm = {
 
 export default function ConsultationSidebar({ isOpen, onClose, initialMessage }: ConsultationSidebarProps) {
   const [form, setForm] = useState(initialForm);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   // Pre-fill message when initialMessage changes and sidebar opens
   useEffect(() => {
@@ -93,15 +101,26 @@ export default function ConsultationSidebar({ isOpen, onClose, initialMessage }:
             className="fixed inset-0 z-50 bg-blue-950/30 backdrop-blur-sm"
           />
 
-          {/* Sidebar Panel */}
+          {/* Sidebar Panel — right slide on desktop, bottom sheet on mobile */}
           <motion.aside
             key="sidebar"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 320, damping: 34 }}
-            className="fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[420px] bg-white shadow-2xl flex flex-col"
+            initial={isMobile ? { y: "100%" } : { x: "100%" }}
+            animate={isMobile ? { y: 0 } : { x: 0 }}
+            exit={isMobile ? { y: "100%" } : { x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 32 }}
+            className={
+              isMobile
+                ? "fixed left-0 right-0 bottom-0 z-50 bg-white shadow-2xl flex flex-col rounded-t-2xl"
+                : "fixed top-0 right-0 bottom-0 z-50 w-[420px] bg-white shadow-2xl flex flex-col"
+            }
+            style={isMobile ? { maxHeight: "92dvh" } : {}}
           >
+            {/* Drag handle (mobile only) */}
+            {isMobile && (
+              <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
+                <div className="w-10 h-1 rounded-full bg-gray-200" />
+              </div>
+            )}
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 flex-shrink-0">
               <div>

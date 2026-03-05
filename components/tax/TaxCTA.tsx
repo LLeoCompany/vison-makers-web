@@ -21,11 +21,12 @@ const HINT_CHIPS = [
 interface Props { onConsult: (msg?: string) => void }
 
 export default function TaxCTA({ onConsult }: Props) {
-  const [input, setInput]     = useState("");
-  const [phase, setPhase]     = useState<"idle" | "analyzing" | "done">("idle");
-  const [step, setStep]       = useState(0);
-  const savedInput            = useRef("");
-  const inputRef              = useRef<HTMLInputElement>(null);
+  const [input, setInput]         = useState("");
+  const [phase, setPhase]         = useState<"idle" | "analyzing" | "done">("idle");
+  const [step, setStep]           = useState(0);
+  const [inputFocused, setFocused] = useState(false);
+  const savedInput                 = useRef("");
+  const inputRef                   = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async () => {
     const trimmed = input.trim();
@@ -104,6 +105,7 @@ export default function TaxCTA({ onConsult }: Props) {
             letterSpacing: "-0.04em", lineHeight: 1.15, marginBottom: 16,
             background: "linear-gradient(90deg, #fff 30%, rgba(148,163,184,0.55))",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+            wordBreak: "keep-all",
           }}>
             세무 이슈 또는 엑셀 항목을<br />AI 진단으로 즉시 분석하세요.
           </h2>
@@ -173,6 +175,11 @@ export default function TaxCTA({ onConsult }: Props) {
                     value={phase === "idle" ? input : ""}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && handleSubmit()}
+                    onFocus={() => {
+                      setFocused(true);
+                      setTimeout(() => inputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 350);
+                    }}
+                    onBlur={() => setFocused(false)}
                     disabled={phase !== "idle"}
                     placeholder={
                       phase === "analyzing"
@@ -289,9 +296,12 @@ export default function TaxCTA({ onConsult }: Props) {
 
     <style>{`
       @media (max-width: 768px) {
-        .tcta-section { padding: 60px 24px 80px !important; }
+        .tcta-section { padding: 60px 16px 140px !important; }
         .tcta-row { flex-direction: column !important; align-items: stretch !important; padding: 12px !important; gap: 10px !important; }
-        .tcta-btn { width: 100% !important; justify-content: center !important; }
+        .tcta-btn { width: 100% !important; justify-content: center !important; padding: 14px !important; font-size: 15px !important; }
+      }
+      @media (max-width: 480px) {
+        .tcta-section { padding: 50px 16px 160px !important; }
       }
     `}</style>
     </>
